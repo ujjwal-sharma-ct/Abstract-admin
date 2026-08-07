@@ -11,7 +11,36 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }</style>
+    <style>
+        ::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }
+        /* Time-of-day shift banners */
+        .shift-bg { position: relative; overflow: hidden; isolation: isolate; }
+        .shift-bg > * { position: relative; z-index: 2; }
+        /* Vivid shift tiles (day-entry modal) — matches the client portal */
+        .shift-morning { background: linear-gradient(160deg, #4aa8ec 0%, #93d1f6 45%, #dff5ec 100%); }
+        .shift-morning::after { content:''; position:absolute; z-index:1; width:42px; height:42px; right:-4px; bottom:-12px;
+            border-radius:9999px; background: radial-gradient(circle, #fff7d6 0%, #ffe27a 55%, rgba(255,226,122,0) 72%); }
+        .shift-afternoon { background: linear-gradient(160deg, #ff9f2e 0%, #ffc25a 46%, #ffe6a6 100%); }
+        .shift-afternoon::after { content:''; position:absolute; z-index:1; width:54px; height:54px; right:-6px; top:-16px;
+            border-radius:9999px; background: radial-gradient(circle, #fffdf2 0%, #fff0a8 45%, rgba(255,240,168,0) 72%); }
+        .shift-night { background: linear-gradient(165deg, #0b1224 0%, #1c2740 55%, #38456b 100%); }
+        .shift-night::before { content:''; position:absolute; z-index:1; inset:0;
+            background-image:
+              radial-gradient(1.6px 1.6px at 18% 28%, #ffffff, transparent),
+              radial-gradient(1.4px 1.4px at 62% 58%, #ffffff, transparent),
+              radial-gradient(1.2px 1.2px at 82% 22%, #e2e8f0, transparent),
+              radial-gradient(1.2px 1.2px at 40% 78%, #cbd5e1, transparent),
+              radial-gradient(1px 1px at 30% 50%, #f1f5f9, transparent);
+            opacity:.9; }
+        .shift-night::after { content:''; position:absolute; z-index:1; width:24px; height:24px; right:10px; top:10px;
+            border-radius:9999px; background: radial-gradient(circle at 34% 34%, #ffffff 0%, #dbe3ef 58%, #aab6cc 100%);
+            box-shadow: 0 0 12px rgba(226,232,240,.55), inset -5px -3px 0 rgba(148,163,184,.35); }
+        .cell-morning { background: linear-gradient(120deg, #c4e7fb 0%, #e2f5ff 55%, #e6faf0 100%); }
+        .cell-afternoon { background: linear-gradient(120deg, #ffcf82 0%, #ffe3ab 50%, #fff4d6 100%); }
+        .cell-night { background: linear-gradient(120deg, #101a33 0%, #22304f 60%, #3a4a72 100%); }
+        .cell-night::after { content:''; position:absolute; z-index:1; width:12px; height:12px; right:8px; top:4px; border-radius:9999px;
+            background: radial-gradient(circle at 34% 34%, #ffffff 0%, #cbd5e1 70%); box-shadow: 0 0 6px rgba(226,232,240,.5); }
+    </style>
     <script>
         tailwind.config = {
             theme: {
@@ -328,7 +357,7 @@
             </div>
 
             <!-- Summary Stat Cards -->
-            <div id="oversight-stats" class="px-6 xl:px-8 pt-4 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3">
+            <div id="oversight-stats" class="px-6 xl:px-8 pt-4 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-3">
                 <div class="bg-white rounded-xl border border-slate-200 shadow-sm px-4 py-3 flex items-center gap-3">
                     <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, rgba(29,78,216,0.1), rgba(91,46,145,0.1));">
                         <i class="fa-solid fa-clock text-blue-600 text-sm"></i>
@@ -372,6 +401,76 @@
                     <div>
                         <p class="text-xs text-slate-400">Absences awaiting agency</p>
                         <p class="text-lg font-bold text-amber-700">3</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl border border-slate-200 shadow-sm px-4 py-3 flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 bg-blue-50">
+                        <i class="fa-solid fa-calendar-xmark text-blue-600 text-sm"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs text-slate-400">Booking changes awaiting client</p>
+                        <p class="text-lg font-bold text-blue-700">2</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking-change approvals oversight (agency un-book requests → client decision) TS-005 / task 5 -->
+            <div class="px-6 xl:px-8 pt-4">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between flex-wrap gap-2">
+                        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-xmark text-blue-600 text-sm"></i>
+                            Booking-change approvals — agency un-book requests
+                        </h3>
+                        <span class="text-xs text-indigo-700 bg-indigo-50 border border-indigo-200 px-2 py-0.5 rounded-full flex items-center gap-1"><i class="fa-solid fa-eye text-[10px]"></i> Monitor only · the client decides</span>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-xs">
+                            <thead>
+                                <tr class="bg-slate-50 border-b border-slate-200">
+                                    <th class="text-left px-5 py-3 text-slate-500 font-semibold">Candidate</th>
+                                    <th class="text-left px-4 py-3 text-slate-500 font-semibold">Client</th>
+                                    <th class="text-left px-4 py-3 text-slate-500 font-semibold">Agency</th>
+                                    <th class="text-center px-4 py-3 text-slate-500 font-semibold">Day requested</th>
+                                    <th class="text-left px-4 py-3 text-slate-500 font-semibold">Reason</th>
+                                    <th class="text-center px-4 py-3 text-slate-500 font-semibold">Client decision</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-slate-100 hover:bg-blue-50/20 transition-colors">
+                                    <td class="px-5 py-3"><p class="font-semibold text-slate-800">Grace Owusu</p><p class="text-slate-400">Forklift Operative · #BKG-2077</p></td>
+                                    <td class="px-4 py-3 font-medium text-slate-700">Metro Logistics</td>
+                                    <td class="px-4 py-3 text-slate-600">Prime Staffing</td>
+                                    <td class="px-4 py-3 text-center text-slate-600">Thu 11 Jun</td>
+                                    <td class="px-4 py-3 text-slate-500 italic max-w-[240px] truncate" title="Candidate requested the day off for a family commitment.">Candidate requested the day off…</td>
+                                    <td class="px-4 py-3 text-center"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-hourglass-half text-[10px]"></i> Pending</span></td>
+                                </tr>
+                                <tr class="border-b border-slate-100 hover:bg-blue-50/20 transition-colors">
+                                    <td class="px-5 py-3"><p class="font-semibold text-slate-800">Aisha Khan</p><p class="text-slate-400">Warehouse Operative · #BKG-2104</p></td>
+                                    <td class="px-4 py-3 font-medium text-slate-700">HSBC Logistics Hub</td>
+                                    <td class="px-4 py-3 text-slate-600">Blue Arrow</td>
+                                    <td class="px-4 py-3 text-center text-slate-600">Fri 12 Jun</td>
+                                    <td class="px-4 py-3 text-slate-500 italic max-w-[240px] truncate" title="Re-allocating to another site for the night shift.">Re-allocating to another site…</td>
+                                    <td class="px-4 py-3 text-center"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-hourglass-half text-[10px]"></i> Pending</span></td>
+                                </tr>
+                                <tr class="border-b border-slate-100 hover:bg-blue-50/20 transition-colors">
+                                    <td class="px-5 py-3"><p class="font-semibold text-slate-800">Callum Fraser</p><p class="text-slate-400">Warehouse Operative · #BKG-2055</p></td>
+                                    <td class="px-4 py-3 font-medium text-slate-700">Barratt Developments</td>
+                                    <td class="px-4 py-3 text-slate-600">Blue Arrow</td>
+                                    <td class="px-4 py-3 text-center text-slate-600">Fri 20 Jun</td>
+                                    <td class="px-4 py-3 text-slate-500 italic max-w-[240px] truncate" title="Cover no longer required for that shift.">Cover no longer required…</td>
+                                    <td class="px-4 py-3 text-center"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-circle-check text-[10px]"></i> Approved</span></td>
+                                </tr>
+                                <tr class="hover:bg-blue-50/20 transition-colors">
+                                    <td class="px-5 py-3"><p class="font-semibold text-slate-800">Priya Sharma</p><p class="text-slate-400">Line Operative · #BKG-2069</p></td>
+                                    <td class="px-4 py-3 font-medium text-slate-700">Greggs Distribution</td>
+                                    <td class="px-4 py-3 text-slate-600">TechForce Agency</td>
+                                    <td class="px-4 py-3 text-center text-slate-600">Mon 16 Jun</td>
+                                    <td class="px-4 py-3 text-slate-500 italic max-w-[240px] truncate" title="Client wants to keep cover; discuss alternatives.">Client wants to keep cover…</td>
+                                    <td class="px-4 py-3 text-center"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200"><i class="fa-solid fa-comments text-[10px]"></i> To be discussed</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -515,13 +614,13 @@
                                         <button onclick="openGrid('Sophie Bennett')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-600 transition-colors">Open <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
                                     </td>
                                 </tr>
-                                <!-- Row 5 — selected drill-down candidate -->
-                                <tr class="border-b border-slate-100 bg-blue-50/40 hover:bg-blue-50/50 transition-colors">
+                                <!-- Row 5 -->
+                                <tr class="border-b border-slate-100 hover:bg-blue-50/20 transition-colors">
                                     <td class="px-5 py-3">
                                         <div class="flex items-center gap-2.5">
-                                            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" class="w-7 h-7 rounded-full object-cover border-2 border-blue-300 flex-shrink-0" alt=""/>
+                                            <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-2.jpg" class="w-7 h-7 rounded-full object-cover border border-slate-200 flex-shrink-0" alt=""/>
                                             <div>
-                                                <p class="font-semibold text-slate-800">Marcus Reid <span class="ml-1 text-[10px] font-semibold text-blue-600 bg-blue-100 border border-blue-200 px-1.5 py-0.5 rounded-full">Open below</span></p>
+                                                <p class="font-semibold text-slate-800">Marcus Reid</p>
                                                 <p class="text-slate-400">Forklift Driver · #BKG-2077</p>
                                             </div>
                                         </div>
@@ -545,7 +644,7 @@
                                         <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">Submitted</span>
                                     </td>
                                     <td class="px-4 py-3 text-center">
-                                        <button onclick="document.getElementById('drilldown-panel').scrollIntoView({behavior:'smooth'})" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-white text-xs font-semibold hover:opacity-90 transition-opacity" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);">Open <i class="fa-solid fa-arrow-down text-[10px]"></i></button>
+                                        <button onclick="openGrid('Marcus Reid')" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200 text-xs font-semibold text-slate-700 hover:border-blue-300 hover:text-blue-600 transition-colors">Open <i class="fa-solid fa-arrow-right text-[10px]"></i></button>
                                     </td>
                                 </tr>
                                 <!-- Row 6 -->
@@ -643,12 +742,25 @@
             </div>
 
             <!-- ============================================================= -->
-            <!-- PART B — ADMIN-ON-BEHALF WEEKLY GRID (drill-down, TS-027..029) -->
+            <!-- PART B — ADMIN-ON-BEHALF WEEKLY DETAIL (collapsed until a candidate is opened, TS-027..029) -->
             <!-- ============================================================= -->
-            <div id="drilldown-panel" class="px-6 xl:px-8 pt-6 pb-2 flex items-center gap-2">
+
+            <!-- Empty state (default — nothing is expanded until the admin opens a candidate) -->
+            <div id="drilldown-empty" class="px-6 xl:px-8 pt-6 pb-2">
+                <div class="bg-white rounded-2xl border border-dashed border-slate-300 shadow-sm px-6 py-10 flex flex-col items-center text-center gap-2">
+                    <div class="w-12 h-12 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, rgba(29,78,216,0.1), rgba(91,46,145,0.1));"><i class="fa-solid fa-hand-pointer text-blue-600 text-lg"></i></div>
+                    <p class="text-sm font-bold text-slate-700">Select a candidate to open their week</p>
+                    <p class="text-xs text-slate-400 max-w-md">Click <span class="font-semibold text-slate-600">Open</span> on any candidate above to review and edit their day-by-day timesheet on the client's behalf. Nothing is expanded until you choose someone.</p>
+                </div>
+            </div>
+
+            <!-- Drill-down (revealed by openGrid) -->
+            <div id="drilldown-wrap" class="hidden">
+            <div id="drilldown-panel" class="px-6 xl:px-8 pt-6 pb-2 flex items-center gap-2 flex-wrap">
                 <i class="fa-solid fa-turn-down text-slate-400 rotate-90"></i>
-                <h2 class="text-base font-bold text-slate-900">Admin-on-behalf entry — Marcus Reid</h2>
-                <span class="text-xs text-slate-400">Greggs Distribution · Meridian Recruitment · Forklift Driver · #BKG-2077</span>
+                <h2 class="text-base font-bold text-slate-900">Admin-on-behalf entry — <span id="dd-name">—</span></h2>
+                <span id="dd-context" class="text-xs text-slate-400"></span>
+                <button onclick="closeGrid()" class="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-slate-200 text-xs font-semibold text-slate-600 hover:border-blue-300 hover:text-blue-600 transition-colors"><i class="fa-solid fa-xmark text-[10px]"></i> Close</button>
             </div>
 
             <!-- Attribution / audit banner (TS-028) -->
@@ -681,21 +793,21 @@
                             </div>
                             <div>
                                 <p class="text-sm font-bold text-white">Weekly Day-Status Grid · Mon–Sun</p>
-                                <p class="text-xs text-white/40">Week 24 · 8–14 Jun 2026 · booking #BKG-2077 · Forklift Driver</p>
+                                <p class="text-xs text-white/40" id="dd-grid-sub">Week 24 · 8–14 Jun 2026</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="fillAdminWeek()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 text-white/90 text-xs font-semibold hover:bg-white/20 transition-colors">
+                            <button onclick="fillWeekDefault()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 text-white/90 text-xs font-semibold hover:bg-white/20 transition-colors">
                                 <i class="fa-solid fa-wand-magic-sparkles text-xs"></i> Fill week from shift pattern
                             </button>
-                            <button onclick="fillAdminWeek()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 text-white/90 text-xs font-semibold hover:bg-white/20 transition-colors">
+                            <button onclick="fillWeekDefault()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 text-white/90 text-xs font-semibold hover:bg-white/20 transition-colors">
                                 <i class="fa-solid fa-copy text-xs"></i> Copy previous week
                             </button>
                         </div>
                     </div>
 
                     <div class="p-5">
-                        <!-- Day-status legend -->
+                        <!-- Day-status + shift legend -->
                         <div class="flex items-center flex-wrap gap-2 mb-4">
                             <span class="text-xs font-semibold text-slate-500 mr-1">Day status:</span>
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-clock text-[10px]"></i> Worked</span>
@@ -703,16 +815,24 @@
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200"><i class="fa-solid fa-umbrella-beach text-[10px]"></i> Holiday</span>
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200"><i class="fa-solid fa-user-xmark text-[10px]"></i> No-show</span>
                             <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-400 border border-slate-200"><i class="fa-solid fa-minus text-[10px]"></i> Not Booked</span>
+                            <span class="w-px h-4 bg-slate-200 mx-1"></span>
+                            <span class="text-xs font-semibold text-slate-500 mr-1">Shift:</span>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-sun text-[10px]"></i> 06–14</span>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200"><i class="fa-solid fa-cloud-sun text-[10px]"></i> 14–22</span>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-700 text-slate-100 border border-slate-600"><i class="fa-solid fa-moon text-[10px]"></i> 22–06</span>
+                            <span class="w-px h-4 bg-slate-200 mx-1"></span>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200"><i class="fa-solid fa-right-left text-[10px]"></i> Role changed for shift</span>
                         </div>
 
-                        <!-- Mon–Sun grid -->
+                        <!-- Role-change note (shown when a worked day was covered in a different role) -->
+                        <div id="a-rolechange-note" class="hidden mb-4 flex items-start gap-2.5 p-3 rounded-xl border border-purple-200 bg-purple-50/50">
+                            <i class="fa-solid fa-right-left text-purple-600 text-sm mt-0.5"></i>
+                            <p class="text-xs text-slate-700"><span class="font-bold text-purple-800">Role change applied.</span> One or more shifts were worked in a different job role than <span class="font-semibold" id="a-assigned-role-label">Forklift Driver</span>. Those days are charged and paid at the covered role's rate card (role × shift). Only Abstract and the client can change a worker's role; the agency sees it read-only.</p>
+                        </div>
+
+                        <!-- Mon–Sun grid (click a day → modal, same flow as the client portal) -->
                         <div id="admin-day-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5"></div>
-
-                        <!-- Absence detail rows -->
-                        <div class="mt-5 flex flex-col gap-3">
-                            <p class="text-xs font-bold text-slate-600 uppercase tracking-wider">Absence detail</p>
-                            <div id="admin-absence-detail" class="flex flex-col gap-3"></div>
-                        </div>
+                        <p class="mt-4 text-xs text-slate-400 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> Click any day to set the shift &amp; hours or record an absence — the same entry dialog the client uses. Absence pay, cost bearer and role changes are captured there and audited to you.</p>
                     </div>
                 </div>
             </div>
@@ -736,7 +856,7 @@
                                     <p class="text-xs font-bold text-blue-800">Client Charge</p>
                                 </div>
                                 <div class="flex items-center justify-between text-xs"><span class="text-blue-600">Worked hours</span><span class="font-semibold text-slate-700"><span id="fin-charge-hrs">22.5</span> hrs</span></div>
-                                <div class="flex items-center justify-between text-xs"><span class="text-blue-600">Charge rate</span><span class="font-semibold text-slate-700">£18.40/hr</span></div>
+                                <div class="flex items-center justify-between text-xs"><span class="text-blue-600">Charge rate</span><span class="font-semibold text-slate-700" id="fin-charge-rate">£18.40/hr</span></div>
                                 <div class="flex items-center justify-between text-xs"><span class="text-blue-600" id="fin-charge-abslabel">Paid absence (1 day)</span><span class="font-semibold text-slate-700" id="fin-charge-absval">£138.00</span></div>
                                 <div class="h-px bg-blue-200 my-1"></div>
                                 <div class="flex items-center justify-between"><span class="text-xs font-bold text-blue-800">Total charge</span><span class="text-sm font-bold text-blue-800" id="fin-charge-total">£552.00</span></div>
@@ -745,10 +865,10 @@
                             <div class="flex flex-col gap-2 p-4 rounded-xl bg-purple-50 border border-purple-100">
                                 <div class="flex items-center gap-2 mb-1">
                                     <div class="w-7 h-7 rounded-lg bg-purple-100 flex items-center justify-center"><i class="fa-solid fa-hand-holding-dollar text-purple-600 text-xs"></i></div>
-                                    <p class="text-xs font-bold text-purple-800">Agency Self-Bill</p>
+                                    <p class="text-xs font-bold text-purple-800" id="fin-pay-title">Agency Self-Bill</p>
                                 </div>
                                 <div class="flex items-center justify-between text-xs"><span class="text-purple-600">Worked hours</span><span class="font-semibold text-slate-700"><span id="fin-pay-hrs">22.5</span> hrs</span></div>
-                                <div class="flex items-center justify-between text-xs"><span class="text-purple-600">Pay rate</span><span class="font-semibold text-slate-700">£13.80/hr</span></div>
+                                <div class="flex items-center justify-between text-xs"><span class="text-purple-600">Pay rate</span><span class="font-semibold text-slate-700" id="fin-pay-rate">£13.80/hr</span></div>
                                 <div class="flex items-center justify-between text-xs"><span class="text-purple-600" id="fin-pay-abslabel">Paid absence (1 day)</span><span class="font-semibold text-slate-700" id="fin-pay-absval">£103.50</span></div>
                                 <div class="h-px bg-purple-200 my-1"></div>
                                 <div class="flex items-center justify-between"><span class="text-xs font-bold text-purple-800">Total pay</span><span class="text-sm font-bold text-purple-800" id="fin-pay-total">£414.00</span></div>
@@ -759,7 +879,7 @@
                                     <div class="w-7 h-7 rounded-lg bg-amber-100 flex items-center justify-center"><i class="fa-solid fa-percent text-amber-600 text-xs"></i></div>
                                     <p class="text-xs font-bold text-amber-800">Abstract Margin</p>
                                 </div>
-                                <div class="flex items-center justify-between text-xs"><span class="text-amber-700">Spread (charge − pay)</span><span class="font-semibold text-slate-700">£4.60/hr</span></div>
+                                <div class="flex items-center justify-between text-xs"><span class="text-amber-700">Spread (charge − pay)</span><span class="font-semibold text-slate-700" id="fin-spread-rate">£4.60/hr</span></div>
                                 <div class="flex items-center justify-between text-xs"><span class="text-amber-700">Statutory (NI, WTR, Pension, Levy)</span><span class="font-semibold text-slate-700" id="fin-statutory">−£31.05</span></div>
                                 <div class="flex items-center justify-between text-xs"><span class="text-amber-700">Margin %</span><span class="font-semibold text-emerald-700" id="fin-marginpct">25.0%</span></div>
                                 <div class="h-px bg-amber-200 my-1"></div>
@@ -784,219 +904,446 @@
             </div>
 
             <div class="h-6"></div>
+            </div><!-- /drilldown-wrap -->
         </main>
     </div>
 </div>
 
+<!-- ============================================================= -->
+<!-- Day-entry modal (same flow as the client portal, plus admin-only pay override + cost bearer) -->
+<!-- ============================================================= -->
+<div id="day-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div class="absolute inset-0 backdrop-blur-sm" style="background: rgba(15,26,62,0.55);" onclick="closeDayModal()"></div>
+    <div class="relative bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+            <div>
+                <h3 class="text-base font-bold text-slate-900">Record day</h3>
+                <p id="dm-context" class="text-xs text-slate-500 mt-0.5"></p>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200"><i class="fa-solid fa-user-shield text-[9px]"></i> On client's behalf</span>
+                <button onclick="closeDayModal()" class="w-8 h-8 rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors flex items-center justify-center" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+        </div>
+
+        <div class="p-6 space-y-5">
+            <!-- Day status choice -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Day status</label>
+                <div class="grid grid-cols-4 gap-2">
+                    <label class="cursor-pointer">
+                        <input type="radio" name="dm-status" value="worked" onchange="updateModalMode()" class="peer sr-only" checked>
+                        <div class="rounded-lg border border-slate-200 peer-checked:border-emerald-400 peer-checked:bg-emerald-50 px-2 py-3 flex flex-col items-center gap-1 text-center transition-colors">
+                            <i class="fa-solid fa-briefcase text-emerald-500"></i><span class="text-xs font-semibold text-slate-700">Worked</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="dm-status" value="sick" onchange="updateModalMode()" class="peer sr-only">
+                        <div class="rounded-lg border border-slate-200 peer-checked:border-amber-400 peer-checked:bg-amber-50 px-2 py-3 flex flex-col items-center gap-1 text-center transition-colors">
+                            <i class="fa-solid fa-notes-medical text-amber-500"></i><span class="text-xs font-semibold text-slate-700">Sick</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="dm-status" value="holiday" onchange="updateModalMode()" class="peer sr-only">
+                        <div class="rounded-lg border border-slate-200 peer-checked:border-blue-400 peer-checked:bg-blue-50 px-2 py-3 flex flex-col items-center gap-1 text-center transition-colors">
+                            <i class="fa-solid fa-umbrella-beach text-blue-500"></i><span class="text-xs font-semibold text-slate-700">Holiday</span>
+                        </div>
+                    </label>
+                    <label class="cursor-pointer">
+                        <input type="radio" name="dm-status" value="noshow" onchange="updateModalMode()" class="peer sr-only">
+                        <div class="rounded-lg border border-slate-200 peer-checked:border-red-400 peer-checked:bg-red-50 px-2 py-3 flex flex-col items-center gap-1 text-center transition-colors">
+                            <i class="fa-solid fa-user-xmark text-red-500"></i><span class="text-xs font-semibold text-slate-700">No-show</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- WORKED panel: role + shift + hours + live charge/pay/margin -->
+            <div id="dm-worked" class="space-y-4">
+                <div id="dm-role-block">
+                    <div class="flex items-center justify-between mb-2">
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider">Role for this shift</label>
+                        <span id="dm-role-changed-pill" class="hidden inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 border border-purple-200"><i class="fa-solid fa-right-left text-[9px]"></i> Role changed</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="relative flex-1">
+                            <select id="dm-role-select" onchange="pickRole(this.value)" disabled class="appearance-none block w-full pl-3 pr-9 py-2 border border-slate-300 rounded-lg text-sm font-medium bg-slate-100 text-slate-500 cursor-not-allowed focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors"></select>
+                            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400"><i class="fa-solid fa-chevron-down text-xs"></i></div>
+                        </div>
+                        <button type="button" id="dm-role-change-btn" onclick="enableRoleChange()" class="px-3 py-2 bg-white border border-blue-300 text-blue-700 rounded-lg text-sm font-medium hover:bg-blue-50 transition-colors flex items-center gap-1.5 shrink-0" title="Change the role worked for this shift only"><i class="fa-solid fa-right-left text-xs"></i> Change role</button>
+                        <button type="button" id="dm-role-reset" onclick="resetRole()" class="hidden px-3 py-2 bg-white border border-slate-300 text-slate-600 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors items-center gap-1.5 shrink-0" title="Revert to the worker's assigned role"><i class="fa-solid fa-rotate-left text-xs"></i> Reset</button>
+                    </div>
+                    <p id="dm-role-note" class="text-[11px] text-slate-400 mt-2 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> Worker's assigned role. Charge, pay &amp; margin follow the role selected. Only Abstract and the client can change a role.</p>
+                    <div id="dm-role-changed-note" class="hidden mt-2 rounded-lg border border-purple-200 bg-purple-50 px-3 py-2 text-[11px] text-purple-700 flex items-start gap-1.5">
+                        <i class="fa-solid fa-triangle-exclamation mt-0.5"></i>
+                        <span>Covering <span id="dm-role-new-name" class="font-bold"></span> for this shift only (assigned role: <span id="dm-role-assigned-name" class="font-semibold"></span>). This day's charge &amp; pay use the <span id="dm-role-new-name2" class="font-semibold"></span> rate card.</span>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Shift attended</label>
+                    <div id="dm-shift-choices" class="grid grid-cols-3 gap-2"></div>
+                    <p class="text-[11px] text-slate-400 mt-2 flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> Charge &amp; pay follow the shift — night pays more. Defaults to this candidate's last shift this week.</p>
+                </div>
+                <div class="flex items-end gap-3 flex-wrap">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Hours worked</label>
+                        <input id="dm-hours" type="number" step="0.5" min="0" class="w-24 rounded-lg border border-slate-300 px-3 py-2 text-sm font-bold text-slate-900 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                    </div>
+                    <div class="flex-1 grid grid-cols-3 gap-2 min-w-[220px]">
+                        <div class="rounded-lg bg-blue-50 border border-blue-100 px-3 py-2"><p class="text-[10px] text-blue-600">Charge</p><p id="dm-est-charge" class="text-sm font-bold text-blue-800">£0.00</p></div>
+                        <div class="rounded-lg bg-purple-50 border border-purple-100 px-3 py-2"><p class="text-[10px] text-purple-600">Pay</p><p id="dm-est-pay" class="text-sm font-bold text-purple-800">£0.00</p></div>
+                        <div class="rounded-lg bg-amber-50 border border-amber-100 px-3 py-2"><p class="text-[10px] text-amber-700">Margin</p><p id="dm-est-margin" class="text-sm font-bold text-amber-800">£0.00</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABSENCE panel: reason + pay override + cost bearer + agency confirm -->
+            <div id="dm-absence" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Reason <span class="text-slate-400 normal-case font-normal">(audited to you)</span></label>
+                    <textarea id="dm-reason" rows="2" class="block w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500" placeholder="e.g. Called in unwell, expected back Wednesday"></textarea>
+                </div>
+                <div class="rounded-lg bg-slate-50 border border-slate-200 px-4 py-3 flex items-center justify-between flex-wrap gap-2">
+                    <div>
+                        <p class="text-xs font-bold text-slate-700">Pay impact <span class="font-normal text-slate-400">(override · TS-018)</span></p>
+                        <p class="text-[11px] text-slate-400 mt-0.5">Set by leave policy — any override is audited to you</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[10px] font-semibold text-slate-500">Unpaid</span>
+                        <button id="dm-pay-toggle" type="button" onclick="toggleModalPay()" role="switch" class="relative w-11 h-6 rounded-full bg-slate-300 transition-colors"><span class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform"></span></button>
+                        <span class="text-[10px] font-semibold text-emerald-600">Paid</span>
+                    </div>
+                </div>
+                <div id="dm-bearer" class="rounded-lg border border-slate-200 px-4 py-3">
+                    <div class="flex items-center justify-between flex-wrap gap-2">
+                        <div class="flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-purple-600 text-xs"></i><p class="text-xs font-bold text-slate-700">Paid-absence cost bearer <span class="font-normal text-slate-400">(TS-035)</span></p></div>
+                        <div id="dm-bearer-opts" class="flex items-center gap-1"></div>
+                    </div>
+                    <p id="dm-bearer-desc" class="text-[11px] text-slate-500 mt-1.5"></p>
+                </div>
+                <div id="dm-agency" class="rounded-lg border border-amber-200 bg-amber-50/60 px-4 py-3">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" id="dm-confirm" class="mt-0.5 w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer shrink-0">
+                        <span>
+                            <span class="text-sm font-semibold text-slate-800">Request agency confirmation</span>
+                            <span class="block text-xs text-slate-500 mt-0.5">The supplying agency (<span id="dm-agency-name" class="font-medium"></span>) will be asked to justify this absence. It does not delay the timesheet.</span>
+                        </span>
+                    </label>
+                </div>
+                <p class="text-[11px] text-slate-400 flex items-center gap-1.5"><i class="fa-solid fa-clipboard-list"></i> Recorded in the audit trail with before/after values (TS-028).</p>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between gap-3 px-6 py-4 border-t border-slate-200 bg-slate-50">
+            <button onclick="markNotBooked()" class="px-3 py-2 text-slate-500 rounded-md text-sm font-medium hover:bg-slate-200 transition-colors flex items-center gap-1.5" title="Clear this day — worker was not scheduled"><i class="fa-solid fa-minus text-xs"></i> Not booked</button>
+            <div class="flex items-center gap-3">
+                <button onclick="closeDayModal()" class="px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-md text-sm font-medium hover:bg-slate-100 transition-colors">Cancel</button>
+                <button onclick="saveDay()" class="px-5 py-2 text-white rounded-md text-sm font-semibold hover:opacity-90 transition-opacity shadow-sm" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);">Save day</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    // ===== Admin-on-behalf weekly grid (Marcus Reid) — fully editable, live financials =====
+    // ===== Admin timesheets — progressive-disclosure drill-down + client-style day modal =====
     const A_DAYS  = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
     const A_DATES = ['8 Jun','9 Jun','10 Jun','11 Jun','12 Jun','13 Jun','14 Jun'];
-    const admin = {
-        name:'Marcus Reid', charge:18.40, pay:13.80, shift:7.5, statFactor:0.075, workDays:[0,1,2,3,4],
-        days:[
-            {status:'worked', hours:7.5},
-            {status:'worked', hours:7.5},
-            {status:'holiday', pay:'Paid', costBearer:'Client', confirm:'Justified', reason:'Booked annual leave.', agency:'Agency justification (Meridian Recruitment): "Annual leave approved in advance on 22 May 2026."'},
-            {status:'noshow', pay:'Unpaid', confirm:'Awaiting agency', reason:'Did not attend, no prior notice.'},
-            {status:'worked', hours:7.5},
-            {status:'notbooked'},
-            {status:'notbooked'}
-        ]
+
+    // Shift library — charge & pay follow the shift (night pays more) via a multiplier.
+    const SHIFTS = {
+      morning:  {label:'Morning',   time:'06:00–14:00', hours:7.5, icon:'fa-sun',       mult:1.00, theme:'shift-morning',   cell:'cell-morning',   border:'border-sky-200',   txt:'text-slate-800', sub:'text-sky-700',   chip:'bg-amber-50 text-amber-700 border-amber-200',    iconCls:'text-amber-500', tileTxt:'text-slate-800', tileSub:'text-slate-700', tileRate:'text-blue-900',  tileRateBg:'bg-white/70'},
+      afternoon:{label:'Afternoon', time:'14:00–22:00', hours:7.5, icon:'fa-cloud-sun', mult:1.08, theme:'shift-afternoon', cell:'cell-afternoon', border:'border-sky-200',   txt:'text-slate-800', sub:'text-amber-700', chip:'bg-indigo-50 text-indigo-700 border-indigo-200', iconCls:'text-amber-500', tileTxt:'text-slate-800', tileSub:'text-slate-700', tileRate:'text-blue-900',  tileRateBg:'bg-white/70'},
+      night:    {label:'Night',     time:'22:00–06:00', hours:7.5, icon:'fa-moon',      mult:1.20, theme:'shift-night',     cell:'cell-night',     border:'border-slate-700', txt:'text-white',     sub:'text-slate-300', chip:'bg-slate-700 text-slate-100 border-slate-600',   iconCls:'text-slate-100', tileTxt:'text-white',     tileSub:'text-slate-300',tileRate:'text-amber-100', tileRateBg:'bg-white/15'},
     };
-    let aEditing = null;
+    const SHIFT_ORDER = ['morning','afternoon','night'];
+
+    // Role rate card (role × shift resolves the rate). The Abstract portal sees charge, pay AND margin.
+    // A worker occasionally covers a different role for a single shift; that day then follows the covered role's card.
+    const ROLES = {
+      warehouse:{label:'Warehouse Operative', charge:17.20, pay:12.90},
+      labourer: {label:'Site Labourer',       charge:16.80, pay:12.50},
+      forklift: {label:'Forklift Driver',     charge:18.40, pay:13.80},
+      flt:      {label:'FLT Driver',          charge:20.50, pay:15.50},
+      line:     {label:'Line Operative',      charge:16.80, pay:12.60},
+      siteadmin:{label:'Site Administrator',  charge:19.50, pay:14.60},
+    };
+    const ROLE_ORDER = ['warehouse','labourer','forklift','flt','line','siteadmin'];
+    const CAN_EDIT_ROLE = true;   // the Abstract admin may change a worker's role for a shift
+
+    const wk  = (h,shift)=>({status:'worked',hours:h,shift:shift||'morning'});
+    const wkr = (h,shift,role)=>({status:'worked',hours:h,shift:shift||'morning',role});
+    const nb  = ()=>({status:'notbooked'});
+    const ab  = (status,pay,confirm,reason,costBearer)=>({status,pay,confirm:confirm||null,reason:reason||'',costBearer});
+
+    // One record per candidate row above; the drill-down renders whichever the admin opens.
+    const CANDS = {
+      daniel:{name:'Daniel Okafor', client:'HSBC Logistics Hub', agency:'TechForce Agency', source:'agency', roleKey:'warehouse', bu:'Midlands Logistics', bkg:'#BKG-2091', statFactor:0.075, defShift:'morning', shiftHrs:7.5,
+        days:[wk(7.5,'morning'),wk(7.5,'morning'),wk(7.5,'morning'),wk(7.5,'morning'),wk(7.5,'morning'),nb(),nb()]},
+      aisha:{name:'Aisha Khan', client:'HSBC Logistics Hub', agency:'Prime Staffing', source:'agency', roleKey:'warehouse', bu:'Midlands Logistics', bkg:'#BKG-2104', statFactor:0.075, defShift:'night', shiftHrs:7.5,
+        days:[wk(7.5,'night'),ab('sick','Paid','Awaiting agency','Called in unwell — expected back Wednesday.','Client'),wk(7.5,'night'),wk(7.5,'night'),wk(7.5,'night'),nb(),nb()]},
+      liam:{name:"Liam O'Connor", client:'Barratt Developments', agency:'Blue Arrow', source:'agency', roleKey:'labourer', bu:'South East Sites', bkg:'#BKG-2088', statFactor:0.075, defShift:'morning', shiftHrs:8,
+        days:[wk(8,'morning'),wk(8,'morning'),wk(8,'morning'),wk(8,'morning'),wk(8,'morning'),nb(),nb()]},
+      sophie:{name:'Sophie Bennett', client:'Barratt Developments', agency:'Abstract', source:'abstract', roleKey:'siteadmin', bu:'South East Sites', bkg:'#BKG-2112', statFactor:0.075, defShift:'morning', shiftHrs:7.5,
+        days:[wk(7.5,'morning'),wk(7.5,'morning'),wk(7.5,'morning'),wk(7.5,'morning'),wk(7.5,'morning'),nb(),nb()]},
+      marcus:{name:'Marcus Reid', client:'Greggs Distribution', agency:'Meridian Recruitment', source:'agency', roleKey:'forklift', bu:'Nationwide Distribution', bkg:'#BKG-2077', statFactor:0.075, defShift:'night', shiftHrs:7.5,
+        days:[wk(7.5,'night'),wk(7.5,'night'),ab('holiday','Paid',null,'Booked annual leave.','Client'),ab('noshow','Unpaid','Awaiting agency','Did not attend, no prior notice.'),wkr(7.5,'night','flt'),nb(),nb()]},
+      priya:{name:'Priya Sharma', client:'Greggs Distribution', agency:'TechForce Agency', source:'agency', roleKey:'line', bu:'Nationwide Distribution', bkg:'#BKG-2069', statFactor:0.075, defShift:'morning', shiftHrs:7.5,
+        days:[wk(7.5,'morning'),wk(7.5,'morning'),wk(7.5,'morning'),wk(7.5,'morning'),wk(7.5,'morning'),ab('sick','Paid','Awaiting agency','Sick day — GP note to follow.','Client'),nb()]},
+      callum:{name:'Callum Fraser', client:'HSBC Logistics Hub', agency:'Blue Arrow', source:'agency', roleKey:'warehouse', bu:'Midlands Logistics', bkg:'#BKG-2055', statFactor:0.075, defShift:'morning', shiftHrs:7.5,
+        days:[wk(7.5,'morning'),wk(7.5,'morning'),wk(7.5,'morning'),wk(7.5,'morning'),nb(),nb(),nb()]},
+      grace:{name:'Grace Adeyemi', client:'Barratt Developments', agency:'Prime Staffing', source:'agency', roleKey:'labourer', bu:'South East Sites', bkg:'#BKG-2041', statFactor:0.075, defShift:'morning', shiftHrs:8.5,
+        days:[wk(8.5,'morning'),wk(8.5,'morning'),wk(8.5,'morning'),wk(8.5,'morning'),ab('holiday','Paid',null,'Booked annual leave.','Client'),nb(),nb()]},
+    };
+    const BYNAME = {};
+    Object.keys(CANDS).forEach(k=>{ CANDS[k].id=k; BYNAME[CANDS[k].name]=k; });
+
+    let current=null, modalTarget=null, modalShift='morning', modalRole=null, roleEditing=false, modalPay='Paid', modalBearer='Client';
 
     const money = n => '£' + n.toLocaleString('en-GB',{minimumFractionDigits:2,maximumFractionDigits:2});
+    const cur = () => CANDS[current];
     const isAbs = d => d.status==='holiday' || d.status==='sick' || d.status==='noshow';
+    const roleKeyForDay = (c,day)=> (day && day.role) ? day.role : c.roleKey;
+    const dayCharge = (c,shift,ro)=> ROLES[ro||c.roleKey].charge * SHIFTS[shift||'morning'].mult;
+    const dayPay    = (c,shift,ro)=> ROLES[ro||c.roleKey].pay    * SHIFTS[shift||'morning'].mult;
+    const roleChangedDay = (c,day)=> day && day.status==='worked' && day.role && day.role !== c.roleKey;
+    const setTxt = (id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=v; };
+
+    function defaultShiftFor(c,d){
+      for(let i=d-1;i>=0;i--){ if(c.days[i].status==='worked') return c.days[i].shift; }
+      for(let i=d+1;i<7;i++){ if(c.days[i].status==='worked') return c.days[i].shift; }
+      return c.defShift||'morning';
+    }
+
     const A_META = {
-        holiday:{icon:'fa-umbrella-beach text-blue-500', lbl:'Holiday', pillCls:'bg-blue-50 text-blue-700 border-blue-200', card:'border-blue-200 bg-blue-50/40', hdr:'bg-blue-50 border-blue-100'},
-        sick:{icon:'fa-notes-medical text-amber-500', lbl:'Sick Leave', pillCls:'bg-amber-50 text-amber-700 border-amber-200', card:'border-amber-200 bg-amber-50/40', hdr:'bg-amber-50 border-amber-100'},
-        noshow:{icon:'fa-user-xmark text-red-500', lbl:'No-show', pillCls:'bg-red-50 text-red-700 border-red-200', card:'border-2 border-red-300 bg-red-50/40 ring-2 ring-red-100', hdr:'bg-red-50 border-red-100'}
+      holiday:{icon:'fa-umbrella-beach text-blue-500', lbl:'Holiday',    pillCls:'bg-blue-50 text-blue-700 border-blue-200',   card:'border border-blue-200 bg-blue-50/40'},
+      sick:   {icon:'fa-notes-medical text-amber-500', lbl:'Sick Leave', pillCls:'bg-amber-50 text-amber-700 border-amber-200', card:'border border-amber-200 bg-amber-50/40'},
+      noshow: {icon:'fa-user-xmark text-red-500',      lbl:'No-show',    pillCls:'bg-red-50 text-red-700 border-red-200',       card:'border-2 border-red-300 bg-red-50/40 ring-2 ring-red-100'}
     };
     const payPill = p => p==='Unpaid'
-        ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">Unpaid</span>'
-        : '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Paid</span>';
+      ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">Unpaid</span>'
+      : '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Paid</span>';
     const confPill = c => c==='Justified'
-        ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-circle-check text-[9px]"></i> Justified</span>'
-        : (c ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-hourglass-half text-[9px]"></i> Awaiting agency</span>' : '');
-
-    function aHeader(d){ return '<div class="px-3 py-1.5 flex items-center justify-between border-b"><span class="text-xs font-bold text-slate-600">'+A_DAYS[d]+'</span><span class="text-[10px] text-slate-400">'+A_DATES[d]+'</span></div>'; }
-
-    function aCard(d){
-        const day = admin.days[d];
-        if(aEditing===d){
-            const cur = day.status==='worked' ? day.hours : '';
-            return '<div class="rounded-xl border-2 border-blue-400 overflow-hidden bg-white">'
-                + '<div class="px-3 py-1.5 bg-blue-50 border-b border-blue-100 flex items-center justify-between"><span class="text-xs font-bold text-slate-600">'+A_DAYS[d]+'</span><span class="text-[10px] text-slate-400">'+A_DATES[d]+'</span></div>'
-                + '<div class="p-2 flex flex-col items-center gap-1.5">'
-                +   '<input id="a-cell-input" type="number" step="0.5" min="0" value="'+cur+'" class="w-16 h-8 text-center text-sm font-bold text-slate-800 border-2 border-blue-400 rounded-md focus:outline-none" onblur="aCommit(this.value)" onkeydown="if(event.key===\'Enter\'){aCommit(this.value)}else if(event.key===\'Escape\'){aCancel()}">'
-                +   '<div class="flex gap-0.5">'
-                +     '<button type="button" title="Sick Leave" onmousedown="event.preventDefault()" onclick="aPick(\'sick\')" class="w-5 h-5 rounded text-[9px] font-bold bg-amber-100 text-amber-700 hover:bg-amber-200">S</button>'
-                +     '<button type="button" title="Holiday" onmousedown="event.preventDefault()" onclick="aPick(\'holiday\')" class="w-5 h-5 rounded text-[9px] font-bold bg-blue-100 text-blue-700 hover:bg-blue-200">H</button>'
-                +     '<button type="button" title="No-show" onmousedown="event.preventDefault()" onclick="aPick(\'noshow\')" class="w-5 h-5 rounded text-[9px] font-bold bg-red-100 text-red-700 hover:bg-red-200">N</button>'
-                +     '<button type="button" title="Not booked" onmousedown="event.preventDefault()" onclick="aPick(\'nb\')" class="w-5 h-5 rounded text-[9px] font-bold bg-slate-100 text-slate-500 hover:bg-slate-200">—</button>'
-                +     '<button type="button" title="Apply" onmousedown="event.preventDefault()" onclick="aCommit(document.getElementById(\'a-cell-input\').value)" class="w-5 h-5 rounded text-[9px] bg-emerald-100 text-emerald-700 hover:bg-emerald-200"><i class="fa-solid fa-check"></i></button>'
-                +   '</div>'
-                + '</div></div>';
-        }
-        const open = 'onclick="aEdit('+d+')"';
-        if(day.status==='worked'){
-            return '<div class="rounded-xl border border-emerald-200 bg-white overflow-hidden">'
-                + '<div class="px-3 py-1.5 bg-emerald-50 border-b border-emerald-100 flex items-center justify-between"><span class="text-xs font-bold text-slate-600">'+A_DAYS[d]+'</span><span class="text-[10px] text-slate-400">'+A_DATES[d]+'</span></div>'
-                + '<button '+open+' class="w-full p-3 flex flex-col items-center gap-1.5 hover:bg-emerald-50/60 transition-colors"><p class="text-xl font-bold text-emerald-700">'+day.hours.toFixed(1)+'</p>'
-                + '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-clock text-[9px]"></i> Worked</span></button></div>';
-        }
-        if(day.status==='notbooked'){
-            return '<div class="rounded-xl border border-slate-200 overflow-hidden bg-slate-50">'
-                + '<div class="px-3 py-1.5 bg-slate-100 border-b border-slate-200 flex items-center justify-between"><span class="text-xs font-bold text-slate-500">'+A_DAYS[d]+'</span><span class="text-[10px] text-slate-400">'+A_DATES[d]+'</span></div>'
-                + '<button '+open+' class="w-full p-3 flex flex-col items-center gap-1.5 hover:bg-slate-100 transition-colors"><i class="fa-solid fa-minus text-slate-300 text-lg"></i>'
-                + '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-400 border border-slate-200">Not Booked</span></button></div>';
-        }
-        const m = A_META[day.status];
-        return '<div class="rounded-xl '+m.card+' overflow-hidden">'
-            + '<div class="px-3 py-1.5 '+m.hdr+' border-b flex items-center justify-between"><span class="text-xs font-bold text-slate-600">'+A_DAYS[d]+'</span><span class="text-[10px] text-slate-400">'+A_DATES[d]+'</span></div>'
-            + '<button '+open+' class="w-full p-3 flex flex-col items-center gap-1.5 hover:opacity-90 transition-opacity"><i class="fa-solid '+m.icon+' text-lg"></i>'
-            + '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold '+m.pillCls+' border">'+m.lbl+'</span>'
-            + payPill(day.pay) + confPill(day.confirm) + '</button></div>';
-    }
-
+      ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-circle-check text-[8px]"></i> Justified</span>'
+      : (c ? '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-hourglass-half text-[8px]"></i> Awaiting agency</span>' : '');
     const CB_META = {
-        Client:   {desc:'Client absorbs — billed at charge, paid at pay (pass-through).'},
-        Agency:   {desc:'Agency absorbs — not billed to client, not reimbursed by Abstract.'},
-        Abstract: {desc:'Abstract absorbs — paid to agency, not billed to client (reduces margin).'}
+      Client:  {desc:'Client absorbs — billed at charge, paid at pay (pass-through).'},
+      Agency:  {desc:'Agency absorbs — not billed to client, not reimbursed by Abstract.'},
+      Abstract:{desc:'Abstract absorbs — paid to agency, not billed to client (reduces margin).'}
     };
-    function costBearerControl(d, cur){
-        const opts = ['Client','Agency','Abstract'].map(function(o){
-            const on = (o===cur);
-            return '<button type="button" onclick="setCostBearer('+d+',\''+o+'\')" class="px-2.5 py-1 rounded-md text-[10px] font-semibold transition-colors '
-                + (on ? 'bg-purple-600 text-white' : 'bg-white text-slate-600 border border-slate-200 hover:border-purple-300') + '">'+o+'</button>';
-        }).join('');
-        return '<div class="mt-2.5 pt-2.5 border-t border-slate-100">'
-            + '<div class="flex items-center justify-between flex-wrap gap-2">'
-            +   '<div class="flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-purple-600 text-xs"></i><p class="text-xs font-bold text-slate-700">Paid-absence cost bearer <span class="font-normal text-slate-400">(TS-035)</span></p></div>'
-            +   '<div class="flex items-center gap-1">'+opts+'</div>'
-            + '</div>'
-            + '<p class="text-[10px] text-slate-500 mt-1.5">'+CB_META[cur].desc+'</p>'
-            + '</div>';
-    }
-    function computeFin(){
-        const worked = admin.days.reduce((t,d)=> t + (d.status==='worked' ? d.hours : 0), 0);
-        const paidAbsDays = admin.days.filter(d=> isAbs(d) && d.pay==='Paid');
-        const paidAbs = paidAbsDays.length;
-        // Paid-absence cost bearer (TS-035/TS-036): Client → +charge & +pay; Abstract → +pay only; Agency → neither.
-        let chargeAbs = 0, payAbs = 0;
-        paidAbsDays.forEach(d=>{
-            const cb = d.costBearer || 'Client';
-            if(cb==='Client'){ chargeAbs += admin.shift*admin.charge; payAbs += admin.shift*admin.pay; }
-            else if(cb==='Abstract'){ payAbs += admin.shift*admin.pay; }        // cost hits Abstract margin
-            // 'Agency' → agency absorbs: neither charged nor reimbursed
-        });
-        const chargeTotal = worked*admin.charge + chargeAbs;
-        const payTotal = worked*admin.pay + payAbs;
-        const gross = chargeTotal - payTotal;
-        const stat = payTotal*admin.statFactor;
-        const net = gross - stat;
-        const pct = chargeTotal>0 ? (gross/chargeTotal*100) : 0;
-        const workedDays = admin.days.filter(d=>d.status==='worked').length;
-        return {worked, paidAbs, chargeAbs, payAbs, chargeTotal, payTotal, gross, stat, net, pct, workedDays};
+
+    // ---- Day cells: client-portal style (shift background), click opens the modal ----
+    function dayCard(d){
+      const c=cur(), day=c.days[d], open='onclick="openDay('+d+')"';
+      if(day.status==='worked'){
+        const s=SHIFTS[day.shift||'morning'], changed=roleChangedDay(c,day);
+        const ring = changed?' ring-2 ring-purple-400 ring-offset-1':'';
+        const badge = changed?'<span class="absolute top-1 right-1 z-[3] w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center text-[9px] shadow" title="Role changed for this shift"><i class="fa-solid fa-right-left"></i></span>':'';
+        const roleTag = changed?'<span class="inline-flex items-center gap-0.5 text-[9px] font-bold '+s.sub+' uppercase tracking-wide"><i class="fa-solid fa-right-left text-[8px]"></i> '+ROLES[day.role].label+'</span>':'';
+        return '<div class="relative rounded-xl border '+s.border+ring+' overflow-hidden">'+badge
+          + '<button '+open+' class="shift-bg '+s.cell+' w-full p-3 flex flex-col items-center gap-1 transition-all hover:brightness-95">'
+          +   '<div class="w-full flex items-center justify-between"><span class="text-xs font-bold '+s.txt+'">'+A_DAYS[d]+'</span><span class="text-[10px] '+s.sub+'">'+A_DATES[d]+'</span></div>'
+          +   '<p class="text-xl font-bold '+s.txt+' leading-tight">'+day.hours.toFixed(1)+'</p>'
+          +   '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold '+s.chip+' border"><i class="fa-solid '+s.icon+' text-[9px]"></i> '+s.time+'</span>'
+          +   roleTag
+          + '</button></div>';
+      }
+      if(day.status==='notbooked'){
+        return '<div class="rounded-xl border border-slate-200 overflow-hidden bg-slate-50">'
+          + '<button '+open+' class="w-full p-3 flex flex-col items-center gap-1 hover:bg-slate-100 transition-colors">'
+          +   '<div class="w-full flex items-center justify-between"><span class="text-xs font-bold text-slate-500">'+A_DAYS[d]+'</span><span class="text-[10px] text-slate-400">'+A_DATES[d]+'</span></div>'
+          +   '<i class="fa-solid fa-minus text-slate-300 text-lg my-0.5"></i>'
+          +   '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-100 text-slate-400 border border-slate-200">Not Booked</span>'
+          + '</button></div>';
+      }
+      const m=A_META[day.status];
+      return '<div class="rounded-xl '+m.card+' overflow-hidden">'
+        + '<button '+open+' class="w-full p-3 flex flex-col items-center gap-1 hover:opacity-90 transition-opacity">'
+        +   '<div class="w-full flex items-center justify-between"><span class="text-xs font-bold text-slate-600">'+A_DAYS[d]+'</span><span class="text-[10px] text-slate-400">'+A_DATES[d]+'</span></div>'
+        +   '<i class="fa-solid '+m.icon+' text-lg my-0.5"></i>'
+        +   '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold '+m.pillCls+' border">'+m.lbl+'</span>'
+        +   '<div class="flex items-center gap-1">'+payPill(day.pay)+confPill(day.confirm)+'</div>'
+        + '</button></div>';
     }
 
-    function renderAdmin(){
-        // day grid
-        let cells = '';
-        for(let d=0; d<7; d++) cells += aCard(d);
-        const f = computeFin();
-        cells += '<div class="rounded-xl border border-blue-200 overflow-hidden" style="background: linear-gradient(135deg, rgba(29,78,216,0.06), rgba(91,46,145,0.06));">'
-            + '<div class="px-3 py-1.5 border-b border-blue-100 flex items-center justify-center"><span class="text-xs font-bold text-blue-700">Week total</span></div>'
-            + '<div class="p-3 flex flex-col items-center gap-1"><p class="text-xl font-bold text-blue-800">'+f.worked.toFixed(1)+'</p><p class="text-[10px] text-slate-500">worked hrs · '+f.workedDays+' days</p></div></div>';
-        document.getElementById('admin-day-grid').innerHTML = cells;
-
-        // absence detail
-        let abs = '';
-        admin.days.forEach((day,d)=>{
-            if(!isAbs(day)) return;
-            const m = A_META[day.status];
-            const paid = day.pay==='Paid';
-            abs += '<div class="flex items-start gap-3 p-4 rounded-xl '+(day.status==='noshow'?'bg-red-50/40 border-red-100':(day.status==='sick'?'bg-amber-50/50 border-amber-100':'bg-blue-50/50 border-blue-100'))+' border">'
-                + '<div class="w-8 h-8 rounded-lg '+(day.status==='noshow'?'bg-red-100':(day.status==='sick'?'bg-amber-100':'bg-blue-100'))+' flex items-center justify-center flex-shrink-0"><i class="fa-solid '+m.icon.split(' ')[0]+' '+(day.status==='noshow'?'text-red-600':(day.status==='sick'?'text-amber-600':'text-blue-600'))+' text-sm"></i></div>'
-                + '<div class="flex-1 min-w-0">'
-                +   '<div class="flex items-center gap-2 flex-wrap"><p class="text-xs font-bold text-slate-800">'+A_DAYS[d]+' '+A_DATES[d]+' · '+m.lbl+'</p>'+payPill(day.pay)+confPill(day.confirm)+'</div>'
-                +   '<p class="text-xs text-slate-600 mt-1">Reason: '+(day.reason||'—')+(day.agency?' <span class="text-slate-500 italic">'+day.agency+'</span>':'')+'</p>'
-                +   '<div class="mt-3 p-3 rounded-lg bg-white border border-slate-200">'
-                +     '<div class="flex items-center justify-between flex-wrap gap-2">'
-                +       '<div class="flex items-center gap-2"><i class="fa-solid fa-user-shield text-purple-600 text-xs"></i><p class="text-xs font-bold text-slate-700">Override pay impact <span class="font-normal text-slate-400">(admin only · TS-018)</span></p></div>'
-                +       '<div class="flex items-center gap-2"><span class="text-[10px] font-semibold text-slate-500">Unpaid</span>'
-                +         '<button onclick="toggleAdminPay('+d+')" role="switch" aria-checked="'+(paid?'true':'false')+'" class="relative w-11 h-6 rounded-full '+(paid?'bg-emerald-500':'bg-slate-300')+' transition-colors"><span class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform'+(paid?' translate-x-5':'')+'"></span></button>'
-                +         '<span class="text-[10px] font-semibold text-emerald-600">Paid</span></div>'
-                +     '</div>'
-                +     '<div class="mt-2.5"><label class="text-[10px] font-medium text-slate-500 mb-1 block">Override reason (required — audited to you)</label><input type="text" placeholder="e.g. Company sick pay applies — line manager confirmed by phone" class="w-full border border-slate-200 rounded-lg px-2.5 py-2 text-xs text-slate-700 bg-slate-50 focus:outline-none focus:border-purple-400 focus:bg-white transition-colors"/></div>'
-                +     (paid ? costBearerControl(d, day.costBearer||'Client') : '')
-                +     '<p class="text-[10px] text-slate-400 mt-1.5"><i class="fa-solid fa-clipboard-list"></i> This change is recorded in the audit trail with before/after values (TS-028).</p>'
-                +   '</div>'
-                + '</div></div>';
-        });
-        if(!abs) abs = '<p class="text-xs text-slate-400 italic px-1">No absences recorded this week.</p>';
-        document.getElementById('admin-absence-detail').innerHTML = abs;
-
-        // financial summary
-        const absDays = f.paidAbs;
-        const lbl = 'Paid absence ('+absDays+(absDays===1?' day':' days')+')';
-        document.getElementById('fin-charge-hrs').textContent = f.worked.toFixed(1);
-        document.getElementById('fin-pay-hrs').textContent = f.worked.toFixed(1);
-        document.getElementById('fin-charge-abslabel').textContent = lbl;
-        document.getElementById('fin-pay-abslabel').textContent = lbl;
-        document.getElementById('fin-charge-absval').textContent = money(f.chargeAbs);
-        document.getElementById('fin-pay-absval').textContent = money(f.payAbs);
-        document.getElementById('fin-charge-total').textContent = money(f.chargeTotal);
-        document.getElementById('fin-pay-total').textContent = money(f.payTotal);
-        document.getElementById('fin-statutory').textContent = '−' + money(f.stat);
-        document.getElementById('fin-marginpct').textContent = f.pct.toFixed(1) + '%';
-        document.getElementById('fin-netmargin').textContent = money(f.net);
-
-        if(aEditing!==null){ const i=document.getElementById('a-cell-input'); if(i){ i.focus(); i.select(); } }
+    function computeFin(c){
+      let worked=0, chargeWorked=0, payWorked=0;
+      c.days.forEach(d=>{ if(d.status!=='worked') return; worked+=d.hours; const rk=roleKeyForDay(c,d), s=SHIFTS[d.shift||'morning']; chargeWorked+=d.hours*ROLES[rk].charge*s.mult; payWorked+=d.hours*ROLES[rk].pay*s.mult; });
+      const paidAbsDays=c.days.filter(d=>isAbs(d)&&d.pay==='Paid'), paidAbs=paidAbsDays.length;
+      const aCharge=ROLES[c.roleKey].charge, aPay=ROLES[c.roleKey].pay;
+      let chargeAbs=0, payAbs=0;
+      paidAbsDays.forEach(d=>{ const cb=d.costBearer||'Client'; if(cb==='Client'){ chargeAbs+=c.shiftHrs*aCharge; payAbs+=c.shiftHrs*aPay; } else if(cb==='Abstract'){ payAbs+=c.shiftHrs*aPay; } });
+      const chargeTotal=chargeWorked+chargeAbs, payTotal=payWorked+payAbs;
+      const gross=chargeTotal-payTotal, stat=payTotal*(c.statFactor||0.075), net=gross-stat, pct=chargeTotal>0?(gross/chargeTotal*100):0;
+      const workedDays=c.days.filter(d=>d.status==='worked').length, roleChanged=c.days.some(d=>roleChangedDay(c,d));
+      return {worked,paidAbs,chargeWorked,payWorked,chargeAbs,payAbs,chargeTotal,payTotal,gross,stat,net,pct,workedDays,roleChanged};
     }
 
-    function aEdit(d){ aEditing=d; renderAdmin(); }
-    function aCancel(){ aEditing=null; renderAdmin(); }
-    function aCommit(v){
-        if(aEditing===null) return;
-        const n=parseFloat(v);
-        admin.days[aEditing] = (v==='' || isNaN(n) || n<=0) ? {status:'notbooked'} : {status:'worked', hours:n};
-        aEditing=null; renderAdmin();
-    }
-    function aPick(status){
-        if(aEditing===null) return;
-        const d=aEditing;
-        if(status==='nb'){ admin.days[d]={status:'notbooked'}; }
-        else {
-            const pay = (status==='noshow') ? 'Unpaid' : 'Paid';
-            const day = {status, pay, confirm:null, reason:'Recorded by Abstract on the client\'s behalf.'};
-            if(pay==='Paid') day.costBearer = 'Client';
-            admin.days[d] = day;
-        }
-        aEditing=null; renderAdmin();
-    }
-    function toggleAdminPay(d){
-        const day=admin.days[d];
-        if(!isAbs(day)) return;
-        day.pay = (day.pay==='Paid') ? 'Unpaid' : 'Paid';
-        if(day.pay==='Paid' && !day.costBearer) day.costBearer = 'Client';
-        renderAdmin();
-    }
-    function setCostBearer(d, val){
-        const day=admin.days[d];
-        if(!isAbs(day) || day.pay!=='Paid') return;
-        day.costBearer = val;
-        renderAdmin();
-    }
-    function fillAdminWeek(){
-        for(let d=0; d<7; d++) admin.days[d] = admin.workDays.includes(d) ? {status:'worked', hours:admin.shift} : {status:'notbooked'};
-        aEditing=null; renderAdmin();
+    function render(){
+      if(!current) return;
+      const c=cur();
+      let cells=''; for(let d=0;d<7;d++) cells+=dayCard(d);
+      const f=computeFin(c);
+      cells += '<div class="rounded-xl border border-blue-200 overflow-hidden" style="background: linear-gradient(135deg, rgba(29,78,216,0.06), rgba(91,46,145,0.06));">'
+        + '<div class="px-3 py-1.5 border-b border-blue-100 flex items-center justify-center"><span class="text-xs font-bold text-blue-700">Week total</span></div>'
+        + '<div class="p-3 flex flex-col items-center gap-1"><p class="text-xl font-bold text-blue-800">'+f.worked.toFixed(1)+'</p><p class="text-[10px] text-slate-500">worked hrs · '+f.workedDays+' days</p></div></div>';
+      document.getElementById('admin-day-grid').innerHTML = cells;
+
+      const lbl = 'Paid absence ('+f.paidAbs+(f.paidAbs===1?' day':' days')+')';
+      setTxt('fin-charge-hrs', f.worked.toFixed(1)); setTxt('fin-pay-hrs', f.worked.toFixed(1));
+      setTxt('fin-charge-abslabel', lbl); setTxt('fin-pay-abslabel', lbl);
+      setTxt('fin-charge-absval', money(f.chargeAbs)); setTxt('fin-pay-absval', money(f.payAbs));
+      setTxt('fin-charge-total', money(f.chargeTotal)); setTxt('fin-pay-total', money(f.payTotal));
+      setTxt('fin-statutory', '−'+money(f.stat)); setTxt('fin-marginpct', f.pct.toFixed(1)+'%'); setTxt('fin-netmargin', money(f.net));
+      const cr = f.worked ? f.chargeWorked/f.worked : ROLES[c.roleKey].charge;
+      const pr = f.worked ? f.payWorked/f.worked : ROLES[c.roleKey].pay;
+      setTxt('fin-charge-rate', money(cr)+'/hr'); setTxt('fin-pay-rate', money(pr)+'/hr'); setTxt('fin-spread-rate', money(cr-pr)+'/hr');
+      const note=document.getElementById('a-rolechange-note'); if(note) note.classList.toggle('hidden', !f.roleChanged);
+      setTxt('a-assigned-role-label', ROLES[c.roleKey].label);
     }
 
-    function openGrid(name){ document.getElementById('drilldown-panel').scrollIntoView({ behavior:'smooth' }); }
-    document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ aCancel(); } });
-    renderAdmin();
+    // ---- Progressive disclosure: open / close the candidate drill-down ----
+    function openGrid(nameOrId){
+      const id = CANDS[nameOrId] ? nameOrId : BYNAME[nameOrId];
+      if(!id) return;
+      current=id; const c=cur();
+      setTxt('dd-name', c.name);
+      setTxt('dd-context', c.client+' · '+c.agency+' · '+ROLES[c.roleKey].label+' · '+c.bkg);
+      setTxt('dd-grid-sub', 'Week 24 · 8–14 Jun 2026 · booking '+c.bkg+' · '+ROLES[c.roleKey].label);
+      setTxt('fin-pay-title', c.source==='abstract' ? 'Worker Pay (Abstract-supplied)' : 'Agency Self-Bill');
+      document.getElementById('drilldown-empty').classList.add('hidden');
+      document.getElementById('drilldown-wrap').classList.remove('hidden');
+      render();
+      document.getElementById('drilldown-wrap').scrollIntoView({behavior:'smooth'});
+    }
+    function closeGrid(){
+      current=null;
+      document.getElementById('drilldown-wrap').classList.add('hidden');
+      const e=document.getElementById('drilldown-empty'); e.classList.remove('hidden');
+      e.scrollIntoView({behavior:'smooth', block:'center'});
+    }
+    function fillWeekDefault(){
+      const c=cur(); if(!c) return;
+      for(let d=0;d<7;d++) c.days[d] = (d<5) ? wk(c.shiftHrs, c.defShift) : nb();
+      render();
+    }
+
+    // ---- Day-entry modal ----
+    function openDay(d){
+      const c=cur(); if(!c) return;
+      modalTarget=d; const day=c.days[d];
+      let status, shift, hours;
+      if(day.status==='worked'){ status='worked'; shift=day.shift||'morning'; hours=day.hours; }
+      else if(day.status==='notbooked'){ status='worked'; shift=defaultShiftFor(c,d); hours=SHIFTS[shift].hours; }
+      else { status=day.status; shift=defaultShiftFor(c,d); hours=SHIFTS[shift].hours; }
+      modalShift=shift; modalRole=roleKeyForDay(c,day); roleEditing=false;
+      modalPay = isAbs(day) ? (day.pay||'Paid') : (status==='noshow'?'Unpaid':'Paid');
+      modalBearer = day.costBearer || 'Client';
+      const r=document.querySelector('input[name=dm-status][value='+status+']'); if(r) r.checked=true;
+      document.getElementById('dm-hours').value=hours;
+      document.getElementById('dm-reason').value=day.reason||'';
+      document.getElementById('dm-confirm').checked=!!day.confirm;
+      setTxt('dm-agency-name', c.agency);
+      document.getElementById('dm-agency').classList.toggle('hidden', c.source==='abstract');
+      renderRoleBlock(c); renderShiftChoices(); updateModalMode();
+      setTxt('dm-context', c.name+' · '+A_DAYS[d]+' '+A_DATES[d]);
+      document.getElementById('day-modal').classList.remove('hidden');
+    }
+    function renderShiftChoices(){
+      const c=cur();
+      document.getElementById('dm-shift-choices').innerHTML = SHIFT_ORDER.map(k=>{
+        const s=SHIFTS[k], on=(k===modalShift);
+        return '<button type="button" onclick="pickShift(\''+k+'\')" class="shift-bg '+s.theme+' relative rounded-xl px-2 py-3 flex flex-col items-center gap-1 text-center transition-all '
+          + (on?'ring-2 ring-offset-2 ring-blue-600 scale-[1.03] shadow-md':'opacity-80 hover:opacity-100')+'">'
+          + (on?'<span class="absolute top-1 right-1 z-[3] w-4 h-4 rounded-full bg-white text-blue-600 flex items-center justify-center text-[9px] shadow"><i class="fa-solid fa-check"></i></span>':'')
+          + '<i class="fa-solid '+s.icon+' '+s.iconCls+' text-base drop-shadow-sm"></i>'
+          + '<span class="text-xs font-bold '+s.tileTxt+'">'+s.label+'</span>'
+          + '<span class="text-[10px] '+s.tileSub+'">'+s.time+'</span>'
+          + '<span class="text-[10px] font-bold '+s.tileRate+' '+s.tileRateBg+' rounded px-1.5 py-0.5">'+money(dayCharge(c,k,modalRole))+'/hr</span>'
+          + '</button>';
+      }).join('');
+    }
+    function pickShift(k){ modalShift=k; renderShiftChoices(); updateWorkedEst(); }
+
+    function renderRoleBlock(c){
+      const sel=document.getElementById('dm-role-select');
+      sel.innerHTML = ROLE_ORDER.map(k=>{ const assigned=(k===c.roleKey);
+        return '<option value="'+k+'"'+(k===modalRole?' selected':'')+'>'+ROLES[k].label+(assigned?' (assigned)':'')+' — '+money(ROLES[k].charge)+'/hr</option>';
+      }).join('');
+      sel.value=modalRole; applyRoleEditingState(c);
+    }
+    function applyRoleEditingState(c){
+      const sel=document.getElementById('dm-role-select'), btn=document.getElementById('dm-role-change-btn'), reset=document.getElementById('dm-role-reset');
+      const unlocked = roleEditing && CAN_EDIT_ROLE;
+      sel.disabled=!unlocked;
+      sel.className='appearance-none block w-full pl-3 pr-9 py-2 border rounded-lg text-sm font-medium focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors '+(unlocked?'border-blue-300 bg-white text-slate-800 cursor-pointer':'border-slate-300 bg-slate-100 text-slate-500 cursor-not-allowed');
+      btn.classList.toggle('hidden', roleEditing);
+      reset.classList.toggle('hidden', !roleEditing); reset.classList.toggle('flex', roleEditing);
+      updateRoleChangedNote(c);
+    }
+    function updateRoleChangedNote(c){
+      const changed=(modalRole!==c.roleKey);
+      document.getElementById('dm-role-changed-note').classList.toggle('hidden', !changed);
+      document.getElementById('dm-role-changed-pill').classList.toggle('hidden', !changed);
+      document.getElementById('dm-role-note').classList.toggle('hidden', changed);
+      if(changed){ setTxt('dm-role-new-name', ROLES[modalRole].label); setTxt('dm-role-new-name2', ROLES[modalRole].label); setTxt('dm-role-assigned-name', ROLES[c.roleKey].label); }
+    }
+    function enableRoleChange(){ if(!CAN_EDIT_ROLE) return; roleEditing=true; applyRoleEditingState(cur()); document.getElementById('dm-role-select').focus(); }
+    function pickRole(k){ modalRole=k; updateRoleChangedNote(cur()); renderShiftChoices(); updateWorkedEst(); }
+    function resetRole(){ const c=cur(); modalRole=c.roleKey; roleEditing=false; renderRoleBlock(c); renderShiftChoices(); updateWorkedEst(); }
+
+    function selectedStatus(){ const el=document.querySelector('input[name=dm-status]:checked'); return el?el.value:'worked'; }
+    function updateModalMode(){
+      const worked=(selectedStatus()==='worked');
+      document.getElementById('dm-worked').classList.toggle('hidden', !worked);
+      document.getElementById('dm-absence').classList.toggle('hidden', worked);
+      if(worked){ updateWorkedEst(); } else { modalPay=(selectedStatus()==='noshow')?'Unpaid':'Paid'; updateAbsenceUI(); }
+    }
+    function updateWorkedEst(){
+      const c=cur(); const h=parseFloat(document.getElementById('dm-hours').value)||0;
+      const ch=h*dayCharge(c,modalShift,modalRole), pa=h*dayPay(c,modalShift,modalRole);
+      setTxt('dm-est-charge', money(ch)); setTxt('dm-est-pay', money(pa)); setTxt('dm-est-margin', money(ch-pa));
+    }
+    function updateAbsenceUI(){
+      const paid=modalPay==='Paid';
+      const tg=document.getElementById('dm-pay-toggle');
+      tg.className='relative w-11 h-6 rounded-full transition-colors '+(paid?'bg-emerald-500':'bg-slate-300');
+      tg.querySelector('span').className='absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform'+(paid?' translate-x-5':'');
+      document.getElementById('dm-bearer').classList.toggle('hidden', !paid);
+      renderBearerOpts();
+    }
+    function renderBearerOpts(){
+      document.getElementById('dm-bearer-opts').innerHTML = ['Client','Agency','Abstract'].map(o=>{ const on=(o===modalBearer);
+        return '<button type="button" onclick="setModalBearer(\''+o+'\')" class="px-2.5 py-1 rounded-md text-[10px] font-semibold transition-colors '+(on?'bg-purple-600 text-white':'bg-white text-slate-600 border border-slate-200 hover:border-purple-300')+'">'+o+'</button>';
+      }).join('');
+      setTxt('dm-bearer-desc', CB_META[modalBearer].desc);
+    }
+    function toggleModalPay(){ modalPay=(modalPay==='Paid')?'Unpaid':'Paid'; if(modalPay==='Paid'&&!modalBearer) modalBearer='Client'; updateAbsenceUI(); }
+    function setModalBearer(v){ modalBearer=v; renderBearerOpts(); }
+
+    function saveDay(){
+      const c=cur(), d=modalTarget; if(d==null){ closeDayModal(); return; }
+      const st=selectedStatus();
+      if(st==='worked'){
+        let h=parseFloat(document.getElementById('dm-hours').value); if(isNaN(h)||h<=0) h=SHIFTS[modalShift].hours;
+        const ro=(modalRole&&modalRole!==c.roleKey)?modalRole:undefined;
+        c.days[d]={status:'worked', hours:h, shift:modalShift, role:ro};
+      } else {
+        const confirmReq=document.getElementById('dm-confirm').checked && c.source!=='abstract';
+        const day={status:st, pay:modalPay, confirm:confirmReq?'Awaiting agency':null, reason:document.getElementById('dm-reason').value};
+        if(modalPay==='Paid') day.costBearer=modalBearer;
+        c.days[d]=day;
+      }
+      modalTarget=null; closeDayModal(); render();
+    }
+    function markNotBooked(){ const c=cur(); if(c&&modalTarget!=null) c.days[modalTarget]=nb(); modalTarget=null; closeDayModal(); render(); }
+    function closeDayModal(){ document.getElementById('day-modal').classList.add('hidden'); }
+
+    document.addEventListener('keydown', function(e){
+      if(e.key!=='Escape') return;
+      if(!document.getElementById('day-modal').classList.contains('hidden')){ closeDayModal(); }
+      else if(!document.getElementById('drilldown-wrap').classList.contains('hidden')){ closeGrid(); }
+    });
+    const dmHours=document.getElementById('dm-hours'); if(dmHours) dmHours.addEventListener('input', updateWorkedEst);
 </script>
 
 </body>
