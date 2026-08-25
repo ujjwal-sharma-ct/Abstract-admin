@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Sign In · Abstract</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -11,402 +11,117 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>::-webkit-scrollbar { display: none;}</style>
+    <style>
+        ::-webkit-scrollbar { display: none; }
+    </style>
     <script>
         tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        inter: ['Inter', 'sans-serif'],
-                    },
-                    colors: {
-                        navy: {
-                            DEFAULT: '#172554',
-                            50: '#EEF1FB',
-                            100: '#D4DCF5',
-                            200: '#A9B9EB',
-                            300: '#7E96E1',
-                            400: '#5373D7',
-                            500: '#2850CD',
-                            600: '#1D3FA4',
-                            700: '#162F7B',
-                            800: '#0F1F52',
-                            900: '#172554',
-                        },
-                        brand: {
-                            blue: '#1D4ED8',
-                            purple: '#5B2E91',
-                            navy: '#172554',
-                        }
-                    },
-                    backgroundImage: {
-                        'gradient-brand': 'linear-gradient(135deg, #172554 0%, #1D4ED8 50%, #5B2E91 100%)',
-                        'gradient-panel': 'linear-gradient(160deg, #0f1a3e 0%, #172554 40%, #1e1a4a 70%, #2d1a5e 100%)',
-                    }
+            theme: { extend: {
+                fontFamily: { inter: ['Inter', 'sans-serif'] },
+                colors: {
+                    navy: { DEFAULT:'#172554', 700:'#162F7B', 800:'#0F1F52', 900:'#172554' },
+                    brand: { blue:'#1D4ED8', purple:'#5B2E91', navy:'#172554' }
                 }
-            }
+            }}
         }
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden">
+<body class="font-inter" style="background: linear-gradient(160deg, #0f1a3e 0%, #172554 35%, #1e1a4a 65%, #2d1a5e 100%);">
 
-<div id="login-root" class="flex w-full" style="min-height: 100vh;">
+<main class="min-h-screen flex items-center justify-center px-4 py-10 relative overflow-hidden">
 
-    <!-- Left Panel - Branding -->
-    <div id="brand-panel" class="hidden lg:flex lg:w-[52%] xl:w-[55%] flex-col relative overflow-hidden" style="background: linear-gradient(160deg, #0f1a3e 0%, #172554 35%, #1e1a4a 65%, #2d1a5e 100%);">
-
-        <!-- Decorative background elements -->
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <!-- Grid pattern -->
-            <div class="absolute inset-0 opacity-5" style="background-image: linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px); background-size: 60px 60px;"></div>
-
-            <!-- Glowing orbs -->
-            <div class="absolute -top-32 -left-32 w-96 h-96 rounded-full opacity-20" style="background: radial-gradient(circle, #1D4ED8 0%, transparent 70%);"></div>
-            <div class="absolute top-1/3 -right-24 w-80 h-80 rounded-full opacity-15" style="background: radial-gradient(circle, #5B2E91 0%, transparent 70%);"></div>
-            <div class="absolute -bottom-24 left-1/4 w-72 h-72 rounded-full opacity-20" style="background: radial-gradient(circle, #1D4ED8 0%, transparent 70%);"></div>
-
-            <!-- Decorative lines -->
-            <svg class="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 800 900" preserveAspectRatio="xMidYMid slice">
-                <path d="M0 200 Q200 150 400 200 T800 200" stroke="#5B2E91" stroke-width="1" fill="none"/>
-                <path d="M0 400 Q200 350 400 400 T800 400" stroke="#1D4ED8" stroke-width="1" fill="none"/>
-                <path d="M0 600 Q200 550 400 600 T800 600" stroke="#5B2E91" stroke-width="1" fill="none"/>
-            </svg>
-        </div>
-
-        <!-- Top nav bar -->
-        <div id="brand-topbar" class="relative z-10 flex items-center justify-between px-10 pt-8">
-            <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);">
-                    <i class="fa-solid fa-layer-group text-white text-sm"></i>
-                </div>
-                <span class="text-white font-bold text-xl tracking-tight">Abstract VMS</span>
-            </div>
-            <div class="flex items-center gap-2 bg-white/10 rounded-full px-3 py-1.5 border border-white/20">
-                <div class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></div>
-                <span class="text-white/80 text-xs font-medium">All systems operational</span>
-            </div>
-        </div>
-
-        <!-- Main brand content -->
-        <div class="relative z-10 flex flex-col flex-1 justify-center px-10 xl:px-16 py-12">
-
-            <!-- Badge -->
-            <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-2 mb-8 w-fit">
-                <i class="fa-solid fa-bolt text-yellow-400 text-xs"></i>
-                <span class="text-white/90 text-xs font-semibold tracking-wide uppercase">Enterprise Vendor Management</span>
-            </div>
-
-            <!-- Headline -->
-            <h1 class="text-4xl xl:text-5xl font-bold text-white leading-tight mb-6">
-                Manage your entire<br/>
-                <span style="background: linear-gradient(90deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">workforce supply chain</span><br/>
-                in one platform.
-            </h1>
-
-            <p class="text-white/60 text-base leading-relaxed mb-10 max-w-md">
-                Abstract VMS connects MSPs, staffing suppliers, and clients in a unified ecosystem — from vacancy creation to financial reporting.
-            </p>
-
-            <!-- Feature list -->
-            <div id="feature-list" class="flex flex-col gap-4 mb-12">
-                <div class="flex items-center gap-4">
-                    <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(29,78,216,0.3); border: 1px solid rgba(29,78,216,0.5);">
-                        <i class="fa-solid fa-briefcase text-blue-400 text-sm"></i>
-                    </div>
-                    <div>
-                        <p class="text-white font-medium text-sm">Vacancy & Placement Management</p>
-                        <p class="text-white/50 text-xs">End-to-end recruitment lifecycle tracking</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(91,46,145,0.3); border: 1px solid rgba(91,46,145,0.5);">
-                        <i class="fa-solid fa-building-columns text-purple-400 text-sm"></i>
-                    </div>
-                    <div>
-                        <p class="text-white font-medium text-sm">Multi-Portal Architecture</p>
-                        <p class="text-white/50 text-xs">Admin, Client & Agency portals in one system</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <div class="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0" style="background: rgba(29,78,216,0.3); border: 1px solid rgba(29,78,216,0.5);">
-                        <i class="fa-solid fa-chart-line text-blue-400 text-sm"></i>
-                    </div>
-                    <div>
-                        <p class="text-white font-medium text-sm">Financial Reporting & Billing</p>
-                        <p class="text-white/50 text-xs">Automated invoicing and margin analytics</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Stats row -->
-            <div id="stats-row" class="grid grid-cols-3 gap-4">
-                <div class="bg-white/5 border border-white/10 rounded-xl p-4">
-                    <p class="text-2xl font-bold text-white mb-1">3</p>
-                    <p class="text-white/50 text-xs">Portals</p>
-                </div>
-                <div class="bg-white/5 border border-white/10 rounded-xl p-4">
-                    <p class="text-2xl font-bold text-white mb-1">100%</p>
-                    <p class="text-white/50 text-xs">Audit Trail</p>
-                </div>
-                <div class="bg-white/5 border border-white/10 rounded-xl p-4">
-                    <p class="text-2xl font-bold text-white mb-1">SOC2</p>
-                    <p class="text-white/50 text-xs">Compliant</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Bottom testimonial -->
-        <div id="brand-testimonial" class="relative z-10 mx-10 xl:mx-16 mb-10 bg-white/5 border border-white/10 rounded-2xl p-5">
-            <div class="flex items-start gap-4">
-                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-10 h-10 rounded-full object-cover flex-shrink-0 border-2 border-white/20" alt="avatar"/>
-                <div class="flex-1">
-                    <p class="text-white/80 text-sm leading-relaxed mb-3">"Abstract VMS transformed how we manage our supplier network. Placement times dropped by 40% in the first quarter."</p>
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <p class="text-white font-semibold text-xs">Sarah Mitchell</p>
-                            <p class="text-white/40 text-xs">Head of Operations, TalentBridge MSP</p>
-                        </div>
-                        <div class="flex gap-1">
-                            <i class="fa-solid fa-star text-yellow-400 text-xs"></i>
-                            <i class="fa-solid fa-star text-yellow-400 text-xs"></i>
-                            <i class="fa-solid fa-star text-yellow-400 text-xs"></i>
-                            <i class="fa-solid fa-star text-yellow-400 text-xs"></i>
-                            <i class="fa-solid fa-star text-yellow-400 text-xs"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Soft brand glows -->
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div class="absolute -top-32 -left-32 w-96 h-96 rounded-full opacity-20" style="background: radial-gradient(circle, #1D4ED8 0%, transparent 70%);"></div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 rounded-full opacity-15" style="background: radial-gradient(circle, #5B2E91 0%, transparent 70%);"></div>
     </div>
 
-    <!-- Right Panel - Login Form -->
-    <div id="login-panel" class="w-full lg:w-[48%] xl:w-[45%] flex flex-col bg-white relative overflow-y-auto" style="min-height: 100vh;">
+    <div class="w-full max-w-[400px] relative z-10">
 
-        <!-- Mobile logo (only visible on small screens) -->
-        <div class="flex lg:hidden items-center justify-center gap-3 pt-8 pb-4">
-            <div class="w-9 h-9 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);">
-                <i class="fa-solid fa-layer-group text-white text-sm"></i>
+        <!-- Logo on the gradient -->
+        <div class="flex justify-center mb-6">
+            <img id="brand-logo" src="logo.png" alt="Abstract VMS" class="h-24 w-auto"
+                 onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block';"/>
+            <div id="logo-fallback" style="display:none;" class="text-center">
+                <span class="text-white font-bold text-3xl tracking-tight">Abstract</span>
+                <span class="block text-white/60 text-sm font-bold uppercase tracking-[0.3em] mt-1">VMS</span>
             </div>
-            <span class="font-bold text-xl tracking-tight" style="color: #172554;">Abstract VMS</span>
         </div>
 
-        <!-- Form container -->
-        <div class="flex flex-col flex-1 justify-center px-8 sm:px-12 xl:px-16 py-8">
+        <!-- Product identity -->
+        <div class="flex flex-col items-center gap-2 mb-8">
+            <span class="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50">Admin Portal</span>
+        </div>
 
-            <!-- Portal selector -->
-            <div id="portal-selector" class="mb-8">
-                <p class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-3">Select your portal</p>
-                <div class="grid grid-cols-3 gap-2 p-1 bg-slate-100 rounded-xl">
-                    <button id="btn-admin" class="portal-btn active-portal flex flex-col items-center gap-1.5 py-3 px-2 rounded-lg transition-all duration-200 text-white" style="background: linear-gradient(135deg, #172554, #1D4ED8);">
-                        <i class="fa-solid fa-shield-halved text-sm"></i>
-                        <span class="text-xs font-semibold">Admin</span>
-                    </button>
-                    <button id="btn-client" class="portal-btn flex flex-col items-center gap-1.5 py-3 px-2 rounded-lg transition-all duration-200 text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm">
-                        <i class="fa-solid fa-building text-sm"></i>
-                        <span class="text-xs font-semibold">Client</span>
-                    </button>
-                    <button id="btn-agency" class="portal-btn flex flex-col items-center gap-1.5 py-3 px-2 rounded-lg transition-all duration-200 text-slate-500 hover:bg-white hover:text-slate-700 hover:shadow-sm">
-                        <i class="fa-solid fa-users text-sm"></i>
-                        <span class="text-xs font-semibold">Agency</span>
-                    </button>
-                </div>
-            </div>
+        <!-- Card -->
+        <div class="bg-white border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
+            <div class="px-8 pt-8 pb-8">
 
-            <!-- Header -->
-            <div id="login-header" class="mb-8">
-                <h2 class="text-2xl xl:text-3xl font-bold mb-2" style="color: #172554;">Welcome back</h2>
-                <p class="text-slate-500 text-sm">Sign in to your <span id="portal-label" class="font-semibold text-blue-600">Admin</span> portal to continue.</p>
-            </div>
+                <!-- Form -->
+                <form id="login-form" class="flex flex-col gap-5" onsubmit="return false;">
 
-            <!-- SSO Button -->
-            <div id="sso-section" class="mb-6">
-                <button id="sso-btn" class="w-full flex items-center justify-center gap-3 py-3 px-4 border-2 border-slate-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 group">
-                    <div class="w-5 h-5 flex items-center justify-center">
-                        <svg viewBox="0 0 24 24" class="w-5 h-5">
-                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-                        </svg>
-                    </div>
-                    <span class="text-sm font-semibold text-slate-600 group-hover:text-blue-700 transition-colors">Continue with Google SSO</span>
-                </button>
-
-                <button id="ms-sso-btn" class="w-full flex items-center justify-center gap-3 py-3 px-4 border-2 border-slate-200 rounded-xl hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-200 group mt-3">
-                    <div class="w-5 h-5 flex items-center justify-center">
-                        <svg viewBox="0 0 24 24" class="w-5 h-5">
-                            <path fill="#f25022" d="M1 1h10v10H1z"/>
-                            <path fill="#00a4ef" d="M13 1h10v10H13z"/>
-                            <path fill="#7fba00" d="M1 13h10v10H1z"/>
-                            <path fill="#ffb900" d="M13 13h10v10H13z"/>
-                        </svg>
-                    </div>
-                    <span class="text-sm font-semibold text-slate-600 group-hover:text-indigo-700 transition-colors">Continue with Microsoft SSO</span>
-                </button>
-            </div>
-
-            <!-- Divider -->
-            <div class="flex items-center gap-4 mb-6">
-                <div class="flex-1 h-px bg-slate-200"></div>
-                <span class="text-xs text-slate-400 font-medium">or sign in with email</span>
-                <div class="flex-1 h-px bg-slate-200"></div>
-            </div>
-
-            <!-- Login Form -->
-            <form id="login-form" class="flex flex-col gap-5" onsubmit="return false;">
-
-                <!-- Email -->
-                <div id="email-field" class="flex flex-col gap-1.5">
-                    <label class="text-sm font-semibold text-slate-700" for="email">Work Email</label>
-                    <div class="relative">
-                        <div class="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                            <i class="fa-regular fa-envelope text-slate-400 text-sm"></i>
+                    <!-- Email -->
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-sm font-semibold text-slate-700" for="email">Email</label>
+                        <div class="relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                <i class="fa-regular fa-envelope text-slate-400 text-sm"></i>
+                            </div>
+                            <input type="email" id="email" autocomplete="username" placeholder="you@abstract.com"
+                                class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-50 transition-all duration-200"/>
                         </div>
-                        <input
-                            type="email"
-                            id="email"
-                            placeholder="you@company.com"
-                            class="w-full pl-11 pr-4 py-3 border-2 border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all duration-200"
-                            value="sarah.mitchell@talentbridge.com"
-                        />
                     </div>
-                </div>
 
-                <!-- Password -->
-                <div id="password-field" class="flex flex-col gap-1.5">
-                    <div class="flex items-center justify-between">
-                        <label class="text-sm font-semibold text-slate-700" for="password">Password</label>
-                        <a href="#" class="text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors">Forgot password?</a>
-                    </div>
-                    <div class="relative">
-                        <div class="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                            <i class="fa-solid fa-lock text-slate-400 text-sm"></i>
+                    <!-- Password -->
+                    <div class="flex flex-col gap-1.5">
+                        <div class="flex items-center justify-between">
+                            <label class="text-sm font-semibold text-slate-700" for="password">Password</label>
+                            <a href="#" class="text-xs font-semibold text-blue-600 hover:text-blue-700 transition-colors">Forgot password?</a>
                         </div>
-                        <input
-                            type="password"
-                            id="password"
-                            placeholder="Enter your password"
-                            class="w-full pl-11 pr-12 py-3 border-2 border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all duration-200"
-                            value="••••••••••"
-                        />
-                        <button type="button" id="toggle-pw" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
-                            <i class="fa-regular fa-eye text-sm"></i>
-                        </button>
+                        <div class="relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                <i class="fa-solid fa-lock text-slate-400 text-sm"></i>
+                            </div>
+                            <input type="password" id="password" autocomplete="current-password" placeholder="Enter your password"
+                                class="w-full pl-11 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-50 transition-all duration-200"/>
+                            <button type="button" id="toggle-pw" aria-label="Show password"
+                                class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors">
+                                <i class="fa-regular fa-eye text-sm"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Remember me & MFA -->
-                <div class="flex items-center justify-between">
-                    <label class="flex items-center gap-2.5 cursor-pointer">
-                        <input type="checkbox" id="remember-me" class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer" checked/>
+                    <!-- Remember -->
+                    <label class="flex items-center gap-2.5 cursor-pointer -mt-0.5">
+                        <input type="checkbox" id="remember-me" class="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer"/>
                         <span class="text-sm text-slate-600">Keep me signed in</span>
                     </label>
-                    <div class="flex items-center gap-2 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1">
-                        <i class="fa-solid fa-shield-halved text-emerald-600 text-xs"></i>
-                        <span class="text-xs font-semibold text-emerald-700">MFA Enabled</span>
-                    </div>
-                </div>
 
-                <!-- Submit Button -->
-                <button
-                    id="login-submit"
-                    type="submit"
-                    onclick="window.location.href='2-Vendor Management - Admin Dash.html'; return false;"
-                    class="w-full py-3.5 rounded-xl text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-90 hover:shadow-lg active:scale-[0.98] mt-1"
-                    style="background: linear-gradient(135deg, #172554 0%, #1D4ED8 60%, #5B2E91 100%);"
-                >
-                    <i class="fa-solid fa-arrow-right-to-bracket text-sm"></i>
-                    Sign in to Admin Portal
-                </button>
-
-            </form>
-
-            <!-- Enterprise note -->
-            <div id="enterprise-note" class="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-xl">
-                <div class="flex items-start gap-3">
-                    <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5" style="background: linear-gradient(135deg, #172554, #5B2E91);">
-                        <i class="fa-solid fa-building text-white text-xs"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-slate-700 mb-0.5">Enterprise SSO Available</p>
-                        <p class="text-xs text-slate-500 leading-relaxed">Your organisation uses SAML 2.0 SSO. <a href="#" class="text-blue-600 font-semibold hover:underline">Configure SSO</a> or contact your IT administrator.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Help links -->
-            <div id="help-links" class="flex items-center justify-center gap-6 mt-6">
-                <a href="#" class="text-xs text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-1.5">
-                    <i class="fa-regular fa-circle-question text-xs"></i>
-                    Help Centre
-                </a>
-                <div class="w-px h-3 bg-slate-300"></div>
-                <a href="#" class="text-xs text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-1.5">
-                    <i class="fa-regular fa-file-lines text-xs"></i>
-                    Privacy Policy
-                </a>
-                <div class="w-px h-3 bg-slate-300"></div>
-                <a href="#" class="text-xs text-slate-400 hover:text-slate-600 transition-colors flex items-center gap-1.5">
-                    <i class="fa-solid fa-headset text-xs"></i>
-                    Contact Support
-                </a>
+                    <!-- Submit -->
+                    <button id="login-submit" type="submit"
+                        onclick="window.location.href='2-Vendor Management - Admin Dash.html'; return false;"
+                        class="w-full py-3.5 rounded-lg text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-95 hover:shadow-lg active:scale-[0.99] focus:outline-none focus:ring-4 focus:ring-blue-100 mt-1"
+                        style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);">
+                        <i class="fa-solid fa-arrow-right-to-bracket text-xs"></i> Sign in
+                    </button>
+                </form>
             </div>
         </div>
 
         <!-- Footer -->
-        <div id="login-footer" class="px-8 sm:px-12 xl:px-16 py-5 border-t border-slate-100 flex items-center justify-between flex-wrap gap-3">
-            <p class="text-xs text-slate-400">© 2026 Abstract VMS. All rights reserved.</p>
-            <div class="flex items-center gap-2">
-                <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-full px-3 py-1.5">
-                    <i class="fa-solid fa-lock text-slate-400 text-xs"></i>
-                    <span class="text-xs text-slate-500 font-medium">256-bit SSL</span>
-                </div>
-                <div class="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-full px-3 py-1.5">
-                    <i class="fa-solid fa-certificate text-slate-400 text-xs"></i>
-                    <span class="text-xs text-slate-500 font-medium">SOC2 Type II</span>
-                </div>
-            </div>
-        </div>
+        <p class="text-center text-xs text-white/40 mt-6">© 2026 Abstract Recruitment</p>
     </div>
-</div>
+</main>
 
 <script>
-    const portals = [
-        { id: 'btn-admin', label: 'Admin', icon: 'fa-shield-halved', btnText: 'Sign in to Admin Portal' },
-        { id: 'btn-client', label: 'Client', icon: 'fa-building', btnText: 'Sign in to Client Portal' },
-        { id: 'btn-agency', label: 'Agency', icon: 'fa-users', btnText: 'Sign in to Agency Portal' },
-    ];
-
-    portals.forEach(portal => {
-        const btn = document.getElementById(portal.id);
-        if (!btn) return;
-        btn.addEventListener('click', function () {
-            portals.forEach(p => {
-                const b = document.getElementById(p.id);
-                if (b) {
-                    b.classList.remove('text-white');
-                    b.style.background = '';
-                    b.classList.add('text-slate-500');
-                }
-            });
-            btn.classList.remove('text-slate-500');
-            btn.classList.add('text-white');
-            btn.style.background = 'linear-gradient(135deg, #172554, #1D4ED8)';
-
-            const label = document.getElementById('portal-label');
-            if (label) label.textContent = portal.label;
-            const submitBtn = document.getElementById('login-submit');
-            if (submitBtn) submitBtn.innerHTML = `<i class="fa-solid fa-arrow-right-to-bracket text-sm"></i> ${portal.btnText}`;
-        });
-    });
-
     const togglePw = document.getElementById('toggle-pw');
     const pwInput = document.getElementById('password');
     if (togglePw && pwInput) {
         togglePw.addEventListener('click', function () {
-            const isPassword = pwInput.type === 'password';
-            pwInput.type = isPassword ? 'text' : 'password';
-            togglePw.innerHTML = isPassword
+            const show = pwInput.type === 'password';
+            pwInput.type = show ? 'text' : 'password';
+            togglePw.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+            togglePw.innerHTML = show
                 ? '<i class="fa-regular fa-eye-slash text-sm"></i>'
                 : '<i class="fa-regular fa-eye text-sm"></i>';
         });

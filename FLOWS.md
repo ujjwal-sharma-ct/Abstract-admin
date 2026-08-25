@@ -4,12 +4,12 @@
 > screen — regenerate with `node scripts/check-flow.mjs`. Annotate freely below the table;
 > only the table between the markers is regenerated.
 
-Screens: 25 · Entry points: `index.html`
+Screens: 26 · Entry points: `index.html`
 
 <!-- FLOW-TABLE:START -->
 | screen | file | links to |
 | ------ | ---- | -------- |
-| Login | `1-Vendor Management - Abstract L.html` | `2-Vendor Management - Admin Dash.html` |
+| Sign In · Abstract | `1-Vendor Management - Abstract L.html` | `2-Vendor Management - Admin Dash.html` |
 | Dashboard | `2-Vendor Management - Admin Dash.html` | `2-Vendor Management - Admin Dash.html`, `3-Vendor Management - Vacancy Li.html`, `4-Vendor Management - Create Vac.html`, `13-Vendor Management - Worker Pool.html`, `6-Vendor Management - Agency Das.html`, `17-Vendor Management - Approved Su.html`, `16-Vendor Management - AWR Trackin.html`, `10-Vendor Management - Client Wee.html`, `11-Vendor Management - Invoicing.html`, `12-Vendor Management - Abstract B.html`, `18-Vendor Management - Rate Cards.html`, `20-Vendor Management - Reports.html`, `21-Vendor Management - Onboard Client.html`, `22-Vendor Management - Onboard Agency.html`, `23-Vendor Management - Configuration.html`, `24-Vendor Management - System Config.html`, `19-Vendor Management - Audit Log.html`, `1-Vendor Management - Abstract L.html`, `8-Vendor Management - Proposal R.html` |
 | Vacancy List | `3-Vendor Management - Vacancy Li.html` | `2-Vendor Management - Admin Dash.html`, `3-Vendor Management - Vacancy Li.html`, `4-Vendor Management - Create Vac.html`, `13-Vendor Management - Worker Pool.html`, `6-Vendor Management - Agency Das.html`, `17-Vendor Management - Approved Su.html`, `16-Vendor Management - AWR Trackin.html`, `10-Vendor Management - Client Wee.html`, `11-Vendor Management - Invoicing.html`, `12-Vendor Management - Abstract B.html`, `18-Vendor Management - Rate Cards.html`, `20-Vendor Management - Reports.html`, `21-Vendor Management - Onboard Client.html`, `22-Vendor Management - Onboard Agency.html`, `23-Vendor Management - Configuration.html`, `24-Vendor Management - System Config.html`, `19-Vendor Management - Audit Log.html`, `1-Vendor Management - Abstract L.html`, `5-Vendor Management - Vacancy De.html` |
 | Create Vacancy Wizard | `4-Vendor Management - Create Vac.html` | `2-Vendor Management - Admin Dash.html`, `3-Vendor Management - Vacancy Li.html`, `4-Vendor Management - Create Vac.html`, `13-Vendor Management - Worker Pool.html`, `6-Vendor Management - Agency Das.html`, `17-Vendor Management - Approved Su.html`, `16-Vendor Management - AWR Trackin.html`, `10-Vendor Management - Client Wee.html`, `11-Vendor Management - Invoicing.html`, `12-Vendor Management - Abstract B.html`, `18-Vendor Management - Rate Cards.html`, `20-Vendor Management - Reports.html`, `21-Vendor Management - Onboard Client.html`, `22-Vendor Management - Onboard Agency.html`, `23-Vendor Management - Configuration.html`, `24-Vendor Management - System Config.html`, `19-Vendor Management - Audit Log.html`, `1-Vendor Management - Abstract L.html` |
@@ -33,6 +33,7 @@ Screens: 25 · Entry points: `index.html`
 | Configuration | `23-Vendor Management - Configuration.html` | `2-Vendor Management - Admin Dash.html`, `3-Vendor Management - Vacancy Li.html`, `4-Vendor Management - Create Vac.html`, `13-Vendor Management - Worker Pool.html`, `6-Vendor Management - Agency Das.html`, `17-Vendor Management - Approved Su.html`, `16-Vendor Management - AWR Trackin.html`, `10-Vendor Management - Client Wee.html`, `11-Vendor Management - Invoicing.html`, `12-Vendor Management - Abstract B.html`, `18-Vendor Management - Rate Cards.html`, `20-Vendor Management - Reports.html`, `21-Vendor Management - Onboard Client.html`, `22-Vendor Management - Onboard Agency.html`, `23-Vendor Management - Configuration.html`, `24-Vendor Management - System Config.html`, `19-Vendor Management - Audit Log.html`, `1-Vendor Management - Abstract L.html` |
 | System Configuration | `24-Vendor Management - System Config.html` | `2-Vendor Management - Admin Dash.html`, `3-Vendor Management - Vacancy Li.html`, `4-Vendor Management - Create Vac.html`, `13-Vendor Management - Worker Pool.html`, `6-Vendor Management - Agency Das.html`, `17-Vendor Management - Approved Su.html`, `16-Vendor Management - AWR Trackin.html`, `10-Vendor Management - Client Wee.html`, `11-Vendor Management - Invoicing.html`, `12-Vendor Management - Abstract B.html`, `18-Vendor Management - Rate Cards.html`, `20-Vendor Management - Reports.html`, `21-Vendor Management - Onboard Client.html`, `22-Vendor Management - Onboard Agency.html`, `23-Vendor Management - Configuration.html`, `24-Vendor Management - System Config.html`, `19-Vendor Management - Audit Log.html`, `1-Vendor Management - Abstract L.html` |
 | Invoices - Abstractvms Client Portal | `a.html` | `2-Vendor Management - Admin Dash.html`, `3-Vendor Management - Vacancy Li.html`, `9-Vendor Management - Booking De.html`, `10-Vendor Management - Client Wee.html`, `11-Vendor Management - Invoicing.html`, `12-Vendor Management - Abstract B.html` |
+| Abstract Admin Design System | `DESIGN-SYSTEM.html` | — |
 | Redirecting... ⟵ entry | `index.html` | `1-Vendor Management - Abstract L.html` |
 <!-- FLOW-TABLE:END -->
 
@@ -41,3 +42,4 @@ Screens: 25 · Entry points: `index.html`
 - ✅ no dead links
 
 - ⚠️ **orphan**: `a.html` (no screen links here — unreachable in the flow)
+- ⚠️ **orphan**: `DESIGN-SYSTEM.html` (no screen links here — unreachable in the flow)
