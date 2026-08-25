@@ -1,0 +1,691 @@
+<title>Abstract Admin Design System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================== TOKENS ============================== */
+:root{
+  /* doc chrome — light */
+  --page:#EEF1F8; --surface:#FFFFFF; --surface-2:#F8FAFC;
+  --ink:#0F172A; --ink-2:#475569; --ink-3:#8A97AC; --line:#E2E8F0; --line-soft:#EDF1F8;
+  --accent:#1D4ED8; --accent-2:#5B2E91; --navy:#172554;
+  --canvas:#F1F5F9;              /* the product's real page ground (light-only product) */
+  --canvas-line:#E2E8F0;
+  --code-bg:#0E1730; --code-ink:#C7D2E8; --code-cmt:#64769B; --code-tok:#7FB0FF; --code-str:#F0B866;
+  --shadow:0 1px 2px rgba(15,23,42,.06), 0 1px 3px rgba(15,23,42,.05);
+  --shadow-pop:0 24px 60px -20px rgba(15,23,42,.35);
+  --rail:linear-gradient(180deg,#0f1a3e 0%,#172554 42%,#1e1a4a 100%);
+  --brand-grad:linear-gradient(135deg,#1D4ED8,#5B2E91);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --page:#0A0F1F; --surface:#111A30; --surface-2:#0E1730;
+  --ink:#E8ECF6; --ink-2:#A6B1C6; --ink-3:#6E7B95; --line:#23314F; --line-soft:#1A2743;
+  --accent:#7CA0F0; --accent-2:#A382D6; --navy:#0d1730;
+  --shadow:0 1px 2px rgba(0,0,0,.4); --shadow-pop:0 24px 60px -20px rgba(0,0,0,.7);
+}}
+:root[data-theme="dark"]{
+  --page:#0A0F1F; --surface:#111A30; --surface-2:#0E1730;
+  --ink:#E8ECF6; --ink-2:#A6B1C6; --ink-3:#6E7B95; --line:#23314F; --line-soft:#1A2743;
+  --accent:#7CA0F0; --accent-2:#A382D6; --navy:#0d1730;
+  --shadow:0 1px 2px rgba(0,0,0,.4); --shadow-pop:0 24px 60px -20px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto} *{transition:none!important;animation:none!important}}
+body{
+  margin:0; background:var(--page); color:var(--ink);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  min-height:100vh; overflow-x:hidden;
+}
+.mono{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+/* ============================== RAIL ============================== */
+.rail{
+  position:fixed; top:0; left:0; width:264px; height:100vh; overflow-y:auto;
+  background:var(--rail); color:#fff; padding:22px 16px; scrollbar-width:none; z-index:10;
+}
+.rail::-webkit-scrollbar{display:none}
+.brand{display:flex; gap:11px; align-items:center; padding:4px 8px 18px; border-bottom:1px solid rgba(255,255,255,.1); margin-bottom:14px}
+.brand .glyph{width:38px;height:38px;border-radius:11px;background:var(--brand-grad);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brand b{display:block;font-weight:800;font-size:15px;letter-spacing:-.01em}
+.brand span{font-size:11.5px;color:rgba(255,255,255,.45)}
+.rail nav{display:flex;flex-direction:column;gap:1px}
+.rail .grp{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.32);padding:16px 10px 6px}
+.rail a{color:rgba(255,255,255,.62);text-decoration:none;font-size:13.5px;font-weight:500;padding:7px 11px;border-radius:9px;transition:.15s}
+.rail a:hover{color:#fff;background:rgba(255,255,255,.07)}
+.rail a:focus-visible{outline:2px solid #7CA0F0;outline-offset:1px}
+.rail .foot{margin-top:20px;padding:14px 10px 4px;border-top:1px solid rgba(255,255,255,.1);font-size:11.5px;color:rgba(255,255,255,.4);line-height:1.5}
+
+/* ============================== CONTENT ============================== */
+main{margin-left:264px;padding:0 clamp(20px,4vw,64px) 120px;max-width:1104px}
+.hero{padding:64px 0 30px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
+.hero h1{font-size:clamp(34px,5vw,46px);font-weight:800;letter-spacing:-.03em;line-height:1.02;margin:14px 0 0;text-wrap:balance}
+.hero p{font-size:17px;color:var(--ink-2);max-width:62ch;margin:16px 0 0}
+.hero .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.tag{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--surface);border:1px solid var(--line);color:var(--ink-2)}
+.tag .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+
+.band{display:flex;align-items:center;gap:14px;margin:64px 0 8px}
+.band .lbl{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3)}
+.band .rule{flex:1;height:1px;background:var(--line)}
+
+section{scroll-margin-top:24px;padding-top:34px}
+section > h2{font-size:24px;font-weight:700;letter-spacing:-.02em;margin:0}
+section > .lede{color:var(--ink-2);margin:8px 0 0;max-width:66ch}
+h3.sub{font-size:15px;font-weight:700;color:var(--ink);margin:30px 0 12px;display:flex;align-items:center;gap:9px}
+h3.sub .k{font:600 11px/1 "JetBrains Mono",monospace;color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent);padding:4px 7px;border-radius:6px}
+
+.note{display:flex;gap:11px;background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:10px;padding:13px 15px;margin:16px 0;font-size:13.5px;color:var(--ink-2)}
+.note b{color:var(--ink)}
+.note.warn{border-left-color:#DC2626}
+.note.warn::before{content:"";}
+
+/* preview canvas = product ground (fixed light, holds on any host theme) */
+.demo{position:relative;background:var(--canvas);border:1px solid var(--canvas-line);border-radius:14px;padding:26px;margin:14px 0;color:#0F172A}
+.demo::after{content:"PRODUCT CANVAS · slate-100";position:absolute;top:9px;right:12px;font:600 9px/1 "JetBrains Mono",monospace;letter-spacing:.1em;color:#94A3B8}
+.demo.tight{padding:18px}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.stack{display:flex;flex-direction:column;gap:14px}
+
+/* code */
+.code{background:var(--code-bg);color:var(--code-ink);border-radius:12px;padding:15px 17px;margin:12px 0;font-family:"JetBrains Mono",monospace;font-size:12.4px;line-height:1.7;overflow-x:auto;white-space:pre;border:1px solid rgba(255,255,255,.06)}
+.code .c{color:var(--code-cmt)}
+.code .t{color:var(--code-tok)}
+.code .s{color:var(--code-str)}
+
+/* swatches */
+.ramp{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0}
+.sw{width:88px}
+.sw i{display:block;height:52px;border-radius:9px;border:1px solid rgba(15,23,42,.08)}
+.sw b{display:block;font:600 11px/1.4 "JetBrains Mono",monospace;margin-top:6px;color:var(--ink)}
+.sw span{display:block;font:400 10.5px/1.3 "JetBrains Mono",monospace;color:var(--ink-3)}
+.fam{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:14px;margin:16px 0}
+.fam .card{background:var(--surface);border:1px solid var(--line);border-radius:13px;padding:15px}
+.fam .card > .nm{font-weight:700;font-size:13.5px;margin-bottom:3px}
+.fam .card > .use{font-size:12px;color:var(--ink-3);margin-bottom:11px}
+.fam .hexes{display:flex;gap:5px;margin-top:11px}
+.fam .hexes i{flex:1;height:26px;border-radius:6px;border:1px solid rgba(15,23,42,.07)}
+.fam .hexes b{display:block;font:400 9.5px/2.6 "JetBrains Mono",monospace;text-align:center;color:var(--ink-3)}
+
+/* product component mirrors (rendered on .demo canvas) */
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid;font-family:Inter}
+.p-neutral{background:#F1F5F9;color:#334155;border-color:#E2E8F0}
+.p-info{background:#EFF6FF;color:#1D4ED8;border-color:#BFDBFE}
+.p-purple{background:#FAF5FF;color:#7E22CE;border-color:#E9D5FF}
+.p-amber{background:#FFFBEB;color:#B45309;border-color:#FDE68A}
+.p-green{background:#ECFDF5;color:#047857;border-color:#A7F3D0}
+.p-red{background:#FEF2F2;color:#B91C1C;border-color:#FECACA}
+.p-closed{background:#F1F5F9;color:#64748B;border-color:#E2E8F0}
+.p-indigo{background:#EEF2FF;color:#4338CA;border-color:#C7D2FE}
+.p-teal{background:#F0FDFA;color:#0F766E;border-color:#99F6E4}
+
+.btn{display:inline-flex;align-items:center;gap:7px;font-family:Inter;font-size:12.5px;font-weight:600;padding:9px 15px;border-radius:9px;border:0;cursor:pointer;transition:.15s}
+.btn svg{width:13px;height:13px}
+.b-primary{background:var(--brand-grad);color:#fff}
+.b-primary:hover{opacity:.92}
+.b-secondary{background:#F1F5F9;color:#334155}
+.b-secondary:hover{background:#E2E8F0}
+.b-ghost{background:#F8FAFC;color:#334155;border:1px solid #E2E8F0}
+.b-ghost:hover{border-color:#93B4F6;color:#1D4ED8}
+.b-danger{background:#fff;color:#DC2626;border:1px solid #FCA5A5}
+.b-danger:hover{background:#FEF2F2}
+.b-icon{width:36px;height:36px;padding:0;justify-content:center;background:#F8FAFC;border:1px solid #E2E8F0;color:#475569;border-radius:9px}
+.b-icon:hover{border-color:#93B4F6;color:#1D4ED8}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+.card{background:#fff;border:1px solid #E2E8F0;border-radius:16px;box-shadow:var(--shadow)}
+.kpi{padding:18px;min-width:190px}
+.kpi .ic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(29,78,216,.1);color:#1D4ED8;margin-bottom:12px}
+.kpi .n{font-size:26px;font-weight:800;color:#0F172A;letter-spacing:-.02em}
+.kpi .l{font-size:13px;color:#64748B;font-weight:500;margin-top:2px}
+.kpi .d{font-size:11.5px;color:#059669;font-weight:600;margin-top:8px}
+
+table.demo-tbl{width:100%;border-collapse:collapse;background:#fff;border:1px solid #E2E8F0;border-radius:14px;overflow:hidden;font-size:13px;font-family:Inter}
+table.demo-tbl thead{background:#F8FAFC}
+table.demo-tbl th{text-align:left;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#64748B;padding:11px 16px}
+table.demo-tbl td{padding:12px 16px;border-top:1px solid #F1F5F9;color:#475569}
+table.demo-tbl td.k{font-weight:600;color:#172554}
+table.demo-tbl tbody tr:hover{background:#F8FAFC}
+
+.field{display:flex;align-items:center;gap:8px;background:#F8FAFC;border:1px solid #E2E8F0;border-radius:9px;padding:8px 11px;font-size:13px;color:#334155;font-family:Inter}
+.field svg{width:14px;height:14px;color:#94A3B8;flex-shrink:0}
+.field input,.field select{border:0;background:transparent;outline:none;font:inherit;color:#334155;width:100%}
+.field:focus-within{border-color:#93B4F6;background:#fff;box-shadow:0 0 0 3px rgba(29,78,216,.12)}
+
+.banner{display:flex;gap:11px;border-radius:12px;padding:13px 15px;font-size:13px;font-family:Inter;align-items:flex-start}
+.ban-info{background:#EFF6FF;border:1px solid #BFDBFE;color:#1E3A8A}
+.ban-amber{background:#FFFBEB;border:1px solid #FDE68A;color:#92400E}
+.ban-red{background:#FEF2F2;border:1px solid #FECACA;color:#991B1B}
+.banner svg{width:16px;height:16px;flex-shrink:0;margin-top:1px}
+
+.empty{background:#fff;border:1px solid #E2E8F0;border-radius:16px;padding:40px;text-align:center}
+.empty .ic{width:52px;height:52px;border-radius:14px;background:#F1F5F9;color:#94A3B8;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px}
+.empty b{display:block;color:#0F172A;font-size:15px}
+.empty p{color:#64748B;font-size:13px;margin:4px 0 16px}
+
+.toggle{width:44px;height:24px;border-radius:999px;background:#10B981;position:relative;border:0;cursor:pointer}
+.toggle i{position:absolute;top:2px;left:22px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.toggle.off{background:#CBD5E1}.toggle.off i{left:2px}
+
+.seg{display:inline-flex;gap:4px}
+.seg button{font:600 11px/1 Inter;padding:7px 11px;border-radius:8px;border:1px solid #E2E8F0;background:#fff;color:#475569;cursor:pointer}
+.seg button.on{background:#7C3AED;color:#fff;border-color:#7C3AED}
+
+.tabs{display:flex;gap:4px;border-bottom:1px solid #E2E8F0}
+.tabs button{font:600 13px/1 Inter;padding:11px 14px;border:0;background:none;color:#64748B;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer}
+.tabs button.on{color:#1D4ED8;border-bottom-color:#1D4ED8}
+
+/* mini shell diagram */
+.shell{display:grid;grid-template-columns:74px 1fr;gap:0;border-radius:14px;overflow:hidden;border:1px solid #E2E8F0;background:#fff;height:200px}
+.shell .s-rail{background:var(--rail);padding:12px 9px}
+.shell .s-rail .lk{height:9px;border-radius:4px;background:rgba(255,255,255,.14);margin-bottom:8px}
+.shell .s-rail .lk.on{background:linear-gradient(135deg,rgba(29,78,216,.6),rgba(91,46,145,.5));border:1px solid rgba(255,255,255,.18)}
+.shell .s-main{display:flex;flex-direction:column}
+.shell .s-hd{height:42px;border-bottom:1px solid #E2E8F0;display:flex;align-items:center;padding:0 14px;gap:8px;background:#fff}
+.shell .s-hd b{font:700 12px Inter;color:#0F172A}
+.shell .s-body{flex:1;background:#F1F5F9;padding:12px;display:flex;gap:8px}
+.shell .s-body .c{flex:1;background:#fff;border:1px solid #E2E8F0;border-radius:9px}
+
+.spec{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:14px 0}
+.spec .b{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px}
+.spec .b .v{font:700 15px "JetBrains Mono",monospace;color:var(--accent)}
+.spec .b .n{font-size:12px;color:var(--ink-2);margin-top:3px}
+.spec .b .x{font:400 10.5px/1.4 "JetBrains Mono",monospace;color:var(--ink-3);margin-top:6px}
+
+.dd{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:16px 0}
+.dd .col{border:1px solid var(--line);border-radius:12px;padding:15px;background:var(--surface)}
+.dd .col h4{margin:0 0 8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;display:flex;align-items:center;gap:7px}
+.dd .do h4{color:#059669}.dd .dont h4{color:#DC2626}
+.dd ul{margin:0;padding-left:17px;font-size:13px;color:var(--ink-2);line-height:1.7}
+
+.forbid{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.forbid span{font:600 12px "JetBrains Mono",monospace;color:#B91C1C;background:#FEF2F2;border:1px solid #FECACA;border-radius:7px;padding:5px 9px;text-decoration:line-through}
+
+.check{list-style:none;padding:0;margin:14px 0;display:flex;flex-direction:column;gap:9px}
+.check li{display:flex;gap:11px;align-items:flex-start;font-size:14px;color:var(--ink-2)}
+.check li svg{width:18px;height:18px;color:#059669;flex-shrink:0;margin-top:1px}
+.check li b{color:var(--ink)}
+
+.themebtn{position:fixed;top:16px;right:20px;z-index:20;display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--line);color:var(--ink-2);border-radius:999px;padding:8px 13px;font:600 12px Inter;cursor:pointer;box-shadow:var(--shadow)}
+.themebtn:hover{border-color:var(--accent);color:var(--accent)}
+
+@media (max-width:880px){
+  .rail{position:static;width:auto;height:auto}
+  main{margin-left:0}
+  .rail nav{display:grid;grid-template-columns:repeat(2,1fr)}
+  .themebtn{top:auto;bottom:16px}
+}
+a.anch{color:inherit;text-decoration:none}
+</style>
+
+<!-- ============================== RAIL ============================== -->
+<aside class="rail">
+  <div class="brand">
+    <div class="glyph"><svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M12 3l9 5-9 5-9-5 9-5z" fill="#fff"/><path d="M3 12l9 5 9-5" stroke="#fff" stroke-width="1.6" opacity=".55"/><path d="M3 16l9 5 9-5" stroke="#fff" stroke-width="1.6" opacity=".3"/></svg></div>
+    <div><b>Abstract VMS</b><span>Admin Design System</span></div>
+  </div>
+  <nav>
+    <a class="anch" href="#overview">Overview</a>
+    <div class="grp">Foundations</div>
+    <a class="anch" href="#color">Color</a>
+    <a class="anch" href="#type">Typography</a>
+    <a class="anch" href="#space">Spacing &amp; grid</a>
+    <a class="anch" href="#radius">Radius &amp; elevation</a>
+    <a class="anch" href="#icons">Iconography</a>
+    <a class="anch" href="#shell">Layout shell</a>
+    <div class="grp">Components</div>
+    <a class="anch" href="#buttons">Buttons</a>
+    <a class="anch" href="#badges">Status badges</a>
+    <a class="anch" href="#source">Source badges</a>
+    <a class="anch" href="#cards">Cards &amp; KPI</a>
+    <a class="anch" href="#tables">Data tables</a>
+    <a class="anch" href="#forms">Forms &amp; filters</a>
+    <a class="anch" href="#feedback">Banners &amp; empty</a>
+    <a class="anch" href="#overlays">Overlays &amp; controls</a>
+    <div class="grp">Governance</div>
+    <a class="anch" href="#rules">Rules &amp; a11y</a>
+    <a class="anch" href="#handover">Handover</a>
+  </nav>
+  <div class="foot">v1.0 · Source of truth: the admin mockups + <span class="mono">DESIGN-SPEC-v4</span>. Tokens mirror the live Tailwind config.</div>
+</aside>
+
+<button class="themebtn" id="tt" aria-label="Toggle color theme">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+  <span>Theme</span>
+</button>
+
+<main>
+  <!-- ============================== HERO ============================== -->
+  <header class="hero">
+    <div class="eyebrow">Design Language System · Developer Handover</div>
+    <h1>The Abstract admin design system</h1>
+    <p>Every token, component, and rule the Abstract (MSP) admin portal is built from — pulled straight from the shipped screens so the code you write matches what's already there. Tailwind utility classes are the API; this page is the contract.</p>
+    <div class="meta">
+      <span class="tag"><span class="dot"></span>Tailwind CSS (CDN + inline config)</span>
+      <span class="tag"><span class="dot"></span>Inter · Font Awesome 6</span>
+      <span class="tag"><span class="dot"></span>Desktop-first, responsive</span>
+      <span class="tag"><span class="dot"></span>Light UI</span>
+    </div>
+  </header>
+
+  <!-- ============================== OVERVIEW ============================== -->
+  <section id="overview">
+    <div class="band"><span class="lbl">Start here</span><span class="rule"></span></div>
+    <h2>How to consume this system</h2>
+    <p class="lede">The portal has no build step — every screen is a standalone HTML file that loads Tailwind from the CDN and applies one inline config. Drop this exact <span class="mono">&lt;head&gt;</span> block into any new screen and you inherit the whole system: fonts, brand palette, and utility API. Everything after this section is how you use it.</p>
+    <div class="code"><span class="c">&lt;!-- Fonts + icons --&gt;</span>
+&lt;<span class="t">link</span> href=<span class="s">"https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap"</span> rel=<span class="s">"stylesheet"</span>&gt;
+&lt;<span class="t">script</span> src=<span class="s">"https://cdn.tailwindcss.com"</span>&gt;&lt;/script&gt;
+&lt;<span class="t">link</span> rel=<span class="s">"stylesheet"</span> href=<span class="s">".../font-awesome/6.5.2/css/all.min.css"</span>&gt;
+
+<span class="c">&lt;!-- Brand tokens: the one config every screen shares --&gt;</span>
+&lt;<span class="t">script</span>&gt;
+  tailwind.config = { theme:{ extend:{
+    fontFamily:{ inter:[<span class="s">'Inter'</span>,<span class="s">'sans-serif'</span>] },
+    colors:{
+      navy:{ DEFAULT:<span class="s">'#172554'</span>, 50:<span class="s">'#EEF1FB'</span>, 100:<span class="s">'#D4DCF5'</span>, 200:<span class="s">'#A9B9EB'</span>, 300:<span class="s">'#7E96E1'</span>,
+             400:<span class="s">'#5373D7'</span>, 500:<span class="s">'#2850CD'</span>, 600:<span class="s">'#1D3FA4'</span>, 700:<span class="s">'#162F7B'</span>, 800:<span class="s">'#0F1F52'</span>, 900:<span class="s">'#172554'</span> },
+      brand:{ blue:<span class="s">'#1D4ED8'</span>, purple:<span class="s">'#5B2E91'</span>, navy:<span class="s">'#172554'</span> }
+    }
+  }}}
+&lt;/<span class="t">script</span>&gt;
+&lt;<span class="t">body</span> class=<span class="s">"font-inter bg-slate-100"</span>&gt; <span class="c">&lt;!-- page ground is always slate-100 --&gt;</span></div>
+    <div class="note"><b>Neutrals are Tailwind <span class="mono">slate</span>, not <span class="mono">gray</span>.</b> The system is built on the slate ramp (a cool, faintly navy-biased grey that sits under the brand). Reaching for <span class="mono">gray-*</span> or <span class="mono">zinc-*</span> will drift off-system — always use <span class="mono">slate-*</span>.</div>
+  </section>
+
+  <!-- ============================== COLOR ============================== -->
+  <div class="band"><span class="lbl">Foundations</span><span class="rule"></span></div>
+  <section id="color">
+    <h2>Color</h2>
+    <p class="lede">One brand identity (navy → blue → purple), a cool slate neutral ramp, and a fixed set of semantic families. Semantic color is never used decoratively — a color <em>means</em> a state. The accent is brand-blue; the gradient is reserved for primary moments.</p>
+
+    <h3 class="sub"><span class="k">brand</span> Brand &amp; signature gradient</h3>
+    <div class="ramp">
+      <div class="sw"><i style="background:#172554"></i><b>#172554</b><span>brand.navy</span></div>
+      <div class="sw"><i style="background:#1D4ED8"></i><b>#1D4ED8</b><span>brand.blue</span></div>
+      <div class="sw"><i style="background:#5B2E91"></i><b>#5B2E91</b><span>brand.purple</span></div>
+      <div class="sw"><i style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"></i><b>135°</b><span>blue→purple</span></div>
+      <div class="sw"><i style="background:linear-gradient(180deg,#0f1a3e,#172554 42%,#1e1a4a)"></i><b>180°</b><span>sidebar</span></div>
+    </div>
+    <div class="note">The <b>blue→purple gradient</b> (<span class="mono">linear-gradient(135deg,#1D4ED8,#5B2E91)</span>) marks the single primary action on a screen and active nav. The <b>vertical navy gradient</b> is the sidebar only. Don't gradient-fill arbitrary surfaces.</div>
+
+    <h3 class="sub"><span class="k">navy</span> Navy scale <span style="font-weight:400;color:var(--ink-3);font-size:12px">(custom — for deep brand surfaces &amp; text on light)</span></h3>
+    <div class="ramp">
+      <div class="sw"><i style="background:#EEF1FB"></i><b>50</b></div>
+      <div class="sw"><i style="background:#D4DCF5"></i><b>100</b></div>
+      <div class="sw"><i style="background:#A9B9EB"></i><b>200</b></div>
+      <div class="sw"><i style="background:#7E96E1"></i><b>300</b></div>
+      <div class="sw"><i style="background:#5373D7"></i><b>400</b></div>
+      <div class="sw"><i style="background:#2850CD"></i><b>500</b></div>
+      <div class="sw"><i style="background:#1D3FA4"></i><b>600</b></div>
+      <div class="sw"><i style="background:#162F7B"></i><b>700</b></div>
+      <div class="sw"><i style="background:#0F1F52"></i><b>800</b></div>
+      <div class="sw"><i style="background:#172554"></i><b>900</b></div>
+    </div>
+
+    <h3 class="sub"><span class="k">slate</span> Neutral ramp <span style="font-weight:400;color:var(--ink-3);font-size:12px">(text, borders, grounds)</span></h3>
+    <div class="ramp">
+      <div class="sw"><i style="background:#F8FAFC"></i><b>50</b><span>surface-2</span></div>
+      <div class="sw"><i style="background:#F1F5F9"></i><b>100</b><span>page</span></div>
+      <div class="sw"><i style="background:#E2E8F0"></i><b>200</b><span>border</span></div>
+      <div class="sw"><i style="background:#CBD5E1"></i><b>300</b></div>
+      <div class="sw"><i style="background:#94A3B8"></i><b>400</b><span>muted</span></div>
+      <div class="sw"><i style="background:#64748B"></i><b>500</b></div>
+      <div class="sw"><i style="background:#475569"></i><b>600</b><span>body</span></div>
+      <div class="sw"><i style="background:#334155"></i><b>700</b></div>
+      <div class="sw"><i style="background:#1E293B"></i><b>800</b></div>
+      <div class="sw"><i style="background:#0F172A"></i><b>900</b><span>heading</span></div>
+    </div>
+
+    <h3 class="sub"><span class="k">semantic</span> Meaning families</h3>
+    <p style="color:var(--ink-2);font-size:13.5px;margin:0 0 4px">Each state renders as a <b>50 / 700</b> fill+text on a <b>200</b> border. Charts and stat accents use the <b>600</b>. These map 1:1 to the status vocabulary below.</p>
+    <div class="fam">
+      <div class="card"><div class="nm">Blue — Info / primary</div><div class="use">Submitted · Open · in-flight</div><span class="pill p-info">Under Review</span><div class="hexes"><div><i style="background:#EFF6FF"></i><b>50</b></div><div><i style="background:#2563EB"></i><b>600</b></div><div><i style="background:#1D4ED8"></i><b>700</b></div></div></div>
+      <div class="card"><div class="nm">Emerald — Success</div><div class="use">Filled · Active · Approved · Paid</div><span class="pill p-green">Approved</span><div class="hexes"><div><i style="background:#ECFDF5"></i><b>50</b></div><div><i style="background:#059669"></i><b>600</b></div><div><i style="background:#047857"></i><b>700</b></div></div></div>
+      <div class="card"><div class="nm">Amber — Waiting</div><div class="use">Partially Filled · Pending · Extended</div><span class="pill p-amber">Pending</span><div class="hexes"><div><i style="background:#FFFBEB"></i><b>50</b></div><div><i style="background:#D97706"></i><b>600</b></div><div><i style="background:#B45309"></i><b>700</b></div></div></div>
+      <div class="card"><div class="nm">Red — Bad / terminal</div><div class="use">Cancelled · Rejected · Expired · Overdue</div><span class="pill p-red">Cancelled</span><div class="hexes"><div><i style="background:#FEF2F2"></i><b>50</b></div><div><i style="background:#DC2626"></i><b>600</b></div><div><i style="background:#B91C1C"></i><b>700</b></div></div></div>
+      <div class="card"><div class="nm">Purple — Released</div><div class="use">Released to Agencies · Sent</div><span class="pill p-purple">Released</span><div class="hexes"><div><i style="background:#FAF5FF"></i><b>50</b></div><div><i style="background:#9333EA"></i><b>600</b></div><div><i style="background:#7E22CE"></i><b>700</b></div></div></div>
+      <div class="card"><div class="nm">Slate — Closed</div><div class="use">Invoiced · Withdrawn · Credited</div><span class="pill p-closed">Invoiced</span><div class="hexes"><div><i style="background:#F1F5F9"></i><b>100</b></div><div><i style="background:#64748B"></i><b>500</b></div><div><i style="background:#475569"></i><b>600</b></div></div></div>
+    </div>
+    <div class="note"><b>Domain accents.</b> Two families are reserved for <em>booking source</em> and nothing else — <span class="mono">indigo</span> = Abstract-sourced, <span class="mono">teal</span> = Agency-sourced. See <a class="anch" href="#source" style="color:var(--accent);font-weight:600">Source badges</a>.</div>
+  </section>
+
+  <!-- ============================== TYPE ============================== -->
+  <section id="type">
+    <h2>Typography</h2>
+    <p class="lede">One family — <b>Inter</b> — across the whole portal, carried by weight and size, not by mixing faces. Numbers in tables and finance use tabular figures. Uppercase micro-labels get letter-spacing; headings never do.</p>
+    <div class="demo tight">
+      <div class="stack" style="gap:10px">
+        <div><span style="font:800 30px/1.05 Inter;color:#0F172A;letter-spacing:-.02em">Workforce pipeline</span><div class="mono" style="font-size:11px;color:#94A3B8;margin-top:4px">text-2xl/3xl · font-bold (800) · tracking-tight — stat &amp; hero numbers</div></div>
+        <div><span style="font:700 20px Inter;color:#0F172A">Section heading</span><div class="mono" style="font-size:11px;color:#94A3B8;margin-top:4px">text-xl · font-bold (700)</div></div>
+        <div><span style="font:700 18px Inter;color:#0F172A">Page title (H1 in header)</span><div class="mono" style="font-size:11px;color:#94A3B8;margin-top:4px">text-lg · font-bold (700)</div></div>
+        <div><span style="font:700 14px Inter;color:#1E293B">Card / component title</span><div class="mono" style="font-size:11px;color:#94A3B8;margin-top:4px">text-sm · font-bold (700)</div></div>
+        <div><span style="font:400 14px Inter;color:#475569">Body copy — the default reading size across tables, forms and descriptions, set on slate-600 for comfortable contrast.</span><div class="mono" style="font-size:11px;color:#94A3B8;margin-top:4px">text-sm · font-normal (400) · slate-600</div></div>
+        <div><span style="font:500 12px Inter;color:#64748B">Meta &amp; secondary</span><div class="mono" style="font-size:11px;color:#94A3B8;margin-top:4px">text-xs · slate-500</div></div>
+        <div><span style="font:600 11px Inter;color:#64748B;text-transform:uppercase;letter-spacing:.06em">Table column label</span><div class="mono" style="font-size:11px;color:#94A3B8;margin-top:4px">text-xs · font-semibold · uppercase · tracking-wider · slate-500</div></div>
+      </div>
+    </div>
+    <div class="spec">
+      <div class="b"><div class="v">400–800</div><div class="n">Weights loaded</div><div class="x">400 body · 500 meta · 600 labels/pills · 700 titles · 800 numbers</div></div>
+      <div class="b"><div class="v">1.6</div><div class="n">Body line-height</div><div class="x">leading-relaxed on prose; tight on numbers</div></div>
+      <div class="b"><div class="v">tabular</div><div class="n">Numeric figures</div><div class="x">finance / hours columns align</div></div>
+    </div>
+  </section>
+
+  <!-- ============================== SPACE ============================== -->
+  <section id="space">
+    <h2>Spacing &amp; grid</h2>
+    <p class="lede">A 4px base. Component internals step in 2 / 2.5 / 3 (8–12px); sections separate on 4 / 6 (16–24px). The content area breathes on a responsive page inset that widens on large screens.</p>
+    <div class="spec">
+      <div class="b"><div class="v">4px</div><div class="n">Base unit</div><div class="x">all gaps are multiples</div></div>
+      <div class="b"><div class="v">gap-2 · 2.5 · 3</div><div class="n">Inside components</div><div class="x">8 / 10 / 12px</div></div>
+      <div class="b"><div class="v">gap-4 · 6</div><div class="n">Between blocks</div><div class="x">16 / 24px</div></div>
+      <div class="b"><div class="v">p-5</div><div class="n">Card padding</div><div class="x">20px standard</div></div>
+      <div class="b"><div class="v">px-6 xl:px-8</div><div class="n">Page inset</div><div class="x">24 → 32px</div></div>
+      <div class="b"><div class="v">py-6</div><div class="n">Main top/bottom</div><div class="x">24px</div></div>
+    </div>
+    <div class="code"><span class="c">// Standard responsive grids</span>
+<span class="t">grid grid-cols-2 lg:grid-cols-4 gap-4</span>   <span class="c">— KPI / stat row</span>
+<span class="t">grid grid-cols-1 xl:grid-cols-3 gap-4</span>  <span class="c">— chart + side panel (2/1 split via xl:col-span-2)</span>
+<span class="t">flex flex-wrap items-center gap-3</span>      <span class="c">— filter / action bars</span></div>
+  </section>
+
+  <!-- ============================== RADIUS ============================== -->
+  <section id="radius">
+    <h2>Radius &amp; elevation</h2>
+    <p class="lede">Corners scale with the element's weight: controls are soft, cards are softer, containers softest, and anything pill-shaped is fully round. Shadows are whisper-light — the system separates surfaces with <em>borders</em>, not drop shadows, reserving real elevation for overlays.</p>
+    <div class="demo">
+      <div class="row" style="gap:20px">
+        <div style="text-align:center"><div style="width:80px;height:56px;background:#fff;border:1px solid #E2E8F0;border-radius:8px"></div><div class="mono" style="font-size:11px;color:#64748B;margin-top:7px">rounded-lg · 8px<br><span style="color:#94A3B8">buttons, inputs</span></div></div>
+        <div style="text-align:center"><div style="width:80px;height:56px;background:#fff;border:1px solid #E2E8F0;border-radius:12px"></div><div class="mono" style="font-size:11px;color:#64748B;margin-top:7px">rounded-xl · 12px<br><span style="color:#94A3B8">nav items, chips</span></div></div>
+        <div style="text-align:center"><div style="width:80px;height:56px;background:#fff;border:1px solid #E2E8F0;border-radius:16px"></div><div class="mono" style="font-size:11px;color:#64748B;margin-top:7px">rounded-2xl · 16px<br><span style="color:#94A3B8">cards, panels</span></div></div>
+        <div style="text-align:center"><div style="width:80px;height:32px;background:#fff;border:1px solid #E2E8F0;border-radius:999px;margin-top:12px"></div><div class="mono" style="font-size:11px;color:#64748B;margin-top:7px">rounded-full<br><span style="color:#94A3B8">pills, avatars</span></div></div>
+        <div style="text-align:center"><div style="width:80px;height:56px;background:#fff;border-radius:16px;box-shadow:0 24px 50px -18px rgba(15,23,42,.4)"></div><div class="mono" style="font-size:11px;color:#64748B;margin-top:7px">shadow-2xl<br><span style="color:#94A3B8">modals only</span></div></div>
+      </div>
+    </div>
+    <div class="note"><b>Elevation rule:</b> cards use <span class="mono">shadow-sm</span> + a <span class="mono">border border-slate-200</span>. Only floating overlays (modals, popovers) earn <span class="mono">shadow-2xl</span>. No mid-tier drop shadows on in-flow content.</div>
+  </section>
+
+  <!-- ============================== ICONS ============================== -->
+  <section id="icons">
+    <h2>Iconography</h2>
+    <p class="lede">Font Awesome 6 — <span class="mono">fa-solid</span> for actions and status, <span class="mono">fa-regular</span> for passive/nav accents. Icons are sized in text units and inherit the surrounding text color; inside pills they drop to 9–10px. One icon per control, always paired with a label except on the icon-button.</p>
+    <div class="demo tight">
+      <div class="row" style="gap:22px;color:#475569">
+        <span style="display:flex;flex-direction:column;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span class="mono" style="font-size:10px;color:#94A3B8">magnifying-glass</span></span>
+        <span style="display:flex;flex-direction:column;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg><span class="mono" style="font-size:10px;color:#94A3B8">check</span></span>
+        <span style="display:flex;flex-direction:column;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg><span class="mono" style="font-size:10px;color:#94A3B8">chevron-down</span></span>
+        <span style="display:flex;flex-direction:column;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg><span class="mono" style="font-size:10px;color:#94A3B8">xmark</span></span>
+        <span style="display:flex;flex-direction:column;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="mono" style="font-size:10px;color:#94A3B8">bell</span></span>
+        <span style="display:flex;flex-direction:column;align-items:center;gap:6px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><span class="mono" style="font-size:10px;color:#94A3B8">briefcase</span></span>
+      </div>
+    </div>
+    <div class="code"><span class="c">&lt;!-- action icon inherits text size + color --&gt;</span>
+&lt;<span class="t">i</span> class=<span class="s">"fa-solid fa-magnifying-glass text-slate-400 text-xs"</span>&gt;&lt;/i&gt;
+<span class="c">&lt;!-- inside a pill, drop to micro size --&gt;</span>
+&lt;<span class="t">i</span> class=<span class="s">"fa-solid fa-check text-[10px]"</span>&gt;&lt;/i&gt;</div>
+  </section>
+
+  <!-- ============================== SHELL ============================== -->
+  <section id="shell">
+    <h2>Layout shell</h2>
+    <p class="lede">Every screen is the same three-part frame: a fixed navy <b>sidebar</b> (nav + identity), a white <b>header</b> bar (breadcrumb, title, page actions, user), and a scrollable <b>main</b> on a slate-100 ground. Only <span class="mono">&lt;main&gt;</span> scrolls.</p>
+    <div class="demo">
+      <div class="shell">
+        <div class="s-rail"><div class="lk on"></div><div class="lk"></div><div class="lk"></div><div class="lk"></div><div class="lk"></div></div>
+        <div class="s-main">
+          <div class="s-hd"><b>Page title</b><span style="margin-left:auto;width:22px;height:22px;border-radius:6px;background:#F1F5F9;border:1px solid #E2E8F0"></span><span style="width:22px;height:22px;border-radius:50%;background:#D4DCF5"></span></div>
+          <div class="s-body"><div class="c"></div><div class="c"></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="spec">
+      <div class="b"><div class="v">w-64 xl:w-72</div><div class="n">Sidebar width</div><div class="x">256 → 288px, hidden below lg</div></div>
+      <div class="b"><div class="v">180° navy</div><div class="n">Sidebar fill</div><div class="x">#0f1a3e → #172554 → #1e1a4a</div></div>
+      <div class="b"><div class="v">h-auto</div><div class="n">Header</div><div class="x">white · border-b slate-200</div></div>
+      <div class="b"><div class="v">overflow-y-auto</div><div class="n">Main only scrolls</div><div class="x">body is overflow-hidden</div></div>
+    </div>
+    <h3 class="sub"><span class="k">nav</span> Nav item &amp; active state</h3>
+    <div class="code"><span class="c">&lt;!-- resting --&gt;</span>
+&lt;<span class="t">a</span> class=<span class="s">"flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60
+          hover:text-white hover:bg-white/8 text-sm transition-all"</span>&gt;
+  &lt;<span class="t">i</span> class=<span class="s">"fa-solid fa-gauge-high text-white/40 w-4 text-center"</span>&gt;&lt;/i&gt;&lt;<span class="t">span</span>&gt;Dashboard&lt;/<span class="t">span</span>&gt;
+&lt;/<span class="t">a</span>&gt;
+<span class="c">&lt;!-- active: gradient chip + hairline + trailing dot --&gt;</span>
+&lt;<span class="t">a</span> class=<span class="s">"... text-white font-semibold"</span>
+   style=<span class="s">"background:linear-gradient(135deg,rgba(29,78,216,.5),rgba(91,46,145,.4));
+          border:1px solid rgba(255,255,255,.15)"</span>&gt; ... &lt;/<span class="t">a</span>&gt;</div>
+  </section>
+
+  <!-- ============================== BUTTONS ============================== -->
+  <div class="band"><span class="lbl">Components</span><span class="rule"></span></div>
+  <section id="buttons">
+    <h2>Buttons</h2>
+    <p class="lede">One primary per view — the gradient. Everything else is quiet: a filled slate secondary, a bordered ghost, a text-only danger, and the square icon-button for toolbar actions. Labels are verbs that name the outcome (“Run Report”, “Approve Agency”), never “OK/Submit”.</p>
+    <div class="demo">
+      <div class="row">
+        <button class="btn b-primary"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M5 3l14 9-14 9V3z"/></svg>Run Report</button>
+        <button class="btn b-secondary">Export week</button>
+        <button class="btn b-ghost"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Add filter</button>
+        <button class="btn b-danger">Revoke</button>
+        <button class="btn b-icon" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></button>
+        <button class="btn b-primary" disabled>Disabled</button>
+      </div>
+    </div>
+    <div class="code"><span class="c">Primary  </span> class=<span class="s">"... text-white rounded-lg px-4 py-2 text-xs font-semibold"</span> style=<span class="s">"background:linear-gradient(135deg,#1D4ED8,#5B2E91)"</span>
+<span class="c">Secondary</span> class=<span class="s">"bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg px-3 py-2 text-xs font-semibold"</span>
+<span class="c">Ghost    </span> class=<span class="s">"bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold"</span>
+<span class="c">Danger   </span> class=<span class="s">"text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg px-2 py-1 text-xs font-semibold"</span>
+<span class="c">Icon     </span> class=<span class="s">"w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300"</span> <span class="c">+ aria-label</span></div>
+    <div class="note"><b>Every icon-only control needs an <span class="mono">aria-label</span></b> naming the action. The gradient primary is the only filled-color button — a second gradient button on one screen breaks the hierarchy.</div>
+  </section>
+
+  <!-- ============================== BADGES ============================== -->
+  <section id="badges">
+    <h2>Status badges</h2>
+    <p class="lede">Status is a <b>fixed vocabulary</b> rendered as one pill shell + a meaning color. You never invent a status string and never pick a color “by vibe” — the string comes from <span class="mono">DESIGN-SPEC-v4</span> and the color from its meaning bucket.</p>
+    <div class="demo">
+      <div class="row">
+        <span class="pill p-neutral">Draft</span>
+        <span class="pill p-info">Submitted</span>
+        <span class="pill p-purple">Released to Agencies</span>
+        <span class="pill p-amber">Partially Filled</span>
+        <span class="pill p-green"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Filled</span>
+        <span class="pill p-red">Cancelled</span>
+        <span class="pill p-closed">Invoiced</span>
+      </div>
+      <div class="row" style="margin-top:16px">
+        <span class="pill p-amber">Pending</span>
+        <span class="pill p-red"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Overdue</span>
+        <span style="font-size:12px;color:#64748B;align-self:center">← Overdue is an <b>additive second pill</b>, never a replacement for the lifecycle status</span>
+      </div>
+    </div>
+    <div class="code"><span class="c">&lt;!-- shell + one color bucket --&gt;</span>
+&lt;<span class="t">span</span> class=<span class="s">"inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold
+             bg-emerald-50 text-emerald-700 border border-emerald-200"</span>&gt;
+  &lt;<span class="t">i</span> class=<span class="s">"fa-solid fa-check text-[10px]"</span>&gt;&lt;/i&gt; Filled
+&lt;/<span class="t">span</span>&gt;</div>
+    <table class="demo-tbl" style="margin-top:8px">
+      <thead><tr><th>Bucket</th><th>Append these classes</th><th>Example statuses</th></tr></thead>
+      <tbody class="mono" style="font-size:12px">
+        <tr><td class="k">Neutral / draft</td><td>bg-slate-100 text-slate-700 border-slate-200</td><td>Draft · Pending Start · Not Booked</td></tr>
+        <tr><td class="k">Info / in-flight</td><td>bg-blue-50 text-blue-700 border-blue-200</td><td>Submitted · Under Review · Generated · Open</td></tr>
+        <tr><td class="k">Released</td><td>bg-purple-50 text-purple-700 border-purple-200</td><td>Released to Agencies · Sent</td></tr>
+        <tr><td class="k">Waiting</td><td>bg-amber-50 text-amber-700 border-amber-200</td><td>Partially Filled · Pending · Extended · Acknowledged</td></tr>
+        <tr><td class="k">Good / terminal</td><td>bg-emerald-50 text-emerald-700 border-emerald-200</td><td>Filled · Active · Accepted · Approved · Paid · Completed</td></tr>
+        <tr><td class="k">Bad / terminal</td><td>bg-red-50 text-red-700 border-red-200</td><td>Cancelled · Rejected · Expired · Disputed · Overdue</td></tr>
+        <tr><td class="k">Closed / archival</td><td>bg-slate-100 text-slate-500 border-slate-200</td><td>Closed · Withdrawn · Invoiced · Credited</td></tr>
+      </tbody>
+    </table>
+    <div class="note warn"><b>Forbidden strings — never render these:</b>
+      <div class="forbid" style="margin:0"><span>Commission</span><span>Uplift %</span><span>In Progress</span><span>On Hold</span><span>Shortlisted</span><span>Interviewing</span><span>Offered</span><span>Pending Approval</span></div>
+    </div>
+  </section>
+
+  <!-- ============================== SOURCE ============================== -->
+  <section id="source">
+    <h2>Source badges <span style="font-weight:400;font-size:14px;color:var(--ink-3)">— domain-specific</span></h2>
+    <p class="lede">Booking <b>source</b> is the portal's core concept, so it gets its own reserved color pair, distinct from every status color. <span class="mono">indigo</span> = filled from Abstract's own pool; <span class="mono">teal</span> = filled by an agency. These two colors mean <em>only</em> source, everywhere: badges, bars, donut arcs.</p>
+    <div class="demo">
+      <div class="row">
+        <span class="pill p-indigo"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l8 3v6c0 5-3.5 8-8 11-4.5-3-8-6-8-11V5l8-3z"/></svg>Abstract-sourced</span>
+        <span class="pill p-teal"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 13l3 3 5-7"/><rect x="3" y="4" width="18" height="16" rx="2"/></svg>Agency-sourced</span>
+      </div>
+    </div>
+    <div class="code"><span class="c">Abstract</span> class=<span class="s">"... bg-indigo-50 text-indigo-700 border-indigo-200"</span>  <span class="c">icon: fa-building-shield</span>
+<span class="c">Agency  </span> class=<span class="s">"... bg-teal-50 text-teal-700 border-teal-200"</span>      <span class="c">icon: fa-handshake-angle</span></div>
+    <div class="note"><b>Data-visibility rule baked into color:</b> source is <em>never</em> shown to the client. Any component that renders a source badge is Abstract-only (or agency-only for its own rows). See <a class="anch" href="#rules" style="color:var(--accent);font-weight:600">Rules</a>.</div>
+  </section>
+
+  <!-- ============================== CARDS ============================== -->
+  <section id="cards">
+    <h2>Cards &amp; KPI stats</h2>
+    <p class="lede">The card is the atomic container: white, hairline slate border, <span class="mono">rounded-2xl</span>, faint shadow. The KPI stat is a card with a tinted icon chip, a big tabular number, and an optional trend line.</p>
+    <div class="demo">
+      <div class="row" style="gap:14px">
+        <div class="card kpi"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div class="n">3,412</div><div class="l">Total Hours</div></div>
+        <div class="card kpi"><div class="ic" style="background:rgba(16,185,129,.1);color:#059669"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/></svg></div><div class="n">£12,720</div><div class="l">Total Margin</div><div class="d">▲ 22.4% vs last week</div></div>
+      </div>
+    </div>
+    <div class="code"><span class="t">bg-white rounded-2xl border border-slate-200 shadow-sm p-5</span>          <span class="c">— card shell</span>
+  &lt;<span class="t">div</span> class=<span class="s">"w-10 h-10 rounded-xl flex items-center justify-center"</span> style=<span class="s">"background:rgba(29,78,216,.1)"</span>&gt;icon&lt;/<span class="t">div</span>&gt;
+  &lt;<span class="t">p</span> class=<span class="s">"text-2xl font-bold text-slate-900"</span>&gt;3,412&lt;/<span class="t">p</span>&gt;
+  &lt;<span class="t">p</span> class=<span class="s">"text-sm text-slate-500 font-medium"</span>&gt;Total Hours&lt;/<span class="t">p</span>&gt;</div>
+  </section>
+
+  <!-- ============================== TABLES ============================== -->
+  <section id="tables">
+    <h2>Data tables</h2>
+    <p class="lede">The workhorse. Slate-50 header with uppercase micro-labels, rows divided by <span class="mono">slate-100</span> hairlines, a subtle row hover, status in a badge cell, and actions right-aligned. Numeric columns are right-aligned and tabular. Wide tables scroll inside their own container — never the page.</p>
+    <div class="demo" style="padding:16px">
+      <div style="overflow-x:auto">
+      <table class="demo-tbl">
+        <thead><tr><th>Reference</th><th>Role</th><th>Source</th><th>Status</th><th style="text-align:right">Margin</th><th></th></tr></thead>
+        <tbody>
+          <tr><td class="k">VAC-1042</td><td>Forklift Driver</td><td><span class="pill p-indigo" style="font-size:10px;padding:2px 8px">Abstract</span></td><td><span class="pill p-amber">Partially Filled</span></td><td class="mono" style="text-align:right;color:#047857;font-weight:600">£192.50</td><td style="text-align:right"><button class="btn b-icon" style="width:30px;height:30px" aria-label="Open VAC-1042"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button></td></tr>
+          <tr><td class="k">VAC-1039</td><td>Warehouse Op.</td><td><span class="pill p-teal" style="font-size:10px;padding:2px 8px">Agency</span></td><td><span class="pill p-green">Filled</span></td><td class="mono" style="text-align:right;color:#047857;font-weight:600">£116.10</td><td style="text-align:right"><button class="btn b-icon" style="width:30px;height:30px" aria-label="Open VAC-1039"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg></button></td></tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+    <div class="code"><span class="t">thead</span> → bg-slate-50 · <span class="t">th</span> text-xs font-semibold text-slate-500 uppercase tracking-wider px-4 py-3
+<span class="t">tbody</span> → divide-y divide-slate-100 · <span class="t">tr</span> hover:bg-slate-50/60 · <span class="t">td</span> px-4 py-3
+numeric cell → <span class="s">text-right font-semibold</span> (tabular) · wrap table in <span class="s">overflow-x-auto</span></div>
+  </section>
+
+  <!-- ============================== FORMS ============================== -->
+  <section id="forms">
+    <h2>Forms &amp; filters</h2>
+    <p class="lede">Inputs sit on <span class="mono">slate-50</span> with a slate-200 border; on focus they turn white with a soft blue ring. Filter bars are a wrapped flex row of these fields, each led by an icon. The most important filter (Client / Agency) gets a stronger colored border to draw the eye.</p>
+    <div class="demo">
+      <div class="row">
+        <div class="field" style="min-width:220px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input placeholder="Search candidate or booking…"></div>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/></svg><select><option>All Agencies</option></select><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+        <div class="field" style="border:2px solid #BFDBFE;background:rgba(29,78,216,.05)"><select style="color:#1D4ED8;font-weight:600"><option>Client: All</option></select><svg viewBox="0 0 24 24" fill="none" stroke="#1D4ED8" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></div>
+      </div>
+    </div>
+    <div class="code"><span class="c">field</span>      class=<span class="s">"flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"</span>
+<span class="c">input     </span> class=<span class="s">"bg-transparent text-xs text-slate-700 placeholder-slate-400 outline-none w-full"</span>
+<span class="c">emphasis  </span> border-2 border-blue-200 bg-blue-50/50  <span class="c">(primary filter — Client / Agency)</span>
+<span class="c">focus     </span> focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/12</div>
+  </section>
+
+  <!-- ============================== FEEDBACK ============================== -->
+  <section id="feedback">
+    <h2>Banners &amp; empty states</h2>
+    <p class="lede">Inline banners carry contextual rules (a BRD reference, a visibility note) in the meaning color. Empty states are a card with a soft icon chip, a plain-language line, and the one action that resolves the emptiness.</p>
+    <div class="demo">
+      <div class="stack">
+        <div class="banner ban-info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg><span>Abstract reports show both rate sets, margin, and the statutory breakdown <b>(RP-007)</b>. Client and agency reports are filtered to their own rates.</span></div>
+        <div class="banner ban-amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.3 3.9l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3l-8-14a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg><span>Insurance for <b>Prime Staffing</b> expires in 9 days — self-bill will be blocked until renewed.</span></div>
+        <div class="empty"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5.5L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.5-6.5A2 2 0 0 0 16.8 4H7.2a2 2 0 0 0-1.7 1.5z"/></svg></div><b>No proposals yet</b><p>Released vacancies awaiting agency submissions will appear here.</p><button class="btn b-primary">Release a vacancy</button></div>
+      </div>
+    </div>
+    <div class="code"><span class="c">banner</span> class=<span class="s">"rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 flex items-start gap-3 text-sm text-blue-800"</span>
+<span class="c">empty </span> card + <span class="s">"w-14 h-14 rounded-full bg-slate-100 text-slate-400"</span> icon + headline + one primary CTA</div>
+  </section>
+
+  <!-- ============================== OVERLAYS ============================== -->
+  <section id="overlays">
+    <h2>Overlays &amp; controls</h2>
+    <p class="lede">Modals sit on a navy-tinted, blurred scrim; the panel is a <span class="mono">rounded-2xl</span> card with <span class="mono">shadow-2xl</span>, a bordered header and a footer action row. Toggles, segmented pickers and tabs are the small stateful controls used inside them.</p>
+    <div class="demo" style="display:flex;gap:22px;flex-wrap:wrap;align-items:flex-start">
+      <div style="width:300px;border-radius:16px;box-shadow:0 24px 50px -18px rgba(15,23,42,.4);background:#fff;overflow:hidden;border:1px solid #E2E8F0">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid #E2E8F0"><b style="font:700 15px Inter;color:#0F172A">Record day</b><button class="btn b-icon" style="width:28px;height:28px" aria-label="Close"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></button></div>
+        <div style="padding:18px;font-size:13px;color:#475569">Modal body — form, choices, live summary.</div>
+        <div style="display:flex;justify-content:flex-end;gap:10px;padding:14px 18px;border-top:1px solid #E2E8F0;background:#F8FAFC"><button class="btn b-ghost">Cancel</button><button class="btn b-primary">Save day</button></div>
+      </div>
+      <div class="stack" style="gap:18px">
+        <div class="row" style="gap:10px"><button class="toggle" aria-label="Paid"><i></i></button><span style="font-size:12.5px;color:#475569">Toggle — <span class="mono" style="font-size:11px">emerald on / slate off</span></span></div>
+        <div class="row" style="gap:10px"><span class="seg"><button class="on">Client</button><button>Agency</button><button>Abstract</button></span><span style="font-size:12.5px;color:#475569">Segmented</span></div>
+        <div class="tabs"><button class="on">Overview</button><button>Self-Bill</button><button>Backing</button></div>
+      </div>
+    </div>
+    <div class="code"><span class="c">scrim </span> class=<span class="s">"fixed inset-0 z-50 flex items-center justify-center p-4"</span> · overlay style=<span class="s">"background:rgba(15,26,62,.55);backdrop-filter:blur(4px)"</span>
+<span class="c">panel </span> class=<span class="s">"bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg max-h-[90vh] overflow-y-auto"</span>
+<span class="c">footer</span> class=<span class="s">"px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3"</span>
+<span class="c">toggle</span> role=<span class="s">"switch"</span> aria-checked · track bg-emerald-500 / bg-slate-300 · knob translate-x-5 when on</div>
+  </section>
+
+  <!-- ============================== RULES ============================== -->
+  <div class="band"><span class="lbl">Governance</span><span class="rule"></span></div>
+  <section id="rules">
+    <h2>Rules &amp; accessibility</h2>
+    <p class="lede">The system encodes business rules, not just looks. These are non-negotiable — a component that breaks one is wrong even if it renders perfectly.</p>
+    <div class="dd">
+      <div class="col do"><h4><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Always</h4>
+        <ul>
+          <li>Use a canonical status string + its meaning color.</li>
+          <li>Right-align &amp; tabular-align money and hours.</li>
+          <li>Give every icon-only button an <span class="mono">aria-label</span>.</li>
+          <li>Keep a visible <span class="mono">:focus-visible</span> ring on interactive elements.</li>
+          <li>Scroll wide content inside <span class="mono">overflow-x-auto</span>, not the page.</li>
+          <li>Show booking <b>source</b> only on Abstract (and agency-own) surfaces.</li>
+        </ul>
+      </div>
+      <div class="col dont"><h4><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 6L6 18M6 6l12 12"/></svg>Never</h4>
+        <ul>
+          <li>Invent a status string or use a forbidden term.</li>
+          <li>Show pay/margin to a client, or charge to an agency.</li>
+          <li>Show booking source to a client, anywhere.</li>
+          <li>Set “Partially Filled / Filled” manually — it's derived.</li>
+          <li>Use <span class="mono">gray-*</span>; add a second gradient button; drop-shadow in-flow cards.</li>
+          <li>Convey state by color alone — pair it with text/icon.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note"><b>Contrast &amp; motion:</b> body text is slate-600+ on white (≥ 4.5:1); pill text uses the 700 shade on the 50 tint (checked). Respect <span class="mono">prefers-reduced-motion</span> — transitions are decorative only. Target size ≥ 36px for touch controls.</div>
+  </section>
+
+  <!-- ============================== HANDOVER ============================== -->
+  <section id="handover">
+    <h2>Handover checklist</h2>
+    <p class="lede">What to wire up so a new screen is on-system from the first commit.</p>
+    <ul class="check">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span><b>Head block</b> — copy the fonts + <span class="mono">tailwind.config</span> from Overview verbatim; body is <span class="mono">font-inter bg-slate-100 overflow-hidden</span>.</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span><b>Shell</b> — reuse the sidebar + header; set the active nav item to the gradient chip.</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span><b>Tokens only</b> — brand/navy/slate + the six semantic families; no ad-hoc hexes, no <span class="mono">gray</span>.</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span><b>Status &amp; source</b> — pills from the vocabulary tables; source badges Abstract-only.</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span><b>Primary action</b> — exactly one gradient button; the rest secondary/ghost.</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg><span><b>A11y pass</b> — labels on icon buttons, focus rings, contrast, reduced-motion.</span></li>
+    </ul>
+    <div class="note" style="border-left-color:#5B2E91"><b>Source of truth precedence:</b> the shipped admin screens → <span class="mono">DESIGN-SPEC-v4.md</span> (shared status vocabulary &amp; visibility rules) → this page. If they ever disagree, the spec wins on <em>vocabulary/rules</em> and the screens win on <em>rendered values</em>; update this page to match.</div>
+  </section>
+</main>
+
+<script>
+  (function(){
+    var btn=document.getElementById('tt');
+    btn&&btn.addEventListener('click',function(){
+      var r=document.documentElement;
+      var cur=r.getAttribute('data-theme');
+      if(!cur){cur=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+      r.setAttribute('data-theme', cur==='dark'?'light':'dark');
+    });
+  })();
+</script>
