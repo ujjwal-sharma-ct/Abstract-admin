@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard · Abstract VMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }</style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'], },
+                    colors: {
+                        navy: { DEFAULT: '#172554', 50: '#EEF1FB', 100: '#D4DCF5', 200: '#A9B9EB', 300: '#7E96E1', 400: '#5373D7', 500: '#2850CD', 600: '#1D3FA4', 700: '#162F7B', 800: '#0F1F52', 900: '#172554', },
+                        brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554', }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default">
+
+<div id="app-root" class="flex w-full" style="height: 100vh;">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
+        <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
+            <img src="logo.png" alt="Abstract VMS" class="h-12 w-auto block -ml-[5px]"/>
+            <p class="text-white/40 text-sm mt-2">Admin Portal</p>
+        </div>
+
+        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1">
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p>
+            <a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);" aria-current="page">
+                <i class="fa-solid fa-gauge-high text-blue-400 w-4 text-center"></i>
+                <span>Admin Dashboard</span>
+                <div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+            </a>
+            <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
+                <span>Vacancy List</span>
+            </a>
+            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
+                <span>Create Vacancy Wizard</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
+            <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users-gear text-white/40 w-4 text-center"></i>
+                <span>Worker Pool</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p>
+            <a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-user text-white/40 w-4 text-center"></i>
+                <span>Agency Dashboard</span>
+            </a>
+            <a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-circle-check text-white/40 w-4 text-center"></i>
+                <span>Approved Suppliers</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p>
+            <a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center"></i>
+                <span>AWR Tracking</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p>
+            <a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clock text-white/40 w-4 text-center"></i>
+                <span>Timesheets</span>
+            </a>
+            <a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center"></i>
+                <span>Invoicing / Self-Bill</span>
+            </a>
+            <a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-bar text-white/40 w-4 text-center"></i>
+                <span>Abstract Backing Report</span>
+            </a>
+            <a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sterling-sign text-white/40 w-4 text-center"></i>
+                <span>Rate Cards</span>
+            </a>
+            <a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-line text-white/40 w-4 text-center"></i>
+                <span>Reports</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p>
+            <a id="nav-onboard-client" href="abstract.onboarding.onboard-client.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-circle-arrow-right text-white/40 w-4 text-center"></i>
+                <span>Onboard Client</span>
+            </a>
+            <a id="nav-onboard-agency" href="abstract.onboarding.onboard-agency.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-tie text-white/40 w-4 text-center"></i>
+                <span>Onboard Agency</span>
+            </a>
+            <a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sliders text-white/40 w-4 text-center"></i>
+                <span>Configuration</span>
+            </a>
+            <a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-gears text-white/40 w-4 text-center"></i>
+                <span>System Configuration</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p>
+            <a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users text-white/40 w-4 text-center"></i>
+                <span>Users</span>
+            </a>
+            <a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-shield text-white/40 w-4 text-center"></i>
+                <span>Roles</span>
+            </a>
+            <a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center"></i>
+                <span>Notification templates</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p>
+            <a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sitemap text-white/40 w-4 text-center"></i>
+                <span>Organisations</span>
+            </a>
+            <a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-lock text-white/40 w-4 text-center"></i>
+                <span>Data subject requests</span>
+            </a>
+            <a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center"></i>
+                <span>Audit Log</span>
+            </a>
+
+        </nav>
+
+        <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
+            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border border-white/20 flex-shrink-0" alt="avatar"/>
+                <div class="flex-1 min-w-0">
+                    <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
+                    <p class="text-white/40 text-xs truncate">Abstract Admin</p>
+                </div>
+                <a href="abstract.identity-access.sign-in.html?reason=signed-out" title="Sign out" aria-label="Sign out" class="w-9 h-9 flex items-center justify-center rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white"></i></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <header id="header" class="flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
+            <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-bars text-slate-600 text-sm"></i></button>
+                <div class="min-w-0">
+                    <h1 id="page-h1" class="text-lg font-bold text-slate-900 truncate">Dashboard</h1>
+                    <p id="page-sub" class="text-xs text-slate-500 hidden sm:block truncate">Welcome to Abstract VMS</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+
+                <button type="button" data-s1-bell aria-label="Notifications" class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-regular fa-bell text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <a href="abstract.identity-access.my-account.html" class="flex items-center gap-2 pl-2 border-l border-slate-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2" aria-label="My account — Sarah Mitchell">
+                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border-2 border-blue-100" alt=""/>
+                    <div class="hidden xl:block"><p class="text-xs font-semibold text-slate-700" data-me-name>Sarah Mitchell</p><p class="text-xs text-slate-500">Abstract</p></div>
+                </a>
+            </div>
+        </header>
+
+        <main id="main" class="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-8 py-6 bg-slate-100">
+
+            <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 sm:p-8">
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Abstract VMS</p>
+                <h2 class="text-xl font-bold text-slate-900 mt-1">Welcome, Sarah.</h2>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed max-w-2xl">This is where you set up who can use Abstract VMS and how it behaves: people, roles and permissions for Abstract and every client and agency, the system's settings, and the messages it sends. Pick a place to start.</p>
+            </section>
+
+            <section class="mt-8" aria-labelledby="g-peop">
+                <h2 id="g-peop" class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">People and access</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="abstract.identity-access.users.html" class="group bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-start gap-4 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">
+                        <span class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-blue-700" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-users" aria-hidden="true"></i></span>
+                        <span class="min-w-0">
+                            <span class="block text-sm font-bold text-slate-900 group-hover:text-blue-700">Users</span>
+                            <span class="block text-sm text-slate-600 mt-0.5 leading-relaxed">Invite people, set their roles, deactivate or reactivate accounts.</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs ml-auto mt-1 group-hover:text-blue-600" aria-hidden="true"></i>
+                    </a>
+                    <a href="abstract.identity-access.roles.html" class="group bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-start gap-4 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">
+                        <span class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-blue-700" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-user-shield" aria-hidden="true"></i></span>
+                        <span class="min-w-0">
+                            <span class="block text-sm font-bold text-slate-900 group-hover:text-blue-700">Roles</span>
+                            <span class="block text-sm text-slate-600 mt-0.5 leading-relaxed">Create, rename and deactivate the roles your users hold.</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs ml-auto mt-1 group-hover:text-blue-600" aria-hidden="true"></i>
+                    </a>
+                    <a href="abstract.identity-access.permission-matrix.html" class="group bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-start gap-4 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">
+                        <span class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-blue-700" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-table-cells" aria-hidden="true"></i></span>
+                        <span class="min-w-0">
+                            <span class="block text-sm font-bold text-slate-900 group-hover:text-blue-700">Permission matrix</span>
+                            <span class="block text-sm text-slate-600 mt-0.5 leading-relaxed">Choose what each role can see and do.</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs ml-auto mt-1 group-hover:text-blue-600" aria-hidden="true"></i>
+                    </a>
+                    <a href="abstract.organisations.organisations.html" class="group bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-start gap-4 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">
+                        <span class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-blue-700" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-sitemap" aria-hidden="true"></i></span>
+                        <span class="min-w-0">
+                            <span class="block text-sm font-bold text-slate-900 group-hover:text-blue-700">Organisations</span>
+                            <span class="block text-sm text-slate-600 mt-0.5 leading-relaxed">Every client and agency — administer their users and roles.</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs ml-auto mt-1 group-hover:text-blue-600" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </section>
+            <section class="mt-8" aria-labelledby="g-conf">
+                <h2 id="g-conf" class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Configuration</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="abstract.configuration.system-settings.html" class="group bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-start gap-4 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">
+                        <span class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-blue-700" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-gears" aria-hidden="true"></i></span>
+                        <span class="min-w-0">
+                            <span class="block text-sm font-bold text-slate-900 group-hover:text-blue-700">System configuration</span>
+                            <span class="block text-sm text-slate-600 mt-0.5 leading-relaxed">Effective-dated settings, shift patterns and bank holidays.</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs ml-auto mt-1 group-hover:text-blue-600" aria-hidden="true"></i>
+                    </a>
+                    <a href="abstract.notifications.notification-templates.html" class="group bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-start gap-4 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">
+                        <span class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-blue-700" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-envelope-open-text" aria-hidden="true"></i></span>
+                        <span class="min-w-0">
+                            <span class="block text-sm font-bold text-slate-900 group-hover:text-blue-700">Notification templates</span>
+                            <span class="block text-sm text-slate-600 mt-0.5 leading-relaxed">The wording of the emails and in-app messages this system sends.</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs ml-auto mt-1 group-hover:text-blue-600" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </section>
+            <section class="mt-8" aria-labelledby="g-over">
+                <h2 id="g-over" class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Oversight and privacy</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <a href="abstract.audit.audit-log.html" class="group bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-start gap-4 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">
+                        <span class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-blue-700" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-clipboard-list" aria-hidden="true"></i></span>
+                        <span class="min-w-0">
+                            <span class="block text-sm font-bold text-slate-900 group-hover:text-blue-700">Audit log</span>
+                            <span class="block text-sm text-slate-600 mt-0.5 leading-relaxed">Every change, who made it and when, with before and after values.</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs ml-auto mt-1 group-hover:text-blue-600" aria-hidden="true"></i>
+                    </a>
+                    <a href="abstract.identity-access.data-subject-requests.html" class="group bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-start gap-4 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">
+                        <span class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-blue-700" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-user-lock" aria-hidden="true"></i></span>
+                        <span class="min-w-0">
+                            <span class="block text-sm font-bold text-slate-900 group-hover:text-blue-700">Data subject requests</span>
+                            <span class="block text-sm text-slate-600 mt-0.5 leading-relaxed">Compile, export or erase a person's personal data.</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs ml-auto mt-1 group-hover:text-blue-600" aria-hidden="true"></i>
+                    </a>
+                    <a href="abstract.identity-access.my-account.html" class="group bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-start gap-4 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">
+                        <span class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-blue-700" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-circle-user" aria-hidden="true"></i></span>
+                        <span class="min-w-0">
+                            <span class="block text-sm font-bold text-slate-900 group-hover:text-blue-700">My account</span>
+                            <span class="block text-sm text-slate-600 mt-0.5 leading-relaxed">Your name, your sign-in email and your password.</span>
+                        </span>
+                        <i class="fa-solid fa-chevron-right text-slate-300 text-xs ml-auto mt-1 group-hover:text-blue-600" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<script>
+/* Mobile navigation (sidebar is hidden below lg — this is the only way to reveal it) */
+(function () {
+  var btn = document.getElementById('mobile-menu-btn'),
+      sb  = document.getElementById('sidebar');
+  if (!btn || !sb) return;
+  btn.setAttribute('aria-controls', 'sidebar');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-label', 'Open navigation');
+  var bd = document.createElement('div');
+  bd.setAttribute('aria-hidden', 'true');
+  bd.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:40;display:none';
+  document.body.appendChild(bd);
+  function open() {
+    sb.style.display = 'flex'; sb.style.position = 'fixed'; sb.style.top = '0';
+    sb.style.bottom = '0'; sb.style.left = '0'; sb.style.zIndex = '50';
+    bd.style.display = 'block'; btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    ['display','position','top','bottom','left','zIndex'].forEach(function (p) { sb.style[p] = ''; });
+    bd.style.display = 'none'; btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', function () { bd.style.display === 'block' ? close() : open(); });
+  bd.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bd.style.display === 'block') close(); });
+  window.addEventListener('resize', function () { if (window.innerWidth >= 1024) close(); });
+})();
+
+</script>
+<script>
+
+</script>
+
+<script src="slice1-kit.js"></script>
+</body>
+</html>

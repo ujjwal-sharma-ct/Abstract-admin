@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activate account · Abstract VMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }</style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'], },
+                    colors: {
+                        navy: { DEFAULT: '#172554', 50: '#EEF1FB', 100: '#D4DCF5', 200: '#A9B9EB', 300: '#7E96E1', 400: '#5373D7', 500: '#2850CD', 600: '#1D3FA4', 700: '#162F7B', 800: '#0F1F52', 900: '#172554', },
+                        brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554', }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter" data-s1-page data-s1-states="default loading validation expired used deactivated success" style="background: linear-gradient(160deg, #0f1a3e 0%, #172554 35%, #1e1a4a 65%, #2d1a5e 100%);">
+
+<main class="min-h-screen flex items-center justify-center px-4 py-10 relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+        <div class="absolute -top-32 -left-32 w-96 h-96 rounded-full opacity-20" style="background: radial-gradient(circle, #1D4ED8 0%, transparent 70%);"></div>
+        <div class="absolute -bottom-24 -right-24 w-96 h-96 rounded-full opacity-15" style="background: radial-gradient(circle, #5B2E91 0%, transparent 70%);"></div>
+    </div>
+
+    <div class="w-full max-w-[420px] relative z-10">
+        <div class="flex justify-center mb-6">
+            <img id="brand-logo" src="logo.png" alt="Abstract VMS" class="h-24 w-auto"
+                 onerror="this.style.display='none';document.getElementById('logo-fallback').style.display='block';"/>
+            <div id="logo-fallback" style="display:none;" class="text-center">
+                <span class="text-white font-bold text-3xl tracking-tight">Abstract</span>
+                <span class="block text-white/60 text-sm font-bold uppercase tracking-[0.3em] mt-1">VMS</span>
+            </div>
+        </div>
+        <div class="flex flex-col items-center gap-2 mb-8">
+            <span class="text-[11px] font-semibold uppercase tracking-[0.2em] text-white/50">Admin Portal</span>
+        </div>
+
+        <div class="bg-white border border-white/20 rounded-2xl shadow-2xl overflow-hidden">
+            <div class="px-6 sm:px-8 pt-8 pb-8">
+
+                <!-- Loading: the link is being checked -->
+                <div data-s1-show="loading" aria-busy="true">
+                    <div class="flex items-center gap-3 mb-6"><i class="fa-solid fa-spinner fa-spin text-blue-700" aria-hidden="true"></i><p class="text-sm font-semibold text-slate-700">Checking your link…</p></div>
+                    <div class="space-y-4">
+                        <div class="h-5 w-2/3 bg-slate-200 rounded animate-pulse"></div>
+                        <div class="h-3 w-full bg-slate-200 rounded animate-pulse"></div>
+                        <div class="h-11 w-full bg-slate-200 rounded-lg animate-pulse"></div>
+                        <div class="h-11 w-full bg-slate-200 rounded-lg animate-pulse"></div>
+                        <div class="h-11 w-full bg-slate-200 rounded-lg animate-pulse"></div>
+                    </div>
+                </div>
+
+                <!-- Form: default + validation -->
+                <div data-s1-show="default validation">
+                    <h1 class="text-xl font-bold text-slate-900 mb-1.5"><span data-mode="activate">Activate your account</span><span data-mode="reset" style="display:none">Set a new password</span></h1>
+                    <p class="text-sm text-slate-600 mb-6"><span data-mode="activate">Welcome to Abstract VMS — Abstract has invited you to its admin portal. Choose a password to finish setting up your account.</span><span data-mode="reset" style="display:none">Choose a new password for your account. This link works for 30 minutes and only once.</span></p>
+
+                    <div id="summary" style="display:none" role="alert" class="rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 mb-5 flex items-start gap-2 text-sm text-red-800">
+                        <i class="fa-solid fa-circle-exclamation mt-0.5" aria-hidden="true"></i><span id="summary-t"></span>
+                    </div>
+
+                    <form id="act-form" class="flex flex-col gap-5" novalidate>
+                        <div class="flex flex-col gap-1.5">
+                            <p class="text-sm font-semibold text-slate-700" id="email-l">Email</p>
+                            <div class="flex items-center gap-3 px-4 py-3 bg-slate-100 border border-slate-200 rounded-lg" aria-labelledby="email-l">
+                                <i class="fa-regular fa-envelope text-slate-400 text-sm" aria-hidden="true"></i>
+                                <span class="flex-1 min-w-0 text-sm text-slate-700 truncate">tom.rees@abstractrecruitment.co.uk</span>
+                                <i class="fa-solid fa-lock text-slate-300 text-xs" title="Read only" aria-hidden="true"></i>
+                            </div>
+                            <p class="text-xs text-slate-500">This is your sign-in. Only an administrator can change it.</p>
+                        </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-sm font-semibold text-slate-700" for="new-password">New password</label>
+                        <div class="relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"><i class="fa-solid fa-lock text-slate-400 text-sm" aria-hidden="true"></i></div>
+                            <input type="password" id="new-password" autocomplete="new-password" placeholder="Enter a password" aria-describedby="new-password-err" class="w-full pl-11 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-50 transition-all duration-200"/>
+                            <button type="button" data-eye="new-password" aria-label="Show password" class="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-regular fa-eye text-sm"></i></button>
+                        </div>
+                        <p id="new-password-err" class="text-xs text-red-600" style="display:none"></p>
+                    </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 -mt-2">
+                            <p class="text-xs font-semibold text-slate-700 mb-2">Your password must have:</p>
+                            <ul id="policy" class="text-sm text-slate-600 space-y-1.5" aria-live="polite"></ul>
+                            <p class="text-[11px] text-slate-500 mt-3">These rules come from the security policy Abstract sets.</p>
+                        </div>
+
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-sm font-semibold text-slate-700" for="confirm-password">Confirm password</label>
+                        <div class="relative">
+                            <div class="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"><i class="fa-solid fa-lock text-slate-400 text-sm" aria-hidden="true"></i></div>
+                            <input type="password" id="confirm-password" autocomplete="new-password" placeholder="Enter it again" aria-describedby="confirm-password-err" class="w-full pl-11 pr-12 py-3 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-50 transition-all duration-200"/>
+                            <button type="button" data-eye="confirm-password" aria-label="Show password" class="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-regular fa-eye text-sm"></i></button>
+                        </div>
+                        <p id="confirm-password-err" class="text-xs text-red-600" style="display:none"></p>
+                    </div>
+                        <button id="submit-btn" type="submit" class="w-full py-3.5 rounded-lg text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-95 hover:shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 disabled:opacity-60 disabled:cursor-not-allowed mt-1" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);"><i class="fa-solid fa-check text-xs" aria-hidden="true"></i> <span id="submit-l"><span data-mode="activate">Activate account</span><span data-mode="reset" style="display:none">Save new password</span></span></button>
+                        <p class="text-xs text-slate-500 text-center flex items-center justify-center gap-1.5"><i class="fa-solid fa-user-lock text-slate-400" aria-hidden="true"></i>Only you know this password — no administrator ever sees it.</p>
+                    </form>
+                </div>
+
+                <div data-s1-show="expired" class="text-center">
+                    <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-clock text-xl" aria-hidden="true"></i></div>
+                    <h1 class="text-lg font-bold text-slate-900"><span data-mode="activate">This activation link has expired</span><span data-mode="reset" style="display:none">This reset link has expired</span></h1>
+                    <p class="text-sm text-slate-600 mt-2"><span data-mode="activate">This activation link has expired. Ask your administrator to send a new one.</span><span data-mode="reset" style="display:none">Reset links work for 30 minutes and only once. Request a new one from the sign-in page.</span></p>
+                    <p class="text-xs text-slate-500 mt-3" data-mode="activate">Activation links work for 72 hours and only once.</p>
+                    <div data-mode="reset" style="display:none" class="mt-6"><a href="abstract.identity-access.sign-in.html" class="w-full py-3.5 rounded-lg text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-95 hover:shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 disabled:opacity-60 disabled:cursor-not-allowed" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);"><i class="fa-solid fa-key text-xs" aria-hidden="true"></i> Request a new link</a></div>
+                </div>
+
+                <div data-s1-show="used" class="text-center">
+                    <div class="w-14 h-14 rounded-full bg-amber-50 text-amber-700 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-link-slash text-xl" aria-hidden="true"></i></div>
+                    <h1 class="text-lg font-bold text-slate-900">This link has already been used</h1>
+                    <p class="text-sm text-slate-600 mt-2"><span data-mode="activate">Your account is already active. Sign in with the password you chose.</span><span data-mode="reset" style="display:none">Your password was already changed with this link. Sign in with your new password.</span> If you've forgotten it, reset it from the sign-in page.</p>
+                    <div class="mt-6 flex flex-col gap-3"><a href="abstract.identity-access.sign-in.html" class="w-full py-3.5 rounded-lg text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-95 hover:shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 disabled:opacity-60 disabled:cursor-not-allowed" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);"><i class="fa-solid fa-arrow-right-to-bracket text-xs" aria-hidden="true"></i> Go to sign in</a>
+                    <a href="abstract.identity-access.sign-in.html" class="text-sm font-semibold text-blue-700 hover:text-blue-800 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Forgot your password?</a></div>
+                </div>
+
+                <div data-s1-show="deactivated" class="text-center">
+                    <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-user-slash text-xl" aria-hidden="true"></i></div>
+                    <h1 class="text-lg font-bold text-slate-900">This account has been deactivated</h1>
+                    <p class="text-sm text-slate-600 mt-2"><span data-mode="activate">An administrator deactivated this account before it was activated, so the link no longer works.</span><span data-mode="reset" style="display:none">An administrator has deactivated this account, so its password can't be changed.</span> If you think this is a mistake, contact your administrator.</p>
+                    
+                </div>
+
+                <div data-s1-show="success" class="text-center">
+                    <div class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-circle-check text-xl" aria-hidden="true"></i></div>
+                    <h1 class="text-lg font-bold text-slate-900"><span data-mode="activate">Your account is active</span><span data-mode="reset" style="display:none">Your password has been changed</span></h1>
+                    <p class="text-sm text-slate-600 mt-2"><span data-mode="activate">You're signed in. Taking you to Abstract VMS…</span><span data-mode="reset" style="display:none">Sign in with your new password.</span></p>
+                    <div class="mt-6" data-mode="activate"><a href="abstract.shell.dashboard.html" data-s1-home class="w-full py-3.5 rounded-lg text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-95 hover:shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 disabled:opacity-60 disabled:cursor-not-allowed" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);">Go to Abstract VMS <i class="fa-solid fa-arrow-right text-xs" aria-hidden="true"></i></a></div>
+                    <div class="mt-6" data-mode="reset" style="display:none"><a href="abstract.identity-access.sign-in.html" class="w-full py-3.5 rounded-lg text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-95 hover:shadow-lg focus:outline-none focus-visible:ring-4 focus-visible:ring-blue-200 disabled:opacity-60 disabled:cursor-not-allowed" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);"><i class="fa-solid fa-arrow-right-to-bracket text-xs" aria-hidden="true"></i> Go to sign in</a></div>
+                </div>
+            </div>
+        </div>
+
+        <p class="text-center text-xs text-white/40 mt-6">© 2026 Abstract Recruitment</p>
+    </div>
+</main>
+
+<script>
+var MODE = new URLSearchParams(location.search).get('mode') === 'reset' ? 'reset' : 'activate';
+document.querySelectorAll('[data-mode]').forEach(function (e) { e.style.display = e.getAttribute('data-mode') === MODE ? '' : 'none'; });
+if (MODE === 'reset') document.title = 'Set a new password · Abstract VMS';
+var EMAIL = 'tom.rees@abstractrecruitment.co.uk';
+var RULES = [
+  ['len', 'at least 12 characters', function (p) { return p.length >= 12; }],
+  ['upper', 'an uppercase letter', function (p) { return /[A-Z]/.test(p); }],
+  ['lower', 'a lowercase letter', function (p) { return /[a-z]/.test(p); }],
+  ['num', 'a number', function (p) { return /[0-9]/.test(p); }],
+  ['special', 'a special character, such as ! or #', function (p) { return /[^A-Za-z0-9]/.test(p); }]
+];
+var tried = false;
+function $(id) { return document.getElementById(id); }
+function paintPolicy() {
+  var p = $('new-password').value;
+  $('policy').innerHTML = RULES.map(function (r) {
+    var ok = r[2](p), bad = tried && !ok;
+    var icon = ok ? '<i class="fa-solid fa-circle-check text-emerald-600 text-xs w-3 text-center" aria-hidden="true"></i>' : bad ? '<i class="fa-solid fa-circle-xmark text-red-600 text-xs w-3 text-center" aria-hidden="true"></i>' : '<i class="fa-regular fa-circle text-slate-300 text-xs w-3 text-center" aria-hidden="true"></i>';
+    return '<li class="flex items-center gap-2 ' + (ok ? 'text-emerald-700' : bad ? 'text-red-600 font-medium' : 'text-slate-600') + '">' + icon + '<span>' + r[1] + '<span class="sr-only">' + (ok ? ' — met' : ' — not met yet') + '</span></span></li>';
+  }).join('');
+  return RULES.every(function (r) { return r[2](p); });
+}
+function err(id, msg) {
+  var i = $(id), e = $(id + '-err');
+  e.textContent = msg || ''; e.style.display = msg ? '' : 'none';
+  i.classList.toggle('border-red-500', !!msg); i.classList.toggle('border-slate-200', !msg);
+  i.setAttribute('aria-invalid', msg ? 'true' : 'false');
+}
+function check() {
+  var strong = paintPolicy(), a = $('new-password').value, b = $('confirm-password').value, ok = true, msgs = [];
+  if (tried) {
+    err('new-password', strong ? '' : (a ? 'Your password doesn\'t meet every rule yet.' : 'Enter a password.'));
+    if (!strong) { ok = false; msgs.push('meet every password rule'); }
+    var m = !b ? 'Enter your password again.' : (a !== b ? 'The passwords don\'t match.' : '');
+    err('confirm-password', m); if (m) { ok = false; msgs.push('make both passwords match'); }
+    $('summary').style.display = ok ? 'none' : '';
+    $('summary-t').textContent = 'To continue, ' + msgs.join(' and ') + '.';
+  } else if (b && a !== b) err('confirm-password', 'The passwords don\'t match.');
+  else err('confirm-password', '');
+  return strong && a === b && !!b;
+}
+$('new-password').addEventListener('input', check);
+$('confirm-password').addEventListener('input', check);
+document.querySelectorAll('[data-eye]').forEach(function (b) {
+  b.onclick = function () {
+    var i = $(b.dataset.eye), show = i.type === 'password';
+    i.type = show ? 'text' : 'password';
+    b.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+    b.innerHTML = show ? '<i class="fa-regular fa-eye-slash text-sm"></i>' : '<i class="fa-regular fa-eye text-sm"></i>';
+  };
+});
+$('act-form').addEventListener('submit', function (e) {
+  e.preventDefault(); tried = true;
+  if (!check()) { var f = document.querySelector('#act-form [aria-invalid="true"]'); if (f) f.focus(); return; }
+  var btn = $('submit-btn'); btn.disabled = true;
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs" aria-hidden="true"></i> ' + (MODE === 'reset' ? 'Saving…' : 'Activating…');
+  setTimeout(function () {
+    btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-check text-xs" aria-hidden="true"></i> ' + (MODE === 'reset' ? 'Save new password' : 'Activate account');
+    S1.setState('success');
+    if (MODE === 'activate') setTimeout(function () { location.href = S1.home(); }, 2500);
+  }, 1100);
+});
+document.addEventListener('s1:state', function (e) {
+  tried = false; $('new-password').value = ''; $('confirm-password').value = '';
+  err('new-password', ''); err('confirm-password', ''); $('summary').style.display = 'none';
+  if (e.detail.state === 'validation') { $('new-password').value = 'tomrees1'; $('confirm-password').value = 'tomrees2'; tried = true; }
+  check();
+});
+</script>
+
+<script src="slice1-kit.js"></script>
+</body>
+</html>

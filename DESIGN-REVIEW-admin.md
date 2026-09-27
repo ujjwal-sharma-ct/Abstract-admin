@@ -23,28 +23,28 @@ flow gap · **P2** = consistency / polish.
 
 ## A. Flow breaks & mis-targeted navigation (P0)
 
-1. **Worker → wrong screen.** In [Worker Pool](13-Vendor%20Management%20-%20Worker%20Pool.html) a worker row's **View** links to
-   [Booking Detail](9-Vendor%20Management%20-%20Booking%20De.html), not a worker profile. There is **no worker/candidate
+1. **Worker → wrong screen.** In [Worker Pool](abstract.candidates.worker-pool.html) a worker row's **View** links to
+   [Booking Detail](abstract.bookings.booking-detail.html), not a worker profile. There is **no worker/candidate
    profile screen anywhere** in the admin portal (CP-001–009), so the worker's compliance,
    licences, availability and documents are unreachable.
 2. **"Book into Position" has no vacancy picker.** The same rows' **Book into Position** jumps
-   straight to [Fill Position](14-Vendor%20Management%20-%20Fill%20Position.html), which is hard-scoped to one vacancy
+   straight to [Fill Position](abstract.demand.fill-position.html), which is hard-scoped to one vacancy
    ("Forklift Driver (Reach) · VAC-1042 · Position 3 of 3"). Booking *from a vacancy* works
    (Vacancy Detail → Fill Position); booking *from a worker* should first let you **choose which
    open position** to fill (CP-014). That reverse flow is missing.
 3. **Agency portal leaks into the admin flow.** The sidebar's "Agency Dashboard" opens
-   [screen 6](6-Vendor%20Management%20-%20Agency%20Das.html), whose sidebar brand reads **"Agency Portal"** and whose content
-   is an agency user's view (candidate "Alex Chen"). [Agency Candidate Submission](7-Vendor%20Management%20-%20Agency%20Can.html) is the
+   [screen 6](abstract.organisations.agency-dashboard.html), whose sidebar brand reads **"Agency Portal"** and whose content
+   is an agency user's view (candidate "Alex Chen"). [Agency Candidate Submission](abstract.demand.agency-candidate-submission.html) is the
    same — an agency-portal screen. This is why "the user profile changes": you've been dropped
    into a different portal. The admin needs its **own** agency directory/management view, not the
    agency's portal (AM-001–006).
 4. **Decision actions don't advance the flow.** The commercial spine is visual-only:
-   - [Proposal Review](8-Vendor%20Management%20-%20Proposal%20R.html): **Accept / Reject** are dead (no handler). Accepting a
+   - [Proposal Review](abstract.demand.proposal-review.html): **Accept / Reject** are dead (no handler). Accepting a
      proposal must create the Agency-sourced booking and move state (PP-004/005) — here it does
      nothing and goes nowhere.
-   - [Booking Detail](9-Vendor%20Management%20-%20Booking%20De.html): **Extend / Amend / Cancel** are dead (BK-007/008); cancel
+   - [Booking Detail](abstract.bookings.booking-detail.html): **Extend / Amend / Cancel** are dead (BK-007/008); cancel
      should return the position to Open (BK-016).
-   - [Approved Suppliers](17-Vendor%20Management%20-%20Approved%20Su.html): **Approve Agency / Revoke** are dead (AB-003/006).
+   - [Approved Suppliers](abstract.organisations.approved-suppliers.html): **Approve Agency / Revoke** are dead (AB-003/006).
      Because the approved-supplier list gates the release step, this is load-bearing.
 5. **No way to browse bookings.** There is a Booking *Detail* but **no Bookings list / active-
    bookings dashboard** (BK-009/010) and no "Bookings" nav item — you can only reach a booking by
@@ -60,16 +60,16 @@ screen that doesn't exist**, or that sit on a decision node and stop the journey
 
 | Screen | buttons | wired | Notable dead CTAs |
 | --- | --- | --- | --- |
-| [Invoicing](11-Vendor%20Management%20-%20Invoicing.html) | 51 | 0 | **Generate Invoice**, Generate, Download × many, Export |
-| [Approved Suppliers](17-Vendor%20Management%20-%20Approved%20Su.html) | 44 | 0 | Approve Agency, Revoke |
-| [Vacancy List](3-Vendor%20Management%20-%20Vacancy%20Li.html) | 63 | 0 | filters, row actions |
-| [Configuration](23-Vendor%20Management%20-%20Configuration.html) | 31 | 8 | save/edit on several policy blocks |
-| [Backing Report](12-Vendor%20Management%20-%20Abstract%20B.html) | 28 | 0 | export, drill-downs |
-| [Proposal Review](8-Vendor%20Management%20-%20Proposal%20R.html) | 28 | 0 | Accept, Reject |
-| [Booking Detail](9-Vendor%20Management%20-%20Booking%20De.html) | 23 | 0 | Extend, Amend, Cancel |
-| [Rate Cards](18-Vendor%20Management%20-%20Rate%20Cards.html) | 12 | 0 | **New Rate Card**, CSV Bulk Upload |
-| [Reports](20-Vendor%20Management%20-%20Reports.html) | 10 | 0 | Run report, export |
-| [AWR Tracking](16-Vendor%20Management%20-%20AWR%20Trackin.html) | 5 | 0 | Apply Post-AWR Rate |
+| [Invoicing](abstract.money.invoicing-self-bill.html) | 51 | 0 | **Generate Invoice**, Generate, Download × many, Export |
+| [Approved Suppliers](abstract.organisations.approved-suppliers.html) | 44 | 0 | Approve Agency, Revoke |
+| [Vacancy List](abstract.demand.vacancy-list.html) | 63 | 0 | filters, row actions |
+| [Configuration](abstract.configuration.organisation-configuration.html) | 31 | 8 | save/edit on several policy blocks |
+| [Backing Report](abstract.money.backing-report.html) | 28 | 0 | export, drill-downs |
+| [Proposal Review](abstract.demand.proposal-review.html) | 28 | 0 | Accept, Reject |
+| [Booking Detail](abstract.bookings.booking-detail.html) | 23 | 0 | Extend, Amend, Cancel |
+| [Rate Cards](abstract.rates.rate-cards.html) | 12 | 0 | **New Rate Card**, CSV Bulk Upload |
+| [Reports](abstract.reporting.reports.html) | 10 | 0 | Run report, export |
+| [AWR Tracking](abstract.awr.awr-tracking.html) | 5 | 0 | Apply Post-AWR Rate |
 
 The two examples you already flagged are the sharpest cases because the destination doesn't exist:
 - **Rate Cards → "New Rate Card"** is a bare button. There is **no rate-card create/edit screen**
@@ -80,13 +80,13 @@ The two examples you already flagged are the sharpest cases because the destinat
   (Generated → Sent → Paid → Disputed → Credited), and no self-bill detail.
 
 **Even the "working" directions don't commit.** Beyond the decision nodes above:
-- [Fill Position](14-Vendor%20Management%20-%20Fill%20Position.html) — **"Create Abstract-sourced Booking"** and **"Record Manual Fill"**
+- [Fill Position](abstract.demand.fill-position.html) — **"Create Abstract-sourced Booking"** and **"Record Manual Fill"**
   are dead, so the one correctly-wired path (Vacancy → pool → fill) still can't create the booking.
-- [Onboard Client](21-Vendor%20Management%20-%20Onboard%20Client.html) / [Onboard Agency](22-Vendor%20Management%20-%20Onboard%20Agency.html) — the step rail and *Continue* are wired, but
+- [Onboard Client](abstract.onboarding.onboard-client.html) / [Onboard Agency](abstract.onboarding.onboard-agency.html) — the step rail and *Continue* are wired, but
   **"Activate client" / "Activate agency"**, **"Invite user"**, "Add business unit / branch /
   role / rate card", and "CSV import" are all dead — the wizards can advance but **never
   complete/activate** (ONB-008/010), and the *only* place users are created doesn't work.
-- [Vacancy List](3-Vendor%20Management%20-%20Vacancy%20Li.html) — the 10 **sort-column headers** render sort arrows but don't sort
+- [Vacancy List](abstract.demand.vacancy-list.html) — the 10 **sort-column headers** render sort arrows but don't sort
   (they look interactive, so they read as broken rather than absent).
 
 ---
@@ -118,10 +118,10 @@ Diffed against the BRD's required admin capabilities. Present-but-shallow items 
 
 **Present — credit where due**
 - Selective **release to agencies with incremental waves** (VC-015/016) is built into
-  [Vacancy Detail](5-Vendor%20Management%20-%20Vacancy%20De.html) — the release drawer (Wave 1/2/3 + approved-supplier picker) is
+  [Vacancy Detail](abstract.demand.vacancy-detail.html) — the release drawer (Wave 1/2/3 + approved-supplier picker) is
   actually wired, so the core differentiator is demonstrated. (Note the top action-bar
   "Release to" shortcut and "Record Manual Fill"/"Save Draft" there are still dead.)
-- **Timesheets** ([screen 10](10-Vendor%20Management%20-%20Client%20Wee.html)) is the most complete flow: cross-client grid,
+- **Timesheets** ([screen 10](abstract.timesheets.timesheets.html)) is the most complete flow: cross-client grid,
   on-behalf entry with day modal, absence + pay-override + cost-bearer (TS-035), per-shift role
   change (TS-049), and the **booking-change / un-book approval monitor** (TS-047) — good.
 - **AWR Tracking**, **Reports** (with source split), **Backing Report**, **System Config**, and

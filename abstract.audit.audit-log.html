@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Log</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }</style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'], },
+                    colors: {
+                        navy: { DEFAULT: '#172554', 50: '#EEF1FB', 100: '#D4DCF5', 200: '#A9B9EB', 300: '#7E96E1', 400: '#5373D7', 500: '#2850CD', 600: '#1D3FA4', 700: '#162F7B', 800: '#0F1F52', 900: '#172554', },
+                        brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554', }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-slate-100 overflow-hidden" data-s1-states="default export-failed">
+
+<div id="app-root" class="flex w-full" style="height: 100vh;">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
+        <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
+            <img src="logo.png" alt="Abstract VMS" class="h-12 w-auto block -ml-[5px]"/>
+            <p class="text-white/40 text-sm mt-2">Admin Portal</p>
+        </div>
+
+        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1">
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p>
+            <a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-gauge-high text-white/40 w-4 text-center"></i>
+                <span>Admin Dashboard</span>
+            </a>
+            <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
+                <span>Vacancy List</span>
+            </a>
+            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
+                <span>Create Vacancy Wizard</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
+            <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users-gear text-white/40 w-4 text-center"></i>
+                <span>Worker Pool</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p>
+            <a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-user text-white/40 w-4 text-center"></i>
+                <span>Agency Dashboard</span>
+            </a>
+            <a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-circle-check text-white/40 w-4 text-center"></i>
+                <span>Approved Suppliers</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p>
+            <a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center"></i>
+                <span>AWR Tracking</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p>
+            <a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clock text-white/40 w-4 text-center"></i>
+                <span>Timesheets</span>
+            </a>
+            <a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center"></i>
+                <span>Invoicing / Self-Bill</span>
+            </a>
+            <a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-bar text-white/40 w-4 text-center"></i>
+                <span>Abstract Backing Report</span>
+            </a>
+            <a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sterling-sign text-white/40 w-4 text-center"></i>
+                <span>Rate Cards</span>
+            </a>
+            <a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-line text-white/40 w-4 text-center"></i>
+                <span>Reports</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p>
+            <a id="nav-onboard-client" href="abstract.onboarding.onboard-client.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-circle-arrow-right text-white/40 w-4 text-center"></i>
+                <span>Onboard Client</span>
+            </a>
+            <a id="nav-onboard-agency" href="abstract.onboarding.onboard-agency.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-tie text-white/40 w-4 text-center"></i>
+                <span>Onboard Agency</span>
+            </a>
+            <a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sliders text-white/40 w-4 text-center"></i>
+                <span>Configuration</span>
+            </a>
+            <a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-gears text-white/40 w-4 text-center"></i>
+                <span>System Configuration</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p>
+            <a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users text-white/40 w-4 text-center"></i>
+                <span>Users</span>
+            </a>
+            <a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-shield text-white/40 w-4 text-center"></i>
+                <span>Roles</span>
+            </a>
+            <a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center"></i>
+                <span>Notification templates</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p>
+            <a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sitemap text-white/40 w-4 text-center"></i>
+                <span>Organisations</span>
+            </a>
+            <a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-lock text-white/40 w-4 text-center"></i>
+                <span>Data subject requests</span>
+            </a>
+            <a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);">
+                <i class="fa-solid fa-clipboard-list text-blue-400 w-4 text-center"></i>
+                <span>Audit Log</span>
+                <div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+            </a>
+
+        </nav>
+
+        <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
+            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border border-white/20 flex-shrink-0" alt="avatar"/>
+                <div class="flex-1 min-w-0">
+                    <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
+                    <p class="text-white/40 text-xs truncate">Abstract Admin</p>
+                </div>
+                <a href="abstract.identity-access.sign-in.html" title="Logout"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white"></i></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <header id="header" class="flex items-center justify-between px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
+            <div class="flex items-center gap-4">
+                <button id="mobile-menu-btn" class="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"><i class="fa-solid fa-bars text-slate-600 text-sm"></i></button>
+                <div>
+                    <h1 class="text-lg font-bold text-slate-900">Audit Log</h1>
+                    <p class="text-xs text-slate-500 hidden sm:block">Searchable trail of every change: who made it, when, and what changed</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <span id="export-job" class="hidden sm:inline-flex items-center" aria-live="polite"></span>
+                <button id="export-btn" type="button" title="Exports the filtered results as CSV. Prototype: Shift-click to see a failed export." aria-label="Export CSV" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg px-3 py-2 min-h-[36px] text-xs font-semibold whitespace-nowrap transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><i class="fa-solid fa-file-csv text-xs"></i><span class="hidden md:inline"> Export CSV</span></button>
+                <div class="hidden sm:flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 w-48 xl:w-56">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs"></i>
+                    <input type="text" placeholder="Search changes..." class="bg-transparent text-xs text-slate-700 placeholder-slate-400 outline-none w-full"/>
+                </div>
+                <button class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors"><i class="fa-regular fa-bell text-slate-600 text-sm"></i><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500"></span></button>
+                <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
+                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border-2 border-blue-100" alt="avatar"/>
+                    <div class="hidden xl:block"><p class="text-xs font-semibold text-slate-700">Sarah Mitchell</p><p class="text-xs text-slate-400">Abstract Admin</p></div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-y-auto px-6 xl:px-8 py-6 bg-slate-100">
+
+            <!-- Stat cards -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
+                    <div class="flex items-start justify-between mb-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-wave-square text-blue-600"></i></div></div>
+                    <p class="text-3xl font-bold text-slate-900 mb-1">1,284</p>
+                    <p class="text-sm text-slate-500 font-medium">Changes today</p>
+                </div>
+            </div>
+
+            <!-- Info banner -->
+            <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 mb-6 flex items-start gap-3">
+                <i class="fa-solid fa-shield-halved text-blue-500 mt-0.5"></i>
+                <p class="text-sm text-blue-800">Every change &mdash; create, update, delete, activate, deactivate, role change &mdash; is recorded with who made it, when, and the before/after values <span class="font-semibold">(XR-006, AB-007)</span>. Page views and downloads are not recorded.</p>
+            </div>
+
+            <!-- Filter bar -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-6 flex flex-wrap items-center gap-3">
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 flex-1 min-w-[180px]">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs"></i>
+                    <input type="text" placeholder="Free-text search (entity ref, summary, IP)..." class="bg-transparent text-xs text-slate-700 placeholder-slate-400 outline-none w-full"/>
+                </div>
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"><i class="fa-regular fa-user text-slate-400 text-xs"></i><select class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option>All users</option><option>Sarah Mitchell</option><option>James Okafor</option><option>Priya Shah</option><option>David Chen</option><option>Amara Okoye</option><option>System</option></select></div>
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"><i class="fa-solid fa-cube text-slate-400 text-xs"></i><select class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option>All entity types</option><option>User</option><option>Role</option><option>Organisation</option><option>System setting</option><option>Shift pattern</option><option>Bank-holiday calendar</option><option>Notification template</option><option>Data subject request</option><option data-s1-later>Vacancy</option><option data-s1-later>Position</option><option data-s1-later>Booking</option><option data-s1-later>Proposal</option><option data-s1-later>Timesheet</option><option data-s1-later>Invoice</option><option data-s1-later>Self-Bill</option><option data-s1-later>Rate Card</option><option data-s1-later>Candidate</option></select></div>
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"><i class="fa-solid fa-bolt text-slate-400 text-xs"></i><select class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option>All actions</option><option>Created</option><option>Updated</option><option>Deleted</option><option>Removed</option><option>Restored</option><option>Activated</option><option>Deactivated</option><option>Role changed</option><option>Transferred</option></select></div>
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2" title="Date range"><i class="fa-regular fa-calendar text-slate-400 text-xs"></i><span class="text-xs font-medium text-slate-600">01 Sep 2026 &ndash; 26 Sep 2026</span><i class="fa-solid fa-chevron-down text-slate-400 text-xs"></i></div>
+            </div>
+
+            <!-- Main table -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm min-w-[1000px]">
+                        <thead>
+                            <tr class="bg-slate-50 text-left">
+                                <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Timestamp</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">User</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Action</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Entity</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Summary</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">IP Address</th>
+                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <!-- Slice 1 rows: changes only -->
+                            <tr class="hover:bg-slate-50/60">
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">26 Sep 10:14:52</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold">SM</div><div><p class="text-slate-800 font-medium leading-tight">Sarah Mitchell</p><p class="text-xs text-slate-400 leading-tight">Abstract</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">System setting</span><span class="font-semibold text-slate-800">security.idle_timeout_minutes</span></td>
+                                <td class="px-4 py-3 text-slate-600">Scheduled a change to Idle timeout from 01 Nov 2026</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
+                                <td class="px-4 py-3 text-right"><button type="button" data-diff="d1" aria-expanded="true" aria-controls="d1" class="text-xs font-semibold text-blue-600 hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><i class="fa-solid fa-code-compare mr-1"></i>Diff</button></td>
+                            </tr>
+                            <tr id="d1" class="bg-slate-50/60">
+                                <td colspan="7" class="px-5 py-3">
+                                    <div class="rounded-xl border border-slate-200 bg-white p-4">
+                                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Before / After &middot; security.idle_timeout_minutes</p>
+                                        <div class="grid grid-cols-2 gap-4 text-sm"><div><p class="text-xs text-slate-400 mb-1">value</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">30</p></div><div><p class="text-xs text-slate-400 mb-1">&nbsp;</p><p class="text-emerald-600 bg-emerald-50 rounded px-2 py-1 inline-block">20</p></div><div><p class="text-xs text-slate-400 mb-1">effective_from</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">01 Jul 2026</p></div><div><p class="text-xs text-slate-400 mb-1">&nbsp;</p><p class="text-emerald-600 bg-emerald-50 rounded px-2 py-1 inline-block">01 Nov 2026</p></div></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/60">
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">26 Sep 09:58:10</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-[10px] font-bold">JO</div><div><p class="text-slate-800 font-medium leading-tight">James Okafor</p><p class="text-xs text-slate-400 leading-tight">Abstract</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-blue-50 text-blue-700 border border-blue-200">Role changed</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">User</span><span class="font-semibold text-slate-800">Tom Brennan</span></td>
+                                <td class="px-4 py-3 text-slate-600">Set roles while administering TechForce Recruitment</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.31</td>
+                                <td class="px-4 py-3 text-right"><button type="button" data-diff="d2" aria-expanded="false" aria-controls="d2" class="text-xs font-semibold text-blue-600 hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><i class="fa-solid fa-code-compare mr-1"></i>Diff</button></td>
+                            </tr>
+                            <tr id="d2" class="bg-slate-50/60 hidden">
+                                <td colspan="7" class="px-5 py-3">
+                                    <div class="rounded-xl border border-slate-200 bg-white p-4">
+                                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Before / After &middot; Tom Brennan</p>
+                                        <div class="grid grid-cols-2 gap-4 text-sm"><div><p class="text-xs text-slate-400 mb-1">roles</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">Recruiter</p></div><div><p class="text-xs text-slate-400 mb-1">&nbsp;</p><p class="text-emerald-600 bg-emerald-50 rounded px-2 py-1 inline-block">Recruiter, Agency administrator</p></div></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/60">
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">26 Sep 09:41:03</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-[10px] font-bold">JO</div><div><p class="text-slate-800 font-medium leading-tight">James Okafor</p><p class="text-xs text-slate-400 leading-tight">Abstract</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-blue-50 text-blue-700 border border-blue-200">Created</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Data subject request</span><span class="font-semibold text-slate-800">Priya Natarajan</span></td>
+                                <td class="px-4 py-3 text-slate-600">Compiled personal data (subject access request)</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.31</td>
+                                <td class="px-4 py-3 text-right"></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/60">
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">25 Sep 17:22:40</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold">SM</div><div><p class="text-slate-800 font-medium leading-tight">Sarah Mitchell</p><p class="text-xs text-slate-400 leading-tight">Abstract</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Role</span><span class="font-semibold text-slate-800">Client administrator &middot; Acme Logistics</span></td>
+                                <td class="px-4 py-3 text-slate-600">Changed 2 permissions while administering Acme Logistics</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
+                                <td class="px-4 py-3 text-right"><button type="button" data-diff="d3" aria-expanded="false" aria-controls="d3" class="text-xs font-semibold text-blue-600 hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><i class="fa-solid fa-code-compare mr-1"></i>Diff</button></td>
+                            </tr>
+                            <tr id="d3" class="bg-slate-50/60 hidden">
+                                <td colspan="7" class="px-5 py-3">
+                                    <div class="rounded-xl border border-slate-200 bg-white p-4">
+                                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Before / After &middot; Client administrator</p>
+                                        <div class="grid grid-cols-2 gap-4 text-sm"><div><p class="text-xs text-slate-400 mb-1">users.manage</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">Off</p></div><div><p class="text-xs text-slate-400 mb-1">&nbsp;</p><p class="text-emerald-600 bg-emerald-50 rounded px-2 py-1 inline-block">On</p></div><div><p class="text-xs text-slate-400 mb-1">audit.export</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">On</p></div><div><p class="text-xs text-slate-400 mb-1">&nbsp;</p><p class="text-emerald-600 bg-emerald-50 rounded px-2 py-1 inline-block">Off</p></div></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/60">
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">25 Sep 16:05:11</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-[10px] font-bold">PS</div><div><p class="text-slate-800 font-medium leading-tight">Priya Shah</p><p class="text-xs text-slate-400 leading-tight">Abstract</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-blue-50 text-blue-700 border border-blue-200">Created</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">User</span><span class="font-semibold text-slate-800">Aisha Rahman</span></td>
+                                <td class="px-4 py-3 text-slate-600">Invited aisha.rahman@nexustalent.example to Nexus Talent</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.19</td>
+                                <td class="px-4 py-3 text-right"></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/60">
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">25 Sep 11:30:27</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold">SM</div><div><p class="text-slate-800 font-medium leading-tight">Sarah Mitchell</p><p class="text-xs text-slate-400 leading-tight">Abstract</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-slate-100 text-slate-700 border border-slate-200">Deactivated</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">User</span><span class="font-semibold text-slate-800">Daniel Hughes</span></td>
+                                <td class="px-4 py-3 text-slate-600">Deactivated a Northgate Foods user</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
+                                <td class="px-4 py-3 text-right"><button type="button" data-diff="d4" aria-expanded="false" aria-controls="d4" class="text-xs font-semibold text-blue-600 hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><i class="fa-solid fa-code-compare mr-1"></i>Diff</button></td>
+                            </tr>
+                            <tr id="d4" class="bg-slate-50/60 hidden">
+                                <td colspan="7" class="px-5 py-3">
+                                    <div class="rounded-xl border border-slate-200 bg-white p-4">
+                                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Before / After &middot; Daniel Hughes</p>
+                                        <div class="grid grid-cols-2 gap-4 text-sm"><div><p class="text-xs text-slate-400 mb-1">status</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">Active</p></div><div><p class="text-xs text-slate-400 mb-1">&nbsp;</p><p class="text-emerald-600 bg-emerald-50 rounded px-2 py-1 inline-block">Inactive</p></div></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/60">
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">24 Sep 15:02:18</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold">SM</div><div><p class="text-slate-800 font-medium leading-tight">Sarah Mitchell</p><p class="text-xs text-slate-400 leading-tight">Abstract</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Notification template</span><span class="font-semibold text-slate-800">user.activation</span></td>
+                                <td class="px-4 py-3 text-slate-600">Saved version 2 of Account activation</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
+                                <td class="px-4 py-3 text-right"></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/60">
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">24 Sep 09:00:04</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px] font-bold">TB</div><div><p class="text-slate-800 font-medium leading-tight">Tom Brennan</p><p class="text-xs text-slate-400 leading-tight">TechForce Recruitment</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-emerald-50 text-emerald-700 border border-emerald-200">Activated</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">User</span><span class="font-semibold text-slate-800">Tom Brennan</span></td>
+                                <td class="px-4 py-3 text-slate-600">Activated their account by setting a password</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">81.2.69.160</td>
+                                <td class="px-4 py-3 text-right"></td>
+                            </tr>
+                            <!-- Row: Release (Create) -->
+                            <tr class="hover:bg-slate-50/60" data-s1-later>
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">10 Jul 14:32:07</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-600">SM</div><div><p class="text-slate-800 font-medium leading-tight">Sarah Mitchell</p><p class="text-xs text-slate-400 leading-tight">Abstract Admin</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">Created</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Vacancy</span><span class="font-semibold text-slate-800">VAC-1043</span></td>
+                                <td class="px-4 py-3 text-slate-600">Released vacancy VAC-1043 to 2 agencies (Wave 1)</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
+                                <td class="px-4 py-3"></td>
+                            </tr>
+                            <!-- Row: Fill Position (Update) - expandable -->
+                            <tr class="hover:bg-slate-50/60" data-s1-later>
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">10 Jul 13:58:41</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-[10px] font-bold text-purple-600">DC</div><div><p class="text-slate-800 font-medium leading-tight">David Chen</p><p class="text-xs text-slate-400 leading-tight">Operations</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Position</span><span class="font-semibold text-slate-800">POS-2211</span></td>
+                                <td class="px-4 py-3 text-slate-600">Filled position 1 of 3 from worker pool</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.31</td>
+                                <td class="px-4 py-3 text-right"><button class="text-xs font-semibold text-blue-600 hover:text-blue-700"><i class="fa-solid fa-code-compare mr-1"></i>Diff</button></td>
+                            </tr>
+                            <tr class="bg-slate-50/60" data-s1-later>
+                                <td colspan="7" class="px-5 py-3">
+                                    <div class="rounded-xl border border-slate-200 bg-white p-4">
+                                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Before / After &middot; POS-2211</p>
+                                        <div class="grid grid-cols-2 gap-4 text-sm">
+                                            <div><p class="text-xs text-slate-400 mb-1">status</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">Open</p></div>
+                                            <div><p class="text-xs text-slate-400 mb-1">&nbsp;</p><p class="text-emerald-600 bg-emerald-50 rounded px-2 py-1 inline-block">Filled</p></div>
+                                            <div><p class="text-xs text-slate-400 mb-1">candidate</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">&mdash;</p></div>
+                                            <div><p class="text-xs text-slate-400 mb-1">&nbsp;</p><p class="text-emerald-600 bg-emerald-50 rounded px-2 py-1 inline-block">James Okafor</p></div>
+                                            <div><p class="text-xs text-slate-400 mb-1">booking_source</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">&mdash;</p></div>
+                                            <div><p class="text-xs text-slate-400 mb-1">&nbsp;</p><p class="text-emerald-600 bg-emerald-50 rounded px-2 py-1 inline-block">Abstract-sourced</p></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <!-- Row: Post-AWR rate (Update) - expandable -->
+                            <tr class="hover:bg-slate-50/60" data-s1-later>
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">10 Jul 12:10:55</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-[10px] font-bold text-emerald-600">AO</div><div><p class="text-slate-800 font-medium leading-tight">Amara Okoye</p><p class="text-xs text-slate-400 leading-tight">Finance</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Booking</span><span class="font-semibold text-slate-800">BK-0912</span></td>
+                                <td class="px-4 py-3 text-slate-600">Applied Post-AWR rate to J. Kowalski</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.19</td>
+                                <td class="px-4 py-3 text-right"><button class="text-xs font-semibold text-blue-600 hover:text-blue-700"><i class="fa-solid fa-code-compare mr-1"></i>Diff</button></td>
+                            </tr>
+                            <tr class="bg-slate-50/60" data-s1-later>
+                                <td colspan="7" class="px-5 py-3">
+                                    <div class="rounded-xl border border-slate-200 bg-white p-4">
+                                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Before / After &middot; BK-0912</p>
+                                        <div class="grid grid-cols-2 gap-4 text-sm">
+                                            <div><p class="text-xs text-slate-400 mb-1">pay_rate</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">&pound;12.60</p></div>
+                                            <div><p class="text-xs text-slate-400 mb-1">&nbsp;</p><p class="text-emerald-600 bg-emerald-50 rounded px-2 py-1 inline-block">&pound;13.45</p></div>
+                                            <div><p class="text-xs text-slate-400 mb-1">awr_status</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">AWR Qualifying</p></div>
+                                            <div><p class="text-xs text-slate-400 mb-1">&nbsp;</p><p class="text-emerald-600 bg-emerald-50 rounded px-2 py-1 inline-block">Post-AWR</p></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                                                                                    <!-- Row: Rate Card update -->
+                            <tr class="hover:bg-slate-50/60" data-s1-later>
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">10 Jul 09:20:02</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-[10px] font-bold text-emerald-600">AO</div><div><p class="text-slate-800 font-medium leading-tight">Amara Okoye</p><p class="text-xs text-slate-400 leading-tight">Finance</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Rate Card</span><span class="font-semibold text-slate-800">RC-Warehouse-Op</span></td>
+                                <td class="px-4 py-3 text-slate-600">Scheduled future-dated rate change (eff. 01 Aug 2026)</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.19</td>
+                                <td class="px-4 py-3"></td>
+                            </tr>
+                                                        <!-- Row: Invoice generated (System) -->
+                            <tr class="hover:bg-slate-50/60" data-s1-later>
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">10 Jul 06:00:11</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center"><i class="fa-solid fa-robot text-slate-400 text-[10px]"></i></div><div><p class="text-slate-800 font-medium leading-tight">System</p><p class="text-xs text-slate-400 leading-tight">Scheduler</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">Created</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Invoice</span><span class="font-semibold text-slate-800">INV-2026-0891</span></td>
+                                <td class="px-4 py-3 text-slate-600">Generated client invoice for Week 27 &middot; Coventry DC</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">127.0.0.1</td>
+                                <td class="px-4 py-3"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="px-5 py-3 border-t border-slate-100 flex items-center justify-between">
+                    <span class="text-xs text-slate-500">Showing 1&ndash;10 of 1,284 changes</span>
+                    <div class="flex items-center gap-1">
+                        <button class="w-8 h-8 rounded-lg border border-slate-200 text-slate-400 hover:bg-slate-50"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                        <button class="w-8 h-8 rounded-lg bg-blue-600 text-white text-xs font-semibold">1</button>
+                        <button class="w-8 h-8 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs">2</button>
+                        <button class="w-8 h-8 rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs">3</button>
+                        <button class="w-8 h-8 rounded-lg border border-slate-200 text-slate-400 hover:bg-slate-50"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<!-- ===== Shared admin shell behaviour: mobile nav · toast · confirm ===== -->
+<div id="confirm-overlay" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+  <div class="absolute inset-0" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px)" onclick="closeConfirm()"></div>
+  <div role="dialog" aria-modal="true" aria-labelledby="confirm-title"
+       class="relative bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md">
+    <div class="flex items-start gap-3 px-6 pt-6">
+      <div id="confirm-icon" class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-red-50 text-red-600"><i class="fa-solid fa-triangle-exclamation"></i></div>
+      <div class="flex-1">
+        <h3 id="confirm-title" class="text-base font-bold text-slate-900">Are you sure?</h3>
+        <p id="confirm-body" class="text-sm text-slate-500 mt-1"></p>
+      </div>
+    </div>
+    <div class="flex items-center justify-end gap-3 px-6 py-4 mt-4 border-t border-slate-200 bg-slate-50 rounded-b-2xl">
+      <button onclick="closeConfirm()" class="px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-100 transition-colors">Cancel</button>
+      <button id="confirm-ok" class="px-5 py-2 text-white rounded-lg text-sm font-semibold transition-opacity hover:opacity-90">Confirm</button>
+    </div>
+  </div>
+</div>
+<div id="toast-stack" class="fixed bottom-5 right-5 z-[70] flex flex-col gap-2 pointer-events-none"></div>
+
+<script>
+/* Mobile navigation (sidebar is hidden below lg — this is the only way to reveal it) */
+(function () {
+  var btn = document.getElementById('mobile-menu-btn'),
+      sb  = document.getElementById('sidebar');
+  if (!btn || !sb) return;
+  btn.setAttribute('aria-controls', 'sidebar');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-label', 'Open navigation');
+  var bd = document.createElement('div');
+  bd.setAttribute('aria-hidden', 'true');
+  bd.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:40;display:none';
+  document.body.appendChild(bd);
+  function open() {
+    sb.style.display = 'flex'; sb.style.position = 'fixed'; sb.style.top = '0';
+    sb.style.bottom = '0'; sb.style.left = '0'; sb.style.zIndex = '50';
+    bd.style.display = 'block'; btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    ['display','position','top','bottom','left','zIndex'].forEach(function (p) { sb.style[p] = ''; });
+    bd.style.display = 'none'; btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', function () { bd.style.display === 'block' ? close() : open(); });
+  bd.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bd.style.display === 'block') close(); });
+  window.addEventListener('resize', function () { if (window.innerWidth >= 1024) close(); });
+})();
+
+/* Toast — feedback after an action */
+function toast(msg, tone) {
+  var wrap = document.getElementById('toast-stack');
+  if (!wrap) return;
+  var tones = { success: 'fa-circle-check text-emerald-500', info: 'fa-circle-info text-blue-500', danger: 'fa-circle-exclamation text-red-500' };
+  var t = document.createElement('div');
+  t.className = 'pointer-events-auto flex items-center gap-2.5 bg-white border border-slate-200 shadow-lg rounded-xl px-4 py-3 text-sm text-slate-700';
+  t.setAttribute('role', 'status');
+  t.innerHTML = '<i class="fa-solid ' + (tones[tone] || tones.success) + '"></i><span></span>';
+  t.querySelector('span').textContent = msg;
+  wrap.appendChild(t);
+  setTimeout(function () { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; setTimeout(function(){ t.remove(); }, 300); }, 3200);
+}
+
+/* Confirm — gate every destructive / irreversible action */
+var _confirmAction = null;
+function openConfirm(opts) {
+  var o = opts || {}, danger = o.tone !== 'neutral';
+  document.getElementById('confirm-title').textContent = o.title || 'Are you sure?';
+  document.getElementById('confirm-body').textContent = o.body || '';
+  var ic = document.getElementById('confirm-icon');
+  ic.className = 'w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ' + (danger ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600');
+  ic.innerHTML = '<i class="fa-solid ' + (danger ? 'fa-triangle-exclamation' : 'fa-circle-question') + '"></i>';
+  var ok = document.getElementById('confirm-ok');
+  ok.textContent = o.confirmLabel || 'Confirm';
+  ok.style.background = danger ? '#DC2626' : 'linear-gradient(135deg,#1D4ED8,#5B2E91)';
+  _confirmAction = o.onConfirm || null;
+  document.getElementById('confirm-overlay').classList.remove('hidden');
+  ok.focus();
+}
+function closeConfirm() { document.getElementById('confirm-overlay').classList.add('hidden'); _confirmAction = null; }
+document.addEventListener('DOMContentLoaded', function () {
+  var ok = document.getElementById('confirm-ok');
+  if (ok) ok.addEventListener('click', function () { var a = _confirmAction; closeConfirm(); if (a) a(); });
+});
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape' && !document.getElementById('confirm-overlay').classList.contains('hidden')) closeConfirm();
+});
+</script>
+
+<script>
+/* Before/after detail toggles */
+document.querySelectorAll('[data-diff]').forEach(function (b) {
+  b.addEventListener('click', function () {
+    var r = document.getElementById(b.getAttribute('data-diff')); if (!r) return;
+    var open = r.classList.toggle('hidden') === false;
+    b.setAttribute('aria-expanded', String(open));
+  });
+});
+/* Export: background job chip beside the button (A6). Shift-click, or the "export-failed" prototype state, shows a failure. */
+function runAuditExport(fail) {
+  var chip = document.getElementById('export-job');
+  S1.runJob(chip, { label: 'audit-log export', file: 'audit-log-2026-09-01-to-2026-09-26.csv', doneTitle: 'Your audit-log export is ready',
+    doneBody: 'audit-log-2026-09-01-to-2026-09-26.csv — 1,284 rows. The download link lasts 7 days.', fail: !!fail });
+}
+document.getElementById('export-btn').addEventListener('click', function (e) { runAuditExport(e.shiftKey); });
+document.addEventListener('s1:state', function (e) { if (e.detail.state === 'export-failed') runAuditExport(true); });
+</script>
+
+<script src="slice1-kit.js"></script>
+</body>
+</html>

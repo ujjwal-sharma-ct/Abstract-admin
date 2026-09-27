@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank holidays · Abstract VMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }</style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'], },
+                    colors: {
+                        navy: { DEFAULT: '#172554', 50: '#EEF1FB', 100: '#D4DCF5', 200: '#A9B9EB', 300: '#7E96E1', 400: '#5373D7', 500: '#2850CD', 600: '#1D3FA4', 700: '#162F7B', 800: '#0F1F52', 900: '#172554', },
+                        brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554', }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default loading empty error validation denied">
+
+<div id="app-root" class="flex w-full" style="height: 100vh;">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
+        <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
+            <img src="logo.png" alt="Abstract VMS" class="h-12 w-auto block -ml-[5px]"/>
+            <p class="text-white/40 text-sm mt-2">Admin Portal</p>
+        </div>
+
+        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1">
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p>
+            <a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-gauge-high text-white/40 w-4 text-center"></i>
+                <span>Admin Dashboard</span>
+            </a>
+            <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
+                <span>Vacancy List</span>
+            </a>
+            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
+                <span>Create Vacancy Wizard</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
+            <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users-gear text-white/40 w-4 text-center"></i>
+                <span>Worker Pool</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p>
+            <a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-user text-white/40 w-4 text-center"></i>
+                <span>Agency Dashboard</span>
+            </a>
+            <a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-circle-check text-white/40 w-4 text-center"></i>
+                <span>Approved Suppliers</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p>
+            <a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center"></i>
+                <span>AWR Tracking</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p>
+            <a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clock text-white/40 w-4 text-center"></i>
+                <span>Timesheets</span>
+            </a>
+            <a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center"></i>
+                <span>Invoicing / Self-Bill</span>
+            </a>
+            <a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-bar text-white/40 w-4 text-center"></i>
+                <span>Abstract Backing Report</span>
+            </a>
+            <a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sterling-sign text-white/40 w-4 text-center"></i>
+                <span>Rate Cards</span>
+            </a>
+            <a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-line text-white/40 w-4 text-center"></i>
+                <span>Reports</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p>
+            <a id="nav-onboard-client" href="abstract.onboarding.onboard-client.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-circle-arrow-right text-white/40 w-4 text-center"></i>
+                <span>Onboard Client</span>
+            </a>
+            <a id="nav-onboard-agency" href="abstract.onboarding.onboard-agency.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-tie text-white/40 w-4 text-center"></i>
+                <span>Onboard Agency</span>
+            </a>
+            <a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sliders text-white/40 w-4 text-center"></i>
+                <span>Configuration</span>
+            </a>
+            <a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);" aria-current="page">
+                <i class="fa-solid fa-gears text-blue-400 w-4 text-center"></i>
+                <span>System Configuration</span>
+                <div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p>
+            <a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users text-white/40 w-4 text-center"></i>
+                <span>Users</span>
+            </a>
+            <a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-shield text-white/40 w-4 text-center"></i>
+                <span>Roles</span>
+            </a>
+            <a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center"></i>
+                <span>Notification templates</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p>
+            <a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sitemap text-white/40 w-4 text-center"></i>
+                <span>Organisations</span>
+            </a>
+            <a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-lock text-white/40 w-4 text-center"></i>
+                <span>Data subject requests</span>
+            </a>
+            <a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center"></i>
+                <span>Audit Log</span>
+            </a>
+
+        </nav>
+
+        <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
+            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border border-white/20 flex-shrink-0" alt="avatar"/>
+                <div class="flex-1 min-w-0">
+                    <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
+                    <p class="text-white/40 text-xs truncate">Abstract Admin</p>
+                </div>
+                <a href="abstract.identity-access.sign-in.html?reason=signed-out" title="Sign out" aria-label="Sign out" class="w-9 h-9 flex items-center justify-center rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white"></i></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <header id="header" class="flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
+            <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-bars text-slate-600 text-sm"></i></button>
+                <div class="min-w-0">
+                    <h1 id="page-h1" class="text-lg font-bold text-slate-900 truncate">Bank holidays</h1>
+                    <p id="page-sub" class="text-xs text-slate-500 hidden sm:block truncate">System configuration · per region and year</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+
+                <button type="button" data-s1-bell aria-label="Notifications" class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-regular fa-bell text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <a href="abstract.identity-access.my-account.html" class="flex items-center gap-2 pl-2 border-l border-slate-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2" aria-label="My account — Sarah Mitchell">
+                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border-2 border-blue-100" alt=""/>
+                    <div class="hidden xl:block"><p class="text-xs font-semibold text-slate-700" data-me-name>Sarah Mitchell</p><p class="text-xs text-slate-500">Abstract</p></div>
+                </a>
+            </div>
+        </header>
+
+        <main id="main" class="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-8 py-6 bg-slate-100">
+
+            <nav aria-label="Breadcrumb" class="text-xs text-slate-500 mb-4 flex flex-wrap items-center gap-1.5">
+                <a href="abstract.configuration.system-settings.html#bankhols" class="hover:text-blue-700 hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">System configuration</a>
+                <i class="fa-solid fa-chevron-right text-[9px] text-slate-400" aria-hidden="true"></i>
+                <span class="font-semibold text-slate-700" aria-current="page">Bank holidays</span>
+            </nav>
+
+            <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 mb-5 flex items-start gap-3 text-sm text-blue-800" role="note">
+                <i class="fa-solid fa-circle-info mt-0.5" aria-hidden="true"></i>
+                <p>Each region has its own calendar. Saving replaces the whole calendar for that region and year, and the change is audited. Corrections apply to calculations from now on.</p>
+            </div>
+
+            <!-- region tabs + year -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm mb-5">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 px-4 sm:px-5 pt-3">
+                    <div role="tablist" aria-label="Region" class="flex gap-1 overflow-x-auto -mb-px">
+                        <button role="tab" data-region="england-wales" class="bh-tab whitespace-nowrap px-4 py-3 text-sm font-semibold border-b-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">England &amp; Wales</button>
+                        <button role="tab" data-region="scotland" class="bh-tab whitespace-nowrap px-4 py-3 text-sm font-semibold border-b-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">Scotland</button>
+                        <button role="tab" data-region="northern-ireland" class="bh-tab whitespace-nowrap px-4 py-3 text-sm font-semibold border-b-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">Northern Ireland</button>
+                    </div>
+                    <div class="flex items-center gap-2 pb-3">
+                        <label for="year" class="text-xs font-semibold text-slate-600">Year</label>
+                        <select id="year" class="px-3 py-2 min-h-[38px] bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">
+                            <option>2026</option><option>2027</option><option>2028</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="border-t border-slate-200"></div>
+
+                <div data-s1-hide="loading error denied">
+                    <div id="bh-summary" class="hidden mx-4 sm:mx-5 mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 flex gap-3" role="alert">
+                        <i class="fa-solid fa-circle-exclamation mt-0.5" aria-hidden="true"></i><p id="bh-summary-t"></p>
+                    </div>
+                    <div id="bh-failed" class="hidden mx-4 sm:mx-5 mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 flex gap-3" role="alert">
+                        <i class="fa-solid fa-triangle-exclamation mt-0.5" aria-hidden="true"></i>
+                        <p><span class="font-semibold">The calendar wasn't saved.</span> The stored calendar is unchanged and your edits are still here. Try again. Reference <span class="font-mono">REF 9KQ2-4TZM</span>.</p>
+                    </div>
+
+                    <!-- editable rows -->
+                    <div id="rows-wrap">
+                        <div class="hidden md:grid grid-cols-[200px_1fr_48px] gap-3 px-5 pt-4 pb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                            <span>Date</span><span>Name</span><span class="sr-only">Remove</span>
+                        </div>
+                        <ol id="rows" class="px-4 sm:px-5 pb-2 flex flex-col"></ol>
+                        <div class="px-4 sm:px-5 pb-5">
+                            <button type="button" id="add-row" class="text-sm font-semibold text-blue-700 hover:text-blue-800 hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 inline-flex items-center gap-2 py-2"><i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Add date</button>
+                        </div>
+                    </div>
+
+                    <!-- empty -->
+                    <div id="empty" class="hidden px-6 py-12 text-center">
+                        <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center mb-4"><i class="fa-regular fa-calendar text-xl" aria-hidden="true"></i></div>
+                        <h2 class="text-base font-bold text-slate-900">No bank holidays recorded for <span id="empty-name">England &amp; Wales in 2028</span></h2>
+                        <p class="text-sm text-slate-600 mt-2 max-w-md mx-auto leading-relaxed">This calendar is what decides which days count as bank holidays, so a missing year means those days are treated as ordinary working days.</p>
+                        <button type="button" id="add-first" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 mt-5"><i class="fa-solid fa-plus text-xs" aria-hidden="true"></i> Add the first date</button>
+                    </div>
+                </div>
+
+                <div data-s1-show="loading" class="p-5 flex flex-col gap-3" aria-busy="true" aria-label="Loading calendar">
+                    <div class="h-10 rounded-lg bg-slate-200 animate-pulse"></div><div class="h-10 rounded-lg bg-slate-200 animate-pulse"></div><div class="h-10 rounded-lg bg-slate-200 animate-pulse"></div><div class="h-10 rounded-lg bg-slate-200 animate-pulse"></div>
+                </div>
+            </div>
+
+            <!-- STATE: error (ErrorState) -->
+            <section data-s1-show="error" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto mt-4" role="alert">
+                <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 mx-auto flex items-center justify-center mb-4"><i class="fa-solid fa-triangle-exclamation text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-xl font-bold text-slate-900">We couldn't load the bank-holiday calendar.</h2>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">Nothing has been changed. Try again, and if it keeps happening, quote this reference to Abstract support.</p>
+                <p class="mt-3 inline-flex items-center gap-2 rounded-lg bg-slate-50 border border-slate-200 px-3 py-1.5 font-mono text-xs text-slate-700">REF 7F3K-29QD</p>
+                <div class="mt-6"><button type="button" onclick="S1.setState('default')" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-rotate-right text-xs" aria-hidden="true"></i> Retry</button></div>
+            </section>
+
+            <!-- STATE: permission denied (403 inside the portal frame) -->
+            <section data-s1-show="denied" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto mt-4" aria-labelledby="denied-t">
+                <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 mx-auto flex items-center justify-center mb-4"><i class="fa-solid fa-lock text-xl" aria-hidden="true"></i></div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Error 403 · No permission</p>
+                <h2 id="denied-t" class="text-xl font-bold text-slate-900 mt-1">You don't have access to this page.</h2>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">Ask your administrator if you need it.</p>
+                <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="abstract.shell.dashboard.html" data-s1-home class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-house text-xs" aria-hidden="true"></i> Back to dashboard</a>
+                </div>
+            </section>
+
+            <!-- sticky save bar -->
+            <div id="savebar" class="hidden sticky bottom-0 z-20 -mx-4 sm:mx-0 mt-2">
+                <div class="bg-white border border-slate-200 sm:rounded-2xl shadow-2xl px-4 sm:px-5 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
+                    <div class="flex-1 min-w-0">
+                        <p id="chg" class="text-sm font-semibold text-slate-900">2 changes</p>
+                        <p id="blocked" class="hidden text-xs font-medium text-red-600 mt-0.5"><i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i>Fix the highlighted rows to save.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button type="button" id="discard" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 flex-1 sm:flex-none">Discard</button>
+                        <button type="button" id="save" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg text-white text-sm font-semibold hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 flex-1 sm:flex-none" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);"><i class="fa-solid fa-check text-xs" aria-hidden="true"></i> Save calendar</button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</div>
+
+<script>
+/* Mobile navigation (sidebar is hidden below lg — this is the only way to reveal it) */
+(function () {
+  var btn = document.getElementById('mobile-menu-btn'),
+      sb  = document.getElementById('sidebar');
+  if (!btn || !sb) return;
+  btn.setAttribute('aria-controls', 'sidebar');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-label', 'Open navigation');
+  var bd = document.createElement('div');
+  bd.setAttribute('aria-hidden', 'true');
+  bd.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:40;display:none';
+  document.body.appendChild(bd);
+  function open() {
+    sb.style.display = 'flex'; sb.style.position = 'fixed'; sb.style.top = '0';
+    sb.style.bottom = '0'; sb.style.left = '0'; sb.style.zIndex = '50';
+    bd.style.display = 'block'; btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    ['display','position','top','bottom','left','zIndex'].forEach(function (p) { sb.style[p] = ''; });
+    bd.style.display = 'none'; btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', function () { bd.style.display === 'block' ? close() : open(); });
+  bd.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bd.style.display === 'block') close(); });
+  window.addEventListener('resize', function () { if (window.innerWidth >= 1024) close(); });
+})();
+
+</script>
+<script>
+
+var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var RN = { 'england-wales': 'England & Wales', 'scotland': 'Scotland', 'northern-ireland': 'Northern Ireland' };
+var DATA = {
+  'england-wales|2026': [['01/01/2026','New Year\'s Day'],['03/04/2026','Good Friday'],['06/04/2026','Easter Monday'],['04/05/2026','Early May bank holiday'],['25/05/2026','Spring bank holiday'],['31/08/2026','Summer bank holiday'],['25/12/2026','Christmas Day'],['28/12/2026','Boxing Day (substitute day)']],
+  'england-wales|2027': [['01/01/2027','New Year\'s Day'],['26/03/2027','Good Friday'],['29/03/2027','Easter Monday'],['03/05/2027','Early May bank holiday'],['31/05/2027','Spring bank holiday'],['30/08/2027','Summer bank holiday'],['27/12/2027','Christmas Day (substitute day)'],['28/12/2027','Boxing Day (substitute day)']],
+  'scotland|2026': [['01/01/2026','New Year\'s Day'],['02/01/2026','2nd January'],['03/04/2026','Good Friday'],['04/05/2026','Early May bank holiday'],['25/05/2026','Spring bank holiday'],['03/08/2026','Summer bank holiday'],['30/11/2026','St Andrew\'s Day'],['25/12/2026','Christmas Day'],['28/12/2026','Boxing Day (substitute day)']],
+  'scotland|2027': [['01/01/2027','New Year\'s Day'],['04/01/2027','2nd January (substitute day)'],['26/03/2027','Good Friday'],['03/05/2027','Early May bank holiday'],['31/05/2027','Spring bank holiday'],['02/08/2027','Summer bank holiday'],['30/11/2027','St Andrew\'s Day'],['27/12/2027','Christmas Day (substitute day)'],['28/12/2027','Boxing Day (substitute day)']],
+  'northern-ireland|2026': [['01/01/2026','New Year\'s Day'],['17/03/2026','St Patrick\'s Day'],['03/04/2026','Good Friday'],['06/04/2026','Easter Monday'],['04/05/2026','Early May bank holiday'],['25/05/2026','Spring bank holiday'],['13/07/2026','Battle of the Boyne (substitute day)'],['31/08/2026','Summer bank holiday'],['25/12/2026','Christmas Day'],['28/12/2026','Boxing Day (substitute day)']],
+  'northern-ireland|2027': [['01/01/2027','New Year\'s Day'],['17/03/2027','St Patrick\'s Day'],['26/03/2027','Good Friday'],['29/03/2027','Easter Monday'],['03/05/2027','Early May bank holiday'],['31/05/2027','Spring bank holiday'],['12/07/2027','Battle of the Boyne'],['30/08/2027','Summer bank holiday'],['27/12/2027','Christmas Day (substitute day)'],['28/12/2027','Boxing Day (substitute day)']]
+};
+var q = new URLSearchParams(location.search);
+var region = RN[q.get('region')] ? q.get('region') : 'england-wales';
+var year = ['2026','2027','2028'].indexOf(q.get('year')) >= 0 ? q.get('year') : '2027';
+var rows = [], saved = [], uid = 0, prevState = null;
+function parse(s) { var m = /^\s*(\d{1,2})\/(\d{1,2})\/(\d{4})\s*$/.exec(s || ''); if (!m) return null; var x = new Date(+m[3], +m[2] - 1, +m[1]); return (x.getDate() === +m[1] && x.getMonth() === +m[2] - 1) ? x : null; }
+function key(s) { var x = parse(s); return x ? x.getTime() : Infinity; }
+function load() {
+  saved = (DATA[region + '|' + year] || []).map(function (r) { return { d: r[0], n: r[1] }; });
+  rows = saved.map(function (r) { return { id: ++uid, d: r.d, n: r.n, touched: false }; });
+  document.getElementById('bh-failed').classList.add('hidden');
+  paintTabs(); render();
+  try { history.replaceState(null, '', '?region=' + region + '&year=' + year); } catch (e) {}
+}
+function changes() {
+  var a = rows.map(function (r) { return r.d + '|' + r.n.trim(); }), bb = saved.map(function (r) { return r.d + '|' + r.n; }), added = 0;
+  a.forEach(function (x) { var i = bb.indexOf(x); if (i >= 0) bb.splice(i, 1); else added++; });
+  return Math.max(added, bb.length); // an edited row counts once
+}
+function rowErrors(forSave) {
+  var errs = {}, seen = {};
+  rows.forEach(function (r) {
+    var x = parse(r.d), e = null;
+    if (!(r.touched || forSave)) return;
+    if (!r.d.trim()) e = 'Enter a date.';
+    else if (!x) e = 'Enter the date as DD/MM/YYYY.';
+    else if (String(x.getFullYear()) !== year) e = 'This date isn\'t in ' + year + '. Change the year above, or pick a date in ' + year + '.';
+    else if (!r.n.trim()) e = 'Enter a name for this date.';
+    if (!e && x && forSave) { if (seen[x.getTime()]) e = 'This date is listed twice.'; seen[x.getTime()] = 1; }
+    if (e) errs[r.id] = e;
+  });
+  return errs;
+}
+function render(forSave) {
+  var errs = rowErrors(forSave), ol = document.getElementById('rows');
+  var empty = !rows.length;
+  document.getElementById('empty').classList.toggle('hidden', !empty);
+  document.getElementById('rows-wrap').classList.toggle('hidden', empty);
+  document.getElementById('empty-name').textContent = RN[region] + ' in ' + year;
+  ol.innerHTML = rows.map(function (r, i) {
+    var e = errs[r.id], x = parse(r.d);
+    var wd = x ? ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][x.getDay()] : '';
+    var bad = e ? ' border-red-500' : ' border-slate-200';
+    return '<li class="py-3 md:py-2 border-b border-slate-100 md:border-0 last:border-0" data-id="' + r.id + '">' +
+      '<div class="grid grid-cols-1 md:grid-cols-[200px_1fr_48px] gap-2 md:gap-3 md:items-center">' +
+      '<div><label class="md:sr-only text-xs font-semibold text-slate-700 mb-1 block" for="d' + r.id + '">Date</label><input id="d' + r.id + '" data-f="d" value="' + S1.esc(r.d) + '" placeholder="DD/MM/YYYY" inputmode="numeric" aria-invalid="' + (!!e) + '" aria-describedby="e' + r.id + ' w' + r.id + '" class="w-full px-3 py-2.5 bg-slate-50 border' + bad + ' rounded-lg text-sm text-slate-800 tabular-nums focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-600/20"/>' +
+      '<span id="w' + r.id + '" class="block text-xs text-slate-500 mt-1 md:hidden">' + wd + '</span></div>' +
+      '<div><label class="md:sr-only text-xs font-semibold text-slate-700 mb-1 block" for="n' + r.id + '">Name</label><div class="flex items-center gap-3"><input id="n' + r.id + '" data-f="n" value="' + S1.esc(r.n) + '" maxlength="80" class="w-full px-3 py-2.5 bg-slate-50 border' + (e && !r.n.trim() ? ' border-red-500' : ' border-slate-200') + ' rounded-lg text-sm text-slate-800 focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-600/20"/><span class="hidden md:inline text-xs text-slate-500 w-20 flex-shrink-0">' + wd + '</span></div></div>' +
+      '<div class="md:text-right"><button type="button" data-rm class="inline-flex items-center gap-2 md:w-9 md:h-9 md:justify-center rounded-lg text-sm font-semibold text-slate-500 hover:text-red-700 hover:bg-red-50 min-h-[36px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" aria-label="Remove ' + S1.esc(r.n || 'this date') + '"><i class="fa-solid fa-xmark" aria-hidden="true"></i><span class="md:hidden">Remove</span></button></div>' +
+      '</div>' + (e ? '<p id="e' + r.id + '" class="text-xs font-medium text-red-600 mt-1.5"><i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i>' + S1.esc(e) + '</p>' : '<span id="e' + r.id + '"></span>') + '</li>';
+  }).join('');
+  var n = changes(), bad = Object.keys(errs).length;
+  document.getElementById('savebar').classList.toggle('hidden', !n && !bad);
+  document.getElementById('chg').textContent = n === 1 ? '1 change' : n + ' changes';
+  document.getElementById('blocked').classList.toggle('hidden', !bad);
+  document.getElementById('save').disabled = !!bad;
+  var s = document.getElementById('bh-summary');
+  if (bad && forSave) { s.classList.remove('hidden'); document.getElementById('bh-summary-t').textContent = bad + (bad === 1 ? ' row needs' : ' rows need') + ' fixing before the calendar can be saved.'; }
+  else if (!bad) s.classList.add('hidden');
+}
+function paintTabs() {
+  document.querySelectorAll('.bh-tab').forEach(function (t) {
+    var on = t.dataset.region === region;
+    t.setAttribute('aria-selected', on); t.tabIndex = on ? 0 : -1;
+    t.className = 'bh-tab whitespace-nowrap px-4 py-3 text-sm font-semibold border-b-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ' + (on ? 'text-blue-700 border-blue-600' : 'text-slate-500 border-transparent hover:text-slate-700');
+  });
+  document.getElementById('year').value = year;
+}
+function guard(go) {
+  if (!changes()) return go();
+  S1.confirm({ tone: 'warning', icon: 'fa-triangle-exclamation', title: 'Leave without saving?', body: 'You have unsaved changes to ' + RN[region] + ' ' + year + '. If you switch now, they\'re discarded.', cta: 'Discard changes', cancel: 'Keep editing', delay: 0, onConfirm: go });
+}
+function sortRows() { rows.sort(function (a, b) { return key(a.d) - key(b.d); }); }
+document.addEventListener('s1:state', function (e) {
+  if (e.detail.state === 'empty') { year = '2028'; load(); }
+  else if (e.detail.state === 'validation') {
+    if (year === '2028') year = '2027';
+    load(); rows.push({ id: ++uid, d: '14/03/2026', n: 'Commonwealth Day', touched: true }); rows.push({ id: ++uid, d: '01/01/' + year, n: 'New Year\'s Day', touched: true });
+    sortRows(); render(true);
+  } else if (e.detail.state === 'default') { if (prevState === 'empty') year = '2027'; load(); }
+  prevState = e.detail.state;
+});
+document.addEventListener('s1:ready', function () {
+  if (!rows.length && !saved.length) load();
+  document.querySelectorAll('.bh-tab').forEach(function (t) {
+    t.onclick = function () { if (t.dataset.region === region) return; guard(function () { region = t.dataset.region; load(); }); };
+    t.onkeydown = function (e) {
+      var ts = [].slice.call(document.querySelectorAll('.bh-tab')), i = ts.indexOf(t);
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') { var n = ts[(i + (e.key === 'ArrowRight' ? 1 : ts.length - 1)) % ts.length]; n.focus(); n.click(); }
+    };
+  });
+  var ysel = document.getElementById('year');
+  ysel.onchange = function () { var ny = ysel.value; ysel.value = year; guard(function () { year = ny; load(); }); };
+  var ol = document.getElementById('rows');
+  ol.addEventListener('input', function (e) {
+    var li = e.target.closest('li'); if (!li) return; var r = rows.filter(function (x) { return x.id === +li.dataset.id; })[0];
+    r[e.target.dataset.f] = e.target.value;
+    var n = changes(); document.getElementById('savebar').classList.toggle('hidden', !n); document.getElementById('chg').textContent = n === 1 ? '1 change' : n + ' changes';
+  });
+  ol.addEventListener('focusout', function (e) {
+    var li = e.target.closest('li'); if (!li || !e.target.dataset.f) return;
+    var r = rows.filter(function (x) { return x.id === +li.dataset.id; })[0]; r.touched = true;
+    if (e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest('[data-rm]')) return; // let the remove click land
+    if (e.target.dataset.f === 'd') sortRows();
+    var active = e.relatedTarget && e.relatedTarget.id;
+    render(); if (active && document.getElementById(active)) document.getElementById(active).focus();
+  });
+  ol.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-rm]'); if (!b) return;
+    var id = +b.closest('li').dataset.id; rows = rows.filter(function (x) { return x.id !== id; }); render();
+  });
+  function addRow() { var r = { id: ++uid, d: '', n: '', touched: false }; rows.push(r); render(); document.getElementById('d' + r.id).focus(); }
+  document.getElementById('add-row').onclick = addRow;
+  document.getElementById('add-first').onclick = addRow;
+  document.getElementById('discard').onclick = function () { load(); S1.toast('Changes discarded.', 'info'); };
+  document.getElementById('save').onclick = function (ev) {
+    sortRows(); render(true);
+    var errs = rowErrors(true), first = Object.keys(errs)[0];
+    if (first) { var f = document.getElementById('d' + first); if (f) f.focus(); return; }
+    var b = document.getElementById('save'); b.disabled = true; b.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs"></i> Saving…';
+    setTimeout(function () {
+      b.disabled = false; b.innerHTML = '<i class="fa-solid fa-check text-xs"></i> Save calendar';
+      if (ev.shiftKey) { document.getElementById('bh-failed').classList.remove('hidden'); S1.toast('The calendar wasn\'t saved. Nothing changed — try again.', 'error'); return; }
+      DATA[region + '|' + year] = rows.filter(function (r) { return r.d; }).map(function (r) { return [r.d, r.n.trim()]; });
+      var n = DATA[region + '|' + year].length; load();
+      S1.toast('Calendar saved — ' + n + ' dates for ' + S1.esc(RN[region]) + ' ' + year + '.', 'success');
+      if (document.body.getAttribute('data-s1-state') !== 'default') S1.setState('default');
+    }, 700);
+  };
+  document.getElementById('save').title = 'Shift-click to demo a failed save';
+});
+
+</script>
+
+<script src="slice1-kit.js"></script>
+</body>
+</html>

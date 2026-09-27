@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Permission matrix · Settings · Abstract VMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }</style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'], },
+                    colors: {
+                        navy: { DEFAULT: '#172554', 50: '#EEF1FB', 100: '#D4DCF5', 200: '#A9B9EB', 300: '#7E96E1', 400: '#5373D7', 500: '#2850CD', 600: '#1D3FA4', 700: '#162F7B', 800: '#0F1F52', 900: '#172554', },
+                        brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554', }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default loading empty error validation denied conflict read-only">
+
+<div id="app-root" class="flex w-full" style="height: 100vh;">
+
+    <!-- Sidebar (shell copied from abstract.audit.audit-log.html) -->
+        <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
+        <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
+            <img src="logo.png" alt="Abstract VMS" class="h-12 w-auto block -ml-[5px]"/>
+            <p class="text-white/40 text-sm mt-2">Admin Portal</p>
+        </div>
+
+        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1">
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p>
+            <a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-gauge-high text-white/40 w-4 text-center"></i>
+                <span>Admin Dashboard</span>
+            </a>
+            <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
+                <span>Vacancy List</span>
+            </a>
+            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
+                <span>Create Vacancy Wizard</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
+            <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users-gear text-white/40 w-4 text-center"></i>
+                <span>Worker Pool</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p>
+            <a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-user text-white/40 w-4 text-center"></i>
+                <span>Agency Dashboard</span>
+            </a>
+            <a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-circle-check text-white/40 w-4 text-center"></i>
+                <span>Approved Suppliers</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p>
+            <a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center"></i>
+                <span>AWR Tracking</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p>
+            <a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clock text-white/40 w-4 text-center"></i>
+                <span>Timesheets</span>
+            </a>
+            <a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center"></i>
+                <span>Invoicing / Self-Bill</span>
+            </a>
+            <a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-bar text-white/40 w-4 text-center"></i>
+                <span>Abstract Backing Report</span>
+            </a>
+            <a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sterling-sign text-white/40 w-4 text-center"></i>
+                <span>Rate Cards</span>
+            </a>
+            <a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-line text-white/40 w-4 text-center"></i>
+                <span>Reports</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p>
+            <a id="nav-onboard-client" href="abstract.onboarding.onboard-client.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-circle-arrow-right text-white/40 w-4 text-center"></i>
+                <span>Onboard Client</span>
+            </a>
+            <a id="nav-onboard-agency" href="abstract.onboarding.onboard-agency.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-tie text-white/40 w-4 text-center"></i>
+                <span>Onboard Agency</span>
+            </a>
+            <a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sliders text-white/40 w-4 text-center"></i>
+                <span>Configuration</span>
+            </a>
+            <a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-gears text-white/40 w-4 text-center"></i>
+                <span>System Configuration</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p>
+            <a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users text-white/40 w-4 text-center"></i>
+                <span>Users</span>
+            </a>
+            <a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);" aria-current="page">
+                <i class="fa-solid fa-user-shield text-blue-400 w-4 text-center"></i>
+                <span>Roles</span>
+                <div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+            </a>
+            <a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center"></i>
+                <span>Notification templates</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p>
+            <a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sitemap text-white/40 w-4 text-center"></i>
+                <span>Organisations</span>
+            </a>
+            <a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-lock text-white/40 w-4 text-center"></i>
+                <span>Data subject requests</span>
+            </a>
+            <a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center"></i>
+                <span>Audit Log</span>
+            </a>
+
+        </nav>
+
+        <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
+            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border border-white/20 flex-shrink-0" alt="avatar"/>
+                <div class="flex-1 min-w-0">
+                    <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
+                    <p class="text-white/40 text-xs truncate">Abstract Admin</p>
+                </div>
+                <a href="abstract.identity-access.sign-in.html" title="Logout"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white"></i></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+        <header id="header" class="flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
+            <div class="flex items-center gap-3 min-w-0">
+                <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-bars text-slate-600 text-sm"></i></button>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h1 class="text-lg font-bold text-slate-900 truncate">Permissions</h1>
+                        <span id="ctx-marker" style="display:none" class="inline-flex items-center gap-1.5 max-w-full whitespace-nowrap overflow-hidden px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200" title="You are working inside another organisation"><i class="fa-solid fa-building-user text-[10px]" aria-hidden="true"></i>Administering<span data-org-name class="truncate"></span></span>
+                    </div>
+                    <p class="text-xs text-slate-500 hidden sm:block truncate">What each role in <span data-org-name>Abstract</span> can do — one role at a time</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 flex-shrink-0">
+                <button data-s1-bell aria-label="Notifications" class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-regular fa-bell text-slate-600 text-sm"></i></button>
+                <a href="abstract.identity-access.my-account.html" aria-label="My account (Sarah Mitchell)" class="flex items-center gap-2 pl-3 border-l border-slate-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">
+                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border-2 border-blue-100" alt=""/>
+                    <div class="hidden xl:block"><p class="text-xs font-semibold text-slate-700">Sarah Mitchell</p><p class="text-xs text-slate-400">Abstract Admin</p></div>
+                </a>
+            </div>
+        </header>
+
+        <main id="main" class="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-8 py-6 bg-slate-100">
+
+            <!-- "Administering <Organisation>" context banner (A2 part 2): shown whenever ?org= is present -->
+            <div id="ctx-banner" style="display:none" role="region" aria-label="Organisation you are administering" class="mb-5 rounded-xl border-2 border-blue-300 bg-blue-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
+                <div class="flex items-start gap-3 flex-1 min-w-0">
+                    <div class="w-9 h-9 rounded-lg bg-blue-700 text-white flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-building-user" aria-hidden="true"></i></div>
+                    <div class="min-w-0">
+                        <p class="text-sm font-bold text-blue-900">You are administering <span data-org-name></span> — changes are made on their behalf and audited as you.</p>
+                        <p class="text-xs text-blue-800 mt-0.5"><span id="ctx-party"></span><span id="ctx-status"></span></p>
+                    </div>
+                </div>
+                <a href="abstract.organisations.organisations.html" class="inline-flex items-center justify-center gap-2 bg-white border border-blue-300 text-blue-800 hover:bg-blue-100 rounded-lg px-3 py-2 text-xs font-semibold min-h-[38px] flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to Abstract <span class="sr-only">(stop administering this organisation)</span></a>
+            </div>
+
+            <nav aria-label="Users and roles" class="flex items-center gap-6 border-b border-slate-200 mb-5 overflow-x-auto whitespace-nowrap">
+                <a href="abstract.identity-access.users.html" data-keep-org class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-users text-xs" aria-hidden="true"></i>Users</a>
+                <a href="abstract.identity-access.roles.html" data-keep-org class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-user-shield text-xs" aria-hidden="true"></i>Roles</a>
+                <a href="abstract.identity-access.permission-matrix.html" data-keep-org aria-current="page" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-blue-700 text-sm font-semibold text-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-table-cells text-xs" aria-hidden="true"></i>Permissions</a>
+            </nav>
+            <div data-s1-hide="denied loading error">
+                <!-- Breadcrumbs -->
+                <nav aria-label="Breadcrumb" class="text-xs text-slate-500 mb-3 flex items-center gap-2">
+                    <a href="abstract.identity-access.roles.html" data-keep-org class="font-semibold text-blue-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Roles</a>
+                    <i class="fa-solid fa-chevron-right text-[9px]" aria-hidden="true"></i>
+                    <span id="crumb-role" class="text-slate-700 font-semibold truncate" aria-current="page"></span>
+                </nav>
+
+                <!-- Role selector: one role at a time -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5 mb-4">
+                    <div class="flex flex-col lg:flex-row lg:items-end gap-4">
+                        <div class="w-full lg:w-80 flex-shrink-0">
+                            <label for="role-sel" class="block text-xs font-semibold text-slate-700 mb-1.5">Role</label>
+                            <div class="flex items-center gap-2 bg-slate-50 border-2 border-blue-200 rounded-lg px-3 py-2 min-h-[42px] focus-within:ring-2 focus-within:ring-blue-600/30">
+                                <i class="fa-solid fa-user-shield text-blue-700 text-xs" aria-hidden="true"></i>
+                                <select id="role-sel" class="bg-transparent text-sm font-semibold text-blue-800 outline-none w-full"></select>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div id="role-meta" class="flex flex-wrap items-center gap-2"></div>
+                            <p id="role-desc" class="text-sm text-slate-600 mt-1.5"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fixed boundary (RBAC-008/009/017) -->
+                <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 mb-4 flex items-start gap-3 text-sm text-blue-800">
+                    <i class="fa-solid fa-shield-halved text-blue-600 mt-0.5" aria-hidden="true"></i>
+                    <div><p class="font-semibold">Rate and personal-data boundaries are fixed by Abstract and can't be granted.</p>
+                    <p id="cat-note" class="text-blue-800/90 mt-0.5"></p></div>
+                </div>
+
+                <!-- Kinds of grant legend -->
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-2 mb-4 text-xs text-slate-500" aria-label="Kinds of grant">
+                    <span class="font-semibold text-slate-600 uppercase tracking-wider text-[11px]">Kinds of grant</span>
+                    <span id="legend" class="flex flex-wrap items-center gap-2"></span>
+                </div>
+
+                <!-- State banners -->
+                <div id="b-empty" style="display:none" class="rounded-xl border border-blue-200 bg-white px-4 py-4 mb-4 flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-700 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-hand-pointer" aria-hidden="true"></i></div>
+                    <div><p class="text-sm font-bold text-slate-900">This role has no permissions yet</p><p class="text-sm text-slate-600 mt-0.5">Tick what it should be able to do, then save. Until then, people who hold only this role see nothing beyond their own account.</p></div>
+                </div>
+                <div id="b-refused" style="display:none" role="alert" class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 mb-4 flex flex-col sm:flex-row sm:items-center gap-3 text-sm text-red-800">
+                    <div class="flex items-start gap-3 flex-1"><i class="fa-solid fa-user-shield mt-0.5" aria-hidden="true"></i><span id="b-refused-t"></span></div>
+                    <button type="button" id="btn-putback" class="inline-flex items-center justify-center gap-2 bg-white border border-red-200 text-red-700 hover:bg-red-100 rounded-lg px-3 py-2 text-xs font-semibold min-h-[38px] flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Put it back</button>
+                </div>
+                <div id="b-conflict" style="display:none" role="alert" class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 mb-4 flex flex-col sm:flex-row sm:items-center gap-3 text-sm text-amber-800">
+                    <div class="flex items-start gap-3 flex-1"><i class="fa-solid fa-code-compare mt-0.5" aria-hidden="true"></i><span><span class="font-semibold">This role changed while you were editing. Review and save again.</span> <span id="b-conflict-who"></span></span></div>
+                    <button type="button" id="btn-review" class="inline-flex items-center justify-center gap-2 bg-white border border-amber-300 text-amber-800 hover:bg-amber-100 rounded-lg px-3 py-2 text-xs font-semibold min-h-[38px] flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-arrows-rotate" aria-hidden="true"></i> Load the latest version</button>
+                </div>
+                <div id="b-readonly" style="display:none" class="rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 mb-4 flex items-start gap-3 text-sm text-slate-700">
+                    <i class="fa-solid fa-eye mt-0.5 text-slate-500" aria-hidden="true"></i><span>You can see this role's permissions but not change them.</span>
+                </div>
+
+                <!-- The matrix: one card per feature group -->
+                <div id="groups" class="flex flex-col gap-4"></div>
+
+                <!-- Sticky save bar: appears only when something changed -->
+                <div id="savebar" style="display:none" class="sticky bottom-0 z-20 pt-4 pb-1 -mx-1">
+                    <div class="bg-white border border-slate-200 rounded-2xl shadow-2xl px-4 sm:px-5 py-3 flex items-center gap-3">
+                        <i class="fa-solid fa-pen-to-square text-blue-700 hidden sm:block" aria-hidden="true"></i>
+                        <p class="flex-1 min-w-0 text-sm text-slate-800" aria-live="polite"><span id="chg-count" class="font-bold"></span><span class="hidden sm:inline text-slate-500"> — not saved yet</span></p>
+                        <button type="button" id="btn-discard" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Discard</button>
+                        <button type="button" id="btn-save" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save changes</button>
+                    </div>
+                </div>
+            </div>
+            <div data-s1-show="loading" class="flex flex-col gap-4" aria-busy="true" aria-label="Loading permissions">
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5"><div class="h-4 w-40 bg-slate-200 rounded animate-pulse mb-4"></div><div class="flex items-center justify-between py-3 border-t border-slate-100"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:30%"></div><div class="w-5 h-5 rounded bg-slate-200 animate-pulse"></div></div><div class="flex items-center justify-between py-3 border-t border-slate-100"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:39%"></div><div class="w-5 h-5 rounded bg-slate-200 animate-pulse"></div></div><div class="flex items-center justify-between py-3 border-t border-slate-100"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:48%"></div><div class="w-5 h-5 rounded bg-slate-200 animate-pulse"></div></div><div class="flex items-center justify-between py-3 border-t border-slate-100"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:57%"></div><div class="w-5 h-5 rounded bg-slate-200 animate-pulse"></div></div><div class="flex items-center justify-between py-3 border-t border-slate-100"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:66%"></div><div class="w-5 h-5 rounded bg-slate-200 animate-pulse"></div></div></div><div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5"><div class="h-4 w-40 bg-slate-200 rounded animate-pulse mb-4"></div><div class="flex items-center justify-between py-3 border-t border-slate-100"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:30%"></div><div class="w-5 h-5 rounded bg-slate-200 animate-pulse"></div></div><div class="flex items-center justify-between py-3 border-t border-slate-100"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:39%"></div><div class="w-5 h-5 rounded bg-slate-200 animate-pulse"></div></div><div class="flex items-center justify-between py-3 border-t border-slate-100"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:48%"></div><div class="w-5 h-5 rounded bg-slate-200 animate-pulse"></div></div><div class="flex items-center justify-between py-3 border-t border-slate-100"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:57%"></div><div class="w-5 h-5 rounded bg-slate-200 animate-pulse"></div></div></div><div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5"><div class="h-4 w-40 bg-slate-200 rounded animate-pulse mb-4"></div><div class="flex items-center justify-between py-3 border-t border-slate-100"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:30%"></div><div class="w-5 h-5 rounded bg-slate-200 animate-pulse"></div></div><div class="flex items-center justify-between py-3 border-t border-slate-100"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:39%"></div><div class="w-5 h-5 rounded bg-slate-200 animate-pulse"></div></div><div class="flex items-center justify-between py-3 border-t border-slate-100"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:48%"></div><div class="w-5 h-5 rounded bg-slate-200 animate-pulse"></div></div></div>
+                <p class="sr-only">Loading…</p>
+            </div>
+
+            <div data-s1-show="error" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-12 text-center" role="alert">
+                <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-triangle-exclamation text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900">We couldn't load this role's permissions</h2>
+                <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">Something went wrong on our side. Try again — if it keeps happening, quote reference <span class="font-semibold text-slate-800 tabular-nums">ERR-PRM-5B21-8830</span> to Abstract support.</p>
+                <button type="button" onclick="S1.setState('loading');setTimeout(function(){S1.setState('default')},700)" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Retry</button>
+            </div>
+
+            <div data-s1-show="denied" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-14 text-center">
+                <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-lock text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900">You don't have access to this page</h2>
+                <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">You don't have access to this page. Ask your administrator if you need it.</p>
+                <a href="abstract.shell.dashboard.html" data-s1-home class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to the dashboard</a>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+/* Mobile navigation (sidebar is hidden below lg — this is the only way to reveal it) */
+(function () {
+  var btn = document.getElementById('mobile-menu-btn'),
+      sb  = document.getElementById('sidebar');
+  if (!btn || !sb) return;
+  btn.setAttribute('aria-controls', 'sidebar');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-label', 'Open navigation');
+  var bd = document.createElement('div');
+  bd.setAttribute('aria-hidden', 'true');
+  bd.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:40;display:none';
+  document.body.appendChild(bd);
+  function open() {
+    sb.style.display = 'flex'; sb.style.position = 'fixed'; sb.style.top = '0';
+    sb.style.bottom = '0'; sb.style.left = '0'; sb.style.zIndex = '50';
+    bd.style.display = 'block'; btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    ['display','position','top','bottom','left','zIndex'].forEach(function (p) { sb.style[p] = ''; });
+    bd.style.display = 'none'; btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', function () { bd.style.display === 'block' ? close() : open(); });
+  bd.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bd.style.display === 'block') close(); });
+  window.addEventListener('resize', function () { if (window.innerWidth >= 1024) close(); });
+})();
+</script>
+<script>
+
+var BADGE = {
+  'Invited': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-envelope'],
+  'Active': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Inactive': ['bg-slate-100 text-slate-500 border border-slate-200', 'fa-circle-minus'],
+  'Draft': ['bg-slate-100 text-slate-700 border border-slate-200', 'fa-file-pen'],
+  'In Setup': ['bg-blue-50 text-blue-700 border border-blue-200', 'fa-screwdriver-wrench'],
+  'Pending Activation': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Suspended': ['bg-red-50 text-red-700 border border-red-200', 'fa-ban']
+};
+function badge(s) {
+  var b = BADGE[s] || BADGE['Draft'];
+  return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ' + b[0] + '"><i class="fa-solid ' + b[1] + ' text-[10px]" aria-hidden="true"></i>' + s + '</span>';
+}
+function marker(text, title) {
+  return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200"' + (title ? ' title="' + title + '"' : '') + '>' + text + '</span>';
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
+function initials(n) { return n.split(/\s+/).map(function (p) { return p[0]; }).slice(0, 2).join('').toUpperCase(); }
+
+
+/* ---- "Administering <Organisation>" context (A2 part 2) ----
+   ?org=<slug> puts the page inside another organisation: header marker + banner,
+   that organisation's data, and ?org= carried on every link between Users, Roles and Permissions. */
+var ORGS = {"acme":{"name":"Acme Logistics","party":"client","status":"Active","users":5},"northgate":{"name":"Northgate Foods","party":"client","status":"Active","users":4},"harbour":{"name":"Harbour Retail Group","party":"client","status":"In Setup","users":2},"meridian":{"name":"Meridian Healthcare Services","party":"client","status":"Pending Activation","users":3},"coastline":{"name":"Coastline Manufacturing","party":"client","status":"Draft","users":1},"pennine":{"name":"Pennine Distribution","party":"client","status":"Suspended","users":3},"techforce":{"name":"TechForce Recruitment","party":"agency","status":"Active","users":4},"nexus":{"name":"Nexus Talent","party":"agency","status":"Active","users":4},"peoplebridge":{"name":"PeopleBridge","party":"agency","status":"Pending Activation","users":2},"summit":{"name":"Summit Staffing Solutions","party":"agency","status":"In Setup","users":1},"rapid":{"name":"Rapid Resource","party":"agency","status":"Suspended","users":3}};
+var Q = new URLSearchParams(location.search);
+var ORG_SLUG = Q.get('org') || null;
+var ORG;
+if (ORG_SLUG && ORGS[ORG_SLUG]) ORG = ORGS[ORG_SLUG];
+else if (ORG_SLUG && Q.get('name')) ORG = { name: Q.get('name'), party: Q.get('party') === 'agency' ? 'agency' : 'client', status: 'Active', users: 3 };
+else { ORG_SLUG = null; ORG = { name: 'Abstract', party: 'abstract', status: 'Active' }; }
+function withOrg(href) {
+  if (!ORG_SLUG) return href;
+  var extra = ORGS[ORG_SLUG] ? '' : '&name=' + encodeURIComponent(ORG.name) + '&party=' + ORG.party;
+  return href + (href.indexOf('?') >= 0 ? '&' : '?') + 'org=' + ORG_SLUG + extra;
+}
+(function applyContext() {
+  document.querySelectorAll('[data-org-name]').forEach(function (e) { e.textContent = ORG.name; });
+  document.querySelectorAll('a[data-keep-org]').forEach(function (a) { a.setAttribute('href', withOrg(a.getAttribute('href'))); });
+  if (!ORG_SLUG) return;
+  document.title = document.title + ' · Administering ' + ORG.name;
+  document.getElementById('ctx-banner').style.display = '';
+  document.getElementById('ctx-marker').style.display = '';
+  document.getElementById('header').style.borderTop = '4px solid #1D4ED8';
+  document.getElementById('ctx-party').textContent = (ORG.party === 'client' ? 'Client' : 'Agency') + ' organisation. You see the same screens its own user administrators see.';
+  if (ORG.status !== 'Active') document.getElementById('ctx-status').textContent = ' Its status is ' + ORG.status + (ORG.status === 'Suspended' ? ', so its users can\'t sign in until it is active again.' : '.');
+  // the sidebar marks Organisations while you are inside another organisation
+  var on = document.querySelector('#sidebar-nav a[aria-current="page"]'), org = document.getElementById('nav-organisations');
+  if (on && org && on !== org) {
+    var onCls = on.className, onStyle = on.getAttribute('style');
+    on.className = org.className; on.removeAttribute('style'); on.removeAttribute('aria-current');
+    var dot = on.querySelector('div.ml-auto'); if (dot) dot.remove();
+    org.className = onCls; org.setAttribute('style', onStyle); org.setAttribute('aria-current', 'page');
+    var d = document.createElement('div'); d.className = 'ml-auto w-1.5 h-1.5 rounded-full bg-blue-400'; org.appendChild(d);
+  }
+})();
+
+var CATALOGUES = {"abstract":[{"g":"users","label":"Users","items":[["user:view","View users","view","See the Users list, each person's roles and status."],["user:create_edit","Invite and edit users","create","The permission that makes someone a user administrator. Every organisation keeps at least one active person who has it."],["user:delete","Deactivate and reactivate users","delete",""],["user:resend_activation","Resend activation links","action","Sends a new 72-hour link; the old one stops working."],["user:view_last_sign_in","See when people last signed in","field",""]]},{"g":"roles","label":"Roles","items":[["role:view","View roles","view",""],["role:create_edit","Create and rename roles","create",""],["role:delete","Deactivate and reactivate roles","delete","Roles are never deleted."],["role:assign","Assign roles to users","action",""]]},{"g":"matrix","label":"Permission matrix","items":[["role:view_permissions","See what each role can do","view",""],["role:configure_permissions","Change what each role can do","action","Changes apply from each user's next click."]]},{"g":"organisations","label":"Organisations","items":[["organisation:view","View every client and agency","view",""],["organisation:administer_all","Administer other organisations","action","Manage any client's or agency's users, roles and permissions on their behalf."]]},{"g":"audit","label":"Audit log","items":[["audit_log:view","View audit entries","view","Every change is recorded. Page views and downloads are not."],["audit_log:export","Export the audit log","action","Runs in the background; you're notified when the file is ready."],["audit_log:view_before_after","See before-and-after values","field",""]]},{"g":"config","label":"System configuration","items":[["system_config:view","View system configuration","view",""],["system_config:create_edit","Schedule setting changes","create","A change takes effect today or later, never earlier."],["system_config:edit_security","Change the security policy","action","Password rules, idle timeout and session limit."]]},{"g":"templates","label":"Notification templates","items":[["notification_template:view","View notification templates","view",""],["notification_template:create_edit","Edit notification templates","create","Every save is a new version."]]},{"g":"notifications","label":"Notifications","info":"Everyone can see their own notifications. It isn't a permission, so no role can take it away.","items":[]},{"g":"dsr","label":"Data subject requests","items":[["data_subject:view","Search people and see their request history","view",""],["data_subject:compile","Compile personal data (subject access request)","action",""],["data_subject:export","Export personal data in machine-readable form","action",""],["data_subject:erase","Erase or anonymise a person","action","Cannot be undone. Refused where a retention obligation applies."]]},{"g":"shifts","label":"Shift patterns & bank holidays","items":[["shift_pattern:view","View shift patterns and bank holidays","view",""],["shift_pattern:create_edit","Create and edit shift patterns","create",""],["shift_pattern:delete","Deactivate shift patterns","delete",""],["bank_holiday:create_edit","Edit bank holidays","create","Per region and year."]]}],"client":[{"g":"users","label":"Users","items":[["user:view","View users","view","See the Users list, each person's roles and status."],["user:create_edit","Invite and edit users","create","The permission that makes someone a user administrator. Every organisation keeps at least one active person who has it."],["user:delete","Deactivate and reactivate users","delete",""],["user:resend_activation","Resend activation links","action","Sends a new 72-hour link; the old one stops working."],["user:view_last_sign_in","See when people last signed in","field",""]]},{"g":"roles","label":"Roles","items":[["role:view","View roles","view",""],["role:create_edit","Create and rename roles","create",""],["role:delete","Deactivate and reactivate roles","delete","Roles are never deleted."],["role:assign","Assign roles to users","action",""]]},{"g":"matrix","label":"Permission matrix","items":[["role:view_permissions","See what each role can do","view",""],["role:configure_permissions","Change what each role can do","action","Changes apply from each user's next click."]]},{"g":"notifications","label":"Notifications","info":"Everyone can see their own notifications. It isn't a permission, so no role can take it away.","items":[]}],"agency":[{"g":"users","label":"Users","items":[["user:view","View users","view","See the Users list, each person's roles and status."],["user:create_edit","Invite and edit users","create","The permission that makes someone a user administrator. Every organisation keeps at least one active person who has it."],["user:delete","Deactivate and reactivate users","delete",""],["user:resend_activation","Resend activation links","action","Sends a new 72-hour link; the old one stops working."],["user:view_last_sign_in","See when people last signed in","field",""]]},{"g":"roles","label":"Roles","items":[["role:view","View roles","view",""],["role:create_edit","Create and rename roles","create",""],["role:delete","Deactivate and reactivate roles","delete","Roles are never deleted."],["role:assign","Assign roles to users","action",""]]},{"g":"matrix","label":"Permission matrix","items":[["role:view_permissions","See what each role can do","view",""],["role:configure_permissions","Change what each role can do","action","Changes apply from each user's next click."]]},{"g":"notifications","label":"Notifications","info":"Everyone can see their own notifications. It isn't a permission, so no role can take it away.","items":[]}]};
+var ROLESETS = {"abstract":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions","organisation:view","organisation:administer_all","audit_log:view","audit_log:export","audit_log:view_before_after","system_config:view","system_config:create_edit","system_config:edit_security","notification_template:view","notification_template:create_edit","data_subject:view","data_subject:compile","data_subject:export","data_subject:erase","shift_pattern:view","shift_pattern:create_edit","shift_pattern:delete","bank_holiday:create_edit"]},{"id":"operations","name":"Operations","def":true,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view","audit_log:view","system_config:view","shift_pattern:view","shift_pattern:create_edit","shift_pattern:delete","bank_holiday:create_edit"]},{"id":"finance","name":"Finance","def":true,"status":"Active","grants":["user:view","role:view","organisation:view","audit_log:view","audit_log:export","audit_log:view_before_after","system_config:view"]},{"id":"compliance","name":"Compliance","def":false,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view","role:view_permissions","organisation:view","audit_log:view","audit_log:export","audit_log:view_before_after","data_subject:view","data_subject:compile","data_subject:export","data_subject:erase"]},{"id":"auditor","name":"External auditor","def":false,"status":"Inactive","grants":["audit_log:view","audit_log:export","audit_log:view_before_after"]},{"id":"temporary","name":"Temporary access","def":false,"status":"Active","grants":[]}],"client":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions"]},{"id":"hiring","name":"Hiring manager","def":true,"status":"Active","grants":["user:view","role:view"]},{"id":"finance","name":"Finance approver","def":true,"status":"Active","grants":["user:view"]},{"id":"seasonal","name":"Seasonal supervisors","def":false,"status":"Inactive","grants":["user:view"]}],"agency":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions"]},{"id":"recruiter","name":"Recruiter","def":true,"status":"Active","grants":["user:view","role:view"]},{"id":"payroll","name":"Payroll","def":true,"status":"Active","grants":["user:view"]}]};
+var USERSETS = {"abstract":[{"name":"Sarah Mitchell","email":"s.mitchell@abstractrecruitment.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 09:12"},{"name":"James Okafor","email":"j.okafor@abstractrecruitment.co.uk","roles":["operations","finance"],"status":"Active","last":"25 Sep 2026, 17:40"},{"name":"Hannah Clarke","email":"h.clarke@abstractrecruitment.co.uk","roles":["compliance"],"status":"Active","last":"24 Sep 2026, 11:02"},{"name":"David Chen","email":"d.chen@abstractrecruitment.co.uk","roles":["operations"],"status":"Active","last":"26 Sep 2026, 08:31"},{"name":"Tom Rees","email":"t.rees@abstractrecruitment.co.uk","roles":["operations"],"status":"Invited","last":""},{"name":"Amara Okoye","email":"a.okoye@abstractrecruitment.co.uk","roles":[],"status":"Invited","last":""},{"name":"Liam Foster","email":"l.foster@abstractrecruitment.co.uk","roles":["finance"],"status":"Active","last":"19 Sep 2026, 15:26"},{"name":"Priya Shah","email":"p.shah@abstractrecruitment.co.uk","roles":["finance"],"status":"Inactive","last":"14 Aug 2026, 09:05"}],"acme":[{"name":"Rachel Green","email":"rachel.green@acmelogistics.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 08:02"},{"name":"Mark Davies","email":"mark.davies@acmelogistics.co.uk","roles":["hiring"],"status":"Active","last":"25 Sep 2026, 14:18"},{"name":"Priya Natarajan","email":"priya.natarajan@acmelogistics.co.uk","roles":["finance"],"status":"Active","last":"23 Sep 2026, 10:47"},{"name":"Olivia Brown","email":"olivia.brown@acmelogistics.co.uk","roles":["hiring"],"status":"Invited","last":""},{"name":"Ben Taylor","email":"ben.taylor@acmelogistics.co.uk","roles":["hiring","seasonal"],"status":"Inactive","last":"02 Aug 2026, 16:20"}],"techforce":[{"name":"Daniel Wright","email":"daniel.wright@techforce-recruitment.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 07:55"},{"name":"Sophie Turner","email":"sophie.turner@techforce-recruitment.co.uk","roles":["recruiter"],"status":"Active","last":"25 Sep 2026, 12:09"},{"name":"Aisha Khan","email":"aisha.khan@techforce-recruitment.co.uk","roles":["payroll"],"status":"Active","last":"22 Sep 2026, 09:30"},{"name":"Ryan Hughes","email":"ryan.hughes@techforce-recruitment.co.uk","roles":["recruiter"],"status":"Invited","last":""}]};
+var ADMIN_KEY = 'user:create_edit';
+var CAT = CATALOGUES[ORG.party];
+var ROLES = JSON.parse(JSON.stringify(ROLESETS[ORG.party]));
+var USERS = ORG_SLUG ? (USERSETS[ORG_SLUG] || [{ roles: ['administrator'], status: 'Active' }]) : USERSETS.abstract;
+var LABEL = {}; CAT.forEach(function (g) { g.items.forEach(function (it) { LABEL[it[0]] = it[1]; }); });
+var TOTAL = Object.keys(LABEL).length;
+var OTHER = (USERS[1] && USERS[1].name) || 'Another administrator';
+var KIND = {
+  view: ['fa-eye', 'View', 'Lets the role open and read this.'],
+  create: ['fa-pen', 'Create & edit', 'Lets the role add and change records.'],
+  'delete': ['fa-power-off', 'Deactivate', 'Deactivate or reactivate. Nothing is ever deleted.'],
+  action: ['fa-bolt', 'Action', 'A named action with its own permission.'],
+  field: ['fa-table-columns', 'Field', 'Controls whether this role can see the values in this field, not whether it can open the page.']
+};
+function kindTag(k) {
+  var d = KIND[k];
+  if (k === 'field') return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-blue-50 text-blue-700 border border-blue-200" title="' + d[2] + '"><i class="fa-solid ' + d[0] + ' text-[9px]" aria-hidden="true"></i>Field</span>';
+  var tone = { view: 'text-slate-600 bg-white border-slate-200', create: 'text-slate-700 bg-slate-50 border-slate-300', 'delete': 'text-slate-700 bg-slate-100 border-slate-300 border-dashed', action: 'text-navy-700 bg-navy-50 border-navy-100' }[k];
+  return '<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[11px] font-semibold border ' + tone + '" title="' + d[2] + '"><i class="fa-solid ' + d[0] + ' text-[9px]" aria-hidden="true"></i>' + d[1] + '</span>';
+}
+document.getElementById('legend').innerHTML = Object.keys(KIND).map(kindTag).join('');
+document.getElementById('cat-note').textContent = ORG.party === 'abstract'
+  ? 'This is the Abstract catalogue — the longest, with ' + TOTAL + ' permissions. No rate-, pay-, margin- or personal-data-scoped permission appears in it, so none can be ticked.'
+  : ORG.party === 'client'
+    ? 'This is the client catalogue (' + TOTAL + ' permissions). It has no agency pay-rate permission at all, so no ' + ORG.name + ' role can ever be given one.'
+    : 'This is the agency catalogue (' + TOTAL + ' permissions). It has no client charge-rate permission at all, so no ' + ORG.name + ' role can ever be given one.';
+
+var isMobile = window.matchMedia('(max-width: 767px)').matches;
+var OPEN = {}; CAT.forEach(function (g, i) { OPEN[g.g] = !isMobile || i === 0; });
+var role, base, cur, readOnly = false, conflict = false, extChanged = null;
+
+// ?role=<id>, or ?role=new&rname=<name> straight after "Create role"
+(function () {
+  var want = Q.get('role');
+  if (want === 'new' && Q.get('rname')) ROLES.push({ id: 'new', name: Q.get('rname'), def: false, status: 'Active', grants: [] });
+})();
+function findRole(id) { return ROLES.filter(function (r) { return r.id === id; })[0]; }
+function defaultRoleId() { var w = Q.get('role'); return (w && findRole(w)) ? w : ROLES[1].id; }
+function fillSelect() {
+  document.getElementById('role-sel').innerHTML = ROLES.map(function (r) { return '<option value="' + r.id + '">' + esc(r.name) + (r.status === 'Inactive' ? ' (Inactive)' : '') + '</option>'; }).join('');
+}
+function holders(r) { return USERS.filter(function (u) { return u.status !== 'Inactive' && u.roles.indexOf(r.id) >= 0; }).length; }
+
+function pick(id) {
+  role = findRole(id);
+  base = role.grants.slice(); cur = role.grants.slice(); conflict = false; extChanged = null;
+  document.getElementById('role-sel').value = id;
+  hide('b-refused'); hide('b-conflict');
+  paint();
+}
+function show(id) { document.getElementById(id).style.display = ''; }
+function hide(id) { document.getElementById(id).style.display = 'none'; }
+function changes() {
+  var out = [];
+  Object.keys(LABEL).forEach(function (k) { if ((base.indexOf(k) >= 0) !== (cur.indexOf(k) >= 0)) out.push(k); });
+  return out;
+}
+function paint() {
+  var n = holders(role);
+  document.getElementById('crumb-role').textContent = role.name;
+  document.getElementById('role-meta').innerHTML = badge(role.status) + (role.def ? ' ' + marker('Default', 'Created when this organisation was set up. You can rename it, change its permissions or deactivate it.') : '') +
+    '<span class="text-xs text-slate-500">' + n + ' ' + (n === 1 ? 'person holds' : 'people hold') + ' this role · <span class="font-semibold text-slate-700 tabular-nums">' + cur.length + ' of ' + TOTAL + '</span> permissions on</span>';
+  document.getElementById('role-desc').textContent = role.status === 'Inactive'
+    ? 'This role is inactive, so it grants nothing right now. You can still prepare its permissions.'
+    : 'Permissions for the ' + role.name + ' role. A change applies from each holder\'s next click — nobody is signed out.';
+  document.getElementById('b-empty').style.display = (base.length === 0 && !readOnly) ? '' : 'none';
+  document.getElementById('b-readonly').style.display = readOnly ? '' : 'none';
+  var ch = changes();
+  document.getElementById('groups').innerHTML = CAT.map(function (g) {
+    var keys = g.items.map(function (it) { return it[0]; });
+    var on = keys.filter(function (k) { return cur.indexOf(k) >= 0; }).length;
+    var head = '<div class="sticky -top-6 z-10 bg-white rounded-t-2xl border-b border-slate-100 flex items-center gap-3 px-4 sm:px-5 py-3">' +
+      '<button type="button" data-toggle="' + g.g + '" aria-expanded="' + OPEN[g.g] + '" aria-controls="grp-' + g.g + '" class="md:hidden w-8 h-8 -ml-1 rounded-lg text-slate-500 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1" aria-label="Show or hide ' + esc(g.label) + '"><i class="fa-solid ' + (OPEN[g.g] ? 'fa-chevron-down' : 'fa-chevron-right') + ' text-xs" aria-hidden="true"></i></button>' +
+      '<h2 class="flex-1 min-w-0 text-sm font-bold text-slate-900 uppercase tracking-wider">' + esc(g.label) + '</h2>' +
+      (keys.length ? '<span class="text-xs font-medium text-slate-500 tabular-nums whitespace-nowrap">' + on + ' of ' + keys.length + ' on</span>' +
+        (readOnly ? '' : '<label class="flex items-center gap-2 cursor-pointer min-h-[36px]"><span class="sr-only">Tick all ' + esc(g.label) + ' permissions</span><span class="hidden sm:inline text-xs font-semibold text-slate-600">All</span><input type="checkbox" data-all="' + g.g + '" ' + (on === keys.length ? 'checked' : '') + ' ' + (on > 0 && on < keys.length ? 'data-ind="1" aria-checked="mixed"' : '') + ' class="w-5 h-5 accent-blue-700 cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"/></label>') : '') +
+      '</div>';
+    var body;
+    if (!keys.length) body = '<p class="px-4 sm:px-5 py-4 text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-info text-slate-400 mt-0.5" aria-hidden="true"></i><span>' + esc(g.info) + '</span></p>';
+    else body = '<ul class="divide-y divide-slate-100">' + g.items.map(function (it) {
+      var k = it[0], isOn = cur.indexOf(k) >= 0, changed = ch.indexOf(k) >= 0, ext = extChanged === k;
+      return '<li><label class="flex items-start gap-3 px-4 sm:px-5 py-3 ' + (readOnly ? '' : 'cursor-pointer hover:bg-slate-50 ') + (changed ? 'bg-blue-50/60 border-l-4 border-blue-600 ' : 'border-l-4 border-transparent ') + '">' +
+        '<span class="flex-1 min-w-0"><span class="flex flex-wrap items-center gap-2"><span class="text-sm font-medium text-slate-800">' + esc(it[1]) + '</span>' + kindTag(it[2]) +
+        (changed ? '<span class="text-[11px] font-semibold text-blue-700"><i class="fa-solid fa-circle text-[6px] align-middle mr-1" aria-hidden="true"></i>' + (isOn ? 'Will be granted' : 'Will be removed') + '</span>' : '') +
+        (ext ? '<span class="text-[11px] font-semibold text-amber-700"><i class="fa-solid fa-code-compare text-[9px] mr-1" aria-hidden="true"></i>Just changed by ' + esc(OTHER) + '</span>' : '') + '</span>' +
+        (it[3] ? '<span class="block text-xs text-slate-500 mt-0.5">' + esc(it[3]) + '</span>' : '') + '</span>' +
+        '<input type="checkbox" data-key="' + k + '" ' + (isOn ? 'checked' : '') + ' ' + (readOnly ? 'disabled' : '') + ' class="mt-0.5 w-5 h-5 accent-blue-700 flex-shrink-0 cursor-pointer disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1" aria-label="' + esc(it[1]) + '"/>' +
+        '</label></li>';
+    }).join('') + '</ul>';
+    return '<section class="bg-white rounded-2xl border border-slate-200 shadow-sm" aria-label="' + esc(g.label) + '">' + head + '<div id="grp-' + g.g + '" class="' + (OPEN[g.g] ? 'block' : 'hidden md:block') + '">' + body + '</div></section>';
+  }).join('');
+  document.querySelectorAll('[data-ind]').forEach(function (c) { c.indeterminate = true; });
+  document.querySelectorAll('[data-key]').forEach(function (c) { c.onchange = function () { set(c.dataset.key, c.checked); }; });
+  document.querySelectorAll('[data-all]').forEach(function (c) { c.onchange = function () {
+    var g = CAT.filter(function (x) { return x.g === c.dataset.all; })[0], keys = g.items.map(function (it) { return it[0]; });
+    var allOn = keys.every(function (k) { return cur.indexOf(k) >= 0; });
+    keys.forEach(function (k) { setRaw(k, !allOn); }); after();
+  }; });
+  document.querySelectorAll('[data-toggle]').forEach(function (b) { b.onclick = function () { OPEN[b.dataset.toggle] = !OPEN[b.dataset.toggle]; paint(); }; });
+  var bar = document.getElementById('savebar');
+  bar.style.display = ch.length && !readOnly ? '' : 'none';
+  document.getElementById('chg-count').textContent = ch.length + (ch.length === 1 ? ' change' : ' changes');
+}
+function setRaw(k, on) { var i = cur.indexOf(k); if (on && i < 0) cur.push(k); if (!on && i >= 0) cur.splice(i, 1); }
+function set(k, on) { setRaw(k, on); after(); }
+function after() { hide('b-refused'); var y = document.getElementById('main').scrollTop; paint(); document.getElementById('main').scrollTop = y; }
+
+function leavesNoAdmin() {
+  if (!(base.indexOf(ADMIN_KEY) >= 0 && cur.indexOf(ADMIN_KEY) < 0 && role.status === 'Active')) return false;
+  return !USERS.some(function (u) {
+    return u.status === 'Active' && u.roles.some(function (id) { var r = findRole(id); return r && r !== role && r.status === 'Active' && r.grants.indexOf(ADMIN_KEY) >= 0; });
+  });
+}
+function save() {
+  if (conflict) { S1.toast('Load the latest version of this role first, then save again.', 'error'); document.getElementById('b-conflict').scrollIntoView({ block: 'center' }); return; }
+  if (leavesNoAdmin()) {
+    document.getElementById('b-refused-t').innerHTML = '<span class="font-semibold">Not saved.</span> You can\'t remove <span class="font-semibold">Invite and edit users</span> from ' + esc(role.name) + ' — ' + esc(ORG.name) + ' would be left with no one who can manage users. Give that permission to another role held by an active user first.';
+    show('b-refused'); document.getElementById('b-refused').scrollIntoView({ block: 'center' });
+    S1.toast('Not saved — ' + esc(ORG.name) + ' would have no one who can manage users.', 'error');
+    return;
+  }
+  var b = document.getElementById('btn-save'), d = document.getElementById('btn-discard');
+  b.disabled = true; d.disabled = true; b.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Saving…';
+  document.querySelectorAll('[data-key],[data-all]').forEach(function (c) { c.disabled = true; });
+  setTimeout(function () {
+    role.grants = cur.slice(); base = cur.slice(); extChanged = null;
+    b.disabled = false; d.disabled = false; b.innerHTML = '<i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save changes';
+    paint(); S1.toast('Permissions saved. They apply from each user\'s next click.', 'success');
+  }, 1100);
+}
+function discard(cb) {
+  var n = changes().length;
+  if (!n) { if (cb) cb(); return; }
+  S1.confirm({ tone: 'danger', title: 'Discard ' + n + (n === 1 ? ' change?' : ' changes?'), body: 'Your changes to ' + role.name + ' haven\'t been saved. If you discard them, the role keeps its current permissions.', cta: 'Discard changes', delay: 0,
+    onConfirm: function () { cur = base.slice(); hide('b-refused'); paint(); if (cb) cb(); } });
+}
+document.getElementById('btn-save').onclick = save;
+document.getElementById('btn-discard').onclick = function () { discard(); };
+document.getElementById('btn-putback').onclick = function () { setRaw(ADMIN_KEY, true); after(); };
+document.getElementById('btn-review').onclick = function () {
+  // load the other editor's version and keep this user's edits on top
+  var mine = changes();
+  base = base.slice(); if (base.indexOf(extChanged) < 0) base.push(extChanged); role.grants = base.slice();
+  cur = base.slice(); mine.forEach(function (k) { setRaw(k, !(base.indexOf(k) >= 0)); });
+  conflict = false; hide('b-conflict'); paint();
+  S1.toast('Showing the latest version with your changes on top. Review and save again.', 'info');
+};
+var sel = document.getElementById('role-sel');
+sel.onchange = function () {
+  var want = sel.value; sel.value = role.id;
+  discard(function () { pick(want); history.replaceState(null, '', withOrg(location.pathname.split('/').pop() + '?role=' + encodeURIComponent(want))); });
+};
+// navigation guard: leaving with unsaved changes
+document.addEventListener('click', function (e) {
+  var a = e.target.closest && e.target.closest('a[href]');
+  if (!a || !changes().length || readOnly) return;
+  var h = a.getAttribute('href'); if (!h || h.charAt(0) === '#') return;
+  e.preventDefault();
+  discard(function () { location.href = h; });
+}, true);
+window.addEventListener('beforeunload', function (e) { if (changes().length && !readOnly) { e.preventDefault(); e.returnValue = ''; } });
+
+fillSelect();
+document.addEventListener('s1:state', function (e) {
+  var s = e.detail.state;
+  readOnly = s === 'read-only';
+  if (s === 'empty') {
+    var z = ROLES.filter(function (r) { return r.grants.length === 0; })[0];
+    if (!z) { z = { id: 'new', name: 'New role', def: false, status: 'Active', grants: [] }; ROLES.push(z); fillSelect(); }
+    pick(z.id); return;
+  }
+  pick(s === 'validation' ? 'administrator' : defaultRoleId());
+  if (s === 'validation') { setRaw(ADMIN_KEY, false); paint(); save(); }
+  if (s === 'conflict') {
+    var keys = Object.keys(LABEL), off = keys.filter(function (k) { return cur.indexOf(k) < 0; });
+    setRaw(off[0], true); if (off[1]) setRaw(off[1], true);
+    extChanged = off[off.length - 1]; conflict = true;
+    document.getElementById('b-conflict-who').textContent = OTHER + ' saved a change to ' + role.name + ' at 10:42.';
+    show('b-conflict'); paint();
+  }
+});
+
+</script>
+
+<script src="slice1-kit.js"></script>
+</body>
+</html>

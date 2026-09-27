@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data subject requests · Abstract VMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }</style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'], },
+                    colors: {
+                        navy: { DEFAULT: '#172554', 50: '#EEF1FB', 100: '#D4DCF5', 200: '#A9B9EB', 300: '#7E96E1', 400: '#5373D7', 500: '#2850CD', 600: '#1D3FA4', 700: '#162F7B', 800: '#0F1F52', 900: '#172554', },
+                        brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554', }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default loading no-match running failed erasure-refused error denied">
+
+<div id="app-root" class="flex w-full" style="height: 100vh;">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
+        <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
+            <img src="logo.png" alt="Abstract VMS" class="h-12 w-auto block -ml-[5px]"/>
+            <p class="text-white/40 text-sm mt-2">Admin Portal</p>
+        </div>
+
+        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1">
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p>
+            <a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-gauge-high text-white/40 w-4 text-center"></i>
+                <span>Admin Dashboard</span>
+            </a>
+            <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
+                <span>Vacancy List</span>
+            </a>
+            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
+                <span>Create Vacancy Wizard</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
+            <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users-gear text-white/40 w-4 text-center"></i>
+                <span>Worker Pool</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p>
+            <a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-user text-white/40 w-4 text-center"></i>
+                <span>Agency Dashboard</span>
+            </a>
+            <a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-circle-check text-white/40 w-4 text-center"></i>
+                <span>Approved Suppliers</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p>
+            <a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center"></i>
+                <span>AWR Tracking</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p>
+            <a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clock text-white/40 w-4 text-center"></i>
+                <span>Timesheets</span>
+            </a>
+            <a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center"></i>
+                <span>Invoicing / Self-Bill</span>
+            </a>
+            <a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-bar text-white/40 w-4 text-center"></i>
+                <span>Abstract Backing Report</span>
+            </a>
+            <a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sterling-sign text-white/40 w-4 text-center"></i>
+                <span>Rate Cards</span>
+            </a>
+            <a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-line text-white/40 w-4 text-center"></i>
+                <span>Reports</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p>
+            <a id="nav-onboard-client" href="abstract.onboarding.onboard-client.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-circle-arrow-right text-white/40 w-4 text-center"></i>
+                <span>Onboard Client</span>
+            </a>
+            <a id="nav-onboard-agency" href="abstract.onboarding.onboard-agency.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-tie text-white/40 w-4 text-center"></i>
+                <span>Onboard Agency</span>
+            </a>
+            <a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sliders text-white/40 w-4 text-center"></i>
+                <span>Configuration</span>
+            </a>
+            <a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-gears text-white/40 w-4 text-center"></i>
+                <span>System Configuration</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p>
+            <a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users text-white/40 w-4 text-center"></i>
+                <span>Users</span>
+            </a>
+            <a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-shield text-white/40 w-4 text-center"></i>
+                <span>Roles</span>
+            </a>
+            <a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center"></i>
+                <span>Notification templates</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p>
+            <a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sitemap text-white/40 w-4 text-center"></i>
+                <span>Organisations</span>
+            </a>
+            <a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);" aria-current="page">
+                <i class="fa-solid fa-user-lock text-blue-400 w-4 text-center"></i>
+                <span>Data subject requests</span>
+                <div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+            </a>
+            <a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center"></i>
+                <span>Audit Log</span>
+            </a>
+
+        </nav>
+
+        <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
+            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border border-white/20 flex-shrink-0" alt="avatar"/>
+                <div class="flex-1 min-w-0">
+                    <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
+                    <p class="text-white/40 text-xs truncate">Abstract Admin</p>
+                </div>
+                <a href="abstract.identity-access.sign-in.html?reason=signed-out" title="Sign out" aria-label="Sign out" class="w-9 h-9 flex items-center justify-center rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white"></i></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <header id="header" class="flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
+            <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-bars text-slate-600 text-sm"></i></button>
+                <div class="min-w-0">
+                    <h1 id="page-h1" class="text-lg font-bold text-slate-900 truncate">Data subject requests</h1>
+                    <p id="page-sub" class="text-xs text-slate-500 hidden sm:block truncate">Subject access, portability and erasure for people held in the system</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+
+                <button type="button" data-s1-bell aria-label="Notifications" class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-regular fa-bell text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <a href="abstract.identity-access.my-account.html" class="flex items-center gap-2 pl-2 border-l border-slate-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2" aria-label="My account — Sarah Mitchell">
+                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border-2 border-blue-100" alt=""/>
+                    <div class="hidden xl:block"><p class="text-xs font-semibold text-slate-700" data-me-name>Sarah Mitchell</p><p class="text-xs text-slate-500">Abstract</p></div>
+                </a>
+            </div>
+        </header>
+
+        <main id="main" class="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-8 py-6 bg-slate-100">
+
+            <p class="text-sm text-slate-600 mb-5 max-w-3xl">Find a person held in the system and act on a data subject request: give them a copy of their personal data, export it in a machine-readable form, or erase it. Every action is confirmed and audited as you.</p>
+
+            <div data-s1-hide="loading error denied" class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+                <!-- search -->
+                <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden h-fit" aria-labelledby="search-t">
+                    <div class="px-5 py-4 border-b border-slate-100">
+                        <h2 id="search-t" class="text-sm font-bold text-slate-900">Find a person</h2>
+                        <p class="text-xs text-slate-500 mt-0.5">Searches every organisation by name or email.</p>
+                    </div>
+                    <form id="search-form" class="p-4 flex gap-2" role="search">
+                        <label for="q" class="sr-only">Name or email</label>
+                        <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 flex-1 min-w-0 focus-within:border-blue-400 focus-within:ring-2 focus-within:ring-blue-600/20 focus-within:bg-white">
+                            <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs" aria-hidden="true"></i>
+                            <input id="q" type="search" value="priya" placeholder="Name or email" autocomplete="off" class="bg-transparent text-sm text-slate-800 placeholder-slate-400 outline-none w-full py-2.5"/>
+                        </div>
+                        <button type="submit" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">Search</button>
+                    </form>
+                    <p id="res-count" class="px-5 pb-2 text-xs text-slate-500" role="status"></p>
+                    <ul id="results" class="divide-y divide-slate-100 border-t border-slate-100"></ul>
+                    <div id="nomatch" class="hidden px-6 py-10 text-center border-t border-slate-100">
+                        <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center mb-3"><i class="fa-solid fa-user-slash" aria-hidden="true"></i></div>
+                        <p class="text-sm font-bold text-slate-900">No one matches "<span id="nomatch-q"></span>"</p>
+                        <p class="text-sm text-slate-600 mt-1">Check the spelling, or search by the person's full email address.</p>
+                    </div>
+                </section>
+
+                <!-- person -->
+                <div class="xl:col-span-2 flex flex-col gap-6 min-w-0">
+                    <div id="no-person" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-14 text-center">
+                        <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center mb-4"><i class="fa-solid fa-user-lock text-xl" aria-hidden="true"></i></div>
+                        <p class="text-base font-bold text-slate-900">Choose a person</p>
+                        <p class="text-sm text-slate-600 mt-1">Search for them, then pick them from the results to see their requests.</p>
+                    </div>
+
+                    <div id="person" class="flex flex-col gap-6">
+                        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-4" aria-labelledby="p-name">
+                            <div id="p-avatar" class="w-12 h-12 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm font-bold flex-shrink-0">PN</div>
+                            <div class="flex-1 min-w-0">
+                                <div class="flex flex-wrap items-center gap-2"><h2 id="p-name" class="text-lg font-bold text-slate-900 truncate">Priya Natarajan</h2><span id="p-status"></span></div>
+                                <p id="p-email" class="text-sm text-slate-600 truncate">priya.natarajan@acmelogistics.example</p>
+                                <p id="p-org" class="text-xs text-slate-500 mt-0.5">Acme Logistics · Client · User since 12 Mar 2026</p>
+                            </div>
+                        </section>
+
+                        <div id="refused" class="hidden rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 flex items-start gap-3 text-sm text-amber-900" role="alert">
+                            <i class="fa-solid fa-hand mt-0.5" aria-hidden="true"></i>
+                            <div><p class="font-semibold">Erasure refused — a retention obligation applies.</p><p id="refused-reason" class="mt-1"></p><p class="mt-1 text-amber-800">You can still compile or export their data. The refusal is recorded in the history below.</p></div>
+                        </div>
+
+                        <section aria-labelledby="actions-t">
+                            <h2 id="actions-t" class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Actions</h2>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col">
+                                    <span class="w-10 h-10 rounded-xl flex items-center justify-center text-blue-700" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-box-archive" aria-hidden="true"></i></span>
+                                    <h3 class="text-sm font-bold text-slate-900 mt-3">Compile personal data</h3>
+                                    <p class="text-xs text-slate-500 mt-0.5">Subject access request</p>
+                                    <p class="text-sm text-slate-600 mt-2 leading-relaxed flex-1">Builds one package of everything held about this person, to send them.</p>
+                                    <button type="button" id="act-sar" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg text-white text-sm font-semibold hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 mt-4" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);"><i class="fa-solid fa-box-archive text-xs" aria-hidden="true"></i> Compile package</button>
+                                    <div id="chip-sar" class="mt-3 flex flex-wrap items-center gap-1 min-h-[28px]" aria-live="polite"></div>
+                                </div>
+                                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col">
+                                    <span class="w-10 h-10 rounded-xl flex items-center justify-center text-blue-700" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-file-code" aria-hidden="true"></i></span>
+                                    <h3 class="text-sm font-bold text-slate-900 mt-3">Export machine-readable</h3>
+                                    <p class="text-xs text-slate-500 mt-0.5">Data portability</p>
+                                    <p class="text-sm text-slate-600 mt-2 leading-relaxed flex-1">Exports their personal data as JSON or CSV so another service can import it.</p>
+                                    <button type="button" id="act-port" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 mt-4"><i class="fa-solid fa-file-export text-xs" aria-hidden="true"></i> Export data</button>
+                                    <div id="chip-port" class="mt-3 flex flex-wrap items-center gap-1 min-h-[28px]" aria-live="polite"></div>
+                                </div>
+                                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col">
+                                    <span class="w-10 h-10 rounded-xl flex items-center justify-center bg-red-50 text-red-600"><i class="fa-solid fa-eraser" aria-hidden="true"></i></span>
+                                    <h3 class="text-sm font-bold text-slate-900 mt-3">Erase / anonymise</h3>
+                                    <p class="text-xs text-slate-500 mt-0.5">Right to erasure</p>
+                                    <p class="text-sm text-slate-600 mt-2 leading-relaxed flex-1">Removes their personal data or replaces it with anonymous values. It can't be undone.</p>
+                                    <button type="button" id="act-erase" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-red-200 text-red-700 text-sm font-semibold hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 mt-4"><i class="fa-solid fa-eraser text-xs" aria-hidden="true"></i> Erase personal data</button>
+                                    <div class="mt-3 min-h-[28px]"></div>
+                                </div>
+                            </div>
+                            <p class="text-xs text-slate-500 mt-3"><i class="fa-solid fa-circle-info mr-1" aria-hidden="true"></i>Packages and exports run in the background. We'll notify you when the file is ready; the download link lasts 7 days. Prototype: Shift-click an action to see it fail.</p>
+                        </section>
+
+                        <!-- history -->
+                        <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" aria-labelledby="h-t">
+                            <div class="px-5 py-4 border-b border-slate-100">
+                                <h2 id="h-t" class="text-sm font-bold text-slate-900">Request history for <span id="h-name">Priya Natarajan</span></h2>
+                                <p class="text-xs text-slate-500 mt-0.5">Newest first.</p>
+                            </div>
+                            <div class="hidden md:block overflow-x-auto">
+                                <table class="w-full text-sm">
+                                    <thead class="bg-slate-50"><tr class="text-left">
+                                        <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider pl-5">Action</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Requested by</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">When</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider pr-5">Status</th>
+                                    </tr></thead>
+                                    <tbody id="h-body" class="divide-y divide-slate-100"></tbody>
+                                </table>
+                            </div>
+                            <ul id="h-cards" class="md:hidden divide-y divide-slate-100"></ul>
+                            <p id="h-empty" class="hidden px-5 py-8 text-sm text-slate-500 text-center">No requests yet for this person.</p>
+                        </section>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STATE: loading (skeleton rows) -->
+            <section data-s1-show="loading" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" aria-busy="true" aria-label="Loading">
+                <div class="px-5 py-4 border-b border-slate-100"><div class="h-4 w-48 rounded bg-slate-200 animate-pulse"></div></div>
+                <div class="divide-y divide-slate-100">
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-40 rounded bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div></div>
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-40 rounded bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div></div>
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-40 rounded bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div></div>
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-40 rounded bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div></div>
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-40 rounded bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div></div>
+                </div>
+            </section>
+
+            <!-- STATE: error (ErrorState) -->
+            <section data-s1-show="error" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto mt-4" role="alert">
+                <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 mx-auto flex items-center justify-center mb-4"><i class="fa-solid fa-triangle-exclamation text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-xl font-bold text-slate-900">We couldn't load data subject requests.</h2>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">Nothing has been changed. Try again, and if it keeps happening, quote this reference to Abstract support.</p>
+                <p class="mt-3 inline-flex items-center gap-2 rounded-lg bg-slate-50 border border-slate-200 px-3 py-1.5 font-mono text-xs text-slate-700">REF 7F3K-29QD</p>
+                <div class="mt-6"><button type="button" onclick="S1.setState('default')" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-rotate-right text-xs" aria-hidden="true"></i> Retry</button></div>
+            </section>
+
+            <!-- STATE: permission denied (403 inside the portal frame) -->
+            <section data-s1-show="denied" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto mt-4" aria-labelledby="denied-t">
+                <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 mx-auto flex items-center justify-center mb-4"><i class="fa-solid fa-lock text-xl" aria-hidden="true"></i></div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Error 403 · No permission</p>
+                <h2 id="denied-t" class="text-xl font-bold text-slate-900 mt-1">You don't have access to this page.</h2>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">Ask your administrator if you need it.</p>
+                <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="abstract.shell.dashboard.html" data-s1-home class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-house text-xs" aria-hidden="true"></i> Back to dashboard</a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<div data-s1-modal id="port-modal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="port-modal-t">
+  <div class="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md max-h-[92vh] overflow-y-auto">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+      <h2 id="port-modal-t" class="text-base font-bold text-slate-900">Export <span id="port-name">Priya Natarajan</span>'s data</h2>
+      <button type="button" onclick="S1.closeModal('port-modal')" aria-label="Close" class="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    <div class="px-6 py-5">
+      <fieldset>
+        <legend class="block text-xs font-semibold text-slate-700 mb-1.5">Format</legend>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <label class="flex items-start gap-3 px-4 py-3 rounded-xl border border-slate-200 cursor-pointer has-[:checked]:border-blue-300 has-[:checked]:bg-blue-50">
+            <input type="radio" name="fmt" value="json" checked class="mt-1 w-4 h-4 accent-blue-600"/>
+            <span><span class="block text-sm font-semibold text-slate-800">JSON</span><span class="block text-xs text-slate-500">One structured file</span></span>
+          </label>
+          <label class="flex items-start gap-3 px-4 py-3 rounded-xl border border-slate-200 cursor-pointer has-[:checked]:border-blue-300 has-[:checked]:bg-blue-50">
+            <input type="radio" name="fmt" value="csv" class="mt-1 w-4 h-4 accent-blue-600"/>
+            <span><span class="block text-sm font-semibold text-slate-800">CSV</span><span class="block text-xs text-slate-500">A zip of tables, one per record type</span></span>
+          </label>
+        </div>
+      </fieldset>
+      <p class="text-sm text-slate-600 mt-4">The export runs in the background and is audited as you. It contains personal data — send it to the person securely.</p></div>
+    <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-col-reverse sm:flex-row justify-end gap-3 rounded-b-2xl"><button type="button" onclick="S1.closeModal('port-modal')" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">Cancel</button>
+      <button type="button" id="port-go" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg text-white text-sm font-semibold hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);"><i class="fa-solid fa-file-export text-xs" aria-hidden="true"></i> Start export</button></div>
+  </div>
+</div>
+<script>
+/* Mobile navigation (sidebar is hidden below lg — this is the only way to reveal it) */
+(function () {
+  var btn = document.getElementById('mobile-menu-btn'),
+      sb  = document.getElementById('sidebar');
+  if (!btn || !sb) return;
+  btn.setAttribute('aria-controls', 'sidebar');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-label', 'Open navigation');
+  var bd = document.createElement('div');
+  bd.setAttribute('aria-hidden', 'true');
+  bd.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:40;display:none';
+  document.body.appendChild(bd);
+  function open() {
+    sb.style.display = 'flex'; sb.style.position = 'fixed'; sb.style.top = '0';
+    sb.style.bottom = '0'; sb.style.left = '0'; sb.style.zIndex = '50';
+    bd.style.display = 'block'; btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    ['display','position','top','bottom','left','zIndex'].forEach(function (p) { sb.style[p] = ''; });
+    bd.style.display = 'none'; btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', function () { bd.style.display === 'block' ? close() : open(); });
+  bd.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bd.style.display === 'block') close(); });
+  window.addEventListener('resize', function () { if (window.innerWidth >= 1024) close(); });
+})();
+
+</script>
+<script>
+
+var PEOPLE = [
+  { id: 'pn', name: 'Priya Natarajan', email: 'priya.natarajan@acmelogistics.example', org: 'Acme Logistics', party: 'Client', status: 'Active', since: '12 Mar 2026',
+    history: [ { action: 'Compile personal data', by: 'James Okafor', when: '26 Sep 2026, 09:41', status: 'completed', file: 'sar-priya-natarajan-2026-09-26.zip' },
+               { action: 'Export machine-readable (JSON)', by: 'Sarah Mitchell', when: '2 Aug 2026, 14:05', status: 'completed', file: 'portability-priya-natarajan.json', expired: true } ] },
+  { id: 'ps', name: 'Priya Shah', email: 'priya.shah@abstract.com', org: 'Abstract', party: 'Abstract', status: 'Active', since: '1 Feb 2026', history: [] },
+  { id: 'tb', name: 'Tom Brennan', email: 'tom.brennan@techforce.example', org: 'TechForce Recruitment', party: 'Agency', status: 'Active', since: '3 Apr 2026', history: [] },
+  { id: 'dh', name: 'Daniel Hughes', email: 'daniel.hughes@northgatefoods.example', org: 'Northgate Foods', party: 'Client', status: 'Inactive', since: '9 Feb 2026',
+    retention: 'Abstract has placed a legal hold on records this person is named in, pending a dispute (set by James Okafor on 12 Aug 2026). Their personal data must be kept until the hold is lifted.',
+    history: [ { action: 'Erase / anonymise', by: 'Sarah Mitchell', when: '20 Sep 2026, 16:12', status: 'refused' } ] },
+  { id: 'ar', name: 'Aisha Rahman', email: 'aisha.rahman@nexustalent.example', org: 'Nexus Talent', party: 'Agency', status: 'Invited', since: '22 Sep 2026', history: [] }
+];
+var sel = null, matches = [];
+var SB = { Active: 'bg-emerald-50 text-emerald-700 border-emerald-200', Inactive: 'bg-slate-100 text-slate-500 border-slate-200', Invited: 'bg-amber-50 text-amber-700 border-amber-200' };
+var JB = { queued: 'bg-slate-100 text-slate-700 border-slate-200', running: 'bg-blue-50 text-blue-700 border-blue-200', completed: 'bg-emerald-50 text-emerald-700 border-emerald-200', failed: 'bg-red-50 text-red-700 border-red-200' };
+var JI = { queued: 'fa-clock', running: 'fa-spinner fa-spin', completed: 'fa-check', failed: 'fa-xmark' };
+function badge(cls, txt, icon) { return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap border ' + cls + '">' + (icon ? '<i class="fa-solid ' + icon + ' text-[10px]" aria-hidden="true"></i>' : '') + txt + '</span>'; }
+function initials(n) { return n.split(' ').map(function (x) { return x[0]; }).join('').slice(0, 2); }
+function slug(n) { return n.toLowerCase().replace(/[^a-z]+/g, '-'); }
+function search(qs) {
+  qs = (qs || '').trim().toLowerCase();
+  matches = qs ? PEOPLE.filter(function (p) { return p.name.toLowerCase().indexOf(qs) >= 0 || p.email.toLowerCase().indexOf(qs) >= 0; }) : [];
+  document.getElementById('results').innerHTML = matches.map(function (p) {
+    return '<li><button type="button" data-p="' + p.id + '" class="w-full text-left px-5 py-3 flex items-center gap-3 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600' + (sel && sel.id === p.id ? ' bg-blue-50/60' : '') + '"' + (sel && sel.id === p.id ? ' aria-current="true"' : '') + '>' +
+      '<span class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs font-bold flex-shrink-0">' + initials(p.name) + '</span>' +
+      '<span class="min-w-0 flex-1"><span class="block text-sm font-semibold text-slate-900 truncate">' + S1.esc(p.name) + '</span><span class="block text-xs text-slate-500 truncate">' + S1.esc(p.email) + '</span><span class="block text-xs text-slate-500 truncate">' + S1.esc(p.org) + ' · ' + p.party + '</span></span>' +
+      badge(SB[p.status], p.status) + '</button></li>';
+  }).join('');
+  document.getElementById('results').querySelectorAll('[data-p]').forEach(function (b) { b.onclick = function () { pick(b.dataset.p); }; });
+  var nm = qs && !matches.length;
+  document.getElementById('nomatch').classList.toggle('hidden', !nm);
+  document.getElementById('nomatch-q').textContent = qs;
+  document.getElementById('res-count').textContent = !qs ? 'Enter a name or email to search.' : matches.length ? matches.length + (matches.length === 1 ? ' person' : ' people') + ' found' : '';
+}
+function pick(id) {
+  sel = PEOPLE.filter(function (p) { return p.id === id; })[0];
+  document.getElementById('no-person').classList.toggle('hidden', !!sel);
+  document.getElementById('person').classList.toggle('hidden', !sel);
+  if (!sel) return;
+  document.getElementById('p-avatar').textContent = initials(sel.name);
+  document.getElementById('p-name').textContent = sel.name; document.getElementById('h-name').textContent = sel.name;
+  document.getElementById('port-name').textContent = sel.name;
+  document.getElementById('p-status').innerHTML = badge(SB[sel.status], sel.status);
+  document.getElementById('p-email').textContent = sel.email;
+  document.getElementById('p-org').textContent = sel.org + ' · ' + sel.party + ' · User since ' + sel.since;
+  document.getElementById('refused').classList.add('hidden');
+  document.getElementById('chip-sar').innerHTML = ''; document.getElementById('chip-port').innerHTML = '';
+  renderHistory(); search(document.getElementById('q').value);
+}
+function statusCell(h) {
+  if (h.status === 'refused') return '<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-800"><i class="fa-solid fa-hand" aria-hidden="true"></i>Refused — retention obligation</span>';
+  if (h.status === 'erased') return '<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700"><i class="fa-solid fa-eraser" aria-hidden="true"></i>Erased</span>';
+  var s = badge(JB[h.status], h.status, JI[h.status]);
+  if (h.status === 'completed' && h.file) s += h.expired ? '<span class="block text-xs text-slate-500 mt-1">Link expired</span>' : '<a href="#" data-dl="' + S1.esc(h.file) + '" class="block text-xs font-semibold text-blue-700 hover:underline mt-1 truncate max-w-[220px]"><i class="fa-solid fa-download mr-1" aria-hidden="true"></i>' + S1.esc(h.file) + '</a>';
+  if (h.status === 'failed') s += '<span class="block text-xs text-red-700 mt-1">No file was produced.</span>';
+  return s;
+}
+function renderHistory() {
+  var hs = sel.history;
+  document.getElementById('h-empty').classList.toggle('hidden', !!hs.length);
+  document.getElementById('h-body').innerHTML = hs.map(function (h) {
+    return '<tr class="align-top"><td class="px-4 pl-5 py-3 font-medium text-slate-800">' + S1.esc(h.action) + (h.reason ? '<span class="block text-xs text-slate-500 font-normal mt-0.5">Reason: ' + S1.esc(h.reason) + '</span>' : '') + '</td><td class="px-4 py-3 text-slate-600">' + S1.esc(h.by) + '</td><td class="px-4 py-3 text-slate-500 whitespace-nowrap">' + h.when + '</td><td class="px-4 pr-5 py-3">' + statusCell(h) + '</td></tr>';
+  }).join('');
+  document.getElementById('h-cards').innerHTML = hs.map(function (h) {
+    return '<li class="px-5 py-4"><p class="text-sm font-semibold text-slate-800">' + S1.esc(h.action) + '</p><p class="text-xs text-slate-500 mt-0.5">' + S1.esc(h.by) + ' · ' + h.when + '</p><div class="mt-2">' + statusCell(h) + '</div></li>';
+  }).join('');
+  document.querySelectorAll('[data-dl]').forEach(function (a) { a.onclick = function (e) { e.preventDefault(); S1.toast('Downloading ' + S1.esc(a.dataset.dl) + '.', 'success'); }; });
+}
+function nowStr() { return '26 Sep 2026, ' + new Date().toTimeString().slice(0, 5); }
+function runTracked(chipId, action, file, fail) {
+  var h = { action: action, by: 'Sarah Mitchell', when: nowStr(), status: 'queued', file: file };
+  sel.history.unshift(h); renderHistory();
+  var host = document.getElementById(chipId);
+  S1.runJob(host, { label: 'personal-data package', file: file, fail: !!fail,
+    doneTitle: 'The personal-data package you requested is ready',
+    doneBody: action + ' for ' + sel.name + ' (' + sel.org + '). ' + file + ' is ready to download.',
+    href: 'abstract.identity-access.data-subject-requests.html' });
+  setTimeout(function () { h.status = 'running'; renderHistory(); }, 900);
+  setTimeout(function () { h.status = fail ? 'failed' : 'completed'; renderHistory(); }, 3200);
+  // "Try again" on a failed chip re-runs the job: record it as a new attempt
+  setTimeout(function () {
+    var r = host.querySelector('[data-retry]'); if (!r) return;
+    r.addEventListener('click', function () {
+      var h2 = { action: action, by: 'Sarah Mitchell', when: nowStr(), status: 'queued', file: file }; sel.history.unshift(h2); renderHistory();
+      setTimeout(function () { h2.status = 'running'; renderHistory(); }, 900);
+      setTimeout(function () { h2.status = 'completed'; renderHistory(); }, 3200);
+    });
+  }, 3300);
+}
+function doSar(fail) {
+  S1.confirm({ title: 'Compile ' + sel.name + '\'s personal data?', icon: 'fa-box-archive',
+    body: 'This builds a package of everything held about them, for a subject access request. It runs in the background, and the request is audited as you.',
+    cta: 'Compile package', onConfirm: function () { runTracked('chip-sar', 'Compile personal data', 'sar-' + slug(sel.name) + '-2026-09-26.zip', fail); } });
+}
+var portFail = false;
+function doPort(fail) { portFail = !!fail; S1.openModal('port-modal'); }
+function doErase() {
+  if (sel.retention) { showRefused(); return; }
+  S1.confirm({ tone: 'danger', title: 'Erase ' + sel.name + '\'s personal data?', icon: 'fa-eraser',
+    bodyHtml: 'Their name, email address and other personal details are removed or replaced with anonymous values across every record. Their account is deactivated. <strong style="color:#b91c1c">This can\'t be undone.</strong> The erasure itself is audited, without their personal data.',
+    reason: true, reasonLabel: 'Reason (required)', reasonPlaceholder: 'For example: erasure request received by email on 24 Sep 2026, ref DSR-118',
+    cta: 'Erase personal data', busy: 'Erasing…', delay: 900,
+    onConfirm: function (reason) {
+      sel.history.unshift({ action: 'Erase / anonymise', by: 'Sarah Mitchell', when: nowStr(), status: 'erased', reason: reason });
+      var old = sel.name; sel.name = 'Anonymised user ' + sel.id.toUpperCase() + '-7731'; sel.email = 'anonymised'; sel.status = 'Inactive';
+      pick(sel.id); document.getElementById('q').value = ''; search('');
+      S1.toast(S1.esc(old) + '\'s personal data has been erased. The record now shows as ' + S1.esc(sel.name) + '.', 'success', { ms: 6000 });
+    } });
+}
+function showRefused() {
+  var r = document.getElementById('refused');
+  document.getElementById('refused-reason').textContent = sel.retention;
+  r.classList.remove('hidden');
+  if (!sel.history.length || sel.history[0].when !== nowStr()) sel.history.unshift({ action: 'Erase / anonymise', by: 'Sarah Mitchell', when: nowStr(), status: 'refused' });
+  renderHistory(); r.scrollIntoView({ block: 'nearest' });
+  S1.toast('Erasure refused — a retention obligation applies. Nothing was erased.', 'error');
+}
+document.addEventListener('s1:state', function (e) {
+  var st = e.detail.state, q = document.getElementById('q');
+  if (st === 'default') { q.value = 'priya'; pick('pn'); }
+  else if (st === 'no-match') { q.value = 'jonathon'; sel = null; pick(null); search('jonathon'); }
+  else if (st === 'running') { // held in the running state for review; a real click moves on to completed
+    q.value = 'priya'; pick('pn');
+    sel.history.unshift({ action: 'Compile personal data', by: 'Sarah Mitchell', when: nowStr(), status: 'running' }); renderHistory();
+    document.getElementById('chip-sar').innerHTML = S1.jobChip('running') + '<span class="text-xs text-slate-500 ml-1">Started ' + nowStr().split(', ')[1] + '</span>'; }
+  else if (st === 'failed') { q.value = 'priya'; pick('pn'); runTracked('chip-port', 'Export machine-readable (CSV)', 'portability-priya-natarajan.zip', true); }
+  else if (st === 'erasure-refused') { q.value = 'hughes'; pick('dh'); showRefused(); }
+});
+document.addEventListener('s1:ready', function () {
+  if (!sel && document.body.getAttribute('data-s1-state') === 'default') pick('pn');
+  document.getElementById('search-form').addEventListener('submit', function (e) { e.preventDefault(); search(document.getElementById('q').value); if (matches.length === 1) pick(matches[0].id); });
+  document.getElementById('q').addEventListener('input', function () { search(this.value); });
+  document.getElementById('act-sar').onclick = function (e) { doSar(e.shiftKey); };
+  document.getElementById('act-port').onclick = function (e) { doPort(e.shiftKey); };
+  document.getElementById('act-erase').onclick = doErase;
+  document.getElementById('port-go').onclick = function () {
+    var fmt = document.querySelector('input[name="fmt"]:checked').value;
+    S1.closeModal('port-modal');
+    runTracked('chip-port', 'Export machine-readable (' + fmt.toUpperCase() + ')', 'portability-' + slug(sel.name) + (fmt === 'json' ? '.json' : '-csv.zip'), portFail);
+  };
+});
+
+</script>
+
+<script src="slice1-kit.js"></script>
+</body>
+</html>

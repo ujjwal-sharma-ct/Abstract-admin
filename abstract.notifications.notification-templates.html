@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification templates · Abstract VMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }</style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'], },
+                    colors: {
+                        navy: { DEFAULT: '#172554', 50: '#EEF1FB', 100: '#D4DCF5', 200: '#A9B9EB', 300: '#7E96E1', 400: '#5373D7', 500: '#2850CD', 600: '#1D3FA4', 700: '#162F7B', 800: '#0F1F52', 900: '#172554', },
+                        brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554', }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default loading error validation denied">
+
+<div id="app-root" class="flex w-full" style="height: 100vh;">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
+        <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
+            <img src="logo.png" alt="Abstract VMS" class="h-12 w-auto block -ml-[5px]"/>
+            <p class="text-white/40 text-sm mt-2">Admin Portal</p>
+        </div>
+
+        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1">
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p>
+            <a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-gauge-high text-white/40 w-4 text-center"></i>
+                <span>Admin Dashboard</span>
+            </a>
+            <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
+                <span>Vacancy List</span>
+            </a>
+            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
+                <span>Create Vacancy Wizard</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
+            <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users-gear text-white/40 w-4 text-center"></i>
+                <span>Worker Pool</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p>
+            <a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-user text-white/40 w-4 text-center"></i>
+                <span>Agency Dashboard</span>
+            </a>
+            <a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-circle-check text-white/40 w-4 text-center"></i>
+                <span>Approved Suppliers</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p>
+            <a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center"></i>
+                <span>AWR Tracking</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p>
+            <a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clock text-white/40 w-4 text-center"></i>
+                <span>Timesheets</span>
+            </a>
+            <a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center"></i>
+                <span>Invoicing / Self-Bill</span>
+            </a>
+            <a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-bar text-white/40 w-4 text-center"></i>
+                <span>Abstract Backing Report</span>
+            </a>
+            <a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sterling-sign text-white/40 w-4 text-center"></i>
+                <span>Rate Cards</span>
+            </a>
+            <a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-line text-white/40 w-4 text-center"></i>
+                <span>Reports</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p>
+            <a id="nav-onboard-client" href="abstract.onboarding.onboard-client.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-circle-arrow-right text-white/40 w-4 text-center"></i>
+                <span>Onboard Client</span>
+            </a>
+            <a id="nav-onboard-agency" href="abstract.onboarding.onboard-agency.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-tie text-white/40 w-4 text-center"></i>
+                <span>Onboard Agency</span>
+            </a>
+            <a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sliders text-white/40 w-4 text-center"></i>
+                <span>Configuration</span>
+            </a>
+            <a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-gears text-white/40 w-4 text-center"></i>
+                <span>System Configuration</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p>
+            <a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users text-white/40 w-4 text-center"></i>
+                <span>Users</span>
+            </a>
+            <a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-shield text-white/40 w-4 text-center"></i>
+                <span>Roles</span>
+            </a>
+            <a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);" aria-current="page">
+                <i class="fa-solid fa-envelope-open-text text-blue-400 w-4 text-center"></i>
+                <span>Notification templates</span>
+                <div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p>
+            <a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sitemap text-white/40 w-4 text-center"></i>
+                <span>Organisations</span>
+            </a>
+            <a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-lock text-white/40 w-4 text-center"></i>
+                <span>Data subject requests</span>
+            </a>
+            <a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center"></i>
+                <span>Audit Log</span>
+            </a>
+
+        </nav>
+
+        <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
+            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border border-white/20 flex-shrink-0" alt="avatar"/>
+                <div class="flex-1 min-w-0">
+                    <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
+                    <p class="text-white/40 text-xs truncate">Abstract Admin</p>
+                </div>
+                <a href="abstract.identity-access.sign-in.html?reason=signed-out" title="Sign out" aria-label="Sign out" class="w-9 h-9 flex items-center justify-center rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white"></i></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <header id="header" class="flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
+            <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-bars text-slate-600 text-sm"></i></button>
+                <div class="min-w-0">
+                    <h1 id="page-h1" class="text-lg font-bold text-slate-900 truncate">Notification templates</h1>
+                    <p id="page-sub" class="text-xs text-slate-500 hidden sm:block truncate">The emails and in-app messages this system sends</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+
+                <button type="button" data-s1-bell aria-label="Notifications" class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-regular fa-bell text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <a href="abstract.identity-access.my-account.html" class="flex items-center gap-2 pl-2 border-l border-slate-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2" aria-label="My account — Sarah Mitchell">
+                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border-2 border-blue-100" alt=""/>
+                    <div class="hidden xl:block"><p class="text-xs font-semibold text-slate-700" data-me-name>Sarah Mitchell</p><p class="text-xs text-slate-500">Abstract</p></div>
+                </a>
+            </div>
+        </header>
+
+        <main id="main" class="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-8 py-6 bg-slate-100">
+
+            <!-- ===== LIST ===== -->
+            <div id="view-list" data-s1-hide="loading error denied">
+                <p class="text-sm text-slate-600 mb-5 max-w-3xl">The emails and in-app messages this system sends. You can change their wording; the set of templates is fixed. Every save creates a new version, and each message keeps the wording it was sent with.</p>
+                <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-slate-50"><tr class="text-left">
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider pl-5">Template</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Channel</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Subject</th>
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Version</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider pr-5">Updated</th>
+                            </tr></thead>
+                            <tbody id="list-body" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                    <ul id="list-cards" class="md:hidden divide-y divide-slate-100"></ul>
+                </section>
+            </div>
+
+            <!-- ===== EDITOR ===== -->
+            <div id="view-edit" class="hidden" data-s1-hide="loading error denied">
+                <nav aria-label="Breadcrumb" class="text-xs text-slate-500 mb-4 flex flex-wrap items-center gap-1.5">
+                    <a href="abstract.notifications.notification-templates.html" id="back-list" class="hover:text-blue-700 hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-chevron-left text-[9px] mr-1" aria-hidden="true"></i>Notification templates</a>
+                    <i class="fa-solid fa-chevron-right text-[9px] text-slate-400" aria-hidden="true"></i>
+                    <span id="bc-leaf" class="font-semibold text-slate-700" aria-current="page"></span>
+                </nav>
+
+                <div class="flex flex-col sm:flex-row sm:items-start gap-3 mb-5">
+                    <div class="flex-1 min-w-0">
+                        <h2 id="ed-name" class="text-xl font-bold text-slate-900"></h2>
+                        <p class="text-xs text-slate-500 mt-1 flex flex-wrap gap-2 items-center"><code id="ed-key" class="font-mono text-slate-700 bg-slate-100 border border-slate-200 rounded px-1.5 py-0.5"></code><span aria-hidden="true">·</span><span id="ed-channel"></span><span aria-hidden="true">·</span><span id="ed-ver"></span></p>
+                    </div>
+                    <button type="button" id="save-ver" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg text-white text-sm font-semibold hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 w-full sm:w-auto" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);"><i class="fa-solid fa-floppy-disk text-xs" aria-hidden="true"></i> Save new version</button>
+                </div>
+
+                <div id="val-banner" class="hidden rounded-xl border border-red-200 bg-red-50 px-4 py-3 mb-5 flex items-start gap-3 text-sm text-red-800" role="alert">
+                    <i class="fa-solid fa-circle-exclamation mt-0.5" aria-hidden="true"></i><div id="val-text"></div>
+                </div>
+
+                <!-- mobile Edit / Preview tabs -->
+                <div role="tablist" aria-label="Editor view" class="md:hidden grid grid-cols-2 gap-1 p-1 mb-4 rounded-xl bg-slate-200/60">
+                    <button role="tab" id="tab-edit" aria-selected="true" class="py-2 rounded-lg text-sm font-semibold bg-white text-slate-900 shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">Edit</button>
+                    <button role="tab" id="tab-prev" aria-selected="false" class="py-2 rounded-lg text-sm font-semibold text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">Preview</button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- edit pane -->
+                    <section id="pane-edit" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col gap-5 min-w-0" aria-label="Edit template">
+                        <div>
+                            <label for="f-subject" class="block text-xs font-semibold text-slate-700 mb-1.5" id="subject-l">Subject</label>
+                            <input id="f-subject" type="text" maxlength="150" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-600/20" aria-describedby="subj-err"/>
+                            <p id="subj-err" class="hidden text-xs font-medium text-red-600 mt-1.5"><i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i><span></span></p>
+                        </div>
+                        <div>
+                            <label for="f-body" class="block text-xs font-semibold text-slate-700 mb-1.5">Body</label>
+                            <div class="relative rounded-lg bg-slate-50" id="body-wrap">
+                                <div id="body-hl" aria-hidden="true" class="absolute inset-0 px-3 py-2.5 text-sm leading-6 text-transparent whitespace-pre-wrap break-words overflow-hidden border border-transparent rounded-lg pointer-events-none" style="font-family:Inter,sans-serif"></div>
+                                <textarea id="f-body" rows="11" spellcheck="true" aria-describedby="body-help unknown-list" class="relative block w-full px-3 py-2.5 text-sm leading-6 text-slate-800 bg-transparent border border-slate-200 rounded-lg resize-y focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-600/20" style="font-family:Inter,sans-serif"></textarea>
+                            </div>
+                            <p id="body-help" class="text-xs text-slate-500 mt-1.5">Plain text with simple formatting. A line holding only a link variable becomes a button.</p>
+                            <p id="unknown-list" class="hidden text-xs font-medium text-amber-800 mt-1.5" role="status"></p>
+                        </div>
+                        <div>
+                            <p class="block text-xs font-semibold text-slate-700 mb-1.5">Insert a variable</p>
+                            <div id="chips" class="flex flex-wrap gap-2"></div>
+                            <p class="text-xs text-slate-500 mt-2">Only these variables can be filled in for this template. Click one to insert it where your cursor is.</p>
+                        </div>
+                    </section>
+
+                    <!-- preview pane -->
+                    <section id="pane-prev" class="hidden md:flex flex-col gap-4 min-w-0" aria-label="Preview">
+                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                            <div class="px-5 py-3 border-b border-slate-100 flex items-center justify-between gap-2">
+                                <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Preview</h3>
+                                <span id="prev-tag" class="text-xs text-slate-500">Your draft</span>
+                            </div>
+                            <div id="prev-hist" class="hidden px-5 py-2.5 bg-amber-50 border-b border-amber-200 text-xs text-amber-800 flex items-center justify-between gap-2">
+                                <span><i class="fa-solid fa-clock-rotate-left mr-1" aria-hidden="true"></i><span id="prev-hist-t"></span> — read-only</span>
+                                <button type="button" id="prev-back" class="font-semibold underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">Back to your draft</button>
+                            </div>
+                            <div class="p-5 bg-slate-50">
+                                <div class="bg-white rounded-xl border border-slate-200 p-5">
+                                    <p id="prev-subject" class="text-base font-bold text-slate-900 break-words"></p>
+                                    <div class="h-px bg-slate-200 my-3"></div>
+                                    <div id="prev-body" class="text-sm text-slate-700 leading-relaxed break-words"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+                            <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Sample values</h3>
+                            <p class="text-xs text-slate-500 mt-1 mb-3">Try a long organisation name to see how the message wraps. These aren't saved.</p>
+                            <div id="samples" class="flex flex-col gap-2"></div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- version history -->
+                <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mt-6" aria-labelledby="vh-t">
+                    <div class="px-5 py-4 border-b border-slate-100">
+                        <h3 id="vh-t" class="text-sm font-bold text-slate-900">Version history</h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Earlier versions are read-only. View one to see it in the preview; your draft stays as it is.</p>
+                    </div>
+                    <ul id="vh" class="divide-y divide-slate-100"></ul>
+                </section>
+            </div>
+
+            <!-- STATE: loading (skeleton rows) -->
+            <section data-s1-show="loading" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" aria-busy="true" aria-label="Loading">
+                <div class="px-5 py-4 border-b border-slate-100"><div class="h-4 w-48 rounded bg-slate-200 animate-pulse"></div></div>
+                <div class="divide-y divide-slate-100">
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-40 rounded bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div></div>
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-40 rounded bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div></div>
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-40 rounded bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div></div>
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-40 rounded bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div></div>
+                </div>
+            </section>
+
+            <!-- STATE: error (ErrorState) -->
+            <section data-s1-show="error" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto mt-4" role="alert">
+                <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 mx-auto flex items-center justify-center mb-4"><i class="fa-solid fa-triangle-exclamation text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-xl font-bold text-slate-900">We couldn't load the notification templates.</h2>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">Nothing has been changed. Try again, and if it keeps happening, quote this reference to Abstract support.</p>
+                <p class="mt-3 inline-flex items-center gap-2 rounded-lg bg-slate-50 border border-slate-200 px-3 py-1.5 font-mono text-xs text-slate-700">REF 7F3K-29QD</p>
+                <div class="mt-6"><button type="button" onclick="S1.setState('default')" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-rotate-right text-xs" aria-hidden="true"></i> Retry</button></div>
+            </section>
+
+            <!-- STATE: permission denied (403 inside the portal frame) -->
+            <section data-s1-show="denied" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto mt-4" aria-labelledby="denied-t">
+                <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 mx-auto flex items-center justify-center mb-4"><i class="fa-solid fa-lock text-xl" aria-hidden="true"></i></div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Error 403 · No permission</p>
+                <h2 id="denied-t" class="text-xl font-bold text-slate-900 mt-1">You don't have access to this page.</h2>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">Ask your administrator if you need it.</p>
+                <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="abstract.shell.dashboard.html" data-s1-home class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-house text-xs" aria-hidden="true"></i> Back to dashboard</a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<script>
+/* Mobile navigation (sidebar is hidden below lg — this is the only way to reveal it) */
+(function () {
+  var btn = document.getElementById('mobile-menu-btn'),
+      sb  = document.getElementById('sidebar');
+  if (!btn || !sb) return;
+  btn.setAttribute('aria-controls', 'sidebar');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-label', 'Open navigation');
+  var bd = document.createElement('div');
+  bd.setAttribute('aria-hidden', 'true');
+  bd.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:40;display:none';
+  document.body.appendChild(bd);
+  function open() {
+    sb.style.display = 'flex'; sb.style.position = 'fixed'; sb.style.top = '0';
+    sb.style.bottom = '0'; sb.style.left = '0'; sb.style.zIndex = '50';
+    bd.style.display = 'block'; btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    ['display','position','top','bottom','left','zIndex'].forEach(function (p) { sb.style[p] = ''; });
+    bd.style.display = 'none'; btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', function () { bd.style.display === 'block' ? close() : open(); });
+  bd.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bd.style.display === 'block') close(); });
+  window.addEventListener('resize', function () { if (window.innerWidth >= 1024) close(); });
+})();
+
+</script>
+<script>
+
+var TODAY = '26 Sep 2026';
+var TPL = {
+  'user.activation': { name: 'Account activation', channel: 'Email', vars: ['userName', 'organisationName', 'activationUrl', 'expiresAt'],
+    versions: [
+      { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'Your Abstract VMS account', body: 'Hello {{userName}},\n\n{{organisationName}} has created an Abstract VMS account for you. Set your password to activate it.\n\n{{activationUrl}}\n\nThis link can be used once and expires on {{expiresAt}}.' },
+      { v: 2, by: 'Sarah Mitchell', at: '4 Sep 2026, 11:02', subject: 'Activate your Abstract VMS account', body: 'Hello {{userName}},\n\n{{organisationName}} has invited you to Abstract VMS. Choose your password to activate your account.\n\n{{activationUrl}}\n\nThis link works once and expires on {{expiresAt}}. If it has expired, ask your administrator to send a new one.\n\nWe will never email you a password.' } ] },
+  'user.password_reset': { name: 'Password reset', channel: 'Email', vars: ['userName', 'resetUrl', 'expiresAt'],
+    versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'Reset your Abstract VMS password', body: 'Hello {{userName}},\n\nWe received a request to reset your Abstract VMS password.\n\n{{resetUrl}}\n\nThis link works once and expires at {{expiresAt}}. If you didn\'t ask for this, you can ignore this email; your password hasn\'t changed.' } ] },
+  'audit.export_ready': { name: 'Audit-log export ready', channel: 'In-app', vars: ['userName', 'fileName', 'rowCount', 'downloadUrl', 'availableUntil'],
+    versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'Your audit-log export is ready', body: '{{fileName}} — {{rowCount}} rows.\n\n{{downloadUrl}}\n\nThe download link lasts until {{availableUntil}}.' } ] },
+  'dsar.package_ready': { name: 'Personal-data package ready', channel: 'In-app', vars: ['userName', 'subjectName', 'organisationName', 'downloadUrl', 'availableUntil'],
+    versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'The personal-data package you requested is ready', body: 'The package for {{subjectName}} ({{organisationName}}) is ready.\n\n{{downloadUrl}}\n\nIt contains personal data. The download link lasts until {{availableUntil}}.' } ] }
+};
+var SAMPLES = { userName: 'Sarah Mitchell', organisationName: 'Acme Logistics', activationUrl: 'https://vms.example/activate/…', resetUrl: 'https://vms.example/reset/…',
+  expiresAt: '29 Sep 2026, 14:20', fileName: 'audit-log-2026-09-01-to-2026-09-26.csv', rowCount: '4,812', downloadUrl: 'https://vms.example/download/…',
+  availableUntil: '3 Oct 2026', subjectName: 'Priya Natarajan' };
+var BTN = { activationUrl: 'Activate my account', resetUrl: 'Set a new password', downloadUrl: 'Download' };
+var ORDER = ['user.activation', 'user.password_reset', 'audit.export_ready', 'dsar.package_ready'];
+var cur = null, viewing = null;
+function latest(t) { return t.versions[t.versions.length - 1]; }
+function tokens(s) { var r = [], m, re = /\{\{\s*([^}]*?)\s*\}\}/g; while ((m = re.exec(s))) r.push(m[1]); return r; }
+function unknown() { var t = TPL[cur]; var all = tokens(document.getElementById('f-subject').value).concat(tokens(document.getElementById('f-body').value));
+  return all.filter(function (x, i) { return t.vars.indexOf(x) < 0 && all.indexOf(x) === i; }); }
+
+function renderList() {
+  var rows = '', cards = '';
+  ORDER.forEach(function (k) {
+    var t = TPL[k], l = latest(t), def = t.versions.length === 1;
+    var mk = def ? ' <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-slate-100 text-slate-700 border border-slate-200 ml-1">Default</span>' : '';
+    var href = 'abstract.notifications.notification-templates.html?t=' + k;
+    rows += '<tr class="hover:bg-slate-50/60"><td class="px-4 pl-5 py-3.5"><a href="' + href + '" data-open="' + k + '" class="font-semibold text-slate-900 hover:text-blue-700 hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">' + t.name + '</a>' + mk + '<span class="block font-mono text-xs text-slate-400 mt-0.5">' + k + '</span></td>' +
+      '<td class="px-4 py-3.5 text-slate-600"><i class="fa-solid ' + (t.channel === 'Email' ? 'fa-envelope' : 'fa-bell') + ' text-slate-400 mr-1.5" aria-hidden="true"></i>' + t.channel + '</td>' +
+      '<td class="px-4 py-3.5 text-slate-600 max-w-[280px] truncate" title="' + S1.esc(l.subject) + '">' + S1.esc(l.subject) + '</td><td class="px-4 py-3.5 font-semibold tabular-nums text-slate-800">v' + l.v + '</td><td class="px-4 pr-5 py-3.5 text-slate-500 whitespace-nowrap">' + (def ? '—' : l.at.split(',')[0]) + '</td></tr>';
+    cards += '<li><a href="' + href + '" data-open="' + k + '" class="block px-5 py-4 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600"><div class="flex items-center justify-between gap-2"><span class="font-semibold text-slate-900">' + t.name + '</span><span class="text-xs font-semibold text-slate-600">v' + l.v + '</span></div><p class="text-sm text-slate-600 mt-1 truncate">' + S1.esc(l.subject) + '</p><p class="text-xs text-slate-500 mt-1">' + t.channel + (def ? ' · Default' : ' · updated ' + l.at.split(',')[0]) + '</p></a></li>';
+  });
+  document.getElementById('list-body').innerHTML = rows; document.getElementById('list-cards').innerHTML = cards;
+  document.querySelectorAll('[data-open]').forEach(function (a) { a.onclick = function (e) { e.preventDefault(); openEditor(a.dataset.open, true); }; });
+}
+function renderPreviewFrom(subject, body) {
+  var t = TPL[cur];
+  function fill(s, html) {
+    return S1.esc(s).replace(/\{\{\s*([^}]*?)\s*\}\}/g, function (m0, n) {
+      if (t.vars.indexOf(n) < 0) return '<mark class="bg-red-100 text-red-800 rounded px-0.5">{{' + S1.esc(n) + '}}</mark>';
+      return '<span class="bg-blue-50 rounded">' + S1.esc(SAMPLES[n] || '') + '</span>';
+    });
+  }
+  document.getElementById('prev-subject').innerHTML = fill(subject);
+  document.getElementById('prev-body').innerHTML = body.split(/\n\n+/).map(function (para) {
+    var m = /^\s*\{\{\s*(\w+)\s*\}\}\s*$/.exec(para);
+    if (m && BTN[m[1]] && t.vars.indexOf(m[1]) >= 0) return '<p class="my-3"><span class="inline-flex items-center px-4 py-2 rounded-lg text-white text-sm font-semibold" style="background:#1D4ED8">' + BTN[m[1]] + '</span></p>';
+    return '<p class="my-2">' + fill(para).replace(/\n/g, '<br>') + '</p>';
+  }).join('');
+}
+function renderPreview() {
+  if (viewing) { var v = TPL[cur].versions[viewing - 1]; renderPreviewFrom(v.subject, v.body); return; }
+  renderPreviewFrom(document.getElementById('f-subject').value, document.getElementById('f-body').value);
+}
+function highlight() {
+  var t = TPL[cur], ta = document.getElementById('f-body'), hl = document.getElementById('body-hl');
+  hl.innerHTML = S1.esc(ta.value).replace(/\{\{\s*([^}]*?)\s*\}\}/g, function (m0, n) {
+    return t.vars.indexOf(n) < 0 ? '<mark style="background:#fee2e2;color:transparent;border-radius:3px;box-shadow:0 2px 0 #dc2626">' + m0 + '</mark>' : '<mark style="background:#dbeafe;color:transparent;border-radius:3px">' + m0 + '</mark>';
+  }) + '\n';
+  hl.scrollTop = ta.scrollTop;
+  var u = unknown(), ul = document.getElementById('unknown-list');
+  if (u.length) { ul.classList.remove('hidden'); ul.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1" aria-hidden="true"></i>' + u.map(function (x) { return '<code class="font-mono">{{' + S1.esc(x) + '}}</code>'; }).join(', ') + (u.length === 1 ? ' isn\'t' : ' aren\'t') + ' a variable this template can fill. It will block saving.'; }
+  else ul.classList.add('hidden');
+}
+function renderHistory() {
+  var t = TPL[cur], n = t.versions.length;
+  document.getElementById('vh').innerHTML = t.versions.slice().reverse().map(function (v) {
+    var isCur = v.v === n;
+    return '<li class="px-5 py-3 flex flex-wrap items-center gap-x-3 gap-y-1"><span class="text-sm font-bold text-slate-900 tabular-nums">v' + v.v + '</span>' +
+      (isCur ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-check text-[10px]" aria-hidden="true"></i>In force</span>' : '') +
+      '<span class="text-sm text-slate-600">' + S1.esc(v.by) + ' · ' + v.at + '</span>' +
+      '<button type="button" data-view="' + v.v + '" class="ml-auto inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg border border-slate-200 text-xs font-semibold text-slate-700 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600' + (viewing === v.v ? ' bg-amber-50 border-amber-200' : '') + '" aria-label="View version ' + v.v + '"><i class="fa-regular fa-eye" aria-hidden="true"></i> View</button></li>';
+  }).join('');
+  document.querySelectorAll('[data-view]').forEach(function (b) { b.onclick = function () { viewVersion(+b.dataset.view); }; });
+}
+function viewVersion(n) {
+  viewing = n; var t = TPL[cur];
+  document.getElementById('prev-hist').classList.remove('hidden');
+  document.getElementById('prev-hist-t').textContent = 'Showing v' + n + ' (' + t.versions[n - 1].at + ')';
+  document.getElementById('prev-tag').textContent = 'Version ' + n;
+  renderPreview(); renderHistory(); showPane('prev');
+}
+function backToDraft() { viewing = null; document.getElementById('prev-hist').classList.add('hidden'); document.getElementById('prev-tag').textContent = 'Your draft'; renderPreview(); renderHistory(); }
+function showPane(which) {
+  var e = document.getElementById('pane-edit'), p = document.getElementById('pane-prev');
+  var mob = window.innerWidth < 768;
+  document.getElementById('tab-edit').setAttribute('aria-selected', which === 'edit');
+  document.getElementById('tab-prev').setAttribute('aria-selected', which === 'prev');
+  document.getElementById('tab-edit').className = document.getElementById('tab-edit').className.replace(/ ?bg-white text-slate-900 shadow-sm| ?text-slate-600/g, '') + (which === 'edit' ? ' bg-white text-slate-900 shadow-sm' : ' text-slate-600');
+  document.getElementById('tab-prev').className = document.getElementById('tab-prev').className.replace(/ ?bg-white text-slate-900 shadow-sm| ?text-slate-600/g, '') + (which === 'prev' ? ' bg-white text-slate-900 shadow-sm' : ' text-slate-600');
+  if (!mob) return;
+  e.classList.toggle('hidden', which !== 'edit'); p.classList.toggle('hidden', which !== 'prev'); p.classList.toggle('flex', which === 'prev');
+}
+function setErr(msgHtml) {
+  var b = document.getElementById('val-banner');
+  if (msgHtml) { document.getElementById('val-text').innerHTML = msgHtml; b.classList.remove('hidden'); } else b.classList.add('hidden');
+}
+function openEditor(k, push) {
+  cur = k; viewing = null; var t = TPL[k], l = latest(t);
+  document.getElementById('view-list').classList.add('hidden');
+  document.getElementById('view-edit').classList.remove('hidden');
+  document.getElementById('bc-leaf').textContent = t.name;
+  document.getElementById('ed-name').textContent = t.name;
+  document.getElementById('ed-key').textContent = k;
+  document.getElementById('ed-channel').textContent = t.channel === 'Email' ? 'Email' : 'In-app notification';
+  document.getElementById('subject-l').textContent = t.channel === 'Email' ? 'Subject' : 'Title';
+  document.getElementById('ed-ver').textContent = 'v' + l.v + ' in force' + (t.versions.length === 1 ? ' · Default' : '');
+  document.getElementById('page-h1').textContent = t.name;
+  document.getElementById('page-sub').textContent = 'Notification template · ' + t.channel;
+  document.title = t.name + ' — notification template · Abstract VMS';
+  document.getElementById('f-subject').value = l.subject;
+  document.getElementById('f-body').value = l.body;
+  document.getElementById('chips').innerHTML = t.vars.map(function (v) { return '<button type="button" data-ins="' + v + '" class="inline-flex items-center gap-1 px-2.5 py-1.5 min-h-[36px] rounded-lg bg-blue-50 border border-blue-200 text-xs font-mono font-semibold text-blue-800 hover:bg-blue-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" aria-label="Insert ' + v + '"><i class="fa-solid fa-plus text-[9px]" aria-hidden="true"></i>' + v + '</button>'; }).join('');
+  document.querySelectorAll('[data-ins]').forEach(function (b) { b.onmousedown = function (e) { e.preventDefault(); }; b.onclick = function () { insert('{{' + b.dataset.ins + '}}'); }; });
+  document.getElementById('samples').innerHTML = t.vars.map(function (v) { return '<label class="grid grid-cols-[130px_1fr] items-center gap-2"><span class="font-mono text-xs text-slate-600 truncate">' + v + '</span><input data-sample="' + v + '" value="' + S1.esc(SAMPLES[v] || '') + '" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:bg-white focus:border-blue-400"/></label>'; }).join('');
+  document.querySelectorAll('[data-sample]').forEach(function (i) { i.oninput = function () { SAMPLES[i.dataset.sample] = i.value; renderPreview(); }; });
+  document.getElementById('prev-hist').classList.add('hidden'); document.getElementById('prev-tag').textContent = 'Your draft';
+  setErr(null); subjErr(null);
+  highlight(); renderPreview(); renderHistory(); showPane('edit');
+  if (push) try { history.pushState({ t: k }, '', '?t=' + k); } catch (e) {}
+}
+function openList(push) {
+  cur = null; document.getElementById('view-edit').classList.add('hidden'); document.getElementById('view-list').classList.remove('hidden');
+  document.getElementById('page-h1').textContent = 'Notification templates';
+  document.getElementById('page-sub').textContent = 'The emails and in-app messages this system sends';
+  document.title = 'Notification templates · Abstract VMS';
+  renderList(); if (push) try { history.pushState({}, '', location.pathname); } catch (e) {}
+}
+function insert(txt) {
+  var ta = document.getElementById('f-body'), s = ta.selectionStart, e = ta.selectionEnd;
+  ta.value = ta.value.slice(0, s) + txt + ta.value.slice(e); ta.focus(); ta.selectionStart = ta.selectionEnd = s + txt.length;
+  highlight(); renderPreview();
+}
+function subjErr(m) { var e = document.getElementById('subj-err'), i = document.getElementById('f-subject');
+  if (m) { e.querySelector('span').textContent = m; e.classList.remove('hidden'); i.classList.add('border-red-500'); i.setAttribute('aria-invalid', 'true'); }
+  else { e.classList.add('hidden'); i.classList.remove('border-red-500'); i.removeAttribute('aria-invalid'); } }
+function save() {
+  var t = TPL[cur], subj = document.getElementById('f-subject').value.trim(), body = document.getElementById('f-body').value.trim(), u = unknown();
+  var ta = document.getElementById('f-body');
+  subjErr(subj ? null : (t.channel === 'Email' ? 'Enter a subject.' : 'Enter a title.'));
+  if (u.length || !subj || !body) {
+    var msg = '<p class="font-semibold">This version wasn\'t saved.</p>';
+    if (u.length) msg += '<p class="mt-1">It uses ' + u.map(function (x) { return '<code class="font-mono">{{' + S1.esc(x) + '}}</code>'; }).join(', ') + ', which ' + (u.length === 1 ? 'isn\'t a variable' : 'aren\'t variables') + ' this template can fill. The variables for ' + t.name + ' are: ' + t.vars.map(function (v) { return '<code class="font-mono">' + v + '</code>'; }).join(', ') + '.</p>';
+    if (!body) msg += '<p class="mt-1">The body is empty.</p>';
+    if (!subj) msg += '<p class="mt-1">The ' + (t.channel === 'Email' ? 'subject' : 'title') + ' is empty.</p>';
+    setErr(msg);
+    ta.classList.toggle('border-red-500', !!u.length || !body);
+    showPane('edit'); (subj ? ta : document.getElementById('f-subject')).focus();
+    return;
+  }
+  setErr(null); ta.classList.remove('border-red-500');
+  var l = latest(t);
+  if (subj === l.subject && body === l.body) { S1.toast('Nothing has changed since v' + l.v + '.', 'info'); return; }
+  S1.confirm({ title: 'Save as version ' + (l.v + 1) + '?', icon: 'fa-floppy-disk',
+    body: t.name + ' ' + (t.channel === 'Email' ? 'emails' : 'notifications') + ' sent from now on use this wording. Messages already sent keep the wording they were sent with. v' + l.v + ' stays in the history.',
+    cta: 'Save new version',
+    onConfirm: function () {
+      t.versions.push({ v: l.v + 1, by: 'Sarah Mitchell', at: TODAY + ', ' + new Date().toTimeString().slice(0, 5), subject: subj, body: body });
+      document.getElementById('ed-ver').textContent = 'v' + (l.v + 1) + ' in force';
+      renderHistory(); S1.toast('Version ' + (l.v + 1) + ' of ' + S1.esc(t.name) + ' saved. It applies to messages sent from now on.', 'success');
+      if (document.body.getAttribute('data-s1-state') === 'validation') S1.setState('default');
+    } });
+}
+document.addEventListener('s1:state', function (e) {
+  if (e.detail.state === 'validation') {
+    openEditor('user.activation', false);
+    var ta = document.getElementById('f-body');
+    ta.value = ta.value.replace('Hello {{userName}},', 'Hello {{userName}},\n\nYour sign-in is {{userEmail}}.');
+    highlight(); renderPreview(); save();
+  } else if (e.detail.state === 'default' && cur) { setErr(null); }
+});
+document.addEventListener('s1:ready', function () {
+  var q = new URLSearchParams(location.search);
+  if (document.body.getAttribute('data-s1-state') !== 'validation') { if (TPL[q.get('t')]) openEditor(q.get('t'), false); else openList(false); }
+  else renderList();
+  document.getElementById('back-list').onclick = function (e) { e.preventDefault(); openList(true); };
+  window.addEventListener('popstate', function () { var k = new URLSearchParams(location.search).get('t'); if (TPL[k]) openEditor(k, false); else openList(false); });
+  var ta = document.getElementById('f-body');
+  ta.addEventListener('input', function () { highlight(); if (viewing) backToDraft(); else renderPreview(); });
+  ta.addEventListener('scroll', function () { document.getElementById('body-hl').scrollTop = ta.scrollTop; });
+  document.getElementById('f-subject').addEventListener('input', function () { highlight(); renderPreview(); if (this.value.trim()) subjErr(null); });
+  document.getElementById('save-ver').onclick = save;
+  document.getElementById('prev-back').onclick = backToDraft;
+  document.getElementById('tab-edit').onclick = function () { showPane('edit'); };
+  document.getElementById('tab-prev').onclick = function () { showPane('prev'); };
+  window.addEventListener('resize', function () { if (window.innerWidth >= 768) { document.getElementById('pane-edit').classList.remove('hidden'); document.getElementById('pane-prev').classList.add('hidden'); } });
+});
+
+</script>
+
+<script src="slice1-kit.js"></script>
+</body>
+</html>

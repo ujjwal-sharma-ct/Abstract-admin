@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users · Settings · Abstract VMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }</style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'], },
+                    colors: {
+                        navy: { DEFAULT: '#172554', 50: '#EEF1FB', 100: '#D4DCF5', 200: '#A9B9EB', 300: '#7E96E1', 400: '#5373D7', 500: '#2850CD', 600: '#1D3FA4', 700: '#162F7B', 800: '#0F1F52', 900: '#172554', },
+                        brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554', }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default loading empty error validation denied large">
+
+<div id="app-root" class="flex w-full" style="height: 100vh;">
+
+    <!-- Sidebar (shell copied from abstract.audit.audit-log.html) -->
+        <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
+        <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
+            <img src="logo.png" alt="Abstract VMS" class="h-12 w-auto block -ml-[5px]"/>
+            <p class="text-white/40 text-sm mt-2">Admin Portal</p>
+        </div>
+
+        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1">
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p>
+            <a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-gauge-high text-white/40 w-4 text-center"></i>
+                <span>Admin Dashboard</span>
+            </a>
+            <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
+                <span>Vacancy List</span>
+            </a>
+            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
+                <span>Create Vacancy Wizard</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
+            <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users-gear text-white/40 w-4 text-center"></i>
+                <span>Worker Pool</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p>
+            <a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-user text-white/40 w-4 text-center"></i>
+                <span>Agency Dashboard</span>
+            </a>
+            <a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-circle-check text-white/40 w-4 text-center"></i>
+                <span>Approved Suppliers</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p>
+            <a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center"></i>
+                <span>AWR Tracking</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p>
+            <a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clock text-white/40 w-4 text-center"></i>
+                <span>Timesheets</span>
+            </a>
+            <a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center"></i>
+                <span>Invoicing / Self-Bill</span>
+            </a>
+            <a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-bar text-white/40 w-4 text-center"></i>
+                <span>Abstract Backing Report</span>
+            </a>
+            <a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sterling-sign text-white/40 w-4 text-center"></i>
+                <span>Rate Cards</span>
+            </a>
+            <a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-line text-white/40 w-4 text-center"></i>
+                <span>Reports</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p>
+            <a id="nav-onboard-client" href="abstract.onboarding.onboard-client.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-circle-arrow-right text-white/40 w-4 text-center"></i>
+                <span>Onboard Client</span>
+            </a>
+            <a id="nav-onboard-agency" href="abstract.onboarding.onboard-agency.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-tie text-white/40 w-4 text-center"></i>
+                <span>Onboard Agency</span>
+            </a>
+            <a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sliders text-white/40 w-4 text-center"></i>
+                <span>Configuration</span>
+            </a>
+            <a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-gears text-white/40 w-4 text-center"></i>
+                <span>System Configuration</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p>
+            <a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);" aria-current="page">
+                <i class="fa-solid fa-users text-blue-400 w-4 text-center"></i>
+                <span>Users</span>
+                <div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+            </a>
+            <a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-shield text-white/40 w-4 text-center"></i>
+                <span>Roles</span>
+            </a>
+            <a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center"></i>
+                <span>Notification templates</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p>
+            <a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sitemap text-white/40 w-4 text-center"></i>
+                <span>Organisations</span>
+            </a>
+            <a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-lock text-white/40 w-4 text-center"></i>
+                <span>Data subject requests</span>
+            </a>
+            <a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center"></i>
+                <span>Audit Log</span>
+            </a>
+
+        </nav>
+
+        <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
+            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border border-white/20 flex-shrink-0" alt="avatar"/>
+                <div class="flex-1 min-w-0">
+                    <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
+                    <p class="text-white/40 text-xs truncate">Abstract Admin</p>
+                </div>
+                <a href="abstract.identity-access.sign-in.html" title="Logout"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white"></i></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+        <header id="header" class="flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
+            <div class="flex items-center gap-3 min-w-0">
+                <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-bars text-slate-600 text-sm"></i></button>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h1 class="text-lg font-bold text-slate-900 truncate">Users</h1>
+                        <span id="ctx-marker" style="display:none" class="inline-flex items-center gap-1.5 max-w-full whitespace-nowrap overflow-hidden px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200" title="You are working inside another organisation"><i class="fa-solid fa-building-user text-[10px]" aria-hidden="true"></i>Administering<span data-org-name class="truncate"></span></span>
+                    </div>
+                    <p class="text-xs text-slate-500 hidden sm:block truncate">People who can sign in for <span data-org-name>Abstract</span>, their roles and status</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 flex-shrink-0">
+                <button data-s1-bell aria-label="Notifications" class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-regular fa-bell text-slate-600 text-sm"></i></button>
+                <a href="abstract.identity-access.my-account.html" aria-label="My account (Sarah Mitchell)" class="flex items-center gap-2 pl-3 border-l border-slate-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">
+                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border-2 border-blue-100" alt=""/>
+                    <div class="hidden xl:block"><p class="text-xs font-semibold text-slate-700">Sarah Mitchell</p><p class="text-xs text-slate-400">Abstract Admin</p></div>
+                </a>
+            </div>
+        </header>
+
+        <main id="main" class="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-8 py-6 bg-slate-100">
+
+            <!-- "Administering <Organisation>" context banner (A2 part 2): shown whenever ?org= is present -->
+            <div id="ctx-banner" style="display:none" role="region" aria-label="Organisation you are administering" class="mb-5 rounded-xl border-2 border-blue-300 bg-blue-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
+                <div class="flex items-start gap-3 flex-1 min-w-0">
+                    <div class="w-9 h-9 rounded-lg bg-blue-700 text-white flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-building-user" aria-hidden="true"></i></div>
+                    <div class="min-w-0">
+                        <p class="text-sm font-bold text-blue-900">You are administering <span data-org-name></span> — changes are made on their behalf and audited as you.</p>
+                        <p class="text-xs text-blue-800 mt-0.5"><span id="ctx-party"></span><span id="ctx-status"></span></p>
+                    </div>
+                </div>
+                <a href="abstract.organisations.organisations.html" class="inline-flex items-center justify-center gap-2 bg-white border border-blue-300 text-blue-800 hover:bg-blue-100 rounded-lg px-3 py-2 text-xs font-semibold min-h-[38px] flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to Abstract <span class="sr-only">(stop administering this organisation)</span></a>
+            </div>
+
+            <nav aria-label="Users and roles" class="flex items-center gap-6 border-b border-slate-200 mb-5 overflow-x-auto whitespace-nowrap">
+                <a href="abstract.identity-access.users.html" data-keep-org aria-current="page" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-blue-700 text-sm font-semibold text-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-users text-xs" aria-hidden="true"></i>Users</a>
+                <a href="abstract.identity-access.roles.html" data-keep-org class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-user-shield text-xs" aria-hidden="true"></i>Roles</a>
+                <a href="abstract.identity-access.permission-matrix.html" data-keep-org class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-table-cells text-xs" aria-hidden="true"></i>Permissions</a>
+            </nav>
+            <div data-s1-hide="denied">
+                <!-- Filter bar + primary action -->
+                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-4">
+                    <div class="flex flex-wrap items-center gap-3">
+                        <label class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px] focus-within:border-blue-300 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-600/20 flex-1 min-w-[200px]"><i class="fa-solid fa-magnifying-glass text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">Search users</span>
+                            <input id="f-search" type="search" placeholder="Search name or email" class="bg-transparent text-sm text-slate-700 placeholder-slate-400 outline-none w-full"/></label>
+                        <label class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px] focus-within:border-blue-300 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-600/20"><i class="fa-solid fa-circle-half-stroke text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">Status</span>
+                            <select id="f-status" class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option value="">All statuses</option><option>Invited</option><option>Active</option><option>Inactive</option></select></label>
+                        <button id="btn-invite" type="button" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 ml-auto" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-user-plus" aria-hidden="true"></i> Invite user</button>
+                    </div>
+                    <div id="chips" class="flex flex-wrap items-center gap-2 mt-3" style="display:none"></div>
+                </div>
+
+            <div data-s1-show="loading" class="bg-white rounded-2xl border border-slate-200 shadow-sm" aria-busy="true" aria-label="Loading">
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:40%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:25%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:53%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:42%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:66%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:29%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:44%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:46%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:57%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:33%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:70%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:50%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div>
+                <p class="sr-only">Loading…</p>
+            </div>
+
+            <div data-s1-show="error" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-12 text-center" role="alert">
+                <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-triangle-exclamation text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900">We couldn't load users</h2>
+                <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">Something went wrong on our side. Try again — if it keeps happening, quote reference <span class="font-semibold text-slate-800 tabular-nums">ERR-USR-7F3K-2291</span> to Abstract support.</p>
+                <button type="button" onclick="S1.setState('loading');setTimeout(function(){S1.setState('default')},700)" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Retry</button>
+            </div>
+                <div data-s1-hide="loading error">
+                    <div id="users-table-card" class="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <caption class="sr-only">Users of <span data-org-name></span></caption>
+                                <thead class="bg-slate-50 border-b border-slate-200">
+                                    <tr>
+                                        <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Name</th>
+                                        <th scope="col" class="hidden xl:table-cell px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Email</th>
+                                        <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Roles</th>
+                                        <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                                        <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Last sign-in</th>
+                                        <th scope="col" class="px-4 py-3"><span class="sr-only">Actions</span></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-tbody" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
+                        <div id="users-foot-d" class="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-t border-slate-200 bg-slate-50"></div>
+                    </div>
+                    <div class="md:hidden">
+                        <ul id="users-cards" class="flex flex-col gap-3"></ul>
+                        <div id="users-foot-m" class="flex flex-wrap items-center justify-between gap-3 mt-3"></div>
+                    </div>
+                    <div id="users-empty" style="display:none" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-12 text-center">
+                        <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-user-slash text-xl" aria-hidden="true"></i></div>
+                        <h2 class="text-base font-bold text-slate-900">No users match these filters</h2>
+                        <p class="text-sm text-slate-600 mt-1">Try a different name or email, or clear the filters to see everyone.</p>
+                        <button type="button" onclick="clearFilters()" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-filter-circle-xmark" aria-hidden="true"></i> Clear filters</button>
+                    </div>
+                    <p class="text-xs text-slate-500 mt-4 flex items-start gap-2"><i class="fa-solid fa-circle-info mt-0.5" aria-hidden="true"></i><span>Role changes apply from each person's next click — nobody is signed out. Every change here is recorded in the <a href="abstract.audit.audit-log.html" class="font-semibold text-blue-700 hover:underline">audit log</a>.</span></p>
+                </div>
+            </div>
+
+            <div data-s1-show="denied" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-14 text-center">
+                <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-lock text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900">You don't have access to this page</h2>
+                <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">You don't have access to this page. Ask your administrator if you need it.</p>
+                <a href="abstract.shell.dashboard.html" data-s1-home class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to the dashboard</a>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Invite user (name + email only; roles are set afterwards) -->
+<div data-s1-modal id="m-invite" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-invite-t">
+    <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+            <h2 id="m-invite-t" class="text-base font-bold text-slate-900">Invite user</h2>
+            <button type="button" onclick="S1.closeModal('m-invite')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <form id="invite-form" novalidate onsubmit="submitInvite(event)">
+            <div id="invite-step1">
+                <div class="px-6 py-5 flex flex-col gap-4">
+                    <div id="invite-summary" style="display:none" role="alert" class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 flex items-start gap-3 text-sm text-red-800"><i class="fa-solid fa-circle-exclamation mt-0.5" aria-hidden="true"></i><span>Check the highlighted field before sending the invitation.</span></div>
+                    <p class="text-sm text-slate-600">They'll join <span class="font-semibold text-slate-800" data-org-name></span> and get an email with a link to set their own password. The link works for 72 hours. No password is ever sent by email.</p>
+                    <div>
+                        <label for="inv-name" class="block text-xs font-semibold text-slate-700 mb-1.5">Full name</label>
+                        <input id="inv-name" type="text" autocomplete="off" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="e.g. Tom Rees" aria-describedby="inv-name-err"/>
+                        <p id="inv-name-err" class="text-xs text-red-600 mt-1.5" style="display:none"></p>
+                    </div>
+                    <div>
+                        <label for="inv-email" class="block text-xs font-semibold text-slate-700 mb-1.5">Email address</label>
+                        <input id="inv-email" type="email" autocomplete="off" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="name@company.co.uk" aria-describedby="inv-email-err inv-email-hint"/>
+                        <p id="inv-email-err" class="text-xs text-red-600 mt-1.5" style="display:none"></p>
+                        <p id="inv-email-hint" class="text-xs text-slate-500 mt-1.5">One email address is one account across the whole system.</p>
+                    </div>
+                    <p class="rounded-lg bg-slate-50 border border-slate-200 px-3 py-2.5 text-xs text-slate-600 flex items-start gap-2"><i class="fa-solid fa-user-shield text-slate-400 mt-0.5" aria-hidden="true"></i><span><span class="font-semibold text-slate-800">You'll set their roles next.</span> Until they have a role they can sign in but see nothing beyond their own account.</span></p>
+                </div>
+                <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3 sm:rounded-b-2xl">
+                    <button type="button" onclick="S1.closeModal('m-invite')" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Cancel</button>
+                    <button type="submit" id="inv-submit" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Send invitation</button>
+                </div>
+            </div>
+            <div id="invite-step2" style="display:none">
+                <div class="px-6 py-6 text-center">
+                    <div class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-envelope-circle-check text-xl" aria-hidden="true"></i></div>
+                    <h3 class="text-base font-bold text-slate-900">Invitation sent</h3>
+                    <p class="text-sm text-slate-600 mt-1">Invitation sent to <span id="inv-sent-to" class="font-semibold text-slate-800 break-all"></span>. The link works for 72 hours.</p>
+                    <p class="text-sm text-slate-600 mt-3">They have no roles yet. Set them now so they can start work when they sign in.</p>
+                </div>
+                <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3 sm:rounded-b-2xl">
+                    <button type="button" onclick="S1.closeModal('m-invite')" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Later</button>
+                    <button type="button" id="inv-setroles" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-user-shield" aria-hidden="true"></i> Set roles now</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit name -->
+<div data-s1-modal id="m-name" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-name-t">
+    <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+            <h2 id="m-name-t" class="text-base font-bold text-slate-900">Edit name</h2>
+            <button type="button" onclick="S1.closeModal('m-name')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <form novalidate onsubmit="saveName(event)">
+            <div class="px-6 py-5 flex flex-col gap-4">
+                <div>
+                    <label for="ed-name" class="block text-xs font-semibold text-slate-700 mb-1.5">Full name</label>
+                    <input id="ed-name" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" aria-describedby="ed-name-err"/>
+                    <p id="ed-name-err" class="text-xs text-red-600 mt-1.5" style="display:none">Enter their name.</p>
+                </div>
+                <div>
+                    <p class="block text-xs font-semibold text-slate-700 mb-1.5">Email address</p>
+                    <p id="ed-email" class="text-sm text-slate-600 bg-slate-100 border border-slate-200 rounded-lg px-3 py-2.5 break-all"></p>
+                    <p class="text-xs text-slate-500 mt-1.5">The email address is their sign-in, so it isn't edited here.</p>
+                </div>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3 sm:rounded-b-2xl">
+                <button type="button" onclick="S1.closeModal('m-name')" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Cancel</button>
+                <button type="submit" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)">Save name</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Set roles -->
+<div data-s1-modal id="m-roles" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-roles-t">
+    <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+            <h2 id="m-roles-t" class="text-base font-bold text-slate-900">Set roles</h2>
+            <button type="button" onclick="S1.closeModal('m-roles')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <form novalidate onsubmit="saveRoles(event)">
+            <div class="px-6 py-5">
+                <p class="text-sm text-slate-600 mb-4">Choose every role <span id="sr-name" class="font-semibold text-slate-800"></span> should have. What they can do is everything those roles grant together.</p>
+                <div id="sr-error" style="display:none" role="alert" class="rounded-xl border border-red-200 bg-red-50 px-4 py-3 mb-4 flex items-start gap-3 text-sm text-red-800"><i class="fa-solid fa-user-shield mt-0.5" aria-hidden="true"></i><span id="sr-error-t"></span></div>
+                <fieldset>
+                    <legend class="sr-only">Roles</legend>
+                    <ul id="sr-list" class="flex flex-col gap-2"></ul>
+                </fieldset>
+                <p class="text-xs text-slate-500 mt-4 flex items-start gap-2"><i class="fa-solid fa-circle-info mt-0.5" aria-hidden="true"></i><span>Inactive roles can't be assigned, so they aren't listed. Changes apply from their next click — they stay signed in.</span></p>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3 sm:rounded-b-2xl">
+                <button type="button" onclick="S1.closeModal('m-roles')" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Cancel</button>
+                <button type="submit" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)">Save roles</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Mobile action sheet -->
+<div data-s1-modal id="m-actions" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-actions-t">
+    <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+            <h2 id="m-actions-t" class="text-base font-bold text-slate-900">Actions</h2>
+            <button type="button" onclick="S1.closeModal('m-actions')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <ul id="ma-list" class="p-3 flex flex-col gap-1"></ul>
+    </div>
+</div>
+<script>
+/* Mobile navigation (sidebar is hidden below lg — this is the only way to reveal it) */
+(function () {
+  var btn = document.getElementById('mobile-menu-btn'),
+      sb  = document.getElementById('sidebar');
+  if (!btn || !sb) return;
+  btn.setAttribute('aria-controls', 'sidebar');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-label', 'Open navigation');
+  var bd = document.createElement('div');
+  bd.setAttribute('aria-hidden', 'true');
+  bd.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:40;display:none';
+  document.body.appendChild(bd);
+  function open() {
+    sb.style.display = 'flex'; sb.style.position = 'fixed'; sb.style.top = '0';
+    sb.style.bottom = '0'; sb.style.left = '0'; sb.style.zIndex = '50';
+    bd.style.display = 'block'; btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    ['display','position','top','bottom','left','zIndex'].forEach(function (p) { sb.style[p] = ''; });
+    bd.style.display = 'none'; btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', function () { bd.style.display === 'block' ? close() : open(); });
+  bd.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bd.style.display === 'block') close(); });
+  window.addEventListener('resize', function () { if (window.innerWidth >= 1024) close(); });
+})();
+</script>
+<script>
+
+var BADGE = {
+  'Invited': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-envelope'],
+  'Active': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Inactive': ['bg-slate-100 text-slate-500 border border-slate-200', 'fa-circle-minus'],
+  'Draft': ['bg-slate-100 text-slate-700 border border-slate-200', 'fa-file-pen'],
+  'In Setup': ['bg-blue-50 text-blue-700 border border-blue-200', 'fa-screwdriver-wrench'],
+  'Pending Activation': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Suspended': ['bg-red-50 text-red-700 border border-red-200', 'fa-ban']
+};
+function badge(s) {
+  var b = BADGE[s] || BADGE['Draft'];
+  return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap ' + b[0] + '"><i class="fa-solid ' + b[1] + ' text-[10px]" aria-hidden="true"></i>' + s + '</span>';
+}
+function marker(text, title) {
+  return '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200"' + (title ? ' title="' + title + '"' : '') + '>' + text + '</span>';
+}
+function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
+function initials(n) { return n.split(/\s+/).map(function (p) { return p[0]; }).slice(0, 2).join('').toUpperCase(); }
+
+
+/* ---- "Administering <Organisation>" context (A2 part 2) ----
+   ?org=<slug> puts the page inside another organisation: header marker + banner,
+   that organisation's data, and ?org= carried on every link between Users, Roles and Permissions. */
+var ORGS = {"acme":{"name":"Acme Logistics","party":"client","status":"Active","users":5},"northgate":{"name":"Northgate Foods","party":"client","status":"Active","users":4},"harbour":{"name":"Harbour Retail Group","party":"client","status":"In Setup","users":2},"meridian":{"name":"Meridian Healthcare Services","party":"client","status":"Pending Activation","users":3},"coastline":{"name":"Coastline Manufacturing","party":"client","status":"Draft","users":1},"pennine":{"name":"Pennine Distribution","party":"client","status":"Suspended","users":3},"techforce":{"name":"TechForce Recruitment","party":"agency","status":"Active","users":4},"nexus":{"name":"Nexus Talent","party":"agency","status":"Active","users":4},"peoplebridge":{"name":"PeopleBridge","party":"agency","status":"Pending Activation","users":2},"summit":{"name":"Summit Staffing Solutions","party":"agency","status":"In Setup","users":1},"rapid":{"name":"Rapid Resource","party":"agency","status":"Suspended","users":3}};
+var Q = new URLSearchParams(location.search);
+var ORG_SLUG = Q.get('org') || null;
+var ORG;
+if (ORG_SLUG && ORGS[ORG_SLUG]) ORG = ORGS[ORG_SLUG];
+else if (ORG_SLUG && Q.get('name')) ORG = { name: Q.get('name'), party: Q.get('party') === 'agency' ? 'agency' : 'client', status: 'Active', users: 3 };
+else { ORG_SLUG = null; ORG = { name: 'Abstract', party: 'abstract', status: 'Active' }; }
+function withOrg(href) {
+  if (!ORG_SLUG) return href;
+  var extra = ORGS[ORG_SLUG] ? '' : '&name=' + encodeURIComponent(ORG.name) + '&party=' + ORG.party;
+  return href + (href.indexOf('?') >= 0 ? '&' : '?') + 'org=' + ORG_SLUG + extra;
+}
+(function applyContext() {
+  document.querySelectorAll('[data-org-name]').forEach(function (e) { e.textContent = ORG.name; });
+  document.querySelectorAll('a[data-keep-org]').forEach(function (a) { a.setAttribute('href', withOrg(a.getAttribute('href'))); });
+  if (!ORG_SLUG) return;
+  document.title = document.title + ' · Administering ' + ORG.name;
+  document.getElementById('ctx-banner').style.display = '';
+  document.getElementById('ctx-marker').style.display = '';
+  document.getElementById('header').style.borderTop = '4px solid #1D4ED8';
+  document.getElementById('ctx-party').textContent = (ORG.party === 'client' ? 'Client' : 'Agency') + ' organisation. You see the same screens its own user administrators see.';
+  if (ORG.status !== 'Active') document.getElementById('ctx-status').textContent = ' Its status is ' + ORG.status + (ORG.status === 'Suspended' ? ', so its users can\'t sign in until it is active again.' : '.');
+  // the sidebar marks Organisations while you are inside another organisation
+  var on = document.querySelector('#sidebar-nav a[aria-current="page"]'), org = document.getElementById('nav-organisations');
+  if (on && org && on !== org) {
+    var onCls = on.className, onStyle = on.getAttribute('style');
+    on.className = org.className; on.removeAttribute('style'); on.removeAttribute('aria-current');
+    var dot = on.querySelector('div.ml-auto'); if (dot) dot.remove();
+    org.className = onCls; org.setAttribute('style', onStyle); org.setAttribute('aria-current', 'page');
+    var d = document.createElement('div'); d.className = 'ml-auto w-1.5 h-1.5 rounded-full bg-blue-400'; org.appendChild(d);
+  }
+})();
+
+var ROLESETS = {"abstract":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions","organisation:view","organisation:administer_all","audit_log:view","audit_log:export","audit_log:view_before_after","system_config:view","system_config:create_edit","system_config:edit_security","notification_template:view","notification_template:create_edit","data_subject:view","data_subject:compile","data_subject:export","data_subject:erase","shift_pattern:view","shift_pattern:create_edit","shift_pattern:delete","bank_holiday:create_edit"]},{"id":"operations","name":"Operations","def":true,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view","audit_log:view","system_config:view","shift_pattern:view","shift_pattern:create_edit","shift_pattern:delete","bank_holiday:create_edit"]},{"id":"finance","name":"Finance","def":true,"status":"Active","grants":["user:view","role:view","organisation:view","audit_log:view","audit_log:export","audit_log:view_before_after","system_config:view"]},{"id":"compliance","name":"Compliance","def":false,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view","role:view_permissions","organisation:view","audit_log:view","audit_log:export","audit_log:view_before_after","data_subject:view","data_subject:compile","data_subject:export","data_subject:erase"]},{"id":"auditor","name":"External auditor","def":false,"status":"Inactive","grants":["audit_log:view","audit_log:export","audit_log:view_before_after"]},{"id":"temporary","name":"Temporary access","def":false,"status":"Active","grants":[]}],"client":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions"]},{"id":"hiring","name":"Hiring manager","def":true,"status":"Active","grants":["user:view","role:view"]},{"id":"finance","name":"Finance approver","def":true,"status":"Active","grants":["user:view"]},{"id":"seasonal","name":"Seasonal supervisors","def":false,"status":"Inactive","grants":["user:view"]}],"agency":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions"]},{"id":"recruiter","name":"Recruiter","def":true,"status":"Active","grants":["user:view","role:view"]},{"id":"payroll","name":"Payroll","def":true,"status":"Active","grants":["user:view"]}]};
+var USERSETS = {"abstract":[{"name":"Sarah Mitchell","email":"s.mitchell@abstractrecruitment.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 09:12"},{"name":"James Okafor","email":"j.okafor@abstractrecruitment.co.uk","roles":["operations","finance"],"status":"Active","last":"25 Sep 2026, 17:40"},{"name":"Hannah Clarke","email":"h.clarke@abstractrecruitment.co.uk","roles":["compliance"],"status":"Active","last":"24 Sep 2026, 11:02"},{"name":"David Chen","email":"d.chen@abstractrecruitment.co.uk","roles":["operations"],"status":"Active","last":"26 Sep 2026, 08:31"},{"name":"Tom Rees","email":"t.rees@abstractrecruitment.co.uk","roles":["operations"],"status":"Invited","last":""},{"name":"Amara Okoye","email":"a.okoye@abstractrecruitment.co.uk","roles":[],"status":"Invited","last":""},{"name":"Liam Foster","email":"l.foster@abstractrecruitment.co.uk","roles":["finance"],"status":"Active","last":"19 Sep 2026, 15:26"},{"name":"Priya Shah","email":"p.shah@abstractrecruitment.co.uk","roles":["finance"],"status":"Inactive","last":"14 Aug 2026, 09:05"}],"acme":[{"name":"Rachel Green","email":"rachel.green@acmelogistics.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 08:02"},{"name":"Mark Davies","email":"mark.davies@acmelogistics.co.uk","roles":["hiring"],"status":"Active","last":"25 Sep 2026, 14:18"},{"name":"Priya Natarajan","email":"priya.natarajan@acmelogistics.co.uk","roles":["finance"],"status":"Active","last":"23 Sep 2026, 10:47"},{"name":"Olivia Brown","email":"olivia.brown@acmelogistics.co.uk","roles":["hiring"],"status":"Invited","last":""},{"name":"Ben Taylor","email":"ben.taylor@acmelogistics.co.uk","roles":["hiring","seasonal"],"status":"Inactive","last":"02 Aug 2026, 16:20"}],"techforce":[{"name":"Daniel Wright","email":"daniel.wright@techforce-recruitment.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 07:55"},{"name":"Sophie Turner","email":"sophie.turner@techforce-recruitment.co.uk","roles":["recruiter"],"status":"Active","last":"25 Sep 2026, 12:09"},{"name":"Aisha Khan","email":"aisha.khan@techforce-recruitment.co.uk","roles":["payroll"],"status":"Active","last":"22 Sep 2026, 09:30"},{"name":"Ryan Hughes","email":"ryan.hughes@techforce-recruitment.co.uk","roles":["recruiter"],"status":"Invited","last":""}]};
+var ADMIN_KEY = 'user:create_edit';
+var ROLES = ROLESETS[ORG.party];
+var ALL_EMAILS = [];
+Object.keys(USERSETS).forEach(function (k) { USERSETS[k].forEach(function (u) { ALL_EMAILS.push(u.email.toLowerCase()); }); });
+var POOL = ['Grace Porter', 'Ethan Walsh', 'Chloe Bennett', 'Oliver Grant', 'Maya Patel', 'Noah Fletcher', 'Isla Morgan', 'Harry Doyle'];
+function genericUsers() {
+  var dom = ORG.name.toLowerCase().replace(/[^a-z]+/g, '') + '.co.uk', out = [];
+  for (var i = 0; i < (ORG.users || 2); i++) {
+    var n = POOL[i % POOL.length];
+    out.push({ name: n, email: n.toLowerCase().replace(' ', '.') + '@' + dom, roles: [i === 0 ? 'administrator' : ROLES[1].id], status: ORG.status === 'Draft' || i === (ORG.users - 1) && i > 0 ? 'Invited' : 'Active', last: ORG.status === 'Draft' ? '' : '24 Sep 2026, 10:1' + i });
+  }
+  return out;
+}
+var USERS = ORG_SLUG ? (USERSETS[ORG_SLUG] || genericUsers()) : USERSETS.abstract;
+USERS = JSON.parse(JSON.stringify(USERS));
+var state = 'default', page = 1, PAGE = 25;
+
+function role(id) { for (var i = 0; i < ROLES.length; i++) if (ROLES[i].id === id) return ROLES[i]; return null; }
+function isAdminRole(id) { var r = role(id); return r && r.status === 'Active' && r.grants.indexOf(ADMIN_KEY) >= 0; }
+function isAdmin(u) { return u.status === 'Active' && u.roles.some(isAdminRole); }
+function wouldLeaveNoAdmin(u, newRoles, newStatus) {
+  return USERS.filter(function (x) {
+    if (x === u) return (newStatus || u.status) === 'Active' && (newRoles || u.roles).some(isAdminRole);
+    return isAdmin(x);
+  }).length === 0;
+}
+
+var LONG = ['Alexandra Montgomery-Fitzwilliam', 'Oluwaseun Adebayo-Richardson', 'Christopher Llewellyn-Jones', 'Maximilian Vanderberg-Hartley'];
+function largeUsers(p) {
+  var first = ['Aaron', 'Bethany', 'Callum', 'Deborah', 'Elliot', 'Fatima', 'George', 'Harriet', 'Imran', 'Jessica', 'Kieran', 'Lucy', 'Mohammed', 'Nadia', 'Owen', 'Phoebe', 'Rhys', 'Sana', 'Toby', 'Ursula', 'Victor', 'Wendy', 'Yusuf', 'Zara', 'Adam'];
+  var last = ['Ahmed', 'Barnes', 'Collins', 'Dixon', 'Evans', 'Fisher', 'Gill', 'Hall', 'Iqbal', 'Jones', 'Khan', 'Lewis', 'Murray', 'Nash', 'Owens', 'Parker', 'Quinn', 'Reid', 'Singh', 'Thompson', 'Usman', 'Vaughan', 'Webb', 'Young', 'Zhang'];
+  var st = ['Active', 'Active', 'Active', 'Invited', 'Active', 'Inactive'];
+  var out = [];
+  for (var i = 0; i < PAGE; i++) {
+    var k = (p - 1) * PAGE + i, nm = (k % 11 === 3) ? LONG[k % LONG.length] : first[k % 25] + ' ' + last[(k * 7) % 25];
+    var s = st[k % 6];
+    out.push({ name: nm, email: nm.toLowerCase().replace(/[^a-z]+/g, '.') + '@' + (ORG_SLUG ? 'example.co.uk' : 'abstractrecruitment.co.uk'), roles: [ROLES[1 + k % (ROLES.length - 1)].id].concat(k % 4 === 0 ? [ROLES[1].id] : []).filter(function (v, j, a) { return a.indexOf(v) === j; }), status: s, last: s === 'Invited' ? '' : ((k % 27) + 1) + ' Sep 2026, ' + (8 + k % 9) + ':' + ('0' + (k * 13) % 60).slice(-2) });
+  }
+  return out;
+}
+
+function roleChips(u) {
+  if (!u.roles.length) return '<span class="text-xs italic text-slate-500">No roles yet</span>';
+  return u.roles.map(function (id) { var r = role(id); return '<span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200 whitespace-nowrap' + (r && r.status === 'Inactive' ? ' line-through decoration-slate-400' : '') + '"' + (r && r.status === 'Inactive' ? ' title="This role is inactive, so it grants nothing"' : '') + '>' + esc(r ? r.name : id) + '</span>'; }).join(' ');
+}
+function actionsFor(u) {
+  var a = [];
+  if (u.status === 'Invited') a.push(['resend', 'Resend activation', 'fa-paper-plane']);
+  a.push(['name', 'Edit name', 'fa-pen']);
+  if (u.status !== 'Inactive') a.push(['roles', 'Set roles', 'fa-user-shield']);
+  if (u.status === 'Inactive') a.push(['reactivate', 'Reactivate', 'fa-rotate-left']);
+  else a.push(['deactivate', 'Deactivate', 'fa-user-slash']);
+  return a;
+}
+function avatar(u) { return '<span class="w-8 h-8 rounded-full bg-navy-50 text-navy-700 border border-navy-100 flex items-center justify-center text-[11px] font-bold flex-shrink-0" aria-hidden="true">' + initials(u.name) + '</span>'; }
+
+function filtered() {
+  var list = state === 'large' ? largeUsers(page) : USERS;
+  if (state === 'large') return list;
+  var q = document.getElementById('f-search').value.trim().toLowerCase(), s = document.getElementById('f-status').value;
+  return list.filter(function (u) { return (!q || u.name.toLowerCase().indexOf(q) >= 0 || u.email.toLowerCase().indexOf(q) >= 0) && (!s || u.status === s); });
+}
+function chips() {
+  var q = document.getElementById('f-search').value.trim(), s = document.getElementById('f-status').value, c = [];
+  if (q) c.push(['Search: ' + q, 'search']);
+  if (s) c.push(['Status: ' + s, 'status']);
+  var box = document.getElementById('chips');
+  box.style.display = c.length ? '' : 'none';
+  box.innerHTML = c.map(function (x) { return '<span class="inline-flex items-center gap-1.5 pl-2.5 pr-1 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">' + esc(x[0]) + '<button type="button" data-clear="' + x[1] + '" aria-label="Remove filter ' + esc(x[0]) + '" class="w-5 h-5 rounded-full hover:bg-blue-100 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark text-[10px]" aria-hidden="true"></i></button></span>'; }).join('') +
+    (c.length ? '<button type="button" onclick="clearFilters()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 ml-1 px-1 min-h-[28px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Clear all</button>' : '');
+  box.querySelectorAll('[data-clear]').forEach(function (b) { b.onclick = function () { if (b.dataset.clear === 'search') document.getElementById('f-search').value = ''; else document.getElementById('f-status').value = ''; render(); }; });
+}
+function clearFilters() { document.getElementById('f-search').value = ''; document.getElementById('f-status').value = ''; render(); }
+
+function pager() {
+  var total = state === 'large' ? 1240 : filtered().length;
+  if (state === 'large') {
+    var from = (page - 1) * PAGE + 1, to = Math.min(page * PAGE, total), pages = Math.ceil(total / PAGE);
+    return '<p class="text-xs text-slate-500">Showing <span class="font-semibold text-slate-700 tabular-nums">' + from + '–' + to + '</span> of <span class="font-semibold text-slate-700 tabular-nums">1,240</span> users</p>' +
+      '<div class="flex items-center gap-1"><button type="button" data-pg="' + (page - 1) + '" ' + (page === 1 ? 'disabled' : '') + ' aria-label="Previous page" class="w-9 h-9 rounded-lg border border-slate-200 bg-white text-slate-600 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-chevron-left text-xs" aria-hidden="true"></i></button>' +
+      [1, 2, 3].map(function (n) { return '<button type="button" data-pg="' + n + '" ' + (n === page ? 'aria-current="page"' : '') + ' class="w-9 h-9 rounded-lg text-xs font-semibold ' + (n === page ? 'bg-blue-700 text-white' : 'border border-slate-200 bg-white text-slate-600') + ' focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">' + n + '</button>'; }).join('') +
+      '<span class="px-1 text-slate-400 text-xs">…</span><button type="button" data-pg="' + pages + '" class="w-9 h-9 rounded-lg text-xs font-semibold border border-slate-200 bg-white text-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">' + pages + '</button>' +
+      '<button type="button" data-pg="' + (page + 1) + '" ' + (page === pages ? 'disabled' : '') + ' aria-label="Next page" class="w-9 h-9 rounded-lg border border-slate-200 bg-white text-slate-600 disabled:opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-chevron-right text-xs" aria-hidden="true"></i></button></div>';
+  }
+  return '<p class="text-xs text-slate-500">Showing <span class="font-semibold text-slate-700 tabular-nums">' + (total ? '1–' + total : '0') + '</span> of <span class="font-semibold text-slate-700 tabular-nums">' + total + '</span> ' + (total === 1 ? 'user' : 'users') + '</p>';
+}
+
+var VIEW = [];
+function render() {
+  chips();
+  VIEW = filtered();
+  var tb = document.getElementById('users-tbody'), cards = document.getElementById('users-cards');
+  tb.innerHTML = VIEW.map(function (u, i) {
+    return '<tr class="group hover:bg-slate-50/60">' +
+      '<td class="px-4 py-3 max-w-[240px]"><div class="flex items-center gap-3 min-w-0">' + avatar(u) + '<span class="min-w-0"><span class="block text-sm font-semibold text-slate-900 truncate" title="' + esc(u.name) + '">' + esc(u.name) + '</span><span class="xl:hidden block text-xs text-slate-500 truncate" title="' + esc(u.email) + '">' + esc(u.email) + '</span></span></div></td>' +
+      '<td class="hidden xl:table-cell px-4 py-3 max-w-[220px]"><span class="block text-sm text-slate-600 truncate" title="' + esc(u.email) + '">' + esc(u.email) + '</span></td>' +
+      '<td class="px-4 py-3"><div class="flex flex-wrap gap-1">' + roleChips(u) + '</div></td>' +
+      '<td class="px-4 py-3">' + badge(u.status) + '</td>' +
+      '<td class="px-4 py-3 text-sm text-slate-600 whitespace-nowrap tabular-nums">' + (u.last || '<span class="text-slate-400" aria-label="Never signed in">—</span>') + '</td>' +
+      '<td class="px-4 py-3 text-right"><div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">' +
+        actionsFor(u).map(function (a) { return '<button type="button" data-act="' + a[0] + '" data-i="' + i + '" class="whitespace-nowrap rounded-lg px-2 py-1.5 text-xs font-semibold ' + (a[0] === 'deactivate' ? 'text-red-600 hover:bg-red-50' : 'text-slate-600 hover:text-blue-700 hover:bg-blue-50') + ' focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">' + a[1] + '<span class="sr-only"> — ' + esc(u.name) + '</span></button>'; }).join('') +
+      '</div></td></tr>';
+  }).join('');
+  cards.innerHTML = VIEW.map(function (u, i) {
+    return '<li class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4"><div class="flex items-start gap-3">' + avatar(u) +
+      '<div class="flex-1 min-w-0"><div class="flex items-start justify-between gap-2"><p class="text-sm font-semibold text-slate-900 truncate">' + esc(u.name) + '</p>' + badge(u.status) + '</div>' +
+      '<p class="text-xs text-slate-500 truncate mt-0.5">' + esc(u.email) + '</p>' +
+      '<div class="flex flex-wrap gap-1 mt-2">' + roleChips(u) + '</div>' +
+      '<div class="flex items-center justify-between mt-3"><p class="text-xs text-slate-500">Last sign-in: <span class="text-slate-700">' + (u.last || 'never') + '</span></p>' +
+      '<button type="button" data-sheet="' + i + '" aria-label="Actions for ' + esc(u.name) + '" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></button></div>' +
+      '</div></div></li>';
+  }).join('');
+  var empty = !VIEW.length;
+  document.getElementById('users-empty').style.display = empty ? '' : 'none';
+  document.getElementById('users-table-card').style.display = empty ? 'none' : '';
+  cards.parentNode.style.display = empty ? 'none' : '';
+  document.getElementById('users-foot-d').innerHTML = pager();
+  document.getElementById('users-foot-m').innerHTML = pager();
+  document.querySelectorAll('[data-pg]').forEach(function (b) { b.onclick = function () { page = +b.dataset.pg; render(); document.getElementById('main').scrollTop = 0; }; });
+  document.querySelectorAll('[data-act]').forEach(function (b) { b.onclick = function () { act(b.dataset.act, VIEW[+b.dataset.i]); }; });
+  document.querySelectorAll('[data-sheet]').forEach(function (b) { b.onclick = function () { sheet(VIEW[+b.dataset.sheet]); }; });
+}
+
+function sheet(u) {
+  document.getElementById('m-actions-t').textContent = u.name;
+  var ul = document.getElementById('ma-list');
+  ul.innerHTML = actionsFor(u).map(function (a) { return '<li><button type="button" data-a="' + a[0] + '" class="w-full flex items-center gap-3 px-3 py-3 rounded-lg text-sm font-medium text-left ' + (a[0] === 'deactivate' ? 'text-red-600 hover:bg-red-50' : 'text-slate-700 hover:bg-slate-50') + ' focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid ' + a[2] + ' w-4 text-center" aria-hidden="true"></i>' + a[1] + '</button></li>'; }).join('');
+  ul.querySelectorAll('[data-a]').forEach(function (b) { b.onclick = function () { S1.closeModal('m-actions'); act(b.dataset.a, u); }; });
+  S1.openModal('m-actions');
+}
+
+var current = null;
+function act(a, u) {
+  current = u;
+  if (a === 'name') { document.getElementById('ed-name').value = u.name; document.getElementById('ed-email').textContent = u.email; fieldErr('ed-name', ''); S1.openModal('m-name'); }
+  if (a === 'roles') openRoles(u);
+  if (a === 'resend') S1.confirm({ title: 'Resend the activation link to ' + u.name + '?', bodyHtml: 'We\'ll email <strong>' + esc(u.email) + '</strong> a new link that works for 72 hours. The link we sent before will stop working.', cta: 'Resend link', icon: 'fa-paper-plane',
+    onConfirm: function () { S1.toast('A new 72-hour activation link was emailed to ' + esc(u.email) + '. The old link no longer works.', 'success'); } });
+  if (a === 'deactivate') {
+    if (wouldLeaveNoAdmin(u, null, 'Inactive')) {
+      S1.confirm({ tone: 'warning', icon: 'fa-user-shield', title: 'You can\'t deactivate ' + u.name, body: ORG.name + ' would be left with no one who can manage users. First give another active user a role that includes Invite and edit users, then try again.', cancel: 'Close' });
+      return;
+    }
+    S1.confirm({ tone: 'danger', title: 'Deactivate ' + u.name + '?', body: 'They\'ll lose access at their next click on every device and can\'t sign in until someone reactivates them. Their roles and history are kept.', reason: true, reasonLabel: 'Reason (required — recorded in the audit log)', reasonPlaceholder: 'e.g. Left the company on 26/09/2026', cta: 'Deactivate user', busy: 'Deactivating…',
+      onConfirm: function () { u.status = 'Inactive'; render(); S1.toast(esc(u.name) + ' is now inactive.', 'success'); } });
+  }
+  if (a === 'reactivate') S1.confirm({ title: 'Reactivate ' + u.name + '?', body: 'They can sign in again with their existing password and get back the roles they had.', cta: 'Reactivate user', icon: 'fa-rotate-left',
+    onConfirm: function () { u.status = 'Active'; render(); S1.toast(esc(u.name) + ' is active again.', 'success'); } });
+}
+function fieldErr(id, msg) {
+  var i = document.getElementById(id), e = document.getElementById(id + '-err');
+  e.textContent = msg; e.style.display = msg ? '' : 'none';
+  i.classList.toggle('border-red-500', !!msg); i.classList.toggle('border-slate-200', !msg);
+  i.setAttribute('aria-invalid', msg ? 'true' : 'false');
+}
+function saveName(e) {
+  e.preventDefault();
+  var v = document.getElementById('ed-name').value.trim();
+  if (!v) { fieldErr('ed-name', 'Enter their name.'); return; }
+  current.name = v; S1.closeModal('m-name'); render(); S1.toast('Name updated to ' + esc(v) + '.', 'success');
+}
+function openRoles(u) {
+  current = u;
+  document.getElementById('sr-name').textContent = u.name;
+  document.getElementById('sr-error').style.display = 'none';
+  document.getElementById('sr-list').innerHTML = ROLES.filter(function (r) { return r.status === 'Active'; }).map(function (r) {
+    return '<li><label class="flex items-center gap-3 rounded-lg border border-slate-200 px-3 py-2.5 hover:bg-slate-50 cursor-pointer"><input type="checkbox" value="' + r.id + '" ' + (u.roles.indexOf(r.id) >= 0 ? 'checked' : '') + ' class="w-5 h-5 accent-blue-700 flex-shrink-0"/>' +
+      '<span class="flex-1 min-w-0"><span class="text-sm font-semibold text-slate-800">' + esc(r.name) + '</span> ' + (r.def ? marker('Default', 'Created when this organisation was set up') : '') +
+      '<span class="block text-xs text-slate-500">' + r.grants.length + ' permission' + (r.grants.length === 1 ? '' : 's') + (r.grants.indexOf(ADMIN_KEY) >= 0 ? ' · can manage users' : '') + '</span></span></label></li>';
+  }).join('');
+  S1.openModal('m-roles');
+}
+function saveRoles(e) {
+  e.preventDefault();
+  var picked = Array.prototype.map.call(document.querySelectorAll('#sr-list input:checked'), function (c) { return c.value; });
+  var keepInactive = current.roles.filter(function (id) { var r = role(id); return r && r.status === 'Inactive'; });
+  var next = picked.concat(keepInactive);
+  if (current.status === 'Active' && wouldLeaveNoAdmin(current, next, null)) {
+    document.getElementById('sr-error-t').textContent = 'You can\'t take this role away from ' + current.name + ' — ' + ORG.name + ' would be left with no one who can manage users. Give another active user that permission first.';
+    document.getElementById('sr-error').style.display = '';
+    return;
+  }
+  current.roles = next; S1.closeModal('m-roles'); render();
+  S1.toast('Roles saved for ' + esc(current.name) + '. They apply from their next click.', 'success');
+}
+
+function openInvite() {
+  document.getElementById('invite-step1').style.display = ''; document.getElementById('invite-step2').style.display = 'none';
+  document.getElementById('inv-name').value = ''; document.getElementById('inv-email').value = '';
+  fieldErr('inv-name', ''); fieldErr('inv-email', ''); document.getElementById('invite-summary').style.display = 'none';
+  S1.openModal('m-invite');
+}
+function validateInvite() {
+  var n = document.getElementById('inv-name').value.trim(), m = document.getElementById('inv-email').value.trim(), ok = true;
+  fieldErr('inv-name', n ? '' : 'Enter their name.'); if (!n) ok = false;
+  var em = '';
+  if (!m) em = 'Enter their email address.';
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m)) em = 'Enter an email address like name@company.co.uk.';
+  else if (ALL_EMAILS.indexOf(m.toLowerCase()) >= 0) em = 'This email address already has an account.';
+  fieldErr('inv-email', em); if (em) ok = false;
+  document.getElementById('invite-summary').style.display = ok ? 'none' : '';
+  return ok;
+}
+function submitInvite(e) {
+  e.preventDefault();
+  if (!validateInvite()) { var f = document.querySelector('#invite-step1 [aria-invalid="true"]'); if (f) f.focus(); return; }
+  var b = document.getElementById('inv-submit'); b.disabled = true; b.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Sending…';
+  setTimeout(function () {
+    b.disabled = false; b.innerHTML = '<i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Send invitation';
+    var u = { name: document.getElementById('inv-name').value.trim(), email: document.getElementById('inv-email').value.trim(), roles: [], status: 'Invited', last: '' };
+    USERS.unshift(u); ALL_EMAILS.push(u.email.toLowerCase()); current = u; render();
+    document.getElementById('inv-sent-to').textContent = u.email;
+    document.getElementById('invite-step1').style.display = 'none'; document.getElementById('invite-step2').style.display = '';
+    document.getElementById('inv-setroles').focus();
+  }, 700);
+}
+
+document.getElementById('btn-invite').onclick = openInvite;
+document.getElementById('inv-setroles').onclick = function () { S1.closeModal('m-invite'); openRoles(current); };
+document.getElementById('f-search').addEventListener('input', render);
+document.getElementById('f-status').addEventListener('change', render);
+document.addEventListener('s1:state', function (e) {
+  state = e.detail.state; page = 1;
+  ['m-invite', 'm-name', 'm-roles', 'm-actions'].forEach(function (id) { document.getElementById(id).classList.add('hidden'); });
+  document.getElementById('f-search').value = state === 'empty' ? 'Kowalski' : '';
+  document.getElementById('f-status').value = '';
+  render();
+  if (state === 'validation') {
+    openInvite();
+    document.getElementById('inv-name').value = 'Jim Okafor';
+    document.getElementById('inv-email').value = USERS.length > 1 ? USERS[1].email : USERS[0].email;
+    validateInvite();
+  }
+});
+
+</script>
+
+<script src="slice1-kit.js"></script>
+</body>
+</html>

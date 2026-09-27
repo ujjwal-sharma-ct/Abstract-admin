@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting history · Abstract VMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }</style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'], },
+                    colors: {
+                        navy: { DEFAULT: '#172554', 50: '#EEF1FB', 100: '#D4DCF5', 200: '#A9B9EB', 300: '#7E96E1', 400: '#5373D7', 500: '#2850CD', 600: '#1D3FA4', 700: '#162F7B', 800: '#0F1F52', 900: '#172554', },
+                        brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554', }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default loading error validation denied large">
+
+<div id="app-root" class="flex w-full" style="height: 100vh;">
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
+        <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
+            <img src="logo.png" alt="Abstract VMS" class="h-12 w-auto block -ml-[5px]"/>
+            <p class="text-white/40 text-sm mt-2">Admin Portal</p>
+        </div>
+
+        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1">
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p>
+            <a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-gauge-high text-white/40 w-4 text-center"></i>
+                <span>Admin Dashboard</span>
+            </a>
+            <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
+                <span>Vacancy List</span>
+            </a>
+            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
+                <span>Create Vacancy Wizard</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
+            <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users-gear text-white/40 w-4 text-center"></i>
+                <span>Worker Pool</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p>
+            <a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-user text-white/40 w-4 text-center"></i>
+                <span>Agency Dashboard</span>
+            </a>
+            <a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-circle-check text-white/40 w-4 text-center"></i>
+                <span>Approved Suppliers</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p>
+            <a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center"></i>
+                <span>AWR Tracking</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p>
+            <a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clock text-white/40 w-4 text-center"></i>
+                <span>Timesheets</span>
+            </a>
+            <a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center"></i>
+                <span>Invoicing / Self-Bill</span>
+            </a>
+            <a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-bar text-white/40 w-4 text-center"></i>
+                <span>Abstract Backing Report</span>
+            </a>
+            <a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sterling-sign text-white/40 w-4 text-center"></i>
+                <span>Rate Cards</span>
+            </a>
+            <a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-chart-line text-white/40 w-4 text-center"></i>
+                <span>Reports</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p>
+            <a id="nav-onboard-client" href="abstract.onboarding.onboard-client.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-building-circle-arrow-right text-white/40 w-4 text-center"></i>
+                <span>Onboard Client</span>
+            </a>
+            <a id="nav-onboard-agency" href="abstract.onboarding.onboard-agency.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-tie text-white/40 w-4 text-center"></i>
+                <span>Onboard Agency</span>
+            </a>
+            <a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sliders text-white/40 w-4 text-center"></i>
+                <span>Configuration</span>
+            </a>
+            <a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);" aria-current="page">
+                <i class="fa-solid fa-gears text-blue-400 w-4 text-center"></i>
+                <span>System Configuration</span>
+                <div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p>
+            <a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-users text-white/40 w-4 text-center"></i>
+                <span>Users</span>
+            </a>
+            <a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-shield text-white/40 w-4 text-center"></i>
+                <span>Roles</span>
+            </a>
+            <a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center"></i>
+                <span>Notification templates</span>
+            </a>
+
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p>
+            <a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-sitemap text-white/40 w-4 text-center"></i>
+                <span>Organisations</span>
+            </a>
+            <a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-user-lock text-white/40 w-4 text-center"></i>
+                <span>Data subject requests</span>
+            </a>
+            <a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center"></i>
+                <span>Audit Log</span>
+            </a>
+
+        </nav>
+
+        <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
+            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all">
+                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border border-white/20 flex-shrink-0" alt="avatar"/>
+                <div class="flex-1 min-w-0">
+                    <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
+                    <p class="text-white/40 text-xs truncate">Abstract Admin</p>
+                </div>
+                <a href="abstract.identity-access.sign-in.html?reason=signed-out" title="Sign out" aria-label="Sign out" class="w-9 h-9 flex items-center justify-center rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white"></i></a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <header id="header" class="flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
+            <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+                <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-bars text-slate-600 text-sm"></i></button>
+                <div class="min-w-0">
+                    <h1 id="page-h1" class="text-lg font-bold text-slate-900 truncate">Idle timeout</h1>
+                    <p id="page-sub" class="text-xs text-slate-500 hidden sm:block truncate">System configuration · Security · setting history</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+
+                <button type="button" data-s1-bell aria-label="Notifications" class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-regular fa-bell text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <a href="abstract.identity-access.my-account.html" class="flex items-center gap-2 pl-2 border-l border-slate-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2" aria-label="My account — Sarah Mitchell">
+                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border-2 border-blue-100" alt=""/>
+                    <div class="hidden xl:block"><p class="text-xs font-semibold text-slate-700" data-me-name>Sarah Mitchell</p><p class="text-xs text-slate-500">Abstract</p></div>
+                </a>
+            </div>
+        </header>
+
+        <main id="main" class="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-8 py-6 bg-slate-100">
+
+            <nav aria-label="Breadcrumb" class="text-xs text-slate-500 mb-4 flex flex-wrap items-center gap-1.5">
+                <a id="bc-root" href="abstract.configuration.system-settings.html" class="hover:text-blue-700 hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">System configuration</a>
+                <i class="fa-solid fa-chevron-right text-[9px] text-slate-400" aria-hidden="true"></i>
+                <a id="bc-group" href="abstract.configuration.system-settings.html#security" class="hover:text-blue-700 hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">Security</a>
+                <i class="fa-solid fa-chevron-right text-[9px] text-slate-400" aria-hidden="true"></i>
+                <span id="bc-leaf" class="font-semibold text-slate-700" aria-current="page">Idle timeout</span>
+            </nav>
+
+            <!-- key not found -->
+            <section id="nokey" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto">
+                <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 mx-auto flex items-center justify-center mb-4"><i class="fa-solid fa-compass text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-xl font-bold text-slate-900">We couldn't find that setting.</h2>
+                <p class="text-sm text-slate-600 mt-2">The link may be out of date. Pick the setting from System configuration.</p>
+                <div class="mt-6"><a href="abstract.configuration.system-settings.html" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-arrow-left text-xs" aria-hidden="true"></i> Back to System configuration</a></div>
+            </section>
+
+            <div id="key-page" data-s1-hide="loading error denied" class="flex flex-col gap-6">
+                <!-- title row -->
+                <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 flex flex-col md:flex-row md:items-start gap-4">
+                    <div class="flex-1 min-w-0">
+                        <h2 id="k-label" class="text-xl font-bold text-slate-900">Idle timeout</h2>
+                        <p class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
+                            <code id="k-key" class="font-mono text-slate-700 bg-slate-100 border border-slate-200 rounded px-1.5 py-0.5 break-all">security.idle_timeout_minutes</code>
+                            <span aria-hidden="true">·</span><span id="k-group">Security</span>
+                            <span aria-hidden="true">·</span><span id="k-type">integer</span>
+                        </p>
+                        <p id="k-desc" class="text-sm text-slate-600 mt-3 leading-relaxed max-w-2xl"></p>
+                    </div>
+                    <button type="button" id="open-schedule" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg text-white text-sm font-semibold hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 w-full md:w-auto" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);"><i class="fa-solid fa-calendar-plus text-xs" aria-hidden="true"></i> Schedule a change</button>
+                </section>
+
+                <div id="ro-banner" class="hidden rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 flex items-start gap-3 text-sm text-blue-800" role="note">
+                    <i class="fa-solid fa-circle-info mt-0.5" aria-hidden="true"></i><p id="ro-text"></p>
+                </div>
+
+                <!-- current + next -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5" aria-labelledby="cur-t">
+                        <div class="flex items-center justify-between gap-2">
+                            <h3 id="cur-t" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Current value</h3>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-check text-[10px]" aria-hidden="true"></i>In force</span>
+                        </div>
+                        <p id="cur-v" class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 tabular-nums"></p>
+                        <p id="cur-m" class="text-xs text-slate-500 mt-1"></p>
+                    </section>
+                    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5" aria-labelledby="next-t">
+                        <div class="flex items-center justify-between gap-2">
+                            <h3 id="next-t" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Next change</h3>
+                            <span id="next-badge"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-clock text-[10px]" aria-hidden="true"></i>Future</span></span>
+                        </div>
+                        <p id="next-v" class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 tabular-nums"></p>
+                        <p id="next-m" class="text-xs text-slate-500 mt-1"></p>
+                    </section>
+                </div>
+
+                <!-- history -->
+                <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" aria-labelledby="hist-t">
+                    <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-3">
+                        <div>
+                            <h3 id="hist-t" class="text-sm font-bold text-slate-900">Version history</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Every change is a new version from a date. Past versions can't be edited.</p>
+                        </div>
+                        <span id="hist-count" class="text-xs text-slate-500 whitespace-nowrap"></span>
+                    </div>
+                    <div id="hist-scroll" class="hidden md:block overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-slate-50 sticky top-0"><tr class="text-left">
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider pl-5 text-right">Value</th>
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Effective from</th>
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Effective to</th>
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Changed by</th>
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider pr-5">When</th>
+                            </tr></thead>
+                            <tbody id="hist-body" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                    <ul id="hist-cards" class="md:hidden divide-y divide-slate-100"></ul>
+                </section>
+            </div>
+
+            <!-- STATE: loading (skeleton rows) -->
+            <section data-s1-show="loading" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" aria-busy="true" aria-label="Loading">
+                <div class="px-5 py-4 border-b border-slate-100"><div class="h-4 w-48 rounded bg-slate-200 animate-pulse"></div></div>
+                <div class="divide-y divide-slate-100">
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-40 rounded bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div></div>
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-40 rounded bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div></div>
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-40 rounded bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div></div>
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-40 rounded bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div></div>
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-40 rounded bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div></div>
+                </div>
+            </section>
+
+            <!-- STATE: error (ErrorState) -->
+            <section data-s1-show="error" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto mt-4" role="alert">
+                <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 mx-auto flex items-center justify-center mb-4"><i class="fa-solid fa-triangle-exclamation text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-xl font-bold text-slate-900">We couldn't load this setting's history.</h2>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">Nothing has been changed. Try again, and if it keeps happening, quote this reference to Abstract support.</p>
+                <p class="mt-3 inline-flex items-center gap-2 rounded-lg bg-slate-50 border border-slate-200 px-3 py-1.5 font-mono text-xs text-slate-700">REF 7F3K-29QD</p>
+                <div class="mt-6"><button type="button" onclick="S1.setState('default')" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-rotate-right text-xs" aria-hidden="true"></i> Retry</button></div>
+            </section>
+
+            <!-- STATE: permission denied (403 inside the portal frame) -->
+            <section data-s1-show="denied" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto mt-4" aria-labelledby="denied-t">
+                <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 mx-auto flex items-center justify-center mb-4"><i class="fa-solid fa-lock text-xl" aria-hidden="true"></i></div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Error 403 · No permission</p>
+                <h2 id="denied-t" class="text-xl font-bold text-slate-900 mt-1">You don't have access to this page.</h2>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">Ask your administrator if you need it.</p>
+                <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="abstract.shell.dashboard.html" data-s1-home class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-house text-xs" aria-hidden="true"></i> Back to dashboard</a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<div data-s1-modal id="sched-modal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="sched-modal-t">
+  <div class="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg max-h-[92vh] overflow-y-auto">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+      <h2 id="sched-modal-t" class="text-base font-bold text-slate-900"><span id="sched-title">Schedule a change — Idle timeout</span></h2>
+      <button type="button" onclick="S1.closeModal('sched-modal')" aria-label="Close" class="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    <div class="px-6 py-5">
+      <form id="sched-form" novalidate class="flex flex-col gap-5">
+        <div id="sched-summary" class="hidden rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 flex gap-3" role="alert">
+          <i class="fa-solid fa-circle-exclamation mt-0.5" aria-hidden="true"></i><p>This change wasn't scheduled. Fix the highlighted fields.</p>
+        </div>
+        <div>
+          <label for="f-value" class="block text-xs font-semibold text-slate-700 mb-1.5">New value</label>
+          <div class="flex items-center gap-2">
+            <span id="f-prefix" class="hidden text-sm font-semibold text-slate-500">£</span>
+            <input id="f-value" type="text" inputmode="decimal" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-600/20 max-w-[180px] text-right tabular-nums" aria-describedby="f-value-hint f-value-err"/>
+            <select id="f-value-bool" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-600/20 max-w-[180px] hidden"><option value="On">On</option><option value="Off">Off</option></select>
+            <span id="f-unit" class="text-sm text-slate-500"></span>
+          </div>
+          <p id="f-value-hint" class="text-xs text-slate-500 mt-1.5"></p>
+          <p id="f-value-err" class="hidden text-xs font-medium text-red-600 mt-1.5"><i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i><span></span></p>
+        </div>
+        <div>
+          <label for="f-date" class="block text-xs font-semibold text-slate-700 mb-1.5">Effective from</label>
+          <div class="relative max-w-[220px]">
+            <input id="f-date" type="text" inputmode="numeric" placeholder="DD/MM/YYYY" autocomplete="off" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-600/20 pr-9" aria-describedby="f-date-hint f-date-err"/>
+            <i class="fa-regular fa-calendar absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none" aria-hidden="true"></i>
+          </div>
+          <p id="f-date-hint" class="text-xs text-slate-500 mt-1.5">Today (26/09/2026) or later. Past periods have already been used.</p>
+          <p id="f-date-err" class="hidden text-xs font-medium text-red-600 mt-1.5"><i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i><span></span></p>
+        </div>
+        <p class="text-xs text-slate-500 leading-relaxed">The change is audited as you. Until its date, the current value stays in force.</p>
+      </form></div>
+    <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-col-reverse sm:flex-row justify-end gap-3 rounded-b-2xl"><button type="button" onclick="S1.closeModal('sched-modal')" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">Cancel</button>
+      <button type="submit" form="sched-form" id="sched-save" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg text-white text-sm font-semibold hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);"><i class="fa-solid fa-calendar-check text-xs" aria-hidden="true"></i> Schedule change</button></div>
+  </div>
+</div>
+<script>
+/* Mobile navigation (sidebar is hidden below lg — this is the only way to reveal it) */
+(function () {
+  var btn = document.getElementById('mobile-menu-btn'),
+      sb  = document.getElementById('sidebar');
+  if (!btn || !sb) return;
+  btn.setAttribute('aria-controls', 'sidebar');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-label', 'Open navigation');
+  var bd = document.createElement('div');
+  bd.setAttribute('aria-hidden', 'true');
+  bd.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:40;display:none';
+  document.body.appendChild(bd);
+  function open() {
+    sb.style.display = 'flex'; sb.style.position = 'fixed'; sb.style.top = '0';
+    sb.style.bottom = '0'; sb.style.left = '0'; sb.style.zIndex = '50';
+    bd.style.display = 'block'; btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    ['display','position','top','bottom','left','zIndex'].forEach(function (p) { sb.style[p] = ''; });
+    bd.style.display = 'none'; btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', function () { bd.style.display === 'block' ? close() : open(); });
+  bd.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bd.style.display === 'block') close(); });
+  window.addEventListener('resize', function () { if (window.innerWidth >= 1024) close(); });
+})();
+
+</script>
+<script>
+
+var TODAY = new Date(2026, 8, 26);
+var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function d(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+function iso(x) { return x.getFullYear() + '-' + ('0' + (x.getMonth() + 1)).slice(-2) + '-' + ('0' + x.getDate()).slice(-2); }
+function fmt(x) { return ('0' + x.getDate()).slice(-2) + ' ' + MON[x.getMonth()] + ' ' + x.getFullYear(); }
+function num(x) { return ('0' + x.getDate()).slice(-2) + '/' + ('0' + (x.getMonth() + 1)).slice(-2) + '/' + x.getFullYear(); }
+var KEYS = {
+  'security.idle_timeout_minutes': { group: 'Security', tab: 'security', label: 'Idle timeout', type: 'integer', unit: 'minutes', min: 5, max: 240,
+    hint: 'Whole minutes between 5 and 240.', desc: 'Signs a person out after this many minutes without activity, in every portal. They are warned two minutes before.',
+    versions: [ { v: '20', from: '2026-11-01', by: 'Sarah Mitchell', at: '22 Sep 2026, 10:14' }, { v: '30', from: '2026-07-01', by: 'Sarah Mitchell', at: '24 Jun 2026, 09:02' },
+                { v: '45', from: '2026-04-01', by: 'Priya Shah', at: '27 Mar 2026, 16:40' }, { v: '30', from: '2026-02-01', by: 'System', at: 'Seeded' } ] },
+  'statutory.employer_ni_pct': { group: 'Statutory rates', tab: 'statutory', label: 'Employer\'s NI', type: 'percent', unit: '%', min: 0, max: 100,
+    hint: 'A percentage between 0 and 100, up to two decimal places.', desc: 'Employer National Insurance as a percentage of base pay. Feeds the statutory breakdown.',
+    versions: [ { v: '15.00', from: '2027-04-06', by: 'Sarah Mitchell', at: '2 Sep 2026, 11:20' }, { v: '13.80', from: '2026-04-06', by: 'System', at: 'Seeded' }, { v: '13.80', from: '2025-04-06', by: 'System', at: 'Seeded' } ] },
+  'statutory.wtr_pct': { group: 'Statutory rates', tab: 'statutory', label: 'WTR / holiday accrual', type: 'percent', unit: '%', min: 0, max: 100,
+    hint: 'A percentage between 0 and 100, up to two decimal places.', desc: 'Holiday accrual under the Working Time Regulations, as a percentage of base pay.',
+    versions: [ { v: '12.07', from: '2026-01-01', by: 'System', at: 'Seeded' } ] },
+  'statutory.pension_pct': { group: 'Statutory rates', tab: 'statutory', label: 'Pension', type: 'percent', unit: '%', min: 0, max: 100,
+    hint: 'A percentage between 0 and 100, up to two decimal places.', desc: 'Employer auto-enrolment pension contribution, as a percentage of base pay.',
+    versions: [ { v: '3.00', from: '2026-04-06', by: 'System', at: 'Seeded' } ] },
+  'statutory.apprenticeship_levy_pct': { group: 'Statutory rates', tab: 'statutory', label: 'Apprenticeship Levy', type: 'percent', unit: '%', min: 0, max: 100,
+    hint: 'A percentage between 0 and 100, up to two decimal places.', desc: 'The UK statutory levy on payroll, as a percentage of base pay.',
+    versions: [ { v: '0.50', from: '2026-04-06', by: 'System', at: 'Seeded' } ] },
+  'vat.standard_rate_pct': { group: 'VAT', tab: 'vat', label: 'VAT standard rate', type: 'percent', unit: '%', min: 0, max: 100,
+    hint: 'A percentage between 0 and 100, up to two decimal places.', desc: 'The default VAT rate.',
+    versions: [ { v: '20.00', from: '2026-01-01', by: 'System', at: 'Seeded' } ] },
+  'margin.floor_pct': { group: 'Margin floor', tab: 'marginfloor', label: 'Minimum margin', type: 'percent', unit: '%', min: 0, max: 100,
+    hint: 'A percentage between 0 and 100, up to two decimal places.', desc: 'The lowest margin a rate card may carry before it warns or is blocked.',
+    versions: [ { v: '12.00', from: '2026-05-01', by: 'James Okafor', at: '14 Apr 2026, 15:03' }, { v: '10.00', from: '2026-01-01', by: 'System', at: 'Seeded' } ] },
+  'locale.currency': { group: 'Currency & locale', tab: 'locale', label: 'Currency', type: 'string', unit: '', fixed: true,
+    desc: 'The currency every amount is held and shown in.', versions: [ { v: 'GBP', from: '2026-01-01', by: 'System', at: 'Seeded' } ] },
+  'locale.locale': { group: 'Currency & locale', tab: 'locale', label: 'Locale', type: 'string', unit: '', fixed: true,
+    desc: 'Language, date and number formats: English (United Kingdom), 26/09/2026, 1,234.56.', versions: [ { v: 'en-GB', from: '2026-01-01', by: 'System', at: 'Seeded' } ] }
+};
+var q = new URLSearchParams(location.search);
+var keyName = q.get('key') || 'security.idle_timeout_minutes';
+var K = KEYS[keyName];
+var large = false;
+
+function show(v) { if (K.type === 'percent') return v + '%'; if (K.type === 'money') return '£' + v; if (K.type === 'integer') return v + ' ' + K.unit; return v; }
+function sorted() { var vs = K.versions.slice(); if (large) vs = vs.concat(K._large || []); return vs.sort(function (a, b) { return a.from < b.from ? 1 : -1; }); }
+function render() {
+  var vs = sorted(), t = iso(TODAY), cur = null, next = null;
+  vs.forEach(function (x) { if (x.from <= t && !cur) cur = x; });
+  vs.forEach(function (x) { if (x.from > t) next = x; }); // earliest future (list is newest first)
+  document.getElementById('cur-v').textContent = cur ? show(cur.v) : '—';
+  document.getElementById('cur-m').textContent = cur ? 'Since ' + fmt(d(cur.from)) + ' · ' + (cur.by === 'System' ? 'seeded by the system' : 'set by ' + cur.by) : '';
+  document.getElementById('next-v').textContent = next ? show(next.v) : 'No change scheduled';
+  document.getElementById('next-v').className = next ? 'mt-3 text-3xl font-extrabold tracking-tight text-slate-900 tabular-nums' : 'mt-3 text-base font-semibold text-slate-500';
+  document.getElementById('next-m').textContent = next ? 'From ' + fmt(d(next.from)) + ' · scheduled by ' + next.by : 'Schedule a change to set a new value from a future date.';
+  document.getElementById('next-badge').style.display = next ? '' : 'none';
+  if (K.fixed) document.getElementById('next-m').textContent = 'Fixed for now. Held as configuration so it can change later.';
+  var body = '', cards = '';
+  vs.forEach(function (x, i) {
+    var to = i > 0 ? new Date(d(vs[i - 1].from).getTime() - 864e5) : null;
+    var st = x === cur ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-check text-[10px]" aria-hidden="true"></i>In force</span>'
+           : x.from > t ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-clock text-[10px]" aria-hidden="true"></i>Future</span>'
+           : '<span class="text-slate-400" aria-hidden="true">—</span><span class="sr-only">Earlier version</span>';
+    var who = x.by === 'System' ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-slate-100 text-slate-700 border border-slate-200"><i class="fa-solid fa-robot text-[10px]" aria-hidden="true"></i>System</span>' : S1.esc(x.by);
+    var muted = (x !== cur && x.from <= t) ? ' text-slate-500' : ' text-slate-900';
+    body += '<tr class="hover:bg-slate-50/60"><td class="px-4 pl-5 py-3 text-right font-semibold tabular-nums whitespace-nowrap' + muted + '">' + S1.esc(show(x.v)) + '</td><td class="px-4 py-3 text-slate-700 whitespace-nowrap">' + fmt(d(x.from)) + '</td><td class="px-4 py-3 text-slate-500 whitespace-nowrap">' + (to ? fmt(to) : '—') + '</td><td class="px-4 py-3">' + st + '</td><td class="px-4 py-3 text-slate-700">' + who + '</td><td class="px-4 pr-5 py-3 text-slate-500 whitespace-nowrap">' + S1.esc(x.at) + '</td></tr>';
+    cards += '<li class="px-5 py-4"><div class="flex items-center justify-between gap-3"><span class="text-base font-bold tabular-nums' + muted + '">' + S1.esc(show(x.v)) + '</span>' + st + '</div><p class="text-sm text-slate-600 mt-1">' + fmt(d(x.from)) + ' – ' + (to ? fmt(to) : 'onwards') + '</p><p class="text-xs text-slate-500 mt-1">' + (x.by === 'System' ? 'System' : S1.esc(x.by)) + ' · ' + S1.esc(x.at) + '</p></li>';
+  });
+  document.getElementById('hist-body').innerHTML = body;
+  document.getElementById('hist-cards').innerHTML = cards;
+  document.getElementById('hist-count').textContent = vs.length + (vs.length === 1 ? ' version' : ' versions');
+  var sc = document.getElementById('hist-scroll');
+  sc.style.maxHeight = large ? '480px' : ''; sc.style.overflowY = large ? 'auto' : '';
+}
+
+function fieldErr(id, msg) {
+  var e = document.getElementById(id + '-err'), i = document.getElementById(id);
+  if (msg) { e.querySelector('span').textContent = msg; e.classList.remove('hidden'); i.classList.add('border-red-500'); i.setAttribute('aria-invalid', 'true'); }
+  else { e.classList.add('hidden'); i.classList.remove('border-red-500'); i.removeAttribute('aria-invalid'); }
+}
+function parseDate(s) {
+  var m = /^\s*(\d{1,2})\/(\d{1,2})\/(\d{4})\s*$/.exec(s || ''); if (!m) return null;
+  var x = new Date(+m[3], +m[2] - 1, +m[1]);
+  return (x.getDate() === +m[1] && x.getMonth() === +m[2] - 1) ? x : null;
+}
+function validate() {
+  var ok = true, raw = document.getElementById('f-value').value.trim(), val = raw;
+  if (K.type === 'boolean') val = document.getElementById('f-value-bool').value;
+  else if (!raw) { fieldErr('f-value', 'Enter a value.'); ok = false; }
+  else if (K.type === 'integer' && (!/^\d+$/.test(raw) || +raw < K.min || +raw > K.max)) { fieldErr('f-value', 'Enter whole minutes between ' + K.min + ' and ' + K.max + '.'); ok = false; }
+  else if (K.type === 'percent' && (!/^\d+(\.\d{1,2})?$/.test(raw) || +raw < 0 || +raw > 100)) { fieldErr('f-value', 'Enter a percentage between 0 and 100, up to two decimal places.'); ok = false; }
+  else fieldErr('f-value', null);
+  if (ok && K.type === 'percent') val = (+raw).toFixed(2);
+  var dt = parseDate(document.getElementById('f-date').value);
+  if (!document.getElementById('f-date').value.trim()) { fieldErr('f-date', 'Enter the date the change takes effect.'); ok = false; }
+  else if (!dt) { fieldErr('f-date', 'Enter a date as DD/MM/YYYY, for example 01/11/2026.'); ok = false; }
+  else if (dt < TODAY) { fieldErr('f-date', 'The date can\'t be earlier than today (' + fmt(TODAY) + '). Past periods have already been used, so history can\'t be rewritten.'); ok = false; }
+  else if (K.versions.some(function (x) { return x.from === iso(dt); })) { fieldErr('f-date', 'A version already takes effect on ' + fmt(dt) + '. Choose a different date.'); ok = false; }
+  else fieldErr('f-date', null);
+  document.getElementById('sched-summary').classList.toggle('hidden', ok);
+  return ok ? { v: val, date: dt } : null;
+}
+function openSchedule() {
+  if (K.fixed) return;
+  document.getElementById('sched-title').textContent = 'Schedule a change — ' + K.label;
+  document.getElementById('f-unit').textContent = K.type === 'percent' ? '%' : (K.unit || '');
+  document.getElementById('f-value-hint').textContent = K.hint || '';
+  document.getElementById('f-value').value = ''; document.getElementById('f-date').value = '';
+  fieldErr('f-value', null); fieldErr('f-date', null); document.getElementById('sched-summary').classList.add('hidden');
+  S1.openModal('sched-modal');
+}
+function applyKey() {
+  if (!K) {
+    document.getElementById('key-page').style.setProperty('display', 'none', 'important');
+    document.getElementById('nokey').classList.remove('hidden');
+    document.getElementById('bc-leaf').textContent = 'Setting not found';
+    document.getElementById('bc-group').parentNode.removeChild(document.getElementById('bc-group').nextElementSibling);
+    document.getElementById('bc-group').remove();
+    return;
+  }
+  document.title = K.label + ' — setting history · Abstract VMS';
+  document.getElementById('page-h1').textContent = K.label;
+  document.getElementById('page-sub').textContent = 'System configuration · ' + K.group + ' · setting history';
+  document.getElementById('bc-group').textContent = K.group;
+  document.getElementById('bc-group').href = 'abstract.configuration.system-settings.html#' + K.tab;
+  document.getElementById('bc-root').href = 'abstract.configuration.system-settings.html#' + K.tab;
+  document.getElementById('bc-leaf').textContent = K.label;
+  document.getElementById('k-label').textContent = K.label;
+  document.getElementById('k-key').textContent = keyName;
+  document.getElementById('k-group').textContent = K.group;
+  document.getElementById('k-type').textContent = K.type;
+  document.getElementById('k-desc').textContent = K.desc;
+  var ro = K.fixed || q.get('readonly') === '1';
+  if (ro) {
+    document.getElementById('open-schedule').remove();
+    document.getElementById('ro-banner').classList.remove('hidden');
+    document.getElementById('ro-text').textContent = K.fixed
+      ? 'This setting is fixed for the MVP (SYS-012), so it has no "Schedule a change". It is held as configuration so more currencies and locales can be added later.'
+      : 'You can see how this setting has changed but not change it. That needs permission to edit system configuration.';
+  }
+  // synthetic long history for the large-data state
+  K._large = [];
+  for (var i = 1; i <= 40; i++) { var x = new Date(2022, 0, 1); x.setMonth(x.getMonth() + i); if (x >= d(K.versions[K.versions.length - 1].from)) break;
+    K._large.push({ v: K.type === 'integer' ? String(15 + (i * 7) % 60) : K.type === 'percent' ? (10 + (i % 7) * 0.35).toFixed(2) : K.versions[0].v, from: iso(x), by: ['Priya Shah', 'James Okafor', 'Sarah Mitchell'][i % 3], at: fmt(new Date(x.getTime() - 5 * 864e5)) + ', 10:0' + (i % 10) }); }
+  render();
+}
+document.addEventListener('s1:state', function (e) {
+  if (!K) return;
+  large = e.detail.state === 'large'; render();
+  if (e.detail.state === 'validation') {
+    openSchedule();
+    document.getElementById('f-value').value = K.type === 'integer' ? '300' : '120';
+    document.getElementById('f-date').value = '01/09/2026';
+    validate();
+  } else S1.closeModal('sched-modal');
+});
+document.addEventListener('s1:ready', function () {
+  applyKey(); if (!K) return;
+  var b = document.getElementById('open-schedule'); if (b) b.onclick = openSchedule;
+  document.getElementById('f-date').addEventListener('blur', function () { if (this.value.trim()) validate(); });
+  document.getElementById('sched-form').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var r = validate(); if (!r) { var f = document.querySelector('#sched-form [aria-invalid="true"]'); if (f) f.focus(); return; }
+    K.versions.push({ v: r.v, from: iso(r.date), by: 'Sarah Mitchell', at: fmt(TODAY) + ', ' + new Date().toTimeString().slice(0, 5) });
+    S1.closeModal('sched-modal'); render();
+    if (iso(r.date) === iso(TODAY)) S1.toast(S1.esc(K.label) + ' is now ' + S1.esc(show(r.v)) + '. The change is audited.', 'success');
+    else S1.toast('Change scheduled — ' + S1.esc(K.label) + ' becomes ' + S1.esc(show(r.v)) + ' on ' + fmt(r.date) + '.', 'success');
+    if (document.body.getAttribute('data-s1-state') === 'validation') S1.setState('default');
+  });
+  if (q.get('schedule') === '1') openSchedule();
+});
+
+</script>
+
+<script src="slice1-kit.js"></script>
+</body>
+</html>
