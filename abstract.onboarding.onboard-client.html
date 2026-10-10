@@ -112,11 +112,11 @@
               <button type="button" id="btn-save-exit-top" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save &amp; exit</button>
             </div>
 
-            <div class="grid gap-4 grid-cols-1 lg:grid-cols-[300px_minmax(0,1fr)] items-start">
-              <!-- Step rail -->
-              <nav class="bg-white rounded-2xl border border-slate-200 shadow-sm min-w-0 lg:sticky lg:top-0" aria-label="Onboarding steps">
-                <div class="px-4 pt-4 pb-2 flex items-center justify-between"><h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Steps</h3><span class="text-xs text-slate-500 tnum" id="rail-count"></span></div>
-                <ol id="step-rail" class="flex lg:flex-col gap-1 px-3 pb-3 overflow-x-auto lg:overflow-visible whitespace-nowrap lg:whitespace-normal"></ol>
+            <div class="flex flex-col gap-4">
+              <!-- Step strip: every step, complete or not, in order; scrolls sideways when long -->
+              <nav class="bg-white rounded-2xl border border-slate-200 shadow-sm min-w-0" aria-label="Onboarding steps">
+                <div class="px-4 pt-3 pb-1 flex items-center justify-between"><h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Steps</h3><span class="text-xs text-slate-500 tnum" id="rail-count"></span></div>
+                <ol id="step-rail" class="flex gap-1 px-3 pb-3 overflow-x-auto whitespace-nowrap"></ol>
               </nav>
 
               <!-- Step panel -->
@@ -310,6 +310,9 @@ var BTN_GHOST = 'inline-flex items-center gap-1.5 text-xs font-semibold text-blu
 var INPUT = 'w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20';
 var INPUT_ERR = 'border-red-400 bg-red-50/40 focus:border-red-400 focus:ring-red-600/20';
 var Q = new URLSearchParams(location.search);
+/* Structure changes: the sidebar item carries the pending count (K13 SidebarNavItem count; polled every 60 s with X-Activity: passive; absent when zero) */
+var S2_PENDING_COUNT = 5;
+document.addEventListener('s1:ready', function () { var c = document.getElementById('nav-sc-count'); if (c && S2_PENDING_COUNT > 0) { c.textContent = S2_PENDING_COUNT; c.classList.remove('hidden'); c.classList.add('inline-block'); c.setAttribute('aria-label', S2_PENDING_COUNT + ' waiting'); } });
 function setErr(id, msg) { var i = document.getElementById(id), e = document.getElementById(id + '-err'); if (!i) return; if (msg) { i.classList.add.apply(i.classList, INPUT_ERR.split(' ')); i.setAttribute('aria-invalid', 'true'); if (e) { e.textContent = msg; e.style.display = ''; } } else { i.classList.remove.apply(i.classList, INPUT_ERR.split(' ')); i.removeAttribute('aria-invalid'); if (e) e.style.display = 'none'; } }
 </script>
 
@@ -411,8 +414,8 @@ function paintRail() {
     var done = REC.complete.indexOf(s.key) >= 0, active = s.key === current;
     var mark = done ? '<span class="w-6 h-6 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center flex-shrink-0" aria-hidden="true"><i class="fa-solid fa-check text-[10px]"></i></span>'
                     : '<span class="w-6 h-6 rounded-full ' + (active ? 'bg-blue-700 text-white' : 'bg-slate-100 text-slate-500 border border-slate-200') + ' flex items-center justify-center flex-shrink-0 text-[11px] font-bold tnum" aria-hidden="true">' + (i + 1) + '</span>';
-    return '<li class="flex-shrink-0 lg:flex-shrink"><button type="button" data-step="' + s.key + '" ' + (active ? 'aria-current="step"' : '') + ' class="w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-left min-h-[40px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 ' + (active ? 'bg-blue-50 border border-blue-200' : 'border border-transparent hover:bg-slate-50') + '">' + mark +
-      '<span class="text-sm ' + (active ? 'font-semibold text-slate-900' : 'text-slate-600') + ' truncate">' + esc(s.title) + '</span><span class="sr-only">' + (done ? ', complete' : ', not complete') + '</span></button></li>';
+    return '<li class="flex-shrink-0"><button type="button" data-step="' + s.key + '" ' + (active ? 'aria-current="step"' : '') + ' class="flex items-center gap-2 px-2.5 py-2 rounded-lg text-left min-h-[40px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 ' + (active ? 'bg-blue-50 border border-blue-200' : 'border border-transparent hover:bg-slate-50') + '">' + mark +
+      '<span class="text-sm ' + (active ? 'font-semibold text-slate-900' : 'text-slate-600') + ' max-w-[180px] truncate">' + esc(s.title) + '</span><span class="sr-only">' + (done ? ', complete' : ', not complete') + '</span></button></li>';
   }).join('');
   rail.querySelectorAll('[data-step]').forEach(function (b) { b.onclick = function () { goTo(b.dataset.step); }; });
 }
@@ -466,7 +469,7 @@ function openStep(key) {
 }
 function sizeFrame() {
   var f = document.getElementById('step-frame'); if (!f) return;
-  var top = f.getBoundingClientRect().top, h = Math.max(480, window.innerHeight - top - 120);
+  var top = f.getBoundingClientRect().top, h = Math.max(560, window.innerHeight - top - 110);
   f.style.height = h + 'px';
 }
 window.addEventListener('resize', sizeFrame);
