@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Structure changes · Abstract VMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }
+    .tnum { font-variant-numeric: tabular-nums; }
+    .row-actions { opacity: 0; } tr:hover .row-actions, tr:focus-within .row-actions, li:hover .row-actions, li:focus-within .row-actions, .tree-row:hover .row-actions, .tree-row:focus-within .row-actions { opacity: 1; }
+    @media (hover: none) { .row-actions { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+    details[open] .details-chev{transform:rotate(90deg)} summary::-webkit-details-marker{display:none}
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'], },
+                    colors: {
+                        navy: { DEFAULT: '#172554', 50: '#EEF1FB', 100: '#D4DCF5', 200: '#A9B9EB', 300: '#7E96E1', 400: '#5373D7', 500: '#2850CD', 600: '#1D3FA4', 700: '#162F7B', 800: '#0F1F52', 900: '#172554', },
+                        brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554', }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s2-page data-s1-states="default loading empty error denied large">
+<div id="app-root" class="flex w-full" style="height: 100vh;">
+    <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
+        <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
+            <img src="logo.png" alt="Abstract VMS" class="h-12 w-auto block -ml-[5px]"/>
+            <p class="text-white/40 text-sm mt-2">Admin Portal</p>
+        </div>
+        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1" aria-label="Main">
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p><a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-gauge-high text-white/40 w-4 text-center" aria-hidden="true"></i><span>Admin Dashboard</span></a><a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-list-check text-white/40 w-4 text-center" aria-hidden="true"></i><span>Vacancy List</span></a><a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center" aria-hidden="true"></i><span>Create Vacancy Wizard</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p><a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-users-gear text-white/40 w-4 text-center" aria-hidden="true"></i><span>Worker Pool</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p><a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-building-user text-white/40 w-4 text-center" aria-hidden="true"></i><span>Agency Dashboard</span></a><a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-circle-check text-white/40 w-4 text-center" aria-hidden="true"></i><span>Approved Suppliers</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p><a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center" aria-hidden="true"></i><span>AWR Tracking</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p><a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-clock text-white/40 w-4 text-center" aria-hidden="true"></i><span>Timesheets</span></a><a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center" aria-hidden="true"></i><span>Invoicing / Self-Bill</span></a><a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-chart-bar text-white/40 w-4 text-center" aria-hidden="true"></i><span>Abstract Backing Report</span></a><a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-sterling-sign text-white/40 w-4 text-center" aria-hidden="true"></i><span>Rate Cards</span></a><a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-chart-line text-white/40 w-4 text-center" aria-hidden="true"></i><span>Reports</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p><a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-sliders text-white/40 w-4 text-center" aria-hidden="true"></i><span>Configuration</span></a><a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-gears text-white/40 w-4 text-center" aria-hidden="true"></i><span>System Configuration</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p><a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-users text-white/40 w-4 text-center" aria-hidden="true"></i><span>Users</span></a><a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-user-shield text-white/40 w-4 text-center" aria-hidden="true"></i><span>Roles</span></a><a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center" aria-hidden="true"></i><span>Notification templates</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p><a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-sitemap text-white/40 w-4 text-center" aria-hidden="true"></i><span>Organisations</span></a><a id="nav-structure-changes" href="abstract.organisations.structure-changes.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);" aria-current="page"><i class="fa-solid fa-code-pull-request text-blue-400 w-4 text-center" aria-hidden="true"></i><span>Structure changes</span><span id="nav-sc-count" class="ml-auto hidden min-w-[20px] h-5 px-1.5 rounded-full bg-amber-400 text-navy-900 text-[11px] font-bold leading-5 text-center tnum"></span></a><a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-user-lock text-white/40 w-4 text-center" aria-hidden="true"></i><span>Data subject requests</span></a><a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center" aria-hidden="true"></i><span>Audit Log</span></a>
+        </nav>
+        <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
+            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 transition-all">
+                <span class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);" aria-hidden="true">SM</span>
+                <div class="flex-1 min-w-0">
+                    <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
+                    <p class="text-white/40 text-xs truncate">Abstract</p>
+                </div>
+                <a href="abstract.identity-access.sign-in.html?reason=signed-out" aria-label="Sign out" title="Sign out"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </aside>
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <header id="header" class="flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
+            <div class="flex items-center gap-3 min-w-0">
+                <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-bars text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h1 class="text-lg font-bold text-slate-900 truncate">Structure changes</h1>
+                    </div>
+                    <p class="text-xs text-slate-500 hidden sm:block truncate">Changes to an organisation's structure that are waiting for Abstract</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 flex-shrink-0">
+                
+                <button data-s1-bell aria-label="Notifications" class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-regular fa-bell text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <a href="abstract.identity-access.my-account.html" aria-label="My account (Sarah Mitchell)" class="flex items-center gap-2 pl-3 border-l border-slate-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">
+                    <span class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);" aria-hidden="true">SM</span>
+                    <span class="hidden xl:block"><span class="block text-xs font-semibold text-slate-700">Sarah Mitchell</span><span class="block text-xs text-slate-400">Abstract</span></span>
+                </a>
+            </div>
+        </header>
+        <main id="main" class="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-8 py-6 bg-slate-100">
+            <div data-s1-show="denied" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-14 text-center">
+                <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-lock text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900">You don't have access to this page</h2>
+                <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">Deciding structure changes needs the permission to approve them. Ask an Abstract administrator if you need it.</p>
+                <a href="abstract.shell.dashboard.html" data-s1-home class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to the dashboard</a>
+            </div>
+            <div data-s1-hide="denied">
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-4">
+              <div class="flex flex-wrap items-center gap-3">
+                <label class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px] focus-within:border-blue-300 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-600/20 flex-1 min-w-[220px]"><i class="fa-solid fa-building text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">Organisation</span><select id="f-org" class="bg-transparent text-sm text-slate-700 outline-none w-full"><option value="">All organisations</option></select></label>
+                <label class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px] focus-within:border-blue-300 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-600/20"><i class="fa-solid fa-circle-half-stroke text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">Decision</span><select id="f-status" class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option value="pending">Pending</option><option value="decided">Decided</option><option value="all">All</option></select></label>
+              </div>
+              <div id="chips" class="flex flex-wrap items-center gap-2 mt-3" style="display:none"></div>
+            </div>
+            <div data-s1-show="loading" class="bg-white rounded-2xl border border-slate-200 shadow-sm" aria-busy="true" aria-label="Loading structure changes">
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:40%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:25%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:53%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:42%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:66%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:29%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:44%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:46%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div><p class="sr-only">Loading…</p></div>
+            <div data-s1-show="error" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-12 text-center" role="alert">
+                <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-triangle-exclamation text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900">We couldn't load structure changes</h2>
+                <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">Something went wrong on our side. Try again — if it keeps happening, quote reference <span class="font-semibold text-slate-800 tnum">ERR-SCR-2B77-0410</span> to Abstract support.</p>
+                <button type="button" onclick="S1.setState('loading');setTimeout(function(){S1.setState('default')},700)" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Retry</button>
+            </div>
+            <div data-s1-hide="loading error">
+              <div id="list"></div>
+              <div id="q-empty" style="display:none" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-12 text-center">
+                <div class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-check text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900" id="q-empty-t">No structure changes are waiting</h2>
+                <p class="text-sm text-slate-600 mt-1" id="q-empty-p">Decided changes are under the Decided filter.</p>
+              </div>
+            </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script>
+/* Mobile navigation (sidebar is hidden below lg — this is the only way to reveal it) */
+(function () {
+  var btn = document.getElementById('mobile-menu-btn'),
+      sb  = document.getElementById('sidebar');
+  if (!btn || !sb) return;
+  btn.setAttribute('aria-controls', 'sidebar');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-label', 'Open navigation');
+  var bd = document.createElement('div');
+  bd.setAttribute('aria-hidden', 'true');
+  bd.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:40;display:none';
+  document.body.appendChild(bd);
+  function open() {
+    sb.style.display = 'flex'; sb.style.position = 'fixed'; sb.style.top = '0';
+    sb.style.bottom = '0'; sb.style.left = '0'; sb.style.zIndex = '50';
+    bd.style.display = 'block'; btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    ['display','position','top','bottom','left','zIndex'].forEach(function (p) { sb.style[p] = ''; });
+    bd.style.display = 'none'; btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', function () { bd.style.display === 'block' ? close() : open(); });
+  bd.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bd.style.display === 'block') close(); });
+  window.addEventListener('resize', function () { if (window.innerWidth >= 1024) close(); });
+})();
+</script>
+<script>
+var BADGE = {
+  'Draft': ['bg-slate-100 text-slate-700 border border-slate-200', 'fa-file-pen'],
+  'In Setup': ['bg-blue-50 text-blue-700 border border-blue-200', 'fa-screwdriver-wrench'],
+  'Pending Activation': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Active': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Suspended': ['bg-red-50 text-red-700 border border-red-200', 'fa-ban'],
+  'Invited': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-envelope'],
+  'Inactive': ['bg-slate-100 text-slate-500 border border-slate-200', 'fa-circle-minus'],
+  'Pending approval': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Approved': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Rejected': ['bg-red-50 text-red-700 border border-red-200', 'fa-circle-xmark'],
+  'Compliant': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Pending': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Expired': ['bg-red-50 text-red-700 border border-red-200', 'fa-circle-xmark'],
+  'Not Applicable': ['bg-slate-100 text-slate-700 border border-slate-200', 'fa-minus']
+};
+function badge(s, small) {
+  var b = BADGE[s] || BADGE['Draft'];
+  return '<span class="inline-flex items-center gap-1.5 ' + (small ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs') + ' rounded-full font-semibold whitespace-nowrap ' + b[0] + '"><i class="fa-solid ' + b[1] + ' text-[10px]" aria-hidden="true"></i>' + s + '</span>';
+}
+/* Markers are not statuses (design-tokens §5): default neutral, success, warning, info */
+var MARK = { 'default': 'bg-slate-100 text-slate-700 border-slate-200', success: 'bg-emerald-50 text-emerald-700 border-emerald-200', warning: 'bg-amber-50 text-amber-700 border-amber-200', info: 'bg-blue-50 text-blue-700 border-blue-200' };
+function marker(text, variant, title) {
+  return '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border whitespace-nowrap ' + MARK[variant || 'default'] + '"' + (title ? ' title="' + esc(title) + '"' : '') + '>' + text + '</span>';
+}
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
+function initials(n) { return String(n).split(/\s+/).map(function (p) { return p[0]; }).slice(0, 2).join('').toUpperCase(); }
+var GBP = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' });
+function money(s) { return GBP.format(Number(s)); }
+function pct(s) { return Number(s).toFixed(2) + ' %'; }
+function fmtDate(iso) { if (!iso) return '—'; var d = new Date(iso + (iso.length === 10 ? 'T00:00:00' : '')); return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }
+function fmtDateTime(iso) { var d = new Date(iso); return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); }
+var BTN_SEC = 'inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
+var BTN_PRI = 'inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed';
+var BTN_PRI_STYLE = 'background:linear-gradient(135deg,#1D4ED8,#5B2E91)';
+var BTN_DANGER = 'inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white rounded-lg px-4 py-2.5 text-xs font-semibold min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-1 disabled:opacity-50';
+var BTN_GHOST = 'inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 hover:text-blue-900 hover:underline rounded px-1 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
+var INPUT = 'w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20';
+var INPUT_ERR = 'border-red-400 bg-red-50/40 focus:border-red-400 focus:ring-red-600/20';
+var Q = new URLSearchParams(location.search);
+/* Structure changes: the sidebar item carries the pending count (K13 SidebarNavItem count; polled every 60 s with X-Activity: passive; absent when zero) */
+var S2_PENDING_COUNT = 5;
+document.addEventListener('s1:ready', function () { var c = document.getElementById('nav-sc-count'); if (c && S2_PENDING_COUNT > 0) { c.textContent = S2_PENDING_COUNT; c.classList.remove('hidden'); c.classList.add('inline-block'); c.setAttribute('aria-label', S2_PENDING_COUNT + ' waiting'); } });
+function setErr(id, msg) { var i = document.getElementById(id), e = document.getElementById(id + '-err'); if (!i) return; if (msg) { i.classList.add.apply(i.classList, INPUT_ERR.split(' ')); i.setAttribute('aria-invalid', 'true'); if (e) { e.textContent = msg; e.style.display = ''; } } else { i.classList.remove.apply(i.classList, INPUT_ERR.split(' ')); i.removeAttribute('aria-invalid'); if (e) e.style.display = 'none'; } }
+</script>
+
+<script>
+var ORGS = {"acme": {"name": "Acme Logistics", "party": "client", "status": "Active", "users": 5, "pct": null, "approval": true, "activatedAt": "2026-03-14T10:12:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-03-15T09:02:00Z", "accessEnabledBy": "Sarah Mitchell", "address": {"line1": "Acme House", "line2": "12 Fenton Way", "town": "Birmingham", "postcode": "B6 7QD", "country": "GB"}, "contacts": [{"name": "Rachel Green", "role": "Procurement lead", "email": "rachel.green@acmelogistics.co.uk", "tel": "0121 496 0102"}, {"name": "Priya Natarajan", "role": "Accounts payable", "email": "priya.natarajan@acmelogistics.co.uk", "tel": "0121 496 0110"}], "contract": {"ref": "ABS-CL-2026-004", "start": "2026-02-01", "end": "2028-01-31", "renewal": "Notice period 90 days; review in Q4 2027."}}, "northgate": {"name": "Northgate Foods", "party": "client", "status": "Active", "users": 4, "pct": null, "approval": false, "activatedAt": "2026-04-02T14:40:00Z", "activatedBy": "James Okafor", "accessEnabledAt": "2026-04-02T15:05:00Z", "accessEnabledBy": "James Okafor", "address": {"line1": "Unit 4, Northgate Business Park", "line2": null, "town": "Leeds", "postcode": "LS9 8AQ", "country": "GB"}, "contacts": [{"name": "Hannah Price", "role": "HR director", "email": "h.price@northgatefoods.co.uk", "tel": "0113 496 0220"}], "contract": {"ref": "ABS-CL-2026-007", "start": "2026-04-01", "end": null, "renewal": null}}, "harbour": {"name": "Harbour Retail Group", "party": "client", "status": "In Setup", "users": 2, "pct": 30, "approval": false, "address": {"line1": "Harbour Point", "line2": "1 Quay Street", "town": "Southampton", "postcode": "SO14 2AQ", "country": "GB"}, "contacts": [{"name": "Marcus Lee", "role": "Operations director", "email": "marcus.lee@harbourretail.co.uk", "tel": "023 8049 0310"}], "contract": {"ref": "ABS-CL-2026-011", "start": "2026-11-01", "end": "2028-10-31", "renewal": "Review six months before the end date."}}, "meridian": {"name": "Meridian Healthcare Services", "party": "client", "status": "Pending Activation", "users": 3, "pct": 90, "approval": false, "address": {"line1": "Meridian House", "line2": "30 Castle Street", "town": "Reading", "postcode": "RG1 7SN", "country": "GB"}, "contacts": [{"name": "Dr Anita Rao", "role": "Director of nursing", "email": "a.rao@meridianhealth.org.uk", "tel": "0118 496 0415"}], "contract": {"ref": "ABS-CL-2026-012", "start": "2026-10-01", "end": "2027-09-30", "renewal": null}}, "coastline": {"name": "Coastline Manufacturing", "party": "client", "status": "Draft", "users": 0, "pct": 0, "approval": false, "address": null, "contacts": [], "contract": {"ref": "", "start": null, "end": null, "renewal": null}}, "pennine": {"name": "Pennine Distribution", "party": "client", "status": "Suspended", "users": 3, "pct": null, "approval": false, "activatedAt": "2026-01-20T11:00:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-01-21T08:30:00Z", "accessEnabledBy": "Sarah Mitchell", "suspension": {"reason": "Contract dispute: invoices unpaid since July 2026. Reinstate once the finance team confirms settlement.", "at": "2026-09-02T16:20:00Z", "by": "Sarah Mitchell"}, "address": {"line1": "Pennine Way Depot", "line2": null, "town": "Huddersfield", "postcode": "HD2 1UA", "country": "GB"}, "contacts": [{"name": "Gary Holmes", "role": "Site director", "email": "g.holmes@penninedist.co.uk", "tel": "01484 496 0501"}], "contract": {"ref": "ABS-CL-2025-019", "start": "2025-11-01", "end": "2026-10-31", "renewal": "Not renewing while suspended."}}, "techforce": {"name": "TechForce Recruitment", "party": "agency", "status": "Active", "users": 4, "pct": null, "approval": false, "activatedAt": "2026-03-10T09:45:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-03-10T10:00:00Z", "accessEnabledBy": "Sarah Mitchell", "address": {"line1": "14 Kingsway House", "line2": null, "town": "Coventry", "postcode": "CV1 2LH", "country": "GB"}, "contacts": [{"name": "Daniel Wright", "role": "Operations director", "email": "daniel.wright@techforce-recruitment.co.uk", "tel": "024 7649 0210"}, {"name": "Aisha Khan", "role": "Payroll", "email": "aisha.khan@techforce-recruitment.co.uk", "tel": null}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "12.50", "sba": {"ref": "SBA-2026-0417", "signed": "2026-07-03", "expiry": "2027-07-02", "doc": "SBA_TechForce_signed.pdf"}}, "nexus": {"name": "Nexus Talent", "party": "agency", "status": "Active", "users": 4, "pct": null, "approval": true, "activatedAt": "2026-03-18T13:00:00Z", "activatedBy": "James Okafor", "accessEnabledAt": "2026-03-19T09:00:00Z", "accessEnabledBy": "James Okafor", "address": {"line1": "2nd Floor, Nexus Court", "line2": "8 Wellington Street", "town": "Sheffield", "postcode": "S1 4HG", "country": "GB"}, "contacts": [{"name": "Aisha Rahman", "role": "Managing director", "email": "a.rahman@nexustalent.co.uk", "tel": "0114 496 0330"}], "paymentTermsDays": 14, "marginBasis": "fixed_per_hour", "marginValue": "2.40", "sba": {"ref": "SBA-2026-0391", "signed": "2026-03-12", "expiry": "2027-03-11", "doc": "SBA_Nexus_signed.pdf"}}, "peoplebridge": {"name": "PeopleBridge", "party": "agency", "status": "Pending Activation", "users": 2, "pct": 88, "approval": false, "address": {"line1": "Bridge House", "line2": "5 Canal Street", "town": "Manchester", "postcode": "M1 3HE", "country": "GB"}, "contacts": [{"name": "Leo Marsh", "role": "Director", "email": "leo@peoplebridge.co.uk", "tel": "0161 496 0180"}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "11.00", "sba": {"ref": "SBA-2026-0442", "signed": "2026-09-28", "expiry": "2027-09-27", "doc": "SBA_PeopleBridge_signed.pdf"}}, "summit": {"name": "Summit Staffing Solutions", "party": "agency", "status": "In Setup", "users": 1, "pct": 33, "approval": false, "address": {"line1": "Summit House", "line2": "22 Peak Road", "town": "Derby", "postcode": "DE1 2QR", "country": "GB"}, "contacts": [{"name": "Fiona Wallace", "role": "Owner", "email": "fiona@summitstaffing.co.uk", "tel": "01332 496 0290"}], "paymentTermsDays": null, "marginBasis": "percentage_of_charge", "marginValue": null, "sba": null}, "rapid": {"name": "Rapid Resource", "party": "agency", "status": "Suspended", "users": 3, "pct": null, "approval": false, "activatedAt": "2026-02-11T10:00:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-02-11T10:30:00Z", "accessEnabledBy": "Sarah Mitchell", "suspension": {"reason": "Employer's liability insurance lapsed on 31 Aug 2026 and no renewal has been received.", "at": "2026-09-01T09:10:00Z", "by": "Hannah Clarke"}, "address": {"line1": "9 Station Approach", "line2": null, "town": "Nottingham", "postcode": "NG1 7AB", "country": "GB"}, "contacts": [{"name": "Kim Barrow", "role": "Director", "email": "kim@rapidresource.co.uk", "tel": "0115 496 0770"}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "12.00", "sba": {"ref": "SBA-2026-0360", "signed": "2026-02-05", "expiry": "2027-02-04", "doc": "SBA_Rapid_signed.pdf"}}};
+var CHANGES = [{"id": "scr-1041", "org": "acme", "requestedBy": "Rachel Green", "requestedAt": "2026-10-06T14:20:00Z", "status": "Pending approval", "change": {"kind": "add", "nodeId": null, "parentId": "mid", "name": "Coventry DC", "nodeType": "site", "cc": "CC-COV-03"}, "summary": "Add site \"Coventry DC\" under Midlands", "applicable": true}, {"id": "scr-1042", "org": "acme", "requestedBy": "Rachel Green", "requestedAt": "2026-10-06T14:22:00Z", "status": "Pending approval", "change": {"kind": "rename", "nodeId": "lds", "parentId": null, "name": "Leeds Distribution Hub", "nodeType": null, "cc": null}, "summary": "Rename \"Leeds Hub\" to \"Leeds Distribution Hub\"", "applicable": true}, {"id": "scr-1043", "org": "acme", "requestedBy": "Mark Davies", "requestedAt": "2026-10-07T09:05:00Z", "status": "Pending approval", "change": {"kind": "remove", "nodeId": "lgw", "parentId": null, "name": null, "nodeType": null, "cc": null}, "summary": "Remove \"London Gateway\"", "applicable": true}, {"id": "scr-1044", "org": "nexus", "requestedBy": "Aisha Rahman", "requestedAt": "2026-10-05T09:05:00Z", "status": "Pending approval", "change": {"kind": "move", "nodeId": "nx-hub", "parentId": "nx-north", "name": null, "nodeType": null, "cc": null}, "summary": "Move \"Hub\" under North Division", "applicable": true}, {"id": "scr-1038", "org": "acme", "requestedBy": "Rachel Green", "requestedAt": "2026-10-02T11:40:00Z", "status": "Rejected", "change": {"kind": "add", "nodeId": null, "parentId": "bhx", "name": "Twilight", "nodeType": "department", "cc": "CC-BHX-01-T"}, "summary": "Add department \"Twilight\" under Birmingham DC", "applicable": true, "decidedBy": "Sarah Mitchell", "decidedAt": "2026-10-03T08:12:00Z", "reason": "Twilight is a working-time window, not a department. Ask Abstract to record it as a Shift in your configuration instead."}, {"id": "scr-1035", "org": "nexus", "requestedBy": "Aisha Rahman", "requestedAt": "2026-09-29T16:02:00Z", "status": "Approved", "change": {"kind": "rename", "nodeId": "nx-shf", "parentId": null, "name": "Sheffield", "nodeType": null, "cc": null}, "summary": "Rename \"Sheffield Branch\" to \"Sheffield\"", "applicable": true, "decidedBy": "James Okafor", "decidedAt": "2026-09-30T09:48:00Z", "reason": null}, {"id": "scr-1039", "org": "acme", "requestedBy": "Mark Davies", "requestedAt": "2026-10-04T10:15:00Z", "status": "Pending approval", "change": {"kind": "add", "nodeId": null, "parentId": "lgw-old", "name": "Gateway Nights", "nodeType": "department", "cc": "CC-LGW-03-N"}, "summary": "Add department \"Gateway Nights\" under Thames Gateway", "applicable": false, "notApplicable": "\"Thames Gateway\" was removed on 5 Oct by Sarah Mitchell, so \"Gateway Nights\" has nowhere to go."}];
+var TODAY = "2026-10-10";
+
+var state = Q.get('state') || 'default', page = 1, PAGE = 20;
+var LIST = [];
+function bigList() {
+  var out = CHANGES.slice(), orgs = Object.keys(ORGS).filter(function (k) { return ORGS[k].status === 'Active'; }), who = ['Rachel Green', 'Mark Davies', 'Aisha Rahman', 'Hannah Price', 'Daniel Wright'], kinds = ['add', 'rename', 'move', 'remove'];
+  for (var i = 0; i < 64; i++) { var k = kinds[i % 4], o = orgs[i % orgs.length]; out.push({ id: 'scr-2' + (100 + i), org: o, requestedBy: who[i % 5], requestedAt: '2026-10-0' + (1 + i % 8) + 'T' + ('0' + (8 + i % 10)).slice(-2) + ':' + ('0' + (i * 7) % 60).slice(-2) + ':00Z', status: 'Pending approval', applicable: true, change: { kind: k }, summary: k === 'add' ? 'Add site "Site ' + (i + 1) + '" under Region ' + (i % 3 + 1) : k === 'rename' ? 'Rename "Site ' + i + '" to "Site ' + i + ' North"' : k === 'move' ? 'Move "Site ' + i + '" under Region ' + (i % 3 + 1) : 'Remove "Old site ' + i + '"' }); }
+  return out;
+}
+function load() {
+  LIST = state === 'large' ? bigList() : state === 'empty' ? [] : CHANGES.slice();
+  var sel = document.getElementById('f-org'), seen = {}; sel.innerHTML = '<option value="">All organisations</option>';
+  LIST.forEach(function (c) { if (!seen[c.org]) { seen[c.org] = 1; var o = document.createElement('option'); o.value = c.org; o.textContent = ORGS[c.org].name; sel.appendChild(o); } });
+  if (Q.get('org') && state === 'default') sel.value = Q.get('org');
+  if (Q.get('status') && state === 'default') document.getElementById('f-status').value = Q.get('status');
+  page = 1; render();
+}
+function filtered() {
+  var o = document.getElementById('f-org').value, st = document.getElementById('f-status').value;
+  return LIST.filter(function (c) { return (!o || c.org === o) && (st === 'all' || (st === 'pending' ? c.status === 'Pending approval' : c.status !== 'Pending approval')); })
+    .sort(function (a, b) { return a.requestedAt < b.requestedAt ? -1 : 1; });
+}
+function chips() {
+  var o = document.getElementById('f-org'), st = document.getElementById('f-status'), c = [];
+  if (o.value) c.push(['Organisation: ' + o.options[o.selectedIndex].text, 'f-org']);
+  c.push([st.options[st.selectedIndex].text, 'f-status']);
+  var box = document.getElementById('chips'); box.style.display = '';
+  box.innerHTML = c.map(function (x) { return '<span class="inline-flex items-center gap-1.5 pl-2.5 pr-1 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">' + esc(x[0]) + (x[1] === 'f-status' && st.value === 'pending' ? '<span class="w-1"></span>' : '<button type="button" data-clear="' + x[1] + '" aria-label="Remove filter ' + esc(x[0]) + '" class="w-5 h-5 rounded-full hover:bg-blue-100 flex items-center justify-center"><i class="fa-solid fa-xmark text-[10px]" aria-hidden="true"></i></button>') + '</span>'; }).join('') + (o.value || st.value !== 'pending' ? '<button type="button" onclick="clearFilters()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 ml-1 px-1 min-h-[28px]">Clear all</button>' : '');
+  box.querySelectorAll('[data-clear]').forEach(function (b) { b.onclick = function () { document.getElementById(b.dataset.clear).value = b.dataset.clear === 'f-status' ? 'pending' : ''; page = 1; render(); }; });
+}
+function clearFilters() { document.getElementById('f-org').value = ''; document.getElementById('f-status').value = 'pending'; page = 1; render(); }
+function rowHtml(c, decided) {
+  var href = 'abstract.organisations.structure-change.html?id=' + c.id;
+  var na = c.status === 'Pending approval' && !c.applicable;
+  var statusCell = badge(c.status) + (na ? '<span class="block text-[11px] text-red-700 font-semibold mt-1">Cannot be applied</span>' : '');
+  var decision = decided ? '<td class="px-4 py-3 text-sm text-slate-700 whitespace-nowrap">' + (c.decidedBy ? esc(c.decidedBy) + '<span class="block text-xs text-slate-500 tnum">' + fmtDateTime(c.decidedAt) + '</span>' : '<span class="text-slate-400">—</span>') + '</td><td class="px-4 py-3 text-sm text-slate-700 max-w-[320px]">' + (c.reason ? esc(c.reason) : '<span class="text-slate-400">—</span>') + '</td>' : '';
+  return '<tr class="hover:bg-slate-50/60 cursor-pointer" data-href="' + href + '"><td class="px-4 py-3 text-sm font-semibold text-slate-900 whitespace-nowrap">' + esc(ORGS[c.org].name) + '</td><td class="px-4 py-3 text-sm text-slate-700 whitespace-nowrap">' + esc(c.requestedBy) + '</td><td class="px-4 py-3 text-sm text-slate-600 whitespace-nowrap tnum">' + fmtDateTime(c.requestedAt) + '</td><td class="px-4 py-3 text-sm text-slate-800"><a href="' + href + '" class="hover:text-blue-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 rounded">' + esc(c.summary) + '</a></td><td class="px-4 py-3">' + statusCell + '</td>' + decision + '<td class="px-4 py-3 text-right"><i class="fa-solid fa-chevron-right text-[10px] text-slate-400" aria-hidden="true"></i></td></tr>';
+}
+function cardHtml(c) {
+  var href = 'abstract.organisations.structure-change.html?id=' + c.id, na = c.status === 'Pending approval' && !c.applicable;
+  return '<li><a href="' + href + '" class="block bg-white rounded-2xl border border-slate-200 shadow-sm p-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><span class="flex items-start justify-between gap-2"><span class="text-sm font-semibold text-slate-900">' + esc(ORGS[c.org].name) + '</span>' + badge(c.status, true) + '</span><span class="block text-sm text-slate-800 mt-1">' + esc(c.summary) + '</span>' + (na ? '<span class="block text-[11px] text-red-700 font-semibold mt-1">Cannot be applied</span>' : '') + '<span class="block text-xs text-slate-500 mt-1">Requested by ' + esc(c.requestedBy) + ' · ' + fmtDateTime(c.requestedAt) + '</span>' + (c.decidedBy ? '<span class="block text-xs text-slate-500 mt-1">' + esc(c.status) + ' by ' + esc(c.decidedBy) + ' · ' + fmtDateTime(c.decidedAt) + (c.reason ? ' · ' + esc(c.reason) : '') + '</span>' : '') + '</a></li>';
+}
+function tableHtml(rows, decided) {
+  return '<div class="hidden md:block ' + 'bg-white rounded-2xl border border-slate-200 shadow-sm' + ' overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left"><caption class="sr-only">Structure change requests</caption><thead class="bg-slate-50 border-b border-slate-200"><tr><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Organisation</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Requested by</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Requested</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Change</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>' + (decided ? '<th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Decision</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Reason</th>' : '') + '<th scope="col" class="px-4 py-3"><span class="sr-only">Open</span></th></tr></thead><tbody class="divide-y divide-slate-100">' + rows.map(function (c) { return rowHtml(c, decided); }).join('') + '</tbody></table></div></div><ul class="md:hidden flex flex-col gap-3">' + rows.map(cardHtml).join('') + '</ul>';
+}
+function render() {
+  chips();
+  var all = filtered(), st = document.getElementById('f-status').value, decided = st !== 'pending', list = document.getElementById('list'), emptyEl = document.getElementById('q-empty');
+  var pendingCount = LIST.filter(function (c) { return c.status === 'Pending approval'; }).length;
+  S2_PENDING_COUNT = pendingCount; var nc = document.getElementById('nav-sc-count'); if (nc) { nc.textContent = pendingCount; nc.classList.toggle('hidden', !pendingCount); nc.classList.toggle('inline-block', !!pendingCount); }
+  if (!all.length) {
+    list.innerHTML = ''; emptyEl.style.display = '';
+    var filteredOut = document.getElementById('f-org').value || st !== 'pending';
+    document.getElementById('q-empty-t').textContent = filteredOut ? 'No structure changes match these filters' : 'No structure changes are waiting';
+    document.getElementById('q-empty-p').textContent = filteredOut ? (st === 'pending' ? 'Nothing is pending for this organisation. Decided changes are under the Decided filter.' : 'Try another organisation, or clear the filters.') : 'Decided changes are under the Decided filter.';
+    return;
+  }
+  emptyEl.style.display = 'none';
+  var orgsIn = {}; all.forEach(function (c) { orgsIn[c.org] = 1; });
+  var grouped = !document.getElementById('f-org').value && all.length > PAGE && Object.keys(orgsIn).length > 1;
+  if (!grouped) {
+    var pages = Math.max(1, Math.ceil(all.length / PAGE)), view = all.slice((page - 1) * PAGE, page * PAGE);
+    list.innerHTML = tableHtml(view, decided) + foot(all.length, pages, decided ? 'changes' : 'pending');
+  } else {
+    // past one page with every organisation: rows group under an organisation heading, oldest pending first; pagination applies to groups
+    var groups = []; Object.keys(orgsIn).forEach(function (k) { groups.push({ org: k, rows: all.filter(function (c) { return c.org === k; }) }); });
+    groups.sort(function (a, b) { return a.rows[0].requestedAt < b.rows[0].requestedAt ? -1 : 1; });
+    var GP = 4, gpages = Math.ceil(groups.length / GP), gview = groups.slice((page - 1) * GP, page * GP);
+    list.innerHTML = gview.map(function (g, i) { return '<details class="' + 'bg-white rounded-2xl border border-slate-200 shadow-sm' + ' mb-4" ' + (i < 2 ? 'open' : '') + '><summary class="flex items-center justify-between gap-3 px-5 py-3 cursor-pointer list-none"><span class="text-sm font-bold text-slate-900"><i class="fa-solid fa-chevron-right text-[10px] text-slate-400 mr-2 details-chev" aria-hidden="true"></i>' + esc(ORGS[g.org].name) + '</span><span class="text-xs text-slate-500">' + g.rows.length + ' ' + (decided ? (g.rows.length === 1 ? 'change' : 'changes') : 'pending') + '</span></summary><div class="border-t border-slate-200 p-3">' + tableHtml(g.rows, decided) + '</div></details>'; }).join('') + foot(all.length, gpages, decided ? 'changes' : 'pending', groups.length);
+  }
+  list.querySelectorAll('tr[data-href]').forEach(function (tr) { tr.onclick = function (e) { if (!e.target.closest('a')) location.href = tr.dataset.href; }; });
+  list.querySelectorAll('[data-pg]').forEach(function (b) { b.onclick = function () { page = +b.dataset.pg; render(); document.getElementById('main').scrollTop = 0; }; });
+}
+function foot(total, pages, word, groups) {
+  return '<div class="flex flex-wrap items-center justify-between gap-3 px-1 py-3"><p class="text-xs text-slate-500"><span class="font-semibold text-slate-700 tnum">' + total + '</span> ' + word + (groups ? ' in <span class="font-semibold text-slate-700 tnum">' + groups + '</span> organisations' : '') + '</p>' + (pages > 1 ? '<div class="flex items-center gap-1"><button type="button" data-pg="' + (page - 1) + '" ' + (page === 1 ? 'disabled' : '') + ' aria-label="Previous page" class="w-9 h-9 rounded-lg border border-slate-200 bg-white text-slate-600 disabled:opacity-40"><i class="fa-solid fa-chevron-left text-xs" aria-hidden="true"></i></button><span class="px-2 text-xs text-slate-600 tnum">Page ' + page + ' of ' + pages + '</span><button type="button" data-pg="' + (page + 1) + '" ' + (page === pages ? 'disabled' : '') + ' aria-label="Next page" class="w-9 h-9 rounded-lg border border-slate-200 bg-white text-slate-600 disabled:opacity-40"><i class="fa-solid fa-chevron-right text-xs" aria-hidden="true"></i></button></div>' : '') + '</div>';
+}
+document.getElementById('f-org').addEventListener('change', function () { page = 1; render(); });
+document.getElementById('f-status').addEventListener('change', function () { page = 1; render(); });
+document.addEventListener('s1:state', function (e) { state = e.detail.state; document.getElementById('f-org').value = ''; document.getElementById('f-status').value = 'pending'; load(); });
+</script>
+<script src="slice1-kit.js"></script>
+</body>
+</html>
