@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile · Abstract VMS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }
+    .tnum { font-variant-numeric: tabular-nums; }
+    .row-actions { opacity: 0; } tr:hover .row-actions, tr:focus-within .row-actions, li:hover .row-actions, li:focus-within .row-actions, .tree-row:hover .row-actions, .tree-row:focus-within .row-actions { opacity: 1; }
+    @media (hover: none) { .row-actions { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+    
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { inter: ['Inter', 'sans-serif'], },
+                    colors: {
+                        navy: { DEFAULT: '#172554', 50: '#EEF1FB', 100: '#D4DCF5', 200: '#A9B9EB', 300: '#7E96E1', 400: '#5373D7', 500: '#2850CD', 600: '#1D3FA4', 700: '#162F7B', 800: '#0F1F52', 900: '#172554', },
+                        brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554', }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s2-page data-s1-states="default loading empty error validation readonly denied large conflict ready refused">
+<div id="app-root" class="flex w-full" style="height: 100vh;">
+    <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
+        <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
+            <img src="logo.png" alt="Abstract VMS" class="h-12 w-auto block -ml-[5px]"/>
+            <p class="text-white/40 text-sm mt-2">Admin Portal</p>
+        </div>
+        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1" aria-label="Main">
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p><a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-gauge-high text-white/40 w-4 text-center" aria-hidden="true"></i><span>Admin Dashboard</span></a><a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-list-check text-white/40 w-4 text-center" aria-hidden="true"></i><span>Vacancy List</span></a><a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center" aria-hidden="true"></i><span>Create Vacancy Wizard</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p><a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-users-gear text-white/40 w-4 text-center" aria-hidden="true"></i><span>Worker Pool</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p><a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-building-user text-white/40 w-4 text-center" aria-hidden="true"></i><span>Agency Dashboard</span></a><a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-circle-check text-white/40 w-4 text-center" aria-hidden="true"></i><span>Approved Suppliers</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p><a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center" aria-hidden="true"></i><span>AWR Tracking</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p><a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-clock text-white/40 w-4 text-center" aria-hidden="true"></i><span>Timesheets</span></a><a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center" aria-hidden="true"></i><span>Invoicing / Self-Bill</span></a><a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-chart-bar text-white/40 w-4 text-center" aria-hidden="true"></i><span>Abstract Backing Report</span></a><a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-sterling-sign text-white/40 w-4 text-center" aria-hidden="true"></i><span>Rate Cards</span></a><a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-chart-line text-white/40 w-4 text-center" aria-hidden="true"></i><span>Reports</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p><a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-sliders text-white/40 w-4 text-center" aria-hidden="true"></i><span>Configuration</span></a><a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-gears text-white/40 w-4 text-center" aria-hidden="true"></i><span>System Configuration</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p><a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-users text-white/40 w-4 text-center" aria-hidden="true"></i><span>Users</span></a><a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-user-shield text-white/40 w-4 text-center" aria-hidden="true"></i><span>Roles</span></a><a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center" aria-hidden="true"></i><span>Notification templates</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p><a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);" aria-current="page"><i class="fa-solid fa-sitemap text-blue-400 w-4 text-center" aria-hidden="true"></i><span>Organisations</span><div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div></a><a id="nav-structure-changes" href="abstract.organisations.structure-changes.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-code-pull-request text-white/40 w-4 text-center" aria-hidden="true"></i><span>Structure changes</span><span id="nav-sc-count" class="ml-auto hidden min-w-[20px] h-5 px-1.5 rounded-full bg-amber-400 text-navy-900 text-[11px] font-bold leading-5 text-center tnum"></span></a><a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-user-lock text-white/40 w-4 text-center" aria-hidden="true"></i><span>Data subject requests</span></a><a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center" aria-hidden="true"></i><span>Audit Log</span></a>
+        </nav>
+        <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
+            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 transition-all">
+                <span class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);" aria-hidden="true">SM</span>
+                <div class="flex-1 min-w-0">
+                    <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
+                    <p class="text-white/40 text-xs truncate">Abstract</p>
+                </div>
+                <a href="abstract.identity-access.sign-in.html?reason=signed-out" aria-label="Sign out" title="Sign out"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white" aria-hidden="true"></i></a>
+            </div>
+        </div>
+    </aside>
+    <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+        <header id="header" class="flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
+            <div class="flex items-center gap-3 min-w-0">
+                <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-bars text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h1 class="text-lg font-bold text-slate-900 truncate">Profile <span id="ctx-marker" class="inline-flex items-center gap-1.5 max-w-full whitespace-nowrap overflow-hidden px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200" title="You are working inside another organisation"><i class="fa-solid fa-building-user text-[10px]" aria-hidden="true"></i>Administering <span data-org-name class="truncate"></span></span></h1>
+                    </div>
+                    <p class="text-xs text-slate-500 hidden sm:block truncate">Identity, contacts and contract for <span data-org-name></span>, and where it is in its lifecycle</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3 flex-shrink-0">
+                
+                <button data-s1-bell aria-label="Notifications" class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-regular fa-bell text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <a href="abstract.identity-access.my-account.html" aria-label="My account (Sarah Mitchell)" class="flex items-center gap-2 pl-3 border-l border-slate-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">
+                    <span class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);" aria-hidden="true">SM</span>
+                    <span class="hidden xl:block"><span class="block text-xs font-semibold text-slate-700">Sarah Mitchell</span><span class="block text-xs text-slate-400">Abstract</span></span>
+                </a>
+            </div>
+        </header>
+        <main id="main" class="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-8 py-6 bg-slate-100">
+            <div data-s1-show="denied" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-14 text-center">
+                <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-lock text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900">You don't have access to this page</h2>
+                <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">Seeing an organisation's profile needs the permission to view organisations. Ask an Abstract administrator if you need it.</p>
+                <a href="abstract.shell.dashboard.html" data-s1-home class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to the dashboard</a>
+            </div>
+            <div data-s1-hide="denied">
+            
+            <div id="ctx-banner" role="region" aria-label="Organisation you are administering" class="mb-5 rounded-xl border-2 border-blue-300 bg-blue-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
+                <div class="flex items-start gap-3 flex-1 min-w-0">
+                    <div class="w-9 h-9 rounded-lg bg-blue-700 text-white flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-building-user" aria-hidden="true"></i></div>
+                    <div class="min-w-0">
+                        <p class="text-sm font-bold text-blue-900">You are administering <span data-org-name></span> — changes are made on their behalf and audited as you.</p>
+                        <p class="text-xs text-blue-800 mt-0.5"><span id="ctx-party"></span><span id="ctx-status"></span></p>
+                    </div>
+                </div>
+                <a href="abstract.organisations.organisations.html" class="inline-flex items-center justify-center gap-2 bg-white border border-blue-300 text-blue-800 hover:bg-blue-100 rounded-lg px-3 py-2 text-xs font-semibold min-h-[38px] flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to Abstract <span class="sr-only">(stop administering this organisation)</span></a>
+            </div>
+            <nav aria-label="Organisation" data-embedded-hide class="flex items-center gap-6 border-b border-slate-200 mb-5 overflow-x-auto whitespace-nowrap"><a href="abstract.organisations.organisation-profile.html" data-keep-org aria-current="page" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-blue-700 text-sm font-semibold text-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-id-card text-xs" aria-hidden="true"></i>Profile</a><a href="abstract.organisations.structure.html" data-keep-org  class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-sitemap text-xs" aria-hidden="true"></i>Structure</a><a href="abstract.identity-access.users.html" data-keep-org  class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-users text-xs" aria-hidden="true"></i>Users</a><a href="abstract.identity-access.roles.html" data-keep-org  class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-user-shield text-xs" aria-hidden="true"></i>Roles</a><a href="abstract.identity-access.permission-matrix.html" data-keep-org  class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-table-cells text-xs" aria-hidden="true"></i>Permissions</a></nav>
+            <div data-s1-show="conflict" role="alert" class="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 flex items-start gap-3 text-sm text-amber-900">
+                <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5" aria-hidden="true"></i>
+                <div class="flex-1"><p class="font-semibold">Someone else changed this profile while you were editing.</p><p class="text-amber-800 mt-0.5">Nothing you typed has been saved. Reload to see their version, then make your change again.</p></div>
+                <button type="button" onclick="S1.setState('default')" class="inline-flex items-center gap-2 bg-white border border-amber-300 text-amber-900 hover:bg-amber-100 rounded-lg px-3 py-2 text-xs font-semibold min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-1"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Reload</button>
+            </div>
+            <div data-s1-show="readonly" role="status" class="mb-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 flex items-start gap-3 text-sm text-blue-900"><i class="fa-solid fa-circle-info text-blue-600 mt-0.5" aria-hidden="true"></i><p>You can see this profile but not change it. That needs permission to edit organisations.</p></div>
+            <div id="nousers-banner" style="display:none" role="status" class="mb-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 flex items-start gap-3 text-sm text-blue-900"><i class="fa-solid fa-circle-info text-blue-600 mt-0.5" aria-hidden="true"></i><p>This organisation has no users yet. <a href="abstract.identity-access.users.html" data-keep-org class="font-semibold underline">Invite its first administrator from Users.</a></p></div>
+
+            <div data-s1-show="loading" class="flex flex-col gap-4" aria-busy="true" aria-label="Loading">
+              <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3"><div class="h-4 bg-slate-200 rounded animate-pulse w-1/4"></div><div class="h-6 bg-slate-200 rounded-full animate-pulse w-32"></div><div class="h-3 bg-slate-200 rounded animate-pulse w-1/2"></div></div>
+              <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-3"><div class="h-4 bg-slate-200 rounded animate-pulse w-1/5"></div><div class="h-10 bg-slate-200 rounded-lg animate-pulse"></div><div class="h-10 bg-slate-200 rounded-lg animate-pulse w-2/3"></div></div>
+              <div data-s1-show="loading" class="bg-white rounded-2xl border border-slate-200 shadow-sm" aria-busy="true" aria-label="Loading contacts">
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:40%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:25%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:53%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:42%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:66%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:29%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div><p class="sr-only">Loading…</p></div>
+            </div>
+            <div data-s1-show="error" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-12 text-center" role="alert">
+                <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-triangle-exclamation text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900">We couldn't load this profile</h2>
+                <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">Something went wrong on our side. Try again — if it keeps happening, quote reference <span class="font-semibold text-slate-800 tnum">ERR-ORG-5C21-0391</span> to Abstract support.</p>
+                <button type="button" onclick="S1.setState('loading');setTimeout(function(){S1.setState('default')},700)" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Retry</button>
+            </div>
+
+            <div data-s1-hide="loading error">
+            <div class="flex items-center justify-between gap-3 mb-4 flex-wrap">
+              <div class="flex items-center gap-3 min-w-0"><span id="org-logo" class="w-10 h-10 rounded-lg bg-slate-100 text-slate-600 border border-slate-200 flex items-center justify-center text-xs font-bold flex-shrink-0" aria-hidden="true"></span><div class="min-w-0"><div class="flex items-center gap-2 flex-wrap"><h2 class="text-xl font-bold text-slate-900 truncate" data-org-name></h2><span id="status-badge"></span><span id="pct-line" class="text-xs text-slate-500"></span></div><p class="text-xs text-slate-500" id="party-line"></p></div></div>
+              <div class="flex items-center gap-2" id="save-wrap"><p id="dirty-note" class="text-xs text-slate-500" aria-live="polite"></p><button type="button" id="btn-save" data-edit class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed hidden sm:inline-flex" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save</button></div>
+            </div>
+            <div id="validation-summary" style="display:none" role="alert" class="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 flex items-start gap-3 text-sm text-red-800"><i class="fa-solid fa-circle-exclamation mt-0.5" aria-hidden="true"></i><span>Check the highlighted fields. Nothing is saved until they are right.</span></div>
+            <div class="flex flex-col gap-4">
+              
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5" aria-labelledby="lc-card-t" id="lifecycle-card">
+  <div class="flex items-start justify-between gap-3 flex-wrap">
+    <div><h2 id="lc-card-t" class="text-sm font-bold text-slate-900">Lifecycle and access</h2><p class="text-xs text-slate-500 mt-0.5">Every action here is audited with who, when and the values before and after.</p></div>
+    <div id="lc-actions" class="flex items-center gap-2 flex-wrap"></div>
+  </div>
+  <dl class="grid gap-4 sm:grid-cols-2 mt-4" id="lc-facts"></dl>
+  <div id="lc-gates" style="display:none" class="mt-4">
+    <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Activation gates</h3>
+    
+<div id="gates-wrap">
+  <div id="refused-banner" data-s1-show="refused" role="alert" class="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 flex items-start gap-3 text-sm text-red-900">
+    <i class="fa-solid fa-circle-exclamation text-red-600 mt-0.5" aria-hidden="true"></i>
+    <div><p class="font-semibold">Activation refused.</p><p class="text-red-800 mt-0.5">A gate stopped being met between this page loading and you confirming. The list below is re-evaluated as of now; meet every gate and try again.</p></div>
+  </div>
+  <ul id="gates-list" class="divide-y divide-slate-100 rounded-xl border border-slate-200 overflow-hidden"></ul>
+  <p id="gates-summary" class="text-xs text-slate-500 mt-3"></p>
+</div>
+  </div>
+</section>
+              
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5" aria-labelledby="id-card-t">
+  <h2 id="id-card-t" class="text-sm font-bold text-slate-900 mb-4">Identity</h2>
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div class="sm:col-span-2"><div>
+      <label for="f-name" class="block text-xs font-semibold text-slate-700 mb-1.5">Name <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input id="f-name" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="The organisation's name as it appears on the contract" aria-describedby="f-name-err f-name-hint" />
+      <p id="f-name-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      <p id="f-name-hint" class="text-xs text-slate-500 mt-1.5">Shown on the Organisations list, in the administering context and on every audit row.</p>
+    </div></div>
+    <div class="sm:col-span-2">
+      <p class="block text-xs font-semibold text-slate-700 mb-1.5">Registered address <span class="text-red-600" aria-hidden="true">*</span></p>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <div class="sm:col-span-2"><input id="f-addr1" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="Address line 1" aria-describedby="f-addr1-err f-addr1-hint" aria-label="Address line 1"/><p id="f-addr1-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p></div>
+        <div class="sm:col-span-2"><input id="f-addr2" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="Address line 2 (optional)" aria-describedby="f-addr2-err f-addr2-hint" aria-label="Address line 2"/></div>
+        <div><input id="f-town" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="Town or city" aria-describedby="f-town-err f-town-hint" aria-label="Town or city"/><p id="f-town-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p></div>
+        <div><input id="f-postcode" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="Postcode" aria-describedby="f-postcode-err f-postcode-hint" aria-label="Postcode"/><p id="f-postcode-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p></div>
+        <div><label for="f-country" class="sr-only">Country</label><select id="f-country" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20"><option value="GB" selected>United Kingdom</option><option value="IE">Ireland</option><option value="JE">Jersey</option><option value="GG">Guernsey</option><option value="IM">Isle of Man</option></select></div>
+      </div>
+    </div>
+  </div>
+</section>
+              
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm" aria-labelledby="ct-card-t">
+  <div class="flex items-center justify-between gap-3 px-5 pt-5 pb-3">
+    <div><h2 id="ct-card-t" class="text-sm font-bold text-slate-900">Contacts</h2><p class="text-xs text-slate-500 mt-0.5">At least one contact, each with an email address or a telephone number.</p></div>
+    <button type="button" id="btn-add-contact" data-edit class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add contact</button>
+  </div>
+  <div class="hidden md:block overflow-x-auto">
+    <table class="w-full text-left">
+      <caption class="sr-only">Contacts</caption>
+      <thead class="bg-slate-50 border-y border-slate-200"><tr>
+        <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Name</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Role at client</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Email</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Telephone</th><th scope="col" class="px-4 py-3"><span class="sr-only">Actions</span></th>
+      </tr></thead>
+      <tbody id="contacts-tbody" class="divide-y divide-slate-100"></tbody>
+    </table>
+  </div>
+  <ul id="contacts-cards" class="md:hidden divide-y divide-slate-100 border-t border-slate-200"></ul>
+  <p id="contacts-empty" style="display:none" class="px-5 py-6 text-sm text-slate-500 text-center border-t border-slate-200">No contacts yet. Add the person Abstract speaks to about this organisation.</p>
+  <p id="contacts-err" class="px-5 pb-4 text-xs text-red-600" style="display:none" role="alert"></p>
+  <p id="contacts-foot" class="px-5 py-3 text-xs text-slate-500 border-t border-slate-100"></p>
+</section>
+              <div id="client-cards" class="flex flex-col gap-4">
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5" aria-labelledby="cn-card-t">
+  <h2 id="cn-card-t" class="text-sm font-bold text-slate-900 mb-4">Contract</h2>
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div class="sm:col-span-2"><div>
+      <label for="f-contract-ref" class="block text-xs font-semibold text-slate-700 mb-1.5">Contract reference <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input id="f-contract-ref" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="e.g. ABS-CL-2026-004" aria-describedby="f-contract-ref-err f-contract-ref-hint" />
+      <p id="f-contract-ref-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div></div>
+    <div>
+      <label for="f-contract-start" class="block text-xs font-semibold text-slate-700 mb-1.5">Contract start</label>
+      <input id="f-contract-start" type="date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="" aria-describedby="f-contract-start-err f-contract-start-hint" />
+      <p id="f-contract-start-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div>
+    <div>
+      <label for="f-contract-end" class="block text-xs font-semibold text-slate-700 mb-1.5">Contract end</label>
+      <input id="f-contract-end" type="date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="" aria-describedby="f-contract-end-err f-contract-end-hint" />
+      <p id="f-contract-end-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      <p id="f-contract-end-hint" class="text-xs text-slate-500 mt-1.5">Leave blank for an open-ended contract.</p>
+    </div>
+    <div class="sm:col-span-2">
+      <label for="f-renewal" class="block text-xs font-semibold text-slate-700 mb-1.5">Renewal information</label>
+      <textarea id="f-renewal" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="Notice period, review dates, anything the account team should know"></textarea>
+    </div>
+  </div>
+</section></div>
+              <div id="agency-cards" class="flex flex-col gap-4" style="display:none">
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm" aria-labelledby="cp-card-t">
+  <div class="flex items-center justify-between gap-3 px-5 pt-5 pb-3">
+    <div><h2 id="cp-card-t" class="text-sm font-bold text-slate-900">Compliance</h2><p class="text-xs text-slate-500 mt-0.5">Insurance, certifications and accreditations Abstract holds for this agency, with the document for each.</p></div>
+    <button type="button" id="btn-add-compliance" data-edit class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add item</button>
+  </div>
+  <div data-s1-show="empty" class="px-6 py-10 text-center border-t border-slate-200">
+    <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-shield-halved text-xl" aria-hidden="true"></i></div>
+    <h3 class="text-base font-bold text-slate-900">No compliance items yet</h3>
+    <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">Add the insurance, certifications and accreditations Abstract holds for this agency. Activation needs an in-date insurance record marked Compliant.</p>
+    <button type="button" data-edit onclick="S1.openModal('m-compliance')" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add item</button>
+  </div>
+  <div data-s1-hide="empty">
+  <div class="hidden md:block overflow-x-auto">
+    <table class="w-full text-left">
+      <caption class="sr-only">Compliance records</caption>
+      <thead class="bg-slate-50 border-y border-slate-200"><tr>
+        <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Item</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Kind</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Issuing body</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Cover / reference</th>
+        <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider"><button type="button" class="inline-flex items-center gap-1 uppercase tracking-wider hover:text-slate-800" data-sort="expiry">Expires <i class="fa-solid fa-arrow-down-short-wide text-[10px]" aria-hidden="true"></i></button></th>
+        <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Document</th><th scope="col" class="px-4 py-3"><span class="sr-only">Actions</span></th>
+      </tr></thead>
+      <tbody id="compliance-tbody" class="divide-y divide-slate-100"></tbody>
+    </table>
+  </div>
+  <ul id="compliance-cards" class="md:hidden divide-y divide-slate-100 border-t border-slate-200"></ul>
+  <p id="compliance-foot" class="px-5 py-3 text-xs text-slate-500 border-t border-slate-100">Sorted by expiry, soonest first. A record past its expiry keeps the status that was entered; the date beside it is what the activation gate reads.</p>
+  </div>
+</section>
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5" aria-labelledby="tm-card-t">
+  <div class="flex items-start justify-between gap-3 mb-4">
+    <div><h2 id="tm-card-t" class="text-sm font-bold text-slate-900">Contract terms with Abstract</h2><p class="text-xs text-slate-500 mt-0.5">The same values as the Commercial group in Configuration: one record, two doors. Saved as organisation-level configuration, effective today.</p></div>
+    <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border bg-slate-100 text-slate-700 border-slate-200 whitespace-nowrap" title="Visible to Abstract users holding the configuration view permission; never returned to the agency portal">Abstract only</span>
+  </div>
+  <div class="grid gap-4 sm:grid-cols-3">
+    <div>
+      <label for="f-terms-days" class="block text-xs font-semibold text-slate-700 mb-1.5">Payment terms <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <div class="flex items-center gap-2"><input id="f-terms-days" type="number" min="0" max="120" step="1" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20 max-w-[120px]" aria-describedby="f-terms-days-err f-terms-days-hint"/><span class="text-sm text-slate-600">days from the self-bill date</span></div>
+      <p id="f-terms-days-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      <p id="f-terms-days-hint" class="text-xs text-slate-500 mt-1.5">Whole days, 0 to 120.</p>
+    </div>
+    <div><label for="f-margin-basis" class="block text-xs font-semibold text-slate-700 mb-1.5">Agreed margin basis <span class="text-red-600" aria-hidden="true">*</span></label><select id="f-margin-basis" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20"><option value="percentage_of_charge">Percentage of charge rate</option><option value="fixed_per_hour">Fixed amount per hour</option></select></div>
+    <div>
+      <label for="f-margin-value" class="block text-xs font-semibold text-slate-700 mb-1.5">Agreed margin <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <div class="flex items-center gap-2"><input id="f-margin-value" type="number" min="0" step="0.01" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20 max-w-[140px] tnum" aria-describedby="f-margin-value-err f-margin-value-hint"/><span id="f-margin-unit" class="text-sm text-slate-600">%</span></div>
+      <p id="f-margin-value-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      <p id="f-margin-value-hint" class="text-xs text-slate-500 mt-1.5">A percentage of the charge rate, or pounds per hour, by the basis chosen.</p>
+    </div>
+  </div>
+</section>
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5" aria-labelledby="sba-card-t">
+  <div class="flex items-start justify-between gap-3 mb-4">
+    <div><h2 id="sba-card-t" class="text-sm font-bold text-slate-900">Self-billing agreement</h2><p class="text-xs text-slate-500 mt-0.5">The signed agreement that lets Abstract raise self-bills for this agency. Activation needs one that is signed and in date.</p></div>
+    <span id="sba-indate"></span>
+  </div>
+  <div class="grid gap-4 sm:grid-cols-3">
+    <div class="sm:col-span-3"><div>
+      <label for="f-sba-ref" class="block text-xs font-semibold text-slate-700 mb-1.5">Agreement reference <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input id="f-sba-ref" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="e.g. SBA-2026-0417" aria-describedby="f-sba-ref-err f-sba-ref-hint" />
+      <p id="f-sba-ref-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div></div>
+    <div>
+      <label for="f-sba-signed" class="block text-xs font-semibold text-slate-700 mb-1.5">Signed on <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input id="f-sba-signed" type="date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="" aria-describedby="f-sba-signed-err f-sba-signed-hint" />
+      <p id="f-sba-signed-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div>
+    <div>
+      <label for="f-sba-expiry" class="block text-xs font-semibold text-slate-700 mb-1.5">Expires on <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input id="f-sba-expiry" type="date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="" aria-describedby="f-sba-expiry-err f-sba-expiry-hint" />
+      <p id="f-sba-expiry-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      <p id="f-sba-expiry-hint" class="text-xs text-slate-500 mt-1.5">After the signed date; a new agreement cannot already have expired.</p>
+    </div>
+    <div>
+      <p class="block text-xs font-semibold text-slate-700 mb-1.5">Signed copy</p>
+      <div id="sba-doc" class="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm min-h-[42px]"><i class="fa-regular fa-file-pdf text-red-600" aria-hidden="true"></i><a href="#" class="text-blue-700 font-semibold truncate" id="sba-doc-link" onclick="event.preventDefault();S1.toast('Downloading the signed agreement.','success')"></a><button type="button" data-edit class="ml-auto text-xs font-semibold text-slate-600 hover:text-blue-700" onclick="pickFile('sba')">Replace</button></div>
+      <div id="sba-upload" style="display:none" class="rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-4 text-center" tabindex="0" role="button" aria-label="Upload the signed agreement" onclick="pickFile('sba')"><i class="fa-solid fa-cloud-arrow-up text-slate-400" aria-hidden="true"></i><p class="text-xs text-slate-700 mt-1">Drop the signed PDF here, or <span class="text-blue-700 font-semibold">choose a file</span></p></div>
+      <div id="sba-file" style="display:none" class="mt-2 flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm"><i class="fa-regular fa-file-pdf text-red-600" aria-hidden="true"></i><span class="flex-1 min-w-0 truncate" id="sba-file-name"></span><span class="text-xs text-slate-500 tnum" id="sba-file-size"></span><div class="w-24 h-1.5 rounded-full bg-slate-200 overflow-hidden" id="sba-file-bar"><div class="h-full bg-blue-600" style="width:0%"></div></div></div>
+    </div>
+  </div>
+</section></div>
+              
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5" aria-labelledby="ap-card-t">
+  <h2 id="ap-card-t" class="text-sm font-bold text-slate-900 mb-3">Structure changes</h2>
+  <label class="flex items-start gap-3 cursor-pointer">
+    <input id="f-approval" type="checkbox" class="mt-0.5 w-4 h-4 rounded border-slate-300 text-blue-700 focus:ring-blue-600"/>
+    <span class="text-sm text-slate-800">Abstract must approve changes to this organisation's structure <span id="approval-marker" class="ml-1 align-middle"></span></span>
+  </label>
+  <p class="text-xs text-slate-500 mt-2 ml-7">While this is on, a node its users add, rename, move or remove waits for an Abstract user's approval before it applies; a rejected change is discarded with a reason. Off when the organisation is created. Changes to this switch apply at once and are audited.</p>
+</section>
+            </div>
+            <div class="sm:hidden sticky bottom-0 -mx-4 px-4 py-3 bg-white border-t border-slate-200 mt-4" data-edit><button type="button" id="btn-save-m" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed w-full" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save</button></div>
+            </div>
+            </div>
+        </main>
+    </div>
+</div>
+<script>
+/* Mobile navigation (sidebar is hidden below lg — this is the only way to reveal it) */
+(function () {
+  var btn = document.getElementById('mobile-menu-btn'),
+      sb  = document.getElementById('sidebar');
+  if (!btn || !sb) return;
+  btn.setAttribute('aria-controls', 'sidebar');
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-label', 'Open navigation');
+  var bd = document.createElement('div');
+  bd.setAttribute('aria-hidden', 'true');
+  bd.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.5);z-index:40;display:none';
+  document.body.appendChild(bd);
+  function open() {
+    sb.style.display = 'flex'; sb.style.position = 'fixed'; sb.style.top = '0';
+    sb.style.bottom = '0'; sb.style.left = '0'; sb.style.zIndex = '50';
+    bd.style.display = 'block'; btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    ['display','position','top','bottom','left','zIndex'].forEach(function (p) { sb.style[p] = ''; });
+    bd.style.display = 'none'; btn.setAttribute('aria-expanded', 'false');
+  }
+  btn.addEventListener('click', function () { bd.style.display === 'block' ? close() : open(); });
+  bd.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bd.style.display === 'block') close(); });
+  window.addEventListener('resize', function () { if (window.innerWidth >= 1024) close(); });
+})();
+</script>
+<script>
+var BADGE = {
+  'Draft': ['bg-slate-100 text-slate-700 border border-slate-200', 'fa-file-pen'],
+  'In Setup': ['bg-blue-50 text-blue-700 border border-blue-200', 'fa-screwdriver-wrench'],
+  'Pending Activation': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Active': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Suspended': ['bg-red-50 text-red-700 border border-red-200', 'fa-ban'],
+  'Invited': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-envelope'],
+  'Inactive': ['bg-slate-100 text-slate-500 border border-slate-200', 'fa-circle-minus'],
+  'Pending approval': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Approved': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Rejected': ['bg-red-50 text-red-700 border border-red-200', 'fa-circle-xmark'],
+  'Compliant': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Pending': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Expired': ['bg-red-50 text-red-700 border border-red-200', 'fa-circle-xmark'],
+  'Not Applicable': ['bg-slate-100 text-slate-700 border border-slate-200', 'fa-minus']
+};
+function badge(s, small) {
+  var b = BADGE[s] || BADGE['Draft'];
+  return '<span class="inline-flex items-center gap-1.5 ' + (small ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs') + ' rounded-full font-semibold whitespace-nowrap ' + b[0] + '"><i class="fa-solid ' + b[1] + ' text-[10px]" aria-hidden="true"></i>' + s + '</span>';
+}
+/* Markers are not statuses (design-tokens §5): default neutral, success, warning, info */
+var MARK = { 'default': 'bg-slate-100 text-slate-700 border-slate-200', success: 'bg-emerald-50 text-emerald-700 border-emerald-200', warning: 'bg-amber-50 text-amber-700 border-amber-200', info: 'bg-blue-50 text-blue-700 border-blue-200' };
+function marker(text, variant, title) {
+  return '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border whitespace-nowrap ' + MARK[variant || 'default'] + '"' + (title ? ' title="' + esc(title) + '"' : '') + '>' + text + '</span>';
+}
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
+function initials(n) { return String(n).split(/\s+/).map(function (p) { return p[0]; }).slice(0, 2).join('').toUpperCase(); }
+var GBP = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' });
+function money(s) { return GBP.format(Number(s)); }
+function pct(s) { return Number(s).toFixed(2) + ' %'; }
+function fmtDate(iso) { if (!iso) return '—'; var d = new Date(iso + (iso.length === 10 ? 'T00:00:00' : '')); return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }
+function fmtDateTime(iso) { var d = new Date(iso); return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); }
+var BTN_SEC = 'inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
+var BTN_PRI = 'inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed';
+var BTN_PRI_STYLE = 'background:linear-gradient(135deg,#1D4ED8,#5B2E91)';
+var BTN_DANGER = 'inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white rounded-lg px-4 py-2.5 text-xs font-semibold min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-1 disabled:opacity-50';
+var BTN_GHOST = 'inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 hover:text-blue-900 hover:underline rounded px-1 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
+var INPUT = 'w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20';
+var INPUT_ERR = 'border-red-400 bg-red-50/40 focus:border-red-400 focus:ring-red-600/20';
+var Q = new URLSearchParams(location.search);
+function setErr(id, msg) { var i = document.getElementById(id), e = document.getElementById(id + '-err'); if (!i) return; if (msg) { i.classList.add.apply(i.classList, INPUT_ERR.split(' ')); i.setAttribute('aria-invalid', 'true'); if (e) { e.textContent = msg; e.style.display = ''; } } else { i.classList.remove.apply(i.classList, INPUT_ERR.split(' ')); i.removeAttribute('aria-invalid'); if (e) e.style.display = 'none'; } }
+</script>
+
+<div data-s1-modal id="m-contact" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-contact-t">
+    <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+            <div class="min-w-0"><h2 id="m-contact-t" class="text-base font-bold text-slate-900">Add contact</h2></div>
+            <button type="button" onclick="S1.closeModal('m-contact')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500 flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="px-6 py-5 flex flex-col gap-4">
+        <div>
+      <label for="k-name" class="block text-xs font-semibold text-slate-700 mb-1.5">Name <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input id="k-name" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="e.g. Rachel Green" aria-describedby="k-name-err k-name-hint" />
+      <p id="k-name-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div>
+        <div>
+      <label for="k-role" class="block text-xs font-semibold text-slate-700 mb-1.5">Role at organisation</label>
+      <input id="k-role" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="e.g. Procurement lead" aria-describedby="k-role-err k-role-hint" />
+      <p id="k-role-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      <p id="k-role-hint" class="text-xs text-slate-500 mt-1.5">A free-text label, not a system role.</p>
+    </div>
+        <div class="grid gap-4 sm:grid-cols-2"><div>
+      <label for="k-email" class="block text-xs font-semibold text-slate-700 mb-1.5">Email</label>
+      <input id="k-email" type="email" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="name@company.co.uk" aria-describedby="k-email-err k-email-hint" />
+      <p id="k-email-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div><div>
+      <label for="k-tel" class="block text-xs font-semibold text-slate-700 mb-1.5">Telephone</label>
+      <input id="k-tel" type="tel" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="0121 496 0000" aria-describedby="k-tel-err k-tel-hint" />
+      <p id="k-tel-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div></div>
+        <p class="text-xs text-slate-500">Give an email address or a telephone number, or both.</p></div>
+        <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-wrap justify-end gap-3 sm:rounded-b-2xl"><button type="button" onclick="S1.closeModal('m-contact')" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Cancel</button><button type="button" id="k-save" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-check" aria-hidden="true"></i> Save contact</button></div>
+    </div>
+</div>
+<div data-s1-modal id="m-compliance" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-compliance-t">
+  <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+      <h2 id="m-compliance-t" class="text-base font-bold text-slate-900">Add compliance item</h2>
+      <button type="button" onclick="S1.closeModal('m-compliance')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    <form novalidate id="compliance-form">
+      <div class="px-6 py-5 flex flex-col gap-4">
+        <div>
+      <label for="c-name" class="block text-xs font-semibold text-slate-700 mb-1.5">Item <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input id="c-name" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="e.g. Employer's liability insurance" aria-describedby="c-name-err c-name-hint" />
+      <p id="c-name-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div><label for="c-kind" class="block text-xs font-semibold text-slate-700 mb-1.5">Kind <span class="text-red-600" aria-hidden="true">*</span></label><select id="c-kind" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20"><option value="insurance">Insurance</option><option value="certification">Certification</option><option value="accreditation">Accreditation</option></select></div>
+          <div><label for="c-status" class="block text-xs font-semibold text-slate-700 mb-1.5">Status <span class="text-red-600" aria-hidden="true">*</span></label><select id="c-status" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20"><option>Compliant</option><option>Pending</option><option>Expired</option><option>Not Applicable</option></select><p class="text-xs text-slate-500 mt-1.5">Entered by Abstract. The activation gate reads the status and the expiry date together.</p></div>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          <div>
+      <label for="c-body" class="block text-xs font-semibold text-slate-700 mb-1.5">Issuing body</label>
+      <input id="c-body" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="e.g. Zurich" aria-describedby="c-body-err c-body-hint" />
+      <p id="c-body-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div>
+          <div>
+      <label for="c-cover" class="block text-xs font-semibold text-slate-700 mb-1.5">Cover or reference</label>
+      <input id="c-cover" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="e.g. £10,000,000 · EL-88214" aria-describedby="c-cover-err c-cover-hint" />
+      <p id="c-cover-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div>
+        </div>
+        <div>
+      <label for="c-expiry" class="block text-xs font-semibold text-slate-700 mb-1.5">Expiry date</label>
+      <input id="c-expiry" type="date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="" aria-describedby="c-expiry-err c-expiry-hint" />
+      <p id="c-expiry-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      <p id="c-expiry-hint" class="text-xs text-slate-500 mt-1.5">A new item cannot already have expired.</p>
+    </div>
+        <div>
+          <p class="block text-xs font-semibold text-slate-700 mb-1.5">Document</p>
+          <div id="c-upload" class="rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-6 text-center hidden sm:block" tabindex="0" role="button" aria-label="Upload a document: drop a file here or choose one">
+            <i class="fa-solid fa-cloud-arrow-up text-slate-400 text-xl" aria-hidden="true"></i>
+            <p class="text-sm text-slate-700 mt-2">Drop the certificate here, or <span class="text-blue-700 font-semibold">choose a file</span></p>
+            <p class="text-xs text-slate-500 mt-1">PDF, PNG or JPG up to 10 MB. One file.</p>
+          </div>
+          <button type="button" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 w-full sm:hidden" onclick="pickFile('c')"><i class="fa-solid fa-paperclip" aria-hidden="true"></i> Choose a file</button>
+          <div id="c-file" style="display:none" class="mt-2 flex items-center gap-3 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm"><i class="fa-regular fa-file-pdf text-red-600" aria-hidden="true"></i><span class="flex-1 min-w-0 truncate" id="c-file-name"></span><span class="text-xs text-slate-500 tnum" id="c-file-size"></span><div class="w-24 h-1.5 rounded-full bg-slate-200 overflow-hidden" id="c-file-bar"><div class="h-full bg-blue-600" style="width:0%"></div></div><button type="button" class="text-slate-400 hover:text-slate-700" aria-label="Remove file" onclick="clearFile('c')"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
+          <p id="c-file-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+        </div>
+      </div>
+      <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3 sm:rounded-b-2xl">
+        <button type="button" onclick="S1.closeModal('m-compliance')" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Cancel</button>
+        <button type="submit" id="c-submit" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-check" aria-hidden="true"></i> Save item</button>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+var ORGS = {"acme": {"name": "Acme Logistics", "party": "client", "status": "Active", "users": 5, "pct": null, "approval": true, "activatedAt": "2026-03-14T10:12:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-03-15T09:02:00Z", "accessEnabledBy": "Sarah Mitchell", "address": {"line1": "Acme House", "line2": "12 Fenton Way", "town": "Birmingham", "postcode": "B6 7QD", "country": "GB"}, "contacts": [{"name": "Rachel Green", "role": "Procurement lead", "email": "rachel.green@acmelogistics.co.uk", "tel": "0121 496 0102"}, {"name": "Priya Natarajan", "role": "Accounts payable", "email": "priya.natarajan@acmelogistics.co.uk", "tel": "0121 496 0110"}], "contract": {"ref": "ABS-CL-2026-004", "start": "2026-02-01", "end": "2028-01-31", "renewal": "Notice period 90 days; review in Q4 2027."}}, "northgate": {"name": "Northgate Foods", "party": "client", "status": "Active", "users": 4, "pct": null, "approval": false, "activatedAt": "2026-04-02T14:40:00Z", "activatedBy": "James Okafor", "accessEnabledAt": "2026-04-02T15:05:00Z", "accessEnabledBy": "James Okafor", "address": {"line1": "Unit 4, Northgate Business Park", "line2": null, "town": "Leeds", "postcode": "LS9 8AQ", "country": "GB"}, "contacts": [{"name": "Hannah Price", "role": "HR director", "email": "h.price@northgatefoods.co.uk", "tel": "0113 496 0220"}], "contract": {"ref": "ABS-CL-2026-007", "start": "2026-04-01", "end": null, "renewal": null}}, "harbour": {"name": "Harbour Retail Group", "party": "client", "status": "In Setup", "users": 2, "pct": 30, "approval": false, "address": {"line1": "Harbour Point", "line2": "1 Quay Street", "town": "Southampton", "postcode": "SO14 2AQ", "country": "GB"}, "contacts": [{"name": "Marcus Lee", "role": "Operations director", "email": "marcus.lee@harbourretail.co.uk", "tel": "023 8049 0310"}], "contract": {"ref": "ABS-CL-2026-011", "start": "2026-11-01", "end": "2028-10-31", "renewal": "Review six months before the end date."}}, "meridian": {"name": "Meridian Healthcare Services", "party": "client", "status": "Pending Activation", "users": 3, "pct": 90, "approval": false, "address": {"line1": "Meridian House", "line2": "30 Castle Street", "town": "Reading", "postcode": "RG1 7SN", "country": "GB"}, "contacts": [{"name": "Dr Anita Rao", "role": "Director of nursing", "email": "a.rao@meridianhealth.org.uk", "tel": "0118 496 0415"}], "contract": {"ref": "ABS-CL-2026-012", "start": "2026-10-01", "end": "2027-09-30", "renewal": null}}, "coastline": {"name": "Coastline Manufacturing", "party": "client", "status": "Draft", "users": 0, "pct": 0, "approval": false, "address": null, "contacts": [], "contract": {"ref": "", "start": null, "end": null, "renewal": null}}, "pennine": {"name": "Pennine Distribution", "party": "client", "status": "Suspended", "users": 3, "pct": null, "approval": false, "activatedAt": "2026-01-20T11:00:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-01-21T08:30:00Z", "accessEnabledBy": "Sarah Mitchell", "suspension": {"reason": "Contract dispute: invoices unpaid since July 2026. Reinstate once the finance team confirms settlement.", "at": "2026-09-02T16:20:00Z", "by": "Sarah Mitchell"}, "address": {"line1": "Pennine Way Depot", "line2": null, "town": "Huddersfield", "postcode": "HD2 1UA", "country": "GB"}, "contacts": [{"name": "Gary Holmes", "role": "Site director", "email": "g.holmes@penninedist.co.uk", "tel": "01484 496 0501"}], "contract": {"ref": "ABS-CL-2025-019", "start": "2025-11-01", "end": "2026-10-31", "renewal": "Not renewing while suspended."}}, "techforce": {"name": "TechForce Recruitment", "party": "agency", "status": "Active", "users": 4, "pct": null, "approval": false, "activatedAt": "2026-03-10T09:45:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-03-10T10:00:00Z", "accessEnabledBy": "Sarah Mitchell", "address": {"line1": "14 Kingsway House", "line2": null, "town": "Coventry", "postcode": "CV1 2LH", "country": "GB"}, "contacts": [{"name": "Daniel Wright", "role": "Operations director", "email": "daniel.wright@techforce-recruitment.co.uk", "tel": "024 7649 0210"}, {"name": "Aisha Khan", "role": "Payroll", "email": "aisha.khan@techforce-recruitment.co.uk", "tel": null}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "12.50", "sba": {"ref": "SBA-2026-0417", "signed": "2026-07-03", "expiry": "2027-07-02", "doc": "SBA_TechForce_signed.pdf"}}, "nexus": {"name": "Nexus Talent", "party": "agency", "status": "Active", "users": 4, "pct": null, "approval": true, "activatedAt": "2026-03-18T13:00:00Z", "activatedBy": "James Okafor", "accessEnabledAt": "2026-03-19T09:00:00Z", "accessEnabledBy": "James Okafor", "address": {"line1": "2nd Floor, Nexus Court", "line2": "8 Wellington Street", "town": "Sheffield", "postcode": "S1 4HG", "country": "GB"}, "contacts": [{"name": "Aisha Rahman", "role": "Managing director", "email": "a.rahman@nexustalent.co.uk", "tel": "0114 496 0330"}], "paymentTermsDays": 14, "marginBasis": "fixed_per_hour", "marginValue": "2.40", "sba": {"ref": "SBA-2026-0391", "signed": "2026-03-12", "expiry": "2027-03-11", "doc": "SBA_Nexus_signed.pdf"}}, "peoplebridge": {"name": "PeopleBridge", "party": "agency", "status": "Pending Activation", "users": 2, "pct": 88, "approval": false, "address": {"line1": "Bridge House", "line2": "5 Canal Street", "town": "Manchester", "postcode": "M1 3HE", "country": "GB"}, "contacts": [{"name": "Leo Marsh", "role": "Director", "email": "leo@peoplebridge.co.uk", "tel": "0161 496 0180"}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "11.00", "sba": {"ref": "SBA-2026-0442", "signed": "2026-09-28", "expiry": "2027-09-27", "doc": "SBA_PeopleBridge_signed.pdf"}}, "summit": {"name": "Summit Staffing Solutions", "party": "agency", "status": "In Setup", "users": 1, "pct": 33, "approval": false, "address": {"line1": "Summit House", "line2": "22 Peak Road", "town": "Derby", "postcode": "DE1 2QR", "country": "GB"}, "contacts": [{"name": "Fiona Wallace", "role": "Owner", "email": "fiona@summitstaffing.co.uk", "tel": "01332 496 0290"}], "paymentTermsDays": null, "marginBasis": "percentage_of_charge", "marginValue": null, "sba": null}, "rapid": {"name": "Rapid Resource", "party": "agency", "status": "Suspended", "users": 3, "pct": null, "approval": false, "activatedAt": "2026-02-11T10:00:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-02-11T10:30:00Z", "accessEnabledBy": "Sarah Mitchell", "suspension": {"reason": "Employer's liability insurance lapsed on 31 Aug 2026 and no renewal has been received.", "at": "2026-09-01T09:10:00Z", "by": "Hannah Clarke"}, "address": {"line1": "9 Station Approach", "line2": null, "town": "Nottingham", "postcode": "NG1 7AB", "country": "GB"}, "contacts": [{"name": "Kim Barrow", "role": "Director", "email": "kim@rapidresource.co.uk", "tel": "0115 496 0770"}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "12.00", "sba": {"ref": "SBA-2026-0360", "signed": "2026-02-05", "expiry": "2027-02-04", "doc": "SBA_Rapid_signed.pdf"}}};
+var TREES = {"acme": [{"id": "mid", "parentId": null, "name": "Midlands", "nodeType": "region", "cc": "CC-MID", "userCount": 0}, {"id": "bhx", "parentId": "mid", "name": "Birmingham DC", "nodeType": "site", "cc": "CC-BHX-01", "userCount": 1}, {"id": "bhx-n", "parentId": "bhx", "name": "Nights", "nodeType": "department", "cc": "CC-BHX-01-N", "userCount": 1}, {"id": "bhx-d", "parentId": "bhx", "name": "Days", "nodeType": "department", "cc": "CC-BHX-01-D", "userCount": 0}, {"id": "lei", "parentId": "mid", "name": "Leicester DC", "nodeType": "site", "cc": "CC-LEI-02", "userCount": 1}, {"id": "nth", "parentId": null, "name": "Northern", "nodeType": "region", "cc": "CC-NTH", "userCount": 1}, {"id": "lds", "parentId": "nth", "name": "Leeds Hub", "nodeType": "site", "cc": "CC-LDS-01", "userCount": 0}, {"id": "lgw", "parentId": null, "name": "London Gateway", "nodeType": "site", "cc": "CC-LGW-03", "userCount": 0}], "northgate": [{"id": "ng-hq", "parentId": null, "name": "Head office", "nodeType": "business_unit", "cc": "NG-100", "userCount": 2}, {"id": "ng-prod", "parentId": null, "name": "Production", "nodeType": "business_unit", "cc": "NG-200", "userCount": 1}, {"id": "ng-leeds", "parentId": "ng-prod", "name": "Leeds bakery", "nodeType": "site", "cc": "NG-210", "userCount": 1}], "harbour": [{"id": "hb-south", "parentId": null, "name": "South coast", "nodeType": "region", "cc": "HB-S", "userCount": 0}, {"id": "hb-soton", "parentId": "hb-south", "name": "Southampton store", "nodeType": "site", "cc": "HB-S-01", "userCount": 1}], "meridian": [{"id": "md-rdg", "parentId": null, "name": "Reading hospital", "nodeType": "site", "cc": "MH-RDG", "userCount": 2}, {"id": "md-rdg-w", "parentId": "md-rdg", "name": "Wards", "nodeType": "department", "cc": "MH-RDG-W", "userCount": 0}], "coastline": [], "pennine": [{"id": "pn-hud", "parentId": null, "name": "Huddersfield depot", "nodeType": "site", "cc": "PN-HUD", "userCount": 2}], "techforce": [{"id": "tf-cov", "parentId": null, "name": "Coventry", "nodeType": "branch", "userCount": 1}, {"id": "tf-mk", "parentId": null, "name": "Milton Keynes", "nodeType": "branch", "userCount": 0}, {"id": "tf-north", "parentId": null, "name": "North Division", "nodeType": "division", "userCount": 1}, {"id": "tf-shf", "parentId": "tf-north", "name": "Sheffield Hub", "nodeType": "branch", "userCount": 0}, {"id": "tf-lds", "parentId": "tf-north", "name": "Leeds Branch", "nodeType": "branch", "userCount": 0}], "nexus": [{"id": "nx-north", "parentId": null, "name": "North Division", "nodeType": "division", "userCount": 1}, {"id": "nx-shf", "parentId": "nx-north", "name": "Sheffield", "nodeType": "branch", "userCount": 1}, {"id": "nx-south", "parentId": null, "name": "South Division", "nodeType": "division", "userCount": 0}, {"id": "nx-hub", "parentId": "nx-south", "name": "Hub", "nodeType": "branch", "userCount": 1}], "peoplebridge": [{"id": "pb-man", "parentId": null, "name": "Manchester", "nodeType": "branch", "userCount": 1}], "summit": [], "rapid": [{"id": "rr-not", "parentId": null, "name": "Nottingham", "nodeType": "branch", "userCount": 2}]};
+var USERS = {"acme": [{"name": "Rachel Green", "email": "rachel.green@acmelogistics.co.uk", "roles": ["Administrator"], "status": "Active", "scope": [], "last": "2026-10-09T08:02:00Z"}, {"name": "Mark Davies", "email": "mark.davies@acmelogistics.co.uk", "roles": ["Hiring manager"], "status": "Active", "scope": ["bhx"], "last": "2026-10-08T14:18:00Z"}, {"name": "Priya Natarajan", "email": "priya.natarajan@acmelogistics.co.uk", "roles": ["Finance approver"], "status": "Active", "scope": [], "last": "2026-10-07T10:47:00Z"}, {"name": "Olivia Brown", "email": "olivia.brown@acmelogistics.co.uk", "roles": ["Hiring manager"], "status": "Invited", "scope": ["lei", "nth"], "last": null}, {"name": "Ben Taylor", "email": "ben.taylor@acmelogistics.co.uk", "roles": ["Hiring manager", "Seasonal supervisors"], "status": "Inactive", "scope": ["bhx-n"], "last": "2026-08-02T16:20:00Z"}], "techforce": [{"name": "Daniel Wright", "email": "daniel.wright@techforce-recruitment.co.uk", "roles": ["Administrator"], "status": "Active", "scope": [], "last": "2026-10-09T07:55:00Z"}, {"name": "Sophie Turner", "email": "sophie.turner@techforce-recruitment.co.uk", "roles": ["Recruiter"], "status": "Active", "scope": ["tf-cov"], "last": "2026-10-08T12:09:00Z"}, {"name": "Aisha Khan", "email": "aisha.khan@techforce-recruitment.co.uk", "roles": ["Payroll"], "status": "Active", "scope": [], "last": "2026-10-06T09:30:00Z"}, {"name": "Ryan Hughes", "email": "ryan.hughes@techforce-recruitment.co.uk", "roles": ["Recruiter"], "status": "Invited", "scope": ["tf-north"], "last": null}], "harbour": [{"name": "Marcus Lee", "email": "marcus.lee@harbourretail.co.uk", "roles": ["Administrator"], "status": "Invited", "scope": [], "last": null}, {"name": "Jo Patel", "email": "jo.patel@harbourretail.co.uk", "roles": ["Hiring manager"], "status": "Invited", "scope": ["hb-soton"], "last": null}], "summit": [{"name": "Fiona Wallace", "email": "fiona@summitstaffing.co.uk", "roles": ["Administrator"], "status": "Invited", "scope": [], "last": null}]};
+var COMPLIANCE = {"techforce": [{"id": "acr-1", "name": "Employer's liability insurance", "kind": "insurance", "issuingBody": "Zurich", "coverOrReference": "£10,000,000 · EL-88214", "expiryDate": "2027-03-31", "status": "Compliant", "doc": "EL_Cert_2026.pdf"}, {"id": "acr-2", "name": "Public liability insurance", "kind": "insurance", "issuingBody": "AXA", "coverOrReference": "£5,000,000 · PL-40027", "expiryDate": "2026-11-09", "status": "Pending", "doc": "PL_Cert_2025.pdf"}, {"id": "acr-3", "name": "REC Corporate Membership", "kind": "accreditation", "issuingBody": "REC", "coverOrReference": "REC-2026-1174", "expiryDate": "2027-01-01", "status": "Compliant", "doc": "REC_2026.pdf"}, {"id": "acr-4", "name": "Stronger Together accreditation", "kind": "accreditation", "issuingBody": "Stronger Together", "coverOrReference": "ST-9921", "expiryDate": "2026-06-30", "status": "Expired", "doc": "ST_2025.pdf"}, {"id": "acr-5", "name": "Gangmasters licence", "kind": "certification", "issuingBody": "GLAA", "coverOrReference": null, "expiryDate": null, "status": "Not Applicable", "doc": null}], "summit": [{"id": "acr-9", "name": "Employer's liability insurance", "kind": "insurance", "issuingBody": "Aviva", "coverOrReference": "£10,000,000 · EL-55102", "expiryDate": "2027-09-30", "status": "Compliant", "doc": "Summit_EL_2026.pdf"}], "peoplebridge": [{"id": "acr-11", "name": "Employer's liability insurance", "kind": "insurance", "issuingBody": "Hiscox", "coverOrReference": "£10,000,000 · HX-20991", "expiryDate": "2027-08-31", "status": "Compliant", "doc": "PB_EL_2026.pdf"}, {"id": "acr-12", "name": "REC Corporate Membership", "kind": "accreditation", "issuingBody": "REC", "coverOrReference": "REC-2026-1402", "expiryDate": "2027-06-01", "status": "Pending", "doc": null}]};
+var LINKS = [{"id": "asl-1", "client": "acme", "agency": "techforce", "approvedFrom": "2026-03-12", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-2", "client": "northgate", "agency": "techforce", "approvedFrom": "2026-05-01", "revokedFrom": null, "approvedBy": "James Okafor"}, {"id": "asl-3", "client": "acme", "agency": "nexus", "approvedFrom": "2026-03-20", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-4", "client": "northgate", "agency": "nexus", "approvedFrom": "2026-02-01", "revokedFrom": "2026-09-30", "approvedBy": "Sarah Mitchell", "revokedBy": "James Okafor"}, {"id": "asl-5", "client": "acme", "agency": "peoplebridge", "approvedFrom": "2026-11-01", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-6", "client": "pennine", "agency": "rapid", "approvedFrom": "2026-02-15", "revokedFrom": "2026-09-01", "approvedBy": "Sarah Mitchell", "revokedBy": "Hannah Clarke"}, {"id": "asl-7", "client": "harbour", "agency": "techforce", "approvedFrom": "2026-11-01", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-8", "client": "meridian", "agency": "peoplebridge", "approvedFrom": "2026-10-15", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}];
+var RATE_CARDS = [{"id": "rc-1", "jobRoleId": "jr-wo", "client": "acme", "orgNodeId": null, "comparatorRate": "14.10", "versions": [{"id": "rv-1b", "effectiveFrom": "2027-01-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-10-01T10:00:00Z", "ack": false, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "14.30", "basePay": "13.00", "employerNi": "1.95", "wtrAccrual": "1.57", "pension": "0.39", "apprenticeshipLevy": "0.07", "chargeRate": "20.40", "spread": "6.10", "margin": "3.42", "marginPct": "16.76", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "14.60", "basePay": "13.30", "employerNi": "2.00", "wtrAccrual": "1.61", "pension": "0.40", "apprenticeshipLevy": "0.07", "chargeRate": "20.80", "spread": "6.20", "margin": "3.42", "marginPct": "16.44", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "15.90", "basePay": "14.50", "employerNi": "2.18", "wtrAccrual": "1.75", "pension": "0.44", "apprenticeshipLevy": "0.07", "chargeRate": "21.60", "spread": "5.70", "margin": "2.66", "marginPct": "12.31", "belowFloor": false}]}, {"id": "rv-1a", "effectiveFrom": "2026-01-01", "effectiveTo": "2026-12-31", "createdBy": "Sarah Mitchell", "createdAt": "2025-12-18T15:20:00Z", "ack": false, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "13.90", "basePay": "12.60", "employerNi": "1.89", "wtrAccrual": "1.52", "pension": "0.38", "apprenticeshipLevy": "0.06", "chargeRate": "19.80", "spread": "5.90", "margin": "3.35", "marginPct": "16.92", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "14.20", "basePay": "12.90", "employerNi": "1.94", "wtrAccrual": "1.56", "pension": "0.39", "apprenticeshipLevy": "0.06", "chargeRate": "20.20", "spread": "6.00", "margin": "3.35", "marginPct": "16.58", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "15.50", "basePay": "14.10", "employerNi": "2.12", "wtrAccrual": "1.70", "pension": "0.42", "apprenticeshipLevy": "0.07", "chargeRate": "21.00", "spread": "5.50", "margin": "2.59", "marginPct": "12.33", "belowFloor": false}]}, {"id": "rv-1z", "effectiveFrom": "2025-04-01", "effectiveTo": "2025-12-31", "createdBy": "Sarah Mitchell", "createdAt": "2025-03-20T09:00:00Z", "ack": true, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "13.20", "basePay": "12.00", "employerNi": "1.80", "wtrAccrual": "1.45", "pension": "0.36", "apprenticeshipLevy": "0.06", "chargeRate": "18.60", "spread": "5.40", "margin": "2.93", "marginPct": "15.75", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "13.40", "basePay": "12.20", "employerNi": "1.83", "wtrAccrual": "1.47", "pension": "0.37", "apprenticeshipLevy": "0.06", "chargeRate": "18.90", "spread": "5.50", "margin": "2.97", "marginPct": "15.71", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "14.70", "basePay": "13.40", "employerNi": "2.01", "wtrAccrual": "1.62", "pension": "0.40", "apprenticeshipLevy": "0.07", "chargeRate": "19.60", "spread": "4.90", "margin": "2.10", "marginPct": "10.71", "belowFloor": false}]}]}, {"id": "rc-2", "jobRoleId": "jr-wo", "client": "acme", "orgNodeId": "bhx", "comparatorRate": "14.40", "versions": [{"id": "rv-2a", "effectiveFrom": "2026-04-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-03-25T11:00:00Z", "ack": false, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "14.10", "basePay": "12.80", "employerNi": "1.92", "wtrAccrual": "1.54", "pension": "0.38", "apprenticeshipLevy": "0.06", "chargeRate": "20.10", "spread": "6.00", "margin": "3.40", "marginPct": "16.92", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "14.40", "basePay": "13.10", "employerNi": "1.97", "wtrAccrual": "1.58", "pension": "0.39", "apprenticeshipLevy": "0.07", "chargeRate": "20.50", "spread": "6.10", "margin": "3.39", "marginPct": "16.54", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "15.70", "basePay": "14.30", "employerNi": "2.15", "wtrAccrual": "1.73", "pension": "0.43", "apprenticeshipLevy": "0.07", "chargeRate": "21.30", "spread": "5.60", "margin": "2.62", "marginPct": "12.30", "belowFloor": false}]}]}, {"id": "rc-3", "jobRoleId": "jr-fd", "client": "acme", "orgNodeId": null, "comparatorRate": null, "versions": [{"id": "rv-3a", "effectiveFrom": "2026-01-01", "effectiveTo": null, "createdBy": "Sarah Mitchell", "createdAt": "2025-12-18T15:30:00Z", "ack": false, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "15.60", "basePay": "14.20", "employerNi": "2.13", "wtrAccrual": "1.71", "pension": "0.43", "apprenticeshipLevy": "0.07", "chargeRate": "22.10", "spread": "6.50", "margin": "3.56", "marginPct": "16.11", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "15.90", "basePay": "14.50", "employerNi": "2.18", "wtrAccrual": "1.75", "pension": "0.44", "apprenticeshipLevy": "0.07", "chargeRate": "22.50", "spread": "6.60", "margin": "3.56", "marginPct": "15.82", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "17.30", "basePay": "15.80", "employerNi": "2.37", "wtrAccrual": "1.91", "pension": "0.47", "apprenticeshipLevy": "0.08", "chargeRate": "24.00", "spread": "6.70", "margin": "3.37", "marginPct": "14.04", "belowFloor": false}]}]}, {"id": "rc-4", "jobRoleId": "jr-pp", "client": "northgate", "orgNodeId": null, "comparatorRate": "13.00", "versions": [{"id": "rv-4a", "effectiveFrom": "2026-05-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-04-20T09:00:00Z", "ack": false, "lines": [{"shiftId": "ng-d", "shiftName": "Days", "hourType": "standard", "agencyPayRate": "13.60", "basePay": "12.30", "employerNi": "1.85", "wtrAccrual": "1.48", "pension": "0.37", "apprenticeshipLevy": "0.06", "chargeRate": "19.40", "spread": "5.80", "margin": "3.34", "marginPct": "17.22", "belowFloor": false}, {"shiftId": "ng-l", "shiftName": "Lates", "hourType": "standard", "agencyPayRate": "13.90", "basePay": "12.60", "employerNi": "1.89", "wtrAccrual": "1.52", "pension": "0.38", "apprenticeshipLevy": "0.06", "chargeRate": "19.80", "spread": "5.90", "margin": "3.35", "marginPct": "16.92", "belowFloor": false}]}]}, {"id": "rc-5", "jobRoleId": "jr-wo", "client": "northgate", "orgNodeId": null, "comparatorRate": null, "versions": [{"id": "rv-5a", "effectiveFrom": "2026-05-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-04-20T09:10:00Z", "ack": false, "lines": [{"shiftId": "ng-d", "shiftName": "Days", "hourType": "standard", "agencyPayRate": "14.00", "basePay": "12.70", "employerNi": "1.91", "wtrAccrual": "1.53", "pension": "0.38", "apprenticeshipLevy": "0.06", "chargeRate": "19.90", "spread": "5.90", "margin": "3.32", "marginPct": "16.68", "belowFloor": false}, {"shiftId": "ng-l", "shiftName": "Lates", "hourType": "standard", "agencyPayRate": "14.30", "basePay": "13.00", "employerNi": "1.95", "wtrAccrual": "1.57", "pension": "0.39", "apprenticeshipLevy": "0.07", "chargeRate": "20.30", "spread": "6.00", "margin": "3.32", "marginPct": "16.35", "belowFloor": false}]}]}, {"id": "rc-6", "jobRoleId": "jr-hca", "client": "meridian", "orgNodeId": null, "comparatorRate": "14.80", "versions": [{"id": "rv-6a", "effectiveFrom": "2026-10-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-09-29T12:00:00Z", "ack": false, "lines": [{"shiftId": "md-ed", "shiftName": "Early", "hourType": "standard", "agencyPayRate": "14.50", "basePay": "13.20", "employerNi": "1.98", "wtrAccrual": "1.59", "pension": "0.40", "apprenticeshipLevy": "0.07", "chargeRate": "20.60", "spread": "6.10", "margin": "3.36", "marginPct": "16.31", "belowFloor": false}, {"shiftId": "md-lt", "shiftName": "Late", "hourType": "standard", "agencyPayRate": "14.50", "basePay": "13.20", "employerNi": "1.98", "wtrAccrual": "1.59", "pension": "0.40", "apprenticeshipLevy": "0.07", "chargeRate": "20.60", "spread": "6.10", "margin": "3.36", "marginPct": "16.31", "belowFloor": false}, {"shiftId": "md-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "16.30", "basePay": "14.90", "employerNi": "2.24", "wtrAccrual": "1.80", "pension": "0.45", "apprenticeshipLevy": "0.07", "chargeRate": "22.80", "spread": "6.50", "margin": "3.34", "marginPct": "14.65", "belowFloor": false}]}]}];
+var TODAY = "2026-10-10";
+
+var GATE_DEFS = { client: [{"key": "structure", "label": "At least one node in the structure", "detail": "Add a region, site or department in step 2.", "stepKey": "structure"}, {"key": "administrator", "label": "A user who can manage users and roles", "detail": "Invite a user in step 3 and give them a role that can manage users and roles.", "stepKey": "users"}, {"key": "rate_card", "label": "A rate card with a version in force today", "detail": "Add a rate card in step 4 with an effective date of today or earlier.", "stepKey": "rates"}, {"key": "invoicing", "label": "Payment terms, VAT treatment and invoice recipients set", "detail": "Set the three required invoicing values in step 5.", "stepKey": "invoicing"}, {"key": "approved_agencies", "label": "The approved-agency list reviewed", "detail": "Open step 8 and save it once you have reviewed the list, even if no agency is approved yet.", "stepKey": "approved-agencies"}], agency: [{"key": "insurance", "label": "In-date insurance on file", "detail": "Add an insurance record in step 2, marked Compliant, with an expiry date of today or later.", "stepKey": "compliance"}, {"key": "self_billing_agreement", "label": "A signed, in-date self-billing agreement", "detail": "Record the reference, signed date and expiry in step 3.", "stepKey": "self-billing"}, {"key": "structure", "label": "At least one node in the structure", "detail": "Add a branch, region or division in step 4.", "stepKey": "structure"}, {"key": "administrator", "label": "A user who can manage users and roles", "detail": "Invite a user in step 5 and give them a role that can manage users and roles.", "stepKey": "users"}, {"key": "rate_card", "label": "A rate card in force for an approved client", "detail": "An approved client needs a rate card with a version in force today; add one in step 6.", "stepKey": "rates"}, {"key": "client_approval", "label": "Approval for at least one client, in force today", "detail": "Approve this agency for a client in step 7 with an effective date of today or earlier.", "stepKey": "client-approvals"}] };
+var GATE_MET = {"harbour": {"structure": true, "administrator": true, "rate_card": false, "invoicing": false, "approved_agencies": false}, "coastline": {"structure": false, "administrator": false, "rate_card": false, "invoicing": false, "approved_agencies": false}, "meridian": {"structure": true, "administrator": true, "rate_card": true, "invoicing": false, "approved_agencies": false}, "summit": {"insurance": true, "self_billing_agreement": false, "structure": false, "administrator": true, "rate_card": false, "client_approval": false}, "peoplebridge": {"insurance": true, "self_billing_agreement": true, "structure": true, "administrator": true, "rate_card": false, "client_approval": false}};
+var state = Q.get('state') || 'default';
+var slug = Q.get('org') || 'acme';
+if (state === 'empty') slug = 'summit';
+var ORG, dirty = false, contacts = [], records = [], gatesMet = null, ro = false;
+var STEP_URL = { client: 'abstract.onboarding.onboard-client.html?org=', agency: 'abstract.onboarding.onboard-agency.html?org=' };
+function withOrg(href) { return href + (href.indexOf('?') >= 0 ? '&' : '?') + 'org=' + slug; }
+document.querySelectorAll('a[data-keep-org]').forEach(function (a) { a.setAttribute('href', withOrg(a.getAttribute('href'))); });
+
+function load() {
+  ORG = JSON.parse(JSON.stringify(ORGS[slug] || ORGS.acme));
+  if (state === 'empty') { ORG.status = 'Active'; ORG.contacts = []; ORG.activatedAt = TODAY + 'T09:00:00Z'; ORG.activatedBy = 'Sarah Mitchell'; ORG.sba = null; COMPLIANCE.summit = []; USERS.summit = []; }
+  if (state === 'large') { ORG.contacts = []; for (var i = 0; i < 26; i++) ORG.contacts.push({ name: ['Alex', 'Sam', 'Jo', 'Chris', 'Pat', 'Dee'][i % 6] + ' ' + ['Morgan', 'Reid', 'Shah', 'Okafor', 'Brennan', 'Walsh', 'Nair'][i % 7], role: ['Site manager', 'Shift lead', 'Accounts', 'HR'][i % 4], email: 'contact' + (i + 1) + '@acmelogistics.co.uk', tel: i % 3 ? '0121 496 0' + (100 + i) : null }); }
+  ro = state === 'readonly';
+  contacts = (ORG.contacts || []).map(function (c) { return Object.assign({}, c); });
+  gatesMet = ORG.status === 'Pending Activation' ? Object.assign({}, GATE_MET[slug] || {}) : null;
+  if (state === 'ready') { ORG.status = 'Pending Activation'; gatesMet = {}; GATE_DEFS[ORG.party].forEach(function (g) { gatesMet[g.key] = true; }); }
+  dirty = false; paint();
+}
+function paint() {
+  document.querySelectorAll('[data-org-name]').forEach(function (e) { e.textContent = ORG.name; });
+  document.title = 'Profile · ' + ORG.name + ' · Abstract VMS';
+  document.getElementById('header').style.borderTop = '4px solid #1D4ED8';
+  document.getElementById('org-logo').textContent = initials(ORG.name);
+  document.getElementById('status-badge').innerHTML = badge(ORG.status);
+  document.getElementById('pct-line').textContent = ORG.pct != null && ORG.status !== 'Active' && ORG.status !== 'Suspended' ? ORG.pct + ' % of onboarding complete' : '';
+  document.getElementById('party-line').textContent = (ORG.party === 'client' ? 'Client' : 'Agency') + ' organisation';
+  document.getElementById('ctx-party').textContent = (ORG.party === 'client' ? 'Client' : 'Agency') + ' organisation. You see the same screens its own user administrators see.';
+  document.getElementById('ctx-status').textContent = ORG.status !== 'Active' ? ' Its status is ' + ORG.status + (ORG.status === 'Suspended' ? ', so its users can\'t sign in until it is active again.' : '.') : '';
+  document.getElementById('client-cards').style.display = ORG.party === 'client' ? '' : 'none';
+  document.getElementById('agency-cards').style.display = ORG.party === 'agency' ? '' : 'none';
+  var users = USERS[slug] || [];
+  document.getElementById('nousers-banner').style.display = (users.length === 0 && (ORG.status === 'Active' || ORG.status === 'Pending Activation')) ? '' : 'none';
+  // Lifecycle card: absent while Draft / In Setup — the wizard owns the record until Review and activate
+  var lc = document.getElementById('lifecycle-card');
+  lc.style.display = (ORG.status === 'Draft' || ORG.status === 'In Setup') ? 'none' : '';
+  paintLifecycle(); fillForm(); paintContacts(); if (ORG.party === 'agency') { paintCompliance(); fillSba(); fillTerms(); }
+  setRo();
+  var sb = document.getElementById('nav-organisations'); if (sb) { sb.setAttribute('aria-current', 'page'); }
+  document.getElementById('dirty-note').textContent = dirty ? 'Unsaved changes.' : '';
+}
+function setRo() {
+  document.querySelectorAll('main input, main select, main textarea').forEach(function (i) { if (i.id !== 'f-approval-x') i.disabled = ro; });
+  document.querySelectorAll('main [data-edit]').forEach(function (b) { b.style.display = ro ? 'none' : ''; });
+}
+function paintLifecycle() {
+  var f = document.getElementById('lc-facts'), a = document.getElementById('lc-actions'), g = document.getElementById('lc-gates');
+  function dt(label, html) { return '<div><dt class="text-xs font-semibold text-slate-500 uppercase tracking-wider">' + label + '</dt><dd class="mt-1 text-sm text-slate-800">' + html + '</dd></div>'; }
+  var rows = '', acts = '';
+  g.style.display = 'none';
+  if (ORG.status === 'Pending Activation') {
+    rows = dt('Status', badge('Pending Activation') + '<span class="text-xs text-slate-500 ml-2">Review opened; waiting for every gate to be met</span>') + dt('User access', marker('Off') + '<span class="text-xs text-slate-500 ml-2">Can be enabled once Active</span>');
+    g.style.display = ''; paintGates();
+  } else if (ORG.status === 'Active') {
+    var access = ORG.accessEnabledAt;
+    rows = dt('Status', badge('Active') + '<span class="text-xs text-slate-500 ml-2">since ' + fmtDate(ORG.activatedAt.slice(0, 10)) + ' · activated by ' + esc(ORG.activatedBy) + '</span>')
+         + dt('User access', (access ? marker('On', 'success') + '<span class="text-xs text-slate-500 ml-2">' + fmtDate(access.slice(0, 10)) + ' · ' + esc(ORG.accessEnabledBy) + '</span>' : marker('Off') + '<span class="text-xs text-slate-500 ml-2">Its users cannot sign in yet</span>'));
+    acts = (access ? '' : '<button type="button" id="btn-enable" class="' + BTN_PRI + '" style="' + BTN_PRI_STYLE + '"><i class="fa-solid fa-door-open" aria-hidden="true"></i> Enable access</button>') + '<button type="button" id="btn-suspend" class="' + BTN_DANGER + '"><i class="fa-solid fa-ban" aria-hidden="true"></i> Suspend</button>';
+  } else if (ORG.status === 'Suspended') {
+    var s = ORG.suspension || {};
+    rows = dt('Status', badge('Suspended') + '<span class="text-xs text-slate-500 ml-2">' + fmtDateTime(s.at) + ' · by ' + esc(s.by) + '</span>') + dt('User access', (ORG.accessEnabledAt ? marker('On', 'success') : marker('Off')) + '<span class="text-xs text-slate-500 ml-2">Unchanged by the suspension; its users are refused sign-in while Suspended</span>') + '<div class="sm:col-span-2">' + dt('Reason', '<p class="rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-900">' + esc(s.reason) + '</p>') + '</div>';
+    acts = '<button type="button" id="btn-reactivate" class="' + BTN_PRI + '" style="' + BTN_PRI_STYLE + '"><i class="fa-solid fa-rotate-left" aria-hidden="true"></i> Reactivate</button>';
+  }
+  f.innerHTML = rows; a.innerHTML = ro ? '' : acts;
+  var en = document.getElementById('btn-enable'); if (en) en.onclick = function () {
+    S1.confirm({ title: 'Enable user access for ' + ORG.name + '?', body: 'Its users will be able to sign in from now on. This is recorded in the audit log and cannot be undone from here.', cta: 'Enable access', onConfirm: function () { ORG.accessEnabledAt = new Date().toISOString(); ORG.accessEnabledBy = 'Sarah Mitchell'; paintLifecycle(); S1.toast('User access enabled for ' + esc(ORG.name) + '. Recorded in the audit log.', 'success'); } });
+  };
+  var su = document.getElementById('btn-suspend'); if (su) su.onclick = function () {
+    S1.confirm({ title: 'Suspend ' + ORG.name + '?', body: 'Its users will not be able to sign in and its history is kept. Say why; the reason is recorded in the audit log.', cta: 'Suspend', tone: 'danger', reason: true, reasonLabel: 'Reason (required)', reasonPlaceholder: 'e.g. Contract dispute: invoices unpaid since July 2026', onConfirm: function (r) { ORG.status = 'Suspended'; ORG.suspension = { reason: r, at: new Date().toISOString(), by: 'Sarah Mitchell' }; paint(); S1.toast(esc(ORG.name) + ' suspended.', 'success'); } });
+  };
+  var re = document.getElementById('btn-reactivate'); if (re) re.onclick = function () {
+    S1.confirm({ title: 'Reactivate ' + ORG.name + '?', body: 'It returns to Active; user access stays as it was.', cta: 'Reactivate', onConfirm: function () { ORG.status = 'Active'; ORG.suspension = null; paint(); S1.toast(esc(ORG.name) + ' is Active again.', 'success'); } });
+  };
+}
+function paintGates() {
+  var defs = GATE_DEFS[ORG.party], list = document.getElementById('gates-list'), unmet = 0;
+  list.innerHTML = defs.map(function (g) {
+    var met = !!gatesMet[g.key]; if (!met) unmet++;
+    return '<li class="px-4 py-3 flex items-start gap-3 bg-white"><span class="mt-0.5">' + (met ? marker('<i class="fa-solid fa-check text-[10px]" aria-hidden="true"></i> Met', 'success') : marker('<i class="fa-solid fa-xmark text-[10px]" aria-hidden="true"></i> Not met', 'warning')) + '</span><div class="flex-1 min-w-0"><p class="text-sm font-semibold text-slate-900">' + esc(g.label) + '</p>' + (met ? '' : '<p class="text-xs text-slate-600 mt-0.5">' + esc(g.detail) + ' <a class="text-blue-700 font-semibold hover:underline" href="' + STEP_URL[ORG.party] + slug + '&step=' + g.stepKey + '">Open the step</a></p>') + '</div></li>';
+  }).join('');
+  document.getElementById('gates-summary').textContent = unmet ? unmet + (unmet === 1 ? ' gate is' : ' gates are') + ' not met. Activate appears once every gate is met.' : 'Every gate is met.';
+  var a = document.getElementById('lc-actions');
+  a.innerHTML = (unmet || ro) ? '' : '<button type="button" id="btn-activate" class="' + BTN_PRI + '" style="' + BTN_PRI_STYLE + '"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Activate</button>';
+  var ab = document.getElementById('btn-activate'); if (ab) ab.onclick = function () {
+    S1.confirm({ title: 'Activate ' + ORG.name + '?', body: 'Every activation gate has passed. Its users still cannot sign in until you enable access.', cta: 'Activate', onConfirm: function () {
+      if (state === 'refused') { gatesMet[ORG.party === 'client' ? 'invoicing' : 'client_approval'] = false; paintGates(); document.getElementById('refused-banner').style.setProperty('display', 'flex', 'important'); return; }
+      ORG.status = 'Active'; ORG.activatedAt = new Date().toISOString(); ORG.activatedBy = 'Sarah Mitchell'; ORG.accessEnabledAt = null; ORG.pct = null; paint(); S1.toast(esc(ORG.name) + ' is Active. Enable access when it is ready to sign in.', 'success');
+    } });
+  };
+}
+
+/* ---------- form ---------- */
+function fillForm() {
+  var a = ORG.address || {};
+  document.getElementById('f-name').value = ORG.name || '';
+  document.getElementById('f-addr1').value = a.line1 || ''; document.getElementById('f-addr2').value = a.line2 || ''; document.getElementById('f-town').value = a.town || ''; document.getElementById('f-postcode').value = a.postcode || ''; document.getElementById('f-country').value = a.country || 'GB';
+  if (ORG.party === 'client') { var c = ORG.contract || {}; document.getElementById('f-contract-ref').value = c.ref || ''; document.getElementById('f-contract-start').value = c.start || ''; document.getElementById('f-contract-end').value = c.end || ''; document.getElementById('f-renewal').value = c.renewal || ''; }
+  document.getElementById('f-approval').checked = !!ORG.approval; paintApproval();
+  ['f-name', 'f-addr1', 'f-town', 'f-postcode', 'f-contract-ref', 'f-contract-end', 'f-terms-days', 'f-margin-value', 'f-sba-expiry'].forEach(function (id) { setErr(id, ''); });
+  document.getElementById('contacts-err').style.display = 'none'; document.getElementById('validation-summary').style.display = 'none';
+  if (state === 'validation') {
+    document.getElementById('f-name').value = '';
+    if (ORG.party === 'client') { document.getElementById('f-contract-start').value = '2026-02-01'; document.getElementById('f-contract-end').value = '2026-01-31'; }
+    contacts = [{ name: 'Sam Field', role: 'Site contact', email: null, tel: null }];
+    setTimeout(function () { validate(); document.getElementById('validation-summary').style.display = ''; }, 0);
+  }
+}
+function paintApproval() { document.getElementById('approval-marker').innerHTML = document.getElementById('f-approval').checked ? marker('On', 'success') : marker('Off'); }
+document.getElementById('f-approval').addEventListener('change', function () { paintApproval(); dirty = true; document.getElementById('dirty-note').textContent = 'Unsaved changes.'; });
+function validate() {
+  var ok = true;
+  function req(id, msg) { var v = document.getElementById(id).value.trim(); setErr(id, v ? '' : msg); if (!v) ok = false; }
+  req('f-name', "Enter the organisation's name."); req('f-addr1', 'Enter the first line of the address.'); req('f-town', 'Enter the town or city.'); req('f-postcode', 'Enter the postcode.');
+  if (ORG.party === 'client') { req('f-contract-ref', 'Enter the contract reference.'); var s = document.getElementById('f-contract-start').value, e = document.getElementById('f-contract-end').value; if (s && e && e < s) { setErr('f-contract-end', 'The contract end must be after its start (' + fmtDate(s) + ').'); ok = false; } else setErr('f-contract-end', ''); }
+  else { var d = document.getElementById('f-terms-days').value; if (d === '' || Number(d) < 0 || Number(d) > 120 || Number(d) % 1) { setErr('f-terms-days', 'Enter whole days between 0 and 120.'); ok = false; } else setErr('f-terms-days', ''); var m = document.getElementById('f-margin-value').value; if (m === '' || Number(m) < 0) { setErr('f-margin-value', 'Enter the agreed margin as a figure of zero or more.'); ok = false; } else setErr('f-margin-value', ''); if (!validateSba()) ok = false; }
+  var cerr = document.getElementById('contacts-err'), bad = contacts.filter(function (c) { return !c.email && !c.tel; });
+  if (!contacts.length) { cerr.textContent = 'Add at least one contact.'; cerr.style.display = ''; ok = false; } else if (bad.length) { cerr.textContent = bad.map(function (c) { return c.name; }).join(', ') + ' has neither an email address nor a telephone number. Give one or the other.'; cerr.style.display = ''; ok = false; } else cerr.style.display = 'none';
+  return ok;
+}
+function save() {
+  if (!validate()) { document.getElementById('validation-summary').style.display = ''; document.getElementById('main').scrollTop = 0; return; }
+  document.getElementById('validation-summary').style.display = 'none';
+  var newName = document.getElementById('f-name').value.trim(), renamed = newName !== ORG.name, wasApproval = ORG.approval;
+  ORG.name = newName; ORG.contacts = contacts.slice(); ORG.approval = document.getElementById('f-approval').checked;
+  ORG.address = { line1: document.getElementById('f-addr1').value.trim(), line2: document.getElementById('f-addr2').value.trim() || null, town: document.getElementById('f-town').value.trim(), postcode: document.getElementById('f-postcode').value.trim(), country: document.getElementById('f-country').value };
+  if (ORG.party === 'client') ORG.contract = { ref: document.getElementById('f-contract-ref').value.trim(), start: document.getElementById('f-contract-start').value || null, end: document.getElementById('f-contract-end').value || null, renewal: document.getElementById('f-renewal').value.trim() || null };
+  else { ORG.paymentTermsDays = Number(document.getElementById('f-terms-days').value); ORG.marginBasis = document.getElementById('f-margin-basis').value; ORG.marginValue = document.getElementById('f-margin-value').value; }
+  dirty = false; paint();
+  S1.toast('Profile saved.' + (renamed ? ' The organisation is now called ' + esc(ORG.name) + ' everywhere.' : '') + (wasApproval !== ORG.approval ? ' Structure-change approval is now ' + (ORG.approval ? 'on' : 'off') + '.' : ''), 'success');
+}
+document.getElementById('btn-save').onclick = save; document.getElementById('btn-save-m').onclick = save;
+document.getElementById('main').addEventListener('input', function (e) { if (e.target.matches('input, select, textarea') && !e.target.closest('[data-s1-modal]')) { dirty = true; document.getElementById('dirty-note').textContent = 'Unsaved changes.'; } });
+window.addEventListener('beforeunload', function (e) { if (dirty) { e.preventDefault(); e.returnValue = ''; } });
+document.querySelectorAll('nav[aria-label="Organisation"] a').forEach(function (a) { a.addEventListener('click', function (e) { if (dirty) { e.preventDefault(); S1.confirm({ title: 'Leave without saving?', body: 'Your changes to this profile will be lost.', cta: 'Leave without saving', tone: 'danger', onConfirm: function () { dirty = false; location.href = a.href; } }); } }); });
+
+/* ---------- contacts (pagination past 20, search) ---------- */
+var cpage = 1, cq = '';
+function paintContacts() {
+  var list = contacts.map(function (c, i) { return Object.assign({ i: i }, c); }).filter(function (c) { return !cq || (c.name + ' ' + (c.email || '') + ' ' + (c.role || '')).toLowerCase().indexOf(cq) >= 0; });
+  var PAGE = 20, pages = Math.max(1, Math.ceil(list.length / PAGE)); if (cpage > pages) cpage = pages;
+  var view = list.slice((cpage - 1) * PAGE, cpage * PAGE);
+  document.getElementById('contacts-tbody').innerHTML = view.map(function (c) {
+    var missing = !c.email && !c.tel;
+    return '<tr class="' + (missing ? 'bg-red-50/40' : '') + '"><td class="px-4 py-3 text-sm font-semibold text-slate-900">' + esc(c.name) + '</td><td class="px-4 py-3 text-sm text-slate-600">' + esc(c.role || '—') + '</td><td class="px-4 py-3 text-sm text-slate-700">' + (c.email ? '<a class="text-blue-700 hover:underline" href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a>' : '<span class="text-slate-400">—</span>') + '</td><td class="px-4 py-3 text-sm text-slate-700 tnum">' + esc(c.tel || '—') + '</td><td class="px-4 py-3 text-right whitespace-nowrap"><span class="row-actions inline-flex gap-1">' + (ro ? '' : '<button type="button" class="' + BTN_GHOST + '" data-edit-contact="' + c.i + '">Edit</button><button type="button" class="' + BTN_GHOST + ' text-red-700 hover:text-red-900" data-del-contact="' + c.i + '" aria-label="Remove ' + esc(c.name) + '"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>') + '</span></td></tr>';
+  }).join('');
+  document.getElementById('contacts-cards').innerHTML = view.map(function (c) { return '<li class="px-5 py-3 flex items-start gap-3"><div class="flex-1 min-w-0"><p class="text-sm font-semibold text-slate-900">' + esc(c.name) + '</p><p class="text-xs text-slate-500">' + esc(c.role || '') + '</p><p class="text-xs text-slate-700 mt-1 break-all">' + esc(c.email || '') + (c.email && c.tel ? ' · ' : '') + esc(c.tel || '') + (!c.email && !c.tel ? '<span class="text-red-700">No email or telephone</span>' : '') + '</p></div>' + (ro ? '' : '<button type="button" class="w-9 h-9 rounded-lg border border-slate-200 bg-white text-slate-500 flex-shrink-0" aria-label="Actions for ' + esc(c.name) + '" data-contact-sheet="' + c.i + '"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></button>') + '</li>'; }).join('');
+  document.getElementById('contacts-empty').style.display = contacts.length ? 'none' : '';
+  var foot = document.getElementById('contacts-foot');
+  foot.innerHTML = (contacts.length > 20 ? '<span class="inline-flex items-center gap-2 mr-3"><label class="sr-only" for="c-search">Search contacts</label><input id="c-search" type="search" value="' + esc(cq) + '" placeholder="Search contacts" class="bg-slate-50 border border-slate-200 rounded-lg px-2 py-1 text-xs"/></span>' : '') + 'Showing ' + (list.length ? (cpage - 1) * PAGE + 1 : 0) + '–' + Math.min(cpage * PAGE, list.length) + ' of ' + list.length + (list.length === 1 ? ' contact' : ' contacts') + (pages > 1 ? ' <button type="button" class="' + BTN_GHOST + '" data-cpg="' + (cpage - 1) + '" ' + (cpage === 1 ? 'disabled' : '') + ' aria-label="Previous page">‹</button> <span class="tnum">' + cpage + ' / ' + pages + '</span> <button type="button" class="' + BTN_GHOST + '" data-cpg="' + (cpage + 1) + '" ' + (cpage === pages ? 'disabled' : '') + ' aria-label="Next page">›</button>' : '');
+  var cs = document.getElementById('c-search'); if (cs) cs.oninput = function () { cq = cs.value.trim().toLowerCase(); cpage = 1; paintContacts(); document.getElementById('c-search').focus(); };
+  document.querySelectorAll('[data-cpg]').forEach(function (b) { b.onclick = function () { cpage = +b.dataset.cpg; paintContacts(); }; });
+  document.querySelectorAll('[data-del-contact]').forEach(function (b) { b.onclick = function () { contacts.splice(+b.dataset.delContact, 1); dirty = true; paintContacts(); document.getElementById('dirty-note').textContent = 'Unsaved changes.'; }; });
+  document.querySelectorAll('[data-edit-contact]').forEach(function (b) { b.onclick = function () { openContact(+b.dataset.editContact); }; });
+  document.querySelectorAll('[data-contact-sheet]').forEach(function (b) { b.onclick = function () { var i = +b.dataset.contactSheet; S1.confirm({ title: contacts[i].name, body: 'What do you want to do with this contact?', cta: 'Edit', cancel: 'Close', onConfirm: function () { openContact(i); } }); }; });
+}
+var editingContact = null;
+function openContact(i) { editingContact = i == null ? null : i; var c = i == null ? {} : contacts[i]; document.getElementById('m-contact-t').textContent = i == null ? 'Add contact' : 'Edit contact'; document.getElementById('k-name').value = c.name || ''; document.getElementById('k-role').value = c.role || ''; document.getElementById('k-email').value = c.email || ''; document.getElementById('k-tel').value = c.tel || ''; ['k-name', 'k-email'].forEach(function (id) { setErr(id, ''); }); S1.openModal('m-contact'); }
+document.getElementById('btn-add-contact').onclick = function () { openContact(null); };
+document.getElementById('k-save').onclick = function () {
+  var n = document.getElementById('k-name').value.trim(), em = document.getElementById('k-email').value.trim(), tel = document.getElementById('k-tel').value.trim(), ok = true;
+  setErr('k-name', n ? '' : "Enter the contact's name."); if (!n) ok = false;
+  if (!em && !tel) { setErr('k-email', 'Give an email address or a telephone number.'); ok = false; } else if (em && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) { setErr('k-email', 'That does not look like an email address.'); ok = false; } else setErr('k-email', '');
+  if (!ok) return;
+  var c = { name: n, role: document.getElementById('k-role').value.trim() || null, email: em || null, tel: tel || null };
+  if (editingContact == null) contacts.push(c); else contacts[editingContact] = c;
+  dirty = true; document.getElementById('dirty-note').textContent = 'Unsaved changes.'; paintContacts(); S1.closeModal('m-contact');
+};
+
+/* ---------- agency cards ---------- */
+var sortDir = 1;
+function paintCompliance() {
+  records = (COMPLIANCE[slug] || []).slice();
+  var card = document.getElementById('agency-cards');
+  var emptyEl = card.querySelector('[data-s1-show="empty"]'), fullEl = card.querySelector('[data-s1-hide="empty"]');
+  emptyEl.style.setProperty('display', records.length ? 'none' : 'block', 'important'); fullEl.style.setProperty('display', records.length ? '' : 'none', 'important');
+  var sorted = records.slice().sort(function (a, b) { return ((a.expiryDate || '9999') < (b.expiryDate || '9999') ? -1 : 1) * sortDir; });
+  function expiryCell(r) { if (!r.expiryDate) return '<span class="text-slate-400">—</span>'; var past = r.expiryDate < TODAY; return '<span class="tnum ' + (past ? 'text-red-700 font-semibold' : 'text-slate-700') + '">' + fmtDate(r.expiryDate) + '</span>' + (past && r.status !== 'Expired' ? '<span class="block text-[11px] text-red-700">Past its expiry</span>' : ''); }
+  document.getElementById('compliance-tbody').innerHTML = sorted.map(function (r) {
+    return '<tr><td class="px-4 py-3 text-sm font-semibold text-slate-900">' + esc(r.name) + '</td><td class="px-4 py-3 text-sm text-slate-600 capitalize">' + esc(r.kind) + '</td><td class="px-4 py-3 text-sm text-slate-600">' + esc(r.issuingBody || '—') + '</td><td class="px-4 py-3 text-sm text-slate-700 tnum">' + esc(r.coverOrReference || '—') + '</td><td class="px-4 py-3 text-sm">' + expiryCell(r) + '</td><td class="px-4 py-3">' + badge(r.status) + '</td><td class="px-4 py-3 text-sm">' + (r.doc ? '<a href="#" onclick="event.preventDefault();S1.toast(\'Downloading ' + esc(r.doc) + '.\',\'success\')" class="inline-flex items-center gap-1.5 text-blue-700 hover:underline"><i class="fa-regular fa-file-pdf text-red-600" aria-hidden="true"></i>' + esc(r.doc) + '</a>' : '<span class="text-slate-400">—</span>') + '</td><td class="px-4 py-3 text-right whitespace-nowrap"><span class="row-actions inline-flex gap-1">' + (ro ? '' : '<button type="button" class="' + BTN_GHOST + '" onclick="S1.openModal(\'m-compliance\')">Edit</button><button type="button" class="' + BTN_GHOST + ' text-red-700 hover:text-red-900" data-withdraw="' + esc(r.id) + '">Withdraw</button>') + '</span></td></tr>';
+  }).join('');
+  document.getElementById('compliance-cards').innerHTML = sorted.map(function (r) { return '<li class="px-5 py-3"><div class="flex items-start justify-between gap-2"><p class="text-sm font-semibold text-slate-900">' + esc(r.name) + '</p>' + badge(r.status, true) + '</div><p class="text-xs text-slate-500 mt-0.5 capitalize">' + esc(r.kind) + (r.issuingBody ? ' · ' + esc(r.issuingBody) : '') + (r.expiryDate ? ' · expires ' + fmtDate(r.expiryDate) : '') + '</p>' + (r.doc ? '<a href="#" onclick="event.preventDefault()" class="text-xs text-blue-700 font-semibold mt-1 inline-block">' + esc(r.doc) + '</a>' : '') + (ro ? '' : '<button type="button" class="w-9 h-9 rounded-lg border border-slate-200 bg-white text-slate-500 float-right -mt-8" aria-label="Actions for ' + esc(r.name) + '" onclick="S1.openModal(\'m-compliance\')"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></button>') + '</li>'; }).join('');
+  document.querySelectorAll('[data-withdraw]').forEach(function (b) { b.onclick = function () { var r = records.find(function (x) { return x.id === b.dataset.withdraw; }); S1.confirm({ title: 'Withdraw ' + r.name + '?', body: 'It leaves this list and the compliance summary. Its document stays with the record and nothing is deleted. This is audited.', cta: 'Withdraw', tone: 'danger', onConfirm: function () { COMPLIANCE[slug] = records.filter(function (x) { return x.id !== r.id; }); paintCompliance(); S1.toast(esc(r.name) + ' withdrawn.', 'success'); } }); }; });
+}
+document.querySelector('[data-sort="expiry"]').onclick = function () { sortDir = -sortDir; paintCompliance(); };
+document.getElementById('btn-add-compliance').onclick = function () { document.getElementById('compliance-form').reset(); clearFile('c'); ['c-name', 'c-expiry'].forEach(function (id) { setErr(id, ''); }); S1.openModal('m-compliance'); };
+document.getElementById('compliance-form').onsubmit = function (e) {
+  e.preventDefault(); var ok = true, n = document.getElementById('c-name').value.trim(); setErr('c-name', n ? '' : 'Name the item.'); if (!n) ok = false;
+  var ex = document.getElementById('c-expiry').value; if (ex && ex < TODAY) { setErr('c-expiry', 'A new item cannot already have expired. Enter today or a later date.'); ok = false; } else setErr('c-expiry', '');
+  if (!ok) return;
+  (COMPLIANCE[slug] = COMPLIANCE[slug] || []).push({ id: 'acr-' + Date.now(), name: n, kind: document.getElementById('c-kind').value, issuingBody: document.getElementById('c-body').value.trim() || null, coverOrReference: document.getElementById('c-cover').value.trim() || null, expiryDate: ex || null, status: document.getElementById('c-status').value, doc: window._cFile || null });
+  S1.closeModal('m-compliance'); paintCompliance(); S1.toast('Compliance item saved.', 'success');
+};
+(function () { var up = document.getElementById('c-upload'); up.onclick = function () { pickFile('c'); }; up.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickFile('c'); } }; up.ondragover = function (e) { e.preventDefault(); up.classList.add('border-blue-400', 'bg-blue-50'); }; up.ondragleave = function () { up.classList.remove('border-blue-400', 'bg-blue-50'); }; up.ondrop = function (e) { e.preventDefault(); up.classList.remove('border-blue-400', 'bg-blue-50'); var f = e.dataTransfer.files[0]; if (f) showFile('c', f.name, f.size, f.type); }; })();
+function pickFile(prefix) { var i = document.createElement('input'); i.type = 'file'; i.accept = '.pdf,.png,.jpg,.jpeg'; i.onchange = function () { var f = i.files[0]; if (f) showFile(prefix, f.name, f.size, f.type); }; i.click(); }
+function showFile(prefix, name, size, type) {
+  var err = document.getElementById(prefix + '-file-err');
+  if (size > 10 * 1024 * 1024) { if (err) { err.textContent = 'That file is ' + (size / 1048576).toFixed(1) + ' MB; the limit is 10 MB.'; err.style.display = ''; } return; }
+  if (!/pdf|png|jpe?g/i.test(type + name)) { if (err) { err.textContent = 'Only PDF, PNG or JPG files are accepted.'; err.style.display = ''; } return; }
+  if (err) err.style.display = 'none';
+  var box = document.getElementById(prefix + '-file'); box.style.display = ''; document.getElementById(prefix + '-file-name').textContent = name; document.getElementById(prefix + '-file-size').textContent = (size / 1024).toFixed(0) + ' KB';
+  var bar = document.getElementById(prefix + '-file-bar').firstElementChild, p = 0;
+  var t = setInterval(function () { p += 20; bar.style.width = Math.min(100, p) + '%'; if (p >= 100) { clearInterval(t); window['_' + prefix + 'File'] = name; if (prefix === 'sba') { document.getElementById('sba-doc-link').textContent = name; document.getElementById('sba-doc').style.display = ''; document.getElementById('sba-upload').style.display = 'none'; dirty = true; } } }, 120);
+}
+function clearFile(prefix) { var b = document.getElementById(prefix + '-file'); if (b) { b.style.display = 'none'; document.getElementById(prefix + '-file-bar').firstElementChild.style.width = '0%'; } window['_' + prefix + 'File'] = null; var e = document.getElementById(prefix + '-file-err'); if (e) e.style.display = 'none'; }
+function fillSba() {
+  var s = ORG.sba;
+  document.getElementById('f-sba-ref').value = s ? s.ref : ''; document.getElementById('f-sba-signed').value = s ? s.signed : ''; document.getElementById('f-sba-expiry').value = s ? s.expiry : '';
+  document.getElementById('sba-doc').style.display = s && s.doc ? '' : 'none'; document.getElementById('sba-upload').style.display = s && s.doc ? 'none' : '';
+  if (s && s.doc) document.getElementById('sba-doc-link').textContent = s.doc;
+  var inDate = s && s.signed <= TODAY && s.expiry >= TODAY;
+  document.getElementById('sba-indate').innerHTML = s ? (inDate ? '<span class="text-xs text-slate-600">Signed ' + fmtDate(s.signed) + ' · expires ' + fmtDate(s.expiry) + '</span>' : '<span class="text-xs text-red-700 font-semibold">Not in date today</span>') : '<span class="text-xs text-slate-500">No agreement recorded yet</span>';
+}
+function validateSba() {
+  var ok = true, ref = document.getElementById('f-sba-ref').value.trim(), s = document.getElementById('f-sba-signed').value, e = document.getElementById('f-sba-expiry').value;
+  if (!ref && !s && !e) { ['f-sba-ref', 'f-sba-signed', 'f-sba-expiry'].forEach(function (id) { setErr(id, ''); }); return true; }
+  setErr('f-sba-ref', ref ? '' : 'Enter the agreement reference.'); if (!ref) ok = false;
+  setErr('f-sba-signed', s ? '' : 'Enter the signed date.'); if (!s) ok = false;
+  if (!e) { setErr('f-sba-expiry', 'Enter the expiry date.'); ok = false; } else if (s && e < s) { setErr('f-sba-expiry', 'The expiry must be after the signed date (' + fmtDate(s) + ').'); ok = false; } else if (!ORG.sba && e < TODAY) { setErr('f-sba-expiry', 'A new agreement cannot already have expired.'); ok = false; } else setErr('f-sba-expiry', '');
+  if (ok) ORG.sba = { ref: ref, signed: s, expiry: e, doc: document.getElementById('sba-doc-link').textContent || null };
+  return ok;
+}
+function fillTerms() {
+  document.getElementById('f-terms-days').value = ORG.paymentTermsDays == null ? '' : ORG.paymentTermsDays;
+  document.getElementById('f-margin-basis').value = ORG.marginBasis || 'percentage_of_charge';
+  document.getElementById('f-margin-value').value = ORG.marginValue == null ? '' : ORG.marginValue;
+  document.getElementById('f-margin-unit').textContent = document.getElementById('f-margin-basis').value === 'fixed_per_hour' ? '£ per hour' : '% of charge';
+}
+document.getElementById('f-margin-basis').addEventListener('change', function () { document.getElementById('f-margin-unit').textContent = this.value === 'fixed_per_hour' ? '£ per hour' : '% of charge'; });
+
+document.addEventListener('s1:state', function (e) { state = e.detail.state; slug = state === 'empty' ? 'summit' : (Q.get('org') || 'acme'); load(); });
+</script>
+<script src="slice1-kit.js"></script>
+</body>
+</html>

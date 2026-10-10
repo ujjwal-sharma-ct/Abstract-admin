@@ -195,7 +195,10 @@
                 <a href="abstract.organisations.organisations.html" class="inline-flex items-center justify-center gap-2 bg-white border border-blue-300 text-blue-800 hover:bg-blue-100 rounded-lg px-3 py-2 text-xs font-semibold min-h-[38px] flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to Abstract <span class="sr-only">(stop administering this organisation)</span></a>
             </div>
 
-            <nav aria-label="Users and roles" class="flex items-center gap-6 border-b border-slate-200 mb-5 overflow-x-auto whitespace-nowrap">
+            <nav aria-label="Organisation" class="flex items-center gap-6 border-b border-slate-200 mb-5 overflow-x-auto whitespace-nowrap">
+                <!-- slice 2 (B1, B2): Profile and Structure tabs exist only inside the administering context -->
+                <a href="abstract.organisations.organisation-profile.html" data-keep-org data-ctx-only style="display:none" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-id-card text-xs" aria-hidden="true"></i>Profile</a>
+                <a href="abstract.organisations.structure.html" data-keep-org data-ctx-only style="display:none" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-sitemap text-xs" aria-hidden="true"></i>Structure</a>
                 <a href="abstract.identity-access.users.html" data-keep-org class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-users text-xs" aria-hidden="true"></i>Users</a>
                 <a href="abstract.identity-access.roles.html" data-keep-org class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-user-shield text-xs" aria-hidden="true"></i>Roles</a>
                 <a href="abstract.identity-access.permission-matrix.html" data-keep-org aria-current="page" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-blue-700 text-sm font-semibold text-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-table-cells text-xs" aria-hidden="true"></i>Permissions</a>
@@ -359,6 +362,7 @@ function withOrg(href) {
   document.querySelectorAll('[data-org-name]').forEach(function (e) { e.textContent = ORG.name; });
   document.querySelectorAll('a[data-keep-org]').forEach(function (a) { a.setAttribute('href', withOrg(a.getAttribute('href'))); });
   if (!ORG_SLUG) return;
+  document.querySelectorAll('[data-ctx-only]').forEach(function (e) { e.style.display = ''; });
   document.title = document.title + ' · Administering ' + ORG.name;
   document.getElementById('ctx-banner').style.display = '';
   document.getElementById('ctx-marker').style.display = '';

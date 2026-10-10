@@ -148,10 +148,10 @@
 
         <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
             <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all">
-                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border border-white/20 flex-shrink-0" alt="avatar"/>
+                <span class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);" aria-hidden="true">SM</span>
                 <div class="flex-1 min-w-0">
                     <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
-                    <p class="text-white/40 text-xs truncate">Abstract Admin</p>
+                    <p class="text-white/40 text-xs truncate">Abstract</p>
                 </div>
                 <a href="abstract.identity-access.sign-in.html" title="Logout"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white"></i></a>
             </div>
@@ -168,14 +168,14 @@
                     <div class="flex items-center gap-2 flex-wrap">
                         <h1 class="text-lg font-bold text-slate-900 truncate">Organisations</h1>
                     </div>
-                    <p class="text-xs text-slate-500 hidden sm:block truncate">Every client and agency, and Abstract itself</p>
+                    <p class="text-xs text-slate-500 hidden sm:block truncate">Every client and agency, and Abstract itself. Onboard a new one, resume a paused onboarding, or open an organisation to administer it.</p>
                 </div>
             </div>
             <div class="flex items-center gap-3 flex-shrink-0">
                 <button data-s1-bell aria-label="Notifications" class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-regular fa-bell text-slate-600 text-sm"></i></button>
                 <a href="abstract.identity-access.my-account.html" aria-label="My account (Sarah Mitchell)" class="flex items-center gap-2 pl-3 border-l border-slate-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">
-                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border-2 border-blue-100" alt=""/>
-                    <div class="hidden xl:block"><p class="text-xs font-semibold text-slate-700">Sarah Mitchell</p><p class="text-xs text-slate-400">Abstract Admin</p></div>
+                    <span class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);" aria-hidden="true">SM</span>
+                    <div class="hidden xl:block"><p class="text-xs font-semibold text-slate-700">Sarah Mitchell</p><p class="text-xs text-slate-400">Abstract</p></div>
                 </a>
             </div>
         </header>
@@ -183,9 +183,16 @@
         <main id="main" class="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-8 py-6 bg-slate-100">
 
             <div data-s1-hide="denied">
-                <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 mb-4 flex items-start gap-3 text-sm text-blue-800">
+                <div class="flex flex-col sm:flex-row sm:items-start gap-3 mb-4">
+                <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 flex items-start gap-3 text-sm text-blue-800 flex-1">
                     <i class="fa-solid fa-building-user text-blue-600 mt-0.5" aria-hidden="true"></i>
-                    <p>Choose an organisation to manage its users, roles and permissions on its behalf. Everything you change there is audited as you. Only people with the <span class="font-semibold">Administer other organisations</span> permission see this page.</p>
+                    <p>Choose an organisation to manage its profile, structure, users, roles and permissions on its behalf. Everything you change there is audited as you. Only people with the <span class="font-semibold">Administer other organisations</span> permission see this page; a <span class="font-semibold">Draft</span> or <span class="font-semibold">In Setup</span> row resumes its onboarding.</p>
+                </div>
+                <!-- slice 2 (B1): the two wizards start here, never from the sidebar; absent without the permission to onboard organisations -->
+                <div class="flex items-center gap-2 flex-shrink-0" id="onboard-actions">
+                    <a href="abstract.onboarding.onboard-client.html?new=1" class="inline-flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-building-circle-arrow-right" aria-hidden="true"></i> Onboard client</a>
+                    <a href="abstract.onboarding.onboard-agency.html?new=1" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-people-group" aria-hidden="true"></i> Onboard agency</a>
+                </div>
                 </div>
                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-4">
                     <div class="flex flex-wrap items-center gap-3">
@@ -339,22 +346,25 @@ function marker(text, title) {
 function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
 function initials(n) { return n.split(/\s+/).map(function (p) { return p[0]; }).slice(0, 2).join('').toUpperCase(); }
 
-var ORGS = {"acme":{"name":"Acme Logistics","party":"client","status":"Active","users":5},"northgate":{"name":"Northgate Foods","party":"client","status":"Active","users":4},"harbour":{"name":"Harbour Retail Group","party":"client","status":"In Setup","users":2},"meridian":{"name":"Meridian Healthcare Services","party":"client","status":"Pending Activation","users":3},"coastline":{"name":"Coastline Manufacturing","party":"client","status":"Draft","users":1},"pennine":{"name":"Pennine Distribution","party":"client","status":"Suspended","users":3},"techforce":{"name":"TechForce Recruitment","party":"agency","status":"Active","users":4},"nexus":{"name":"Nexus Talent","party":"agency","status":"Active","users":4},"peoplebridge":{"name":"PeopleBridge","party":"agency","status":"Pending Activation","users":2},"summit":{"name":"Summit Staffing Solutions","party":"agency","status":"In Setup","users":1},"rapid":{"name":"Rapid Resource","party":"agency","status":"Suspended","users":3}};
+var ORGS = {"acme":{"name":"Acme Logistics","party":"client","status":"Active","users":5,"pct":null},"northgate":{"name":"Northgate Foods","party":"client","status":"Active","users":4,"pct":null},"harbour":{"name":"Harbour Retail Group","party":"client","status":"In Setup","users":2,"pct":30},"meridian":{"name":"Meridian Healthcare Services","party":"client","status":"Pending Activation","users":3,"pct":90},"coastline":{"name":"Coastline Manufacturing","party":"client","status":"Draft","users":0,"pct":0},"pennine":{"name":"Pennine Distribution","party":"client","status":"Suspended","users":3,"pct":null},"techforce":{"name":"TechForce Recruitment","party":"agency","status":"Active","users":4,"pct":null},"nexus":{"name":"Nexus Talent","party":"agency","status":"Active","users":4,"pct":null},"peoplebridge":{"name":"PeopleBridge","party":"agency","status":"Pending Activation","users":2,"pct":88},"summit":{"name":"Summit Staffing Solutions","party":"agency","status":"In Setup","users":1,"pct":33},"rapid":{"name":"Rapid Resource","party":"agency","status":"Suspended","users":3,"pct":null}};
 var TYPE = { abstract: ['Abstract', 'fa-shield-halved'], client: ['Client', 'fa-building'], agency: ['Agency', 'fa-people-group'] };
-var BASE = [{ slug: '', name: 'Abstract', party: 'abstract', status: 'Active', users: 8 }].concat(Object.keys(ORGS).map(function (k) { var o = ORGS[k]; return { slug: k, name: o.name, party: o.party, status: o.status, users: o.users }; }));
+var BASE = [{ slug: '', name: 'Abstract', party: 'abstract', status: 'Active', users: 8 }].concat(Object.keys(ORGS).map(function (k) { var o = ORGS[k]; return { slug: k, name: o.name, party: o.party, status: o.status, users: o.users, pct: o.pct }; }));
 var BIG = (function () {
   var out = BASE.slice(), pre = ['Northern', 'Premier', 'Atlas', 'Beacon', 'Crown', 'Elite', 'Harvest', 'Kingfisher', 'Lakeside', 'Metro', 'Oakwood', 'Pioneer', 'Riverside', 'Sterling', 'Thames', 'Unity', 'Vanguard', 'Westfield'];
   var cs = ['Foods', 'Logistics', 'Retail', 'Manufacturing', 'Healthcare', 'Distribution', 'Engineering', 'Packaging Solutions and Fulfilment Services'];
   var as = ['Recruitment', 'Staffing', 'Talent', 'Personnel', 'Workforce'];
   var st = ['Active', 'Active', 'Active', 'Active', 'In Setup', 'Pending Activation', 'Active', 'Suspended', 'Draft'];
-  for (var i = 0; out.length < 56; i++) out.push({ slug: 'c' + i, name: pre[i % 18] + ' ' + cs[i % 8], party: 'client', status: st[i % 9], users: 1 + (i * 7) % 40 });
-  for (var j = 0; out.length < 251; j++) out.push({ slug: 'a' + j, name: pre[(j * 5) % 18] + ' ' + as[j % 5] + (j >= 90 ? ' ' + (Math.floor(j / 90) + 1) : ''), party: 'agency', status: st[(j + 2) % 9], users: 1 + (j * 3) % 25 });
+  for (var i = 0; out.length < 56; i++) out.push({ slug: 'c' + i, name: pre[i % 18] + ' ' + cs[i % 8], party: 'client', status: st[i % 9], users: 1 + (i * 7) % 40, pct: st[i % 9] === 'Draft' ? 0 : st[i % 9] === 'In Setup' ? 10 + (i * 13) % 80 : st[i % 9] === 'Pending Activation' ? 90 : null });
+  for (var j = 0; out.length < 251; j++) out.push({ slug: 'a' + j, name: pre[(j * 5) % 18] + ' ' + as[j % 5] + (j >= 90 ? ' ' + (Math.floor(j / 90) + 1) : ''), party: 'agency', status: st[(j + 2) % 9], users: 1 + (j * 3) % 25, pct: st[(j + 2) % 9] === 'Draft' ? 0 : st[(j + 2) % 9] === 'In Setup' ? 11 + (j * 7) % 80 : st[(j + 2) % 9] === 'Pending Activation' ? 88 : null });
   return out;
 })();
 var state = 'default', page = 1, PAGE = 25;
+function resumable(o) { return o.status === 'Draft' || o.status === 'In Setup'; }
 function href(o) {
   if (!o.slug) return 'abstract.identity-access.users.html';
-  var h = 'abstract.identity-access.users.html?org=' + o.slug;
+  // slice 2 (B1): a Draft or In Setup row resumes its paused wizard at the next incomplete step; any other row opens the administering context at its Profile tab
+  if (resumable(o)) return 'abstract.onboarding.onboard-' + o.party + '.html?org=' + o.slug;
+  var h = 'abstract.organisations.organisation-profile.html?org=' + o.slug;
   if (!ORGS[o.slug]) h += '&name=' + encodeURIComponent(o.name) + '&party=' + o.party;
   return h;
 }
@@ -391,13 +401,13 @@ function render() {
       '<td class="px-4 py-3 max-w-[300px]"><div class="flex items-center gap-3 min-w-0">' + logo(o) + '<a href="' + href(o) + '" class="text-sm font-semibold text-slate-900 hover:text-blue-700 truncate focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1" title="' + esc(o.name) + '">' + esc(o.name) + '</a>' + (o.party === 'abstract' ? marker('Your organisation') : '') + '</div></td>' +
       '<td class="px-4 py-3">' + typeTag(o.party) + '</td>' +
       '<td class="px-4 py-3 text-right text-sm text-slate-700 tabular-nums">' + o.users + '</td>' +
-      '<td class="px-4 py-3">' + badge(o.status) + '</td>' +
-      '<td class="px-4 py-3 text-right whitespace-nowrap"><span class="text-xs font-semibold text-blue-700"><span class="hidden xl:inline">' + (o.party === 'abstract' ? 'Manage' : 'Administer') + ' </span><i class="fa-solid fa-chevron-right text-[10px]" aria-hidden="true"></i></span></td></tr>';
+      '<td class="px-4 py-3"><span class="inline-flex items-center gap-2">' + badge(o.status) + (o.pct != null && resumable(o) ? '<span class="text-xs text-slate-500 tabular-nums">' + o.pct + ' %</span>' : (o.pct != null ? '<span class="text-xs text-slate-500 tabular-nums">' + o.pct + ' %</span>' : '')) + '</span></td>' +
+      '<td class="px-4 py-3 text-right whitespace-nowrap"><span class="text-xs font-semibold text-blue-700"><span class="hidden xl:inline">' + (o.party === 'abstract' ? 'Manage' : resumable(o) ? 'Resume' : 'Open') + ' </span><i class="fa-solid fa-chevron-right text-[10px]" aria-hidden="true"></i></span></td></tr>';
   }).join('');
   document.getElementById('org-cards').innerHTML = view.map(function (o) {
     return '<li><a href="' + href(o) + '" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">' + logo(o) +
       '<span class="flex-1 min-w-0"><span class="flex items-start justify-between gap-2"><span class="text-sm font-semibold text-slate-900 truncate">' + esc(o.name) + '</span>' + badge(o.status) + '</span>' +
-      '<span class="flex items-center gap-2 mt-2">' + typeTag(o.party) + '<span class="text-xs text-slate-500">' + o.users + ' ' + (o.users === 1 ? 'user' : 'users') + '</span></span></span>' +
+      '<span class="flex items-center gap-2 mt-2">' + typeTag(o.party) + '<span class="text-xs text-slate-500">' + o.users + ' ' + (o.users === 1 ? 'user' : 'users') + '</span>' + (o.pct != null ? '<span class="text-xs text-slate-500 tabular-nums">' + o.pct + ' % · ' + (resumable(o) ? 'Resume' : 'Open') + '</span>' : '') + '</span></span>' +
       '<i class="fa-solid fa-chevron-right text-xs text-slate-400" aria-hidden="true"></i></a></li>';
   }).join('');
   var none = !all.length;
