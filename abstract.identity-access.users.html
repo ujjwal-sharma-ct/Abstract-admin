@@ -148,10 +148,10 @@
 
         <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
             <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all">
-                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border border-white/20 flex-shrink-0" alt="avatar"/>
+                <span class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);" aria-hidden="true">SM</span>
                 <div class="flex-1 min-w-0">
                     <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
-                    <p class="text-white/40 text-xs truncate">Abstract Admin</p>
+                    <p class="text-white/40 text-xs truncate">Abstract</p>
                 </div>
                 <a href="abstract.identity-access.sign-in.html" title="Logout"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white"></i></a>
             </div>
@@ -175,8 +175,8 @@
             <div class="flex items-center gap-3 flex-shrink-0">
                 <button data-s1-bell aria-label="Notifications" class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-regular fa-bell text-slate-600 text-sm"></i></button>
                 <a href="abstract.identity-access.my-account.html" aria-label="My account (Sarah Mitchell)" class="flex items-center gap-2 pl-3 border-l border-slate-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">
-                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border-2 border-blue-100" alt=""/>
-                    <div class="hidden xl:block"><p class="text-xs font-semibold text-slate-700">Sarah Mitchell</p><p class="text-xs text-slate-400">Abstract Admin</p></div>
+                    <span class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);" aria-hidden="true">SM</span>
+                    <div class="hidden xl:block"><p class="text-xs font-semibold text-slate-700">Sarah Mitchell</p><p class="text-xs text-slate-400">Abstract</p></div>
                 </a>
             </div>
         </header>
@@ -184,7 +184,7 @@
         <main id="main" class="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-8 py-6 bg-slate-100">
 
             <!-- "Administering <Organisation>" context banner (A2 part 2): shown whenever ?org= is present -->
-            <div id="ctx-banner" style="display:none" role="region" aria-label="Organisation you are administering" class="mb-5 rounded-xl border-2 border-blue-300 bg-blue-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
+            <div id="ctx-banner" style="display:none" data-embedded-hide role="region" aria-label="Organisation you are administering" class="mb-5 rounded-xl border-2 border-blue-300 bg-blue-50 px-4 py-3 flex flex-col sm:flex-row sm:items-center gap-3">
                 <div class="flex items-start gap-3 flex-1 min-w-0">
                     <div class="w-9 h-9 rounded-lg bg-blue-700 text-white flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-building-user" aria-hidden="true"></i></div>
                     <div class="min-w-0">
@@ -195,7 +195,7 @@
                 <a href="abstract.organisations.organisations.html" class="inline-flex items-center justify-center gap-2 bg-white border border-blue-300 text-blue-800 hover:bg-blue-100 rounded-lg px-3 py-2 text-xs font-semibold min-h-[38px] flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to Abstract <span class="sr-only">(stop administering this organisation)</span></a>
             </div>
 
-            <nav aria-label="Organisation" class="flex items-center gap-6 border-b border-slate-200 mb-5 overflow-x-auto whitespace-nowrap">
+            <nav aria-label="Organisation" data-embedded-hide class="flex items-center gap-6 border-b border-slate-200 mb-5 overflow-x-auto whitespace-nowrap">
                 <!-- slice 2 (B1, B2): Profile and Structure tabs exist only inside the administering context -->
                 <a href="abstract.organisations.organisation-profile.html" data-keep-org data-ctx-only style="display:none" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-id-card text-xs" aria-hidden="true"></i>Profile</a>
                 <a href="abstract.organisations.structure.html" data-keep-org data-ctx-only style="display:none" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-sitemap text-xs" aria-hidden="true"></i>Structure</a>
@@ -211,6 +211,8 @@
                             <input id="f-search" type="search" placeholder="Search name or email" class="bg-transparent text-sm text-slate-700 placeholder-slate-400 outline-none w-full"/></label>
                         <label class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px] focus-within:border-blue-300 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-600/20"><i class="fa-solid fa-circle-half-stroke text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">Status</span>
                             <select id="f-status" class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option value="">All statuses</option><option>Invited</option><option>Active</option><option>Inactive</option></select></label>
+                        <label data-s1-later data-ctx-only style="display:none" class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px] focus-within:border-blue-300 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-600/20"><i class="fa-solid fa-sitemap text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">Scope</span>
+                            <select id="f-scope" class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option value="">Any scope</option></select></label>
                         <button id="btn-invite" type="button" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 ml-auto" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-user-plus" aria-hidden="true"></i> Invite user</button>
                     </div>
                     <div id="chips" class="flex flex-wrap items-center gap-2 mt-3" style="display:none"></div>
@@ -266,6 +268,7 @@
                                         <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Name</th>
                                         <th scope="col" class="hidden xl:table-cell px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Email</th>
                                         <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Roles</th>
+                                        <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider" data-s1-later data-ctx-only style="display:none">Scope</th>
                                         <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
                                         <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Last sign-in</th>
                                         <th scope="col" class="px-4 py-3"><span class="sr-only">Actions</span></th>
@@ -322,6 +325,11 @@
                         <input id="inv-email" type="email" autocomplete="off" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="name@company.co.uk" aria-describedby="inv-email-err inv-email-hint"/>
                         <p id="inv-email-err" class="text-xs text-red-600 mt-1.5" style="display:none"></p>
                         <p id="inv-email-hint" class="text-xs text-slate-500 mt-1.5">One email address is one account across the whole system.</p>
+                    </div>
+                    <div data-s1-later data-ctx-only style="display:none">
+                        <p class="block text-xs font-semibold text-slate-700 mb-1.5">Scope</p>
+                        <div class="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 min-h-[42px]"><span id="inv-scope" class="text-sm text-slate-700 min-w-0">Whole organisation</span><button type="button" id="inv-scope-btn" class="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 hover:underline flex-shrink-0">Choose nodes</button></div>
+                        <p class="text-xs text-slate-500 mt-1.5">Optional. They see records at the nodes you tick and everything beneath them; tick nothing for the whole organisation.</p>
                     </div>
                     <p class="rounded-lg bg-slate-50 border border-slate-200 px-3 py-2.5 text-xs text-slate-600 flex items-start gap-2"><i class="fa-solid fa-user-shield text-slate-400 mt-0.5" aria-hidden="true"></i><span><span class="font-semibold text-slate-800">You'll set their roles next.</span> Until they have a role they can sign in but see nothing beyond their own account.</span></p>
                 </div>
@@ -399,6 +407,39 @@
     </div>
 </div>
 
+
+<!-- Set scope (slice 2, B3): the K13 Tree in multi-select use. Modal at 1024 px, bottom sheet at 375 px. -->
+<div data-s1-modal id="m-scope" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-scope-t">
+    <div class="bg-white w-full sm:max-w-xl rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col font-[Inter,sans-serif]">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 flex-shrink-0">
+            <h2 id="m-scope-t" class="text-base font-bold text-slate-900">Set scope</h2>
+            <button type="button" onclick="S1.closeModal('m-scope')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="px-6 pt-4 pb-3 flex-shrink-0">
+            <p class="text-sm text-slate-600" id="scope-rule"></p>
+            <label class="mt-3 flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px] focus-within:border-blue-300 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-600/20"><i class="fa-solid fa-magnifying-glass text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">Search nodes</span><input id="scope-search" type="search" placeholder="Search nodes" class="bg-transparent text-sm text-slate-700 placeholder-slate-400 outline-none w-full"/></label>
+        </div>
+        <div class="px-6 flex-1 overflow-y-auto min-h-[120px]">
+            <div id="scope-tree" class="rounded-xl border border-slate-200"></div>
+            <div id="scope-empty" style="display:none" class="rounded-xl border border-slate-200 px-6 py-10 text-center">
+                <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-3"><i class="fa-solid fa-sitemap" aria-hidden="true"></i></div>
+                <p class="text-sm font-semibold text-slate-900">This organisation has no structure nodes yet.</p>
+                <p class="text-sm text-slate-600 mt-1">Every user sees the whole organisation. <a id="scope-empty-link" href="#" class="text-blue-700 font-semibold hover:underline">Add nodes on the structure page.</a></p>
+            </div>
+            <div id="scope-error" style="display:none" class="rounded-xl border border-red-200 bg-red-50 px-4 py-6 text-center" role="alert">
+                <p class="text-sm font-semibold text-red-900">We couldn't load the structure.</p>
+                <button type="button" onclick="scopeRetry()" class="mt-3 inline-flex items-center gap-2 bg-white border border-red-300 text-red-900 rounded-lg px-3 py-2 text-xs font-semibold min-h-[38px]"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Try again</button>
+            </div>
+        </div>
+        <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center gap-3 sm:rounded-b-2xl flex-shrink-0">
+            <p class="text-xs text-slate-600 flex-1 min-w-0" id="scope-summary" aria-live="polite"></p>
+            <div class="flex justify-end gap-3">
+                <button type="button" onclick="S1.closeModal('m-scope')" class="inline-flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Cancel</button>
+                <button type="button" id="scope-save" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-check" aria-hidden="true"></i> Save scope</button>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Mobile action sheet -->
 <div data-s1-modal id="m-actions" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-actions-t">
     <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
@@ -498,6 +539,178 @@ function withOrg(href) {
 
 var ROLESETS = {"abstract":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions","organisation:view","organisation:administer_all","audit_log:view","audit_log:export","audit_log:view_before_after","system_config:view","system_config:create_edit","system_config:edit_security","notification_template:view","notification_template:create_edit","data_subject:view","data_subject:compile","data_subject:export","data_subject:erase","shift_pattern:view","shift_pattern:create_edit","shift_pattern:delete","bank_holiday:create_edit"]},{"id":"operations","name":"Operations","def":true,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view","audit_log:view","system_config:view","shift_pattern:view","shift_pattern:create_edit","shift_pattern:delete","bank_holiday:create_edit"]},{"id":"finance","name":"Finance","def":true,"status":"Active","grants":["user:view","role:view","organisation:view","audit_log:view","audit_log:export","audit_log:view_before_after","system_config:view"]},{"id":"compliance","name":"Compliance","def":false,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view","role:view_permissions","organisation:view","audit_log:view","audit_log:export","audit_log:view_before_after","data_subject:view","data_subject:compile","data_subject:export","data_subject:erase"]},{"id":"auditor","name":"External auditor","def":false,"status":"Inactive","grants":["audit_log:view","audit_log:export","audit_log:view_before_after"]},{"id":"temporary","name":"Temporary access","def":false,"status":"Active","grants":[]}],"client":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions"]},{"id":"hiring","name":"Hiring manager","def":true,"status":"Active","grants":["user:view","role:view"]},{"id":"finance","name":"Finance approver","def":true,"status":"Active","grants":["user:view"]},{"id":"seasonal","name":"Seasonal supervisors","def":false,"status":"Inactive","grants":["user:view"]}],"agency":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions"]},{"id":"recruiter","name":"Recruiter","def":true,"status":"Active","grants":["user:view","role:view"]},{"id":"payroll","name":"Payroll","def":true,"status":"Active","grants":["user:view"]}]};
 var USERSETS = {"abstract":[{"name":"Sarah Mitchell","email":"s.mitchell@abstractrecruitment.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 09:12"},{"name":"James Okafor","email":"j.okafor@abstractrecruitment.co.uk","roles":["operations","finance"],"status":"Active","last":"25 Sep 2026, 17:40"},{"name":"Hannah Clarke","email":"h.clarke@abstractrecruitment.co.uk","roles":["compliance"],"status":"Active","last":"24 Sep 2026, 11:02"},{"name":"David Chen","email":"d.chen@abstractrecruitment.co.uk","roles":["operations"],"status":"Active","last":"26 Sep 2026, 08:31"},{"name":"Tom Rees","email":"t.rees@abstractrecruitment.co.uk","roles":["operations"],"status":"Invited","last":""},{"name":"Amara Okoye","email":"a.okoye@abstractrecruitment.co.uk","roles":[],"status":"Invited","last":""},{"name":"Liam Foster","email":"l.foster@abstractrecruitment.co.uk","roles":["finance"],"status":"Active","last":"19 Sep 2026, 15:26"},{"name":"Priya Shah","email":"p.shah@abstractrecruitment.co.uk","roles":["finance"],"status":"Inactive","last":"14 Aug 2026, 09:05"}],"acme":[{"name":"Rachel Green","email":"rachel.green@acmelogistics.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 08:02"},{"name":"Mark Davies","email":"mark.davies@acmelogistics.co.uk","roles":["hiring"],"status":"Active","last":"25 Sep 2026, 14:18"},{"name":"Priya Natarajan","email":"priya.natarajan@acmelogistics.co.uk","roles":["finance"],"status":"Active","last":"23 Sep 2026, 10:47"},{"name":"Olivia Brown","email":"olivia.brown@acmelogistics.co.uk","roles":["hiring"],"status":"Invited","last":""},{"name":"Ben Taylor","email":"ben.taylor@acmelogistics.co.uk","roles":["hiring","seasonal"],"status":"Inactive","last":"02 Aug 2026, 16:20"}],"techforce":[{"name":"Daniel Wright","email":"daniel.wright@techforce-recruitment.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 07:55"},{"name":"Sophie Turner","email":"sophie.turner@techforce-recruitment.co.uk","roles":["recruiter"],"status":"Active","last":"25 Sep 2026, 12:09"},{"name":"Aisha Khan","email":"aisha.khan@techforce-recruitment.co.uk","roles":["payroll"],"status":"Active","last":"22 Sep 2026, 09:30"},{"name":"Ryan Hughes","email":"ryan.hughes@techforce-recruitment.co.uk","roles":["recruiter"],"status":"Invited","last":""}]};
+var Q = new URLSearchParams(location.search);
+
+/* ---------- Scope (slice 2, B3): breadcrumbs, the picker, My Account line ---------- */
+var S2_TREES = {"acme": [{"id": "mid", "parentId": null, "name": "Midlands", "nodeType": "region", "cc": "CC-MID", "userCount": 0}, {"id": "bhx", "parentId": "mid", "name": "Birmingham DC", "nodeType": "site", "cc": "CC-BHX-01", "userCount": 1}, {"id": "bhx-n", "parentId": "bhx", "name": "Nights", "nodeType": "department", "cc": "CC-BHX-01-N", "userCount": 1}, {"id": "bhx-d", "parentId": "bhx", "name": "Days", "nodeType": "department", "cc": "CC-BHX-01-D", "userCount": 0}, {"id": "lei", "parentId": "mid", "name": "Leicester DC", "nodeType": "site", "cc": "CC-LEI-02", "userCount": 1}, {"id": "nth", "parentId": null, "name": "Northern", "nodeType": "region", "cc": "CC-NTH", "userCount": 1}, {"id": "lds", "parentId": "nth", "name": "Leeds Hub", "nodeType": "site", "cc": "CC-LDS-01", "userCount": 0}, {"id": "lgw", "parentId": null, "name": "London Gateway", "nodeType": "site", "cc": "CC-LGW-03", "userCount": 0}], "northgate": [{"id": "ng-hq", "parentId": null, "name": "Head office", "nodeType": "business_unit", "cc": "NG-100", "userCount": 2}, {"id": "ng-prod", "parentId": null, "name": "Production", "nodeType": "business_unit", "cc": "NG-200", "userCount": 1}, {"id": "ng-leeds", "parentId": "ng-prod", "name": "Leeds bakery", "nodeType": "site", "cc": "NG-210", "userCount": 1}], "harbour": [{"id": "hb-south", "parentId": null, "name": "South coast", "nodeType": "region", "cc": "HB-S", "userCount": 0}, {"id": "hb-soton", "parentId": "hb-south", "name": "Southampton store", "nodeType": "site", "cc": "HB-S-01", "userCount": 1}], "meridian": [{"id": "md-rdg", "parentId": null, "name": "Reading hospital", "nodeType": "site", "cc": "MH-RDG", "userCount": 2}, {"id": "md-rdg-w", "parentId": "md-rdg", "name": "Wards", "nodeType": "department", "cc": "MH-RDG-W", "userCount": 0}], "coastline": [], "pennine": [{"id": "pn-hud", "parentId": null, "name": "Huddersfield depot", "nodeType": "site", "cc": "PN-HUD", "userCount": 2}], "techforce": [{"id": "tf-cov", "parentId": null, "name": "Coventry", "nodeType": "branch", "userCount": 1}, {"id": "tf-mk", "parentId": null, "name": "Milton Keynes", "nodeType": "branch", "userCount": 0}, {"id": "tf-north", "parentId": null, "name": "North Division", "nodeType": "division", "userCount": 1}, {"id": "tf-shf", "parentId": "tf-north", "name": "Sheffield Hub", "nodeType": "branch", "userCount": 0}, {"id": "tf-lds", "parentId": "tf-north", "name": "Leeds Branch", "nodeType": "branch", "userCount": 0}], "nexus": [{"id": "nx-north", "parentId": null, "name": "North Division", "nodeType": "division", "userCount": 1}, {"id": "nx-shf", "parentId": "nx-north", "name": "Sheffield", "nodeType": "branch", "userCount": 1}, {"id": "nx-south", "parentId": null, "name": "South Division", "nodeType": "division", "userCount": 0}, {"id": "nx-hub", "parentId": "nx-south", "name": "Hub", "nodeType": "branch", "userCount": 1}], "peoplebridge": [{"id": "pb-man", "parentId": null, "name": "Manchester", "nodeType": "branch", "userCount": 1}], "summit": [], "rapid": [{"id": "rr-not", "parentId": null, "name": "Nottingham", "nodeType": "branch", "userCount": 2}]};
+var S2_TYPE_LABEL = {"business_unit": "Business unit", "region": "Region", "site": "Site", "department": "Department", "branch": "Branch", "division": "Division"};
+var TYPE_LABEL = S2_TYPE_LABEL;
+
+/* ---------- Tree (kernel K13) ---------- */
+function Tree(host, props) {
+  var self = this;
+  host = typeof host === 'string' ? document.getElementById(host) : host;
+  this.host = host; this.p = Object.assign({ selection: 'none', value: [], disabledIds: [], defaultExpandedDepth: 99, search: false, root: null, columns: [], decorate: null, renderRow: null, ghosts: [], readOnly: false, compact: false }, props || {});
+  this.expanded = {}; this.focusId = null; this.query = ''; this.value = (this.p.value || []).slice();
+  this.setNodes(this.p.nodes || []);
+  host.classList.add('s2-tree');
+  host.addEventListener('keydown', function (e) { self.onKey(e); });
+  this.render();
+}
+Tree.prototype.setNodes = function (nodes) {
+  var self = this;
+  this.nodes = nodes.map(function (n) { return Object.assign({}, n); });
+  this.byId = {}; this.children = {}; this.nodes.forEach(function (n) { self.byId[n.id] = n; });
+  this.nodes.forEach(function (n) { var p = n.parentId && self.byId[n.parentId] ? n.parentId : '__root'; n._p = p; (self.children[p] = self.children[p] || []).push(n); });
+  this.nodes.forEach(function (n) { n.depth = self.depthOf(n.id); n.path = self.pathOf(n.id); });
+  var self2 = this; if (!Object.keys(this.expanded).length) this.nodes.forEach(function (n) { self2.expanded[n.id] = n.depth < self2.p.defaultExpandedDepth; });
+};
+Tree.prototype.depthOf = function (id) { var d = 0, n = this.byId[id]; while (n && n._p !== '__root') { d++; n = this.byId[n._p]; } return d; };
+Tree.prototype.pathOf = function (id) { var out = [], n = this.byId[id]; while (n) { out.unshift(n.name); n = n._p === '__root' ? null : this.byId[n._p]; } return out; };
+Tree.prototype.descendants = function (id) { var out = [], self = this; (function walk(x) { (self.children[x] || []).forEach(function (c) { out.push(c.id); walk(c.id); }); })(id); return out; };
+Tree.prototype.ancestors = function (id) { var out = [], n = this.byId[id]; while (n && n._p !== '__root') { out.push(n._p); n = this.byId[n._p]; } return out; };
+Tree.prototype.matches = function (n) { return !this.query || n.name.toLowerCase().indexOf(this.query) >= 0; };
+Tree.prototype.visible = function () {
+  // depth-first list of rows to draw: with a query, every match plus its ancestors (expanded)
+  var self = this, out = [], keep = null;
+  if (this.query) { keep = {}; this.nodes.forEach(function (n) { if (self.matches(n)) { keep[n.id] = 1; self.ancestors(n.id).forEach(function (a) { keep[a] = 1; }); } }); }
+  (function walk(p) {
+    (self.children[p] || []).forEach(function (n) {
+      if (keep && !keep[n.id]) return;
+      out.push(n);
+      var open = keep ? true : self.expanded[n.id];
+      if (open) walk(n.id);
+      (self.p.ghosts || []).filter(function (g) { return g.parentId === n.id && (open || keep); }).forEach(function (g) { out.push(Object.assign({ _ghost: true, _p: n.id, depth: n.depth + 1 }, g)); });
+    });
+  })('__root');
+  (self.p.ghosts || []).filter(function (g) { return !g.parentId; }).forEach(function (g) { out.push(Object.assign({ _ghost: true, _p: '__root', depth: 0 }, g)); });
+  return out;
+};
+Tree.prototype.covered = function (id) { var self = this; return this.ancestors(id).some(function (a) { return self.value.indexOf(a) >= 0; }); };
+Tree.prototype.isDisabled = function (id) { return (this.p.disabledIds || []).indexOf(id) >= 0 || (this.p.selection === 'multi' && this.covered(id)); };
+Tree.prototype.toggle = function (id, open) { this.expanded[id] = open == null ? !this.expanded[id] : open; if (this.p.onExpandedChange) this.p.onExpandedChange(this.expanded); this.render(); };
+Tree.prototype.expandAll = function () { var self = this; this.nodes.forEach(function (n) { self.expanded[n.id] = true; }); this.render(); };
+Tree.prototype.collapseTo = function (depth) { var self = this; this.nodes.forEach(function (n) { self.expanded[n.id] = n.depth < depth; }); this.render(); };
+Tree.prototype.setQuery = function (q) { this.query = (q || '').trim().toLowerCase(); this.render(); };
+Tree.prototype.select = function (id) {
+  if (this.p.selection === 'none' || this.isDisabled(id)) return;
+  if (this.p.selection === 'single') this.value = this.value[0] === id ? [] : [id];
+  else { var i = this.value.indexOf(id); if (i >= 0) this.value.splice(i, 1); else { var self = this; this.value = this.value.filter(function (v) { return self.ancestors(v).indexOf(id) < 0; }); this.value.push(id); } }
+  if (this.p.onChange) this.p.onChange(this.value.slice());
+  this.render();
+};
+Tree.prototype.render = function () {
+  var self = this, rows = this.visible(), ro = this.p.readOnly, sel = this.p.selection, hasRoot = !!this.p.root;
+  var html = '';
+  if (hasRoot) html += this.rowHtml(Object.assign({ id: '__root', depth: -1, name: this.p.root.name, nodeType: 'Organisation', _root: true, userCount: this.p.root.userCount }, {}), true, rows.length > 0);
+  rows.forEach(function (n) { html += self.rowHtml(n, false, (self.children[n.id] || []).length > 0 || (self.p.ghosts || []).some(function (g) { return g.parentId === n.id; })); });
+  this.host.innerHTML = '<ul role="tree" aria-label="' + esc(this.p.label || 'Structure') + '" class="divide-y divide-slate-100">' + html + '</ul>';
+  if (this.query) {
+    var m = this.nodes.filter(function (n) { return self.matches(n); }).length;
+    this.host.insertAdjacentHTML('beforeend', '<p class="px-4 py-2 text-xs text-slate-500 border-t border-slate-100" role="status">' + m + ' of ' + this.nodes.length + ' nodes match</p>');
+  }
+  this.host.querySelectorAll('[data-toggle]').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); self.toggle(b.dataset.toggle); }; });
+  this.host.querySelectorAll('[role="treeitem"]').forEach(function (li) {
+    li.onfocus = function () { self.focusId = li.dataset.id; self.host.querySelectorAll('[role="treeitem"]').forEach(function (x) { x.tabIndex = -1; }); li.tabIndex = 0; };
+    li.onclick = function (e) { if (e.target.closest('button,a,input,label')) return; self.focusId = li.dataset.id; if (sel !== 'none' && !li.dataset.ghost && li.dataset.id !== '__root') self.select(li.dataset.id); if (sel === 'none' && self.p.onPick && !li.dataset.ghost) { self.p.onPick(li.dataset.id); self.render(); } };
+  });
+  this.host.querySelectorAll('input[type="checkbox"][data-check]').forEach(function (c) { c.onchange = function () { self.select(c.dataset.check); }; });
+  var first = this.host.querySelector('[role="treeitem"][data-id="' + (this.focusId || '') + '"]') || this.host.querySelector('[role="treeitem"]');
+  if (first) first.tabIndex = 0;
+  if (this.p.afterRender) this.p.afterRender();
+};
+Tree.prototype.rowHtml = function (n, isRoot, hasKids) {
+  var sel = this.p.selection, open = isRoot ? true : !!this.expanded[n.id], ghost = !!n._ghost, depth = isRoot ? 0 : n.depth + 1;
+  var disabled = !isRoot && !ghost && this.isDisabled(n.id), covered = !isRoot && !ghost && sel === 'multi' && this.covered(n.id);
+  var selected = !isRoot && !ghost && this.value.indexOf(n.id) >= 0;
+  var picked = this.p.picked === n.id;
+  var indent = '<span class="flex-shrink-0 flex" style="width:' + (depth * 20) + 'px" aria-hidden="true">' + (depth ? Array.apply(null, Array(depth)).map(function () { return '<span class="block w-5 border-l border-slate-200 h-full"></span>'; }).join('') : '') + '</span>';
+  var chevron = (hasKids && !isRoot) ? '<button type="button" data-toggle="' + esc(n.id) + '" class="w-6 h-6 rounded flex items-center justify-center text-slate-500 hover:bg-slate-100 flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" aria-label="' + (open ? 'Collapse' : 'Expand') + ' ' + esc(n.name) + '" tabindex="-1"><i class="fa-solid fa-chevron-' + (open ? 'down' : 'right') + ' text-[10px]" aria-hidden="true"></i></button>' : '<span class="w-6 h-6 flex-shrink-0 flex items-center justify-center text-slate-300" aria-hidden="true">' + (isRoot ? '<i class="fa-solid fa-building text-xs text-slate-500"></i>' : ghost ? '<i class="fa-regular fa-circle-dot text-[10px] text-amber-500"></i>' : '<i class="fa-solid fa-circle text-[5px]"></i>') + '</span>';
+  var check = '';
+  if (sel === 'multi' && !isRoot && !ghost) check = '<input type="checkbox" data-check="' + esc(n.id) + '" ' + (selected || covered ? 'checked' : '') + ' ' + (disabled ? 'disabled' : '') + ' class="w-4 h-4 rounded border-slate-300 text-blue-700 focus:ring-blue-600 flex-shrink-0" aria-label="' + esc(n.name) + (covered ? ' (covered)' : '') + '" tabindex="-1"/>';
+  if (sel === 'single' && !ghost) check = '<span class="w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center ' + (selected || picked ? 'border-blue-700' : 'border-slate-300') + (disabled ? ' opacity-40' : '') + '" aria-hidden="true">' + (selected || picked ? '<span class="w-2 h-2 rounded-full bg-blue-700"></span>' : '') + '</span>';
+  var typeLabel = isRoot ? 'Organisation' : (TYPE_LABEL[n.nodeType] || n.nodeType);
+  var name = '<span class="text-sm ' + (isRoot ? 'font-bold text-slate-900' : ghost ? 'font-medium text-slate-500 italic' : 'font-medium text-slate-900') + ' truncate">' + esc(n.name) + (n.marker ? ' ' + n.marker : '') + '</span>';
+  var meta = '<span class="text-xs text-slate-500 md:hidden block truncate">' + esc(typeLabel) + (this.p.showCost && n.cc ? ' · ' + esc(n.cc) : '') + (covered ? ' · covered' : '') + '</span>';
+  var cols = '';
+  if (!this.p.compact) {
+    cols += '<span class="hidden md:block w-28 flex-shrink-0 text-xs text-slate-600 truncate">' + esc(typeLabel) + (covered ? '<span class="text-slate-400"> · covered</span>' : '') + '</span>';
+    if (this.p.showCost) cols += '<span class="hidden md:block w-28 flex-shrink-0 text-xs text-slate-600 tnum truncate">' + esc(n.cc || (isRoot ? '—' : '')) + '</span>';
+    if (this.p.showUsers) cols += '<span class="hidden md:block w-14 flex-shrink-0 text-xs text-slate-700 tnum text-right">' + (ghost ? '' : (this.p.userLink && !isRoot && n.userCount ? '<a href="' + this.p.userLink(n) + '" class="text-blue-700 hover:underline" title="Users scoped at this node">' + n.userCount + '</a>' : (n.userCount == null ? '' : n.userCount))) + '</span>';
+  } else if (covered) { cols += '<span class="hidden md:inline text-xs text-slate-400">covered</span>'; }
+  var deco = this.p.decorate && !isRoot ? (this.p.decorate(n) || '') : '';
+  var actions = this.p.renderRow && !ghost ? (this.p.renderRow(n, isRoot) || '') : '';
+  var cls = 'tree-row group flex items-start gap-2 px-3 py-2 min-h-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600 ' + (selected || picked ? 'bg-blue-50 ' : 'hover:bg-slate-50 ') + (ghost ? 'bg-amber-50/40 ' : '') + (disabled && sel !== 'none' ? 'opacity-60 ' : '') + (sel !== 'none' && !disabled && !isRoot && !ghost ? 'cursor-pointer ' : '');
+  return '<li role="treeitem" data-id="' + esc(n.id) + '" ' + (ghost ? 'data-ghost="1" ' : '') + 'aria-level="' + (depth + 1) + '" ' + (hasKids || isRoot ? 'aria-expanded="' + open + '" ' : '') + (sel !== 'none' ? 'aria-selected="' + selected + '" ' : '') + (disabled ? 'aria-disabled="true" ' : '') + 'tabindex="-1" class="' + cls + '"' + (disabled && this.p.disabledTitle ? ' title="' + esc(this.p.disabledTitle) + '"' : '') + '>' +
+    indent + chevron + (check ? '<span class="flex items-center h-5 flex-shrink-0">' + check + '</span>' : '') +
+    '<span class="flex-1 min-w-0"><span class="flex items-center gap-2 min-w-0">' + name + (this.p.showUsers && !ghost && !this.p.compact ? '<span class="md:hidden text-xs text-slate-500 tnum ml-auto flex-shrink-0">' + (n.userCount == null ? '' : n.userCount + ' <i class="fa-regular fa-user text-[10px]" aria-hidden="true"></i>') + '</span>' : '') + '</span>' + meta + deco + '</span>' +
+    cols + (actions ? '<span class="flex-shrink-0 flex items-center">' + actions + '</span>' : '') + '</li>';
+};
+Tree.prototype.onKey = function (e) {
+  var items = Array.prototype.slice.call(this.host.querySelectorAll('[role="treeitem"]'));
+  var cur = document.activeElement.closest ? document.activeElement.closest('[role="treeitem"]') : null;
+  var i = items.indexOf(cur); if (i < 0) return;
+  var n = this.byId[cur.dataset.id], go = null;
+  if (e.key === 'ArrowDown') go = items[i + 1];
+  else if (e.key === 'ArrowUp') go = items[i - 1];
+  else if (e.key === 'Home') go = items[0];
+  else if (e.key === 'End') go = items[items.length - 1];
+  else if (e.key === 'ArrowRight') { if (cur.getAttribute('aria-expanded') === 'false') { this.toggle(cur.dataset.id, true); this.focusAfter(cur.dataset.id); e.preventDefault(); return; } go = items[i + 1]; }
+  else if (e.key === 'ArrowLeft') { if (cur.getAttribute('aria-expanded') === 'true' && cur.dataset.id !== '__root') { this.toggle(cur.dataset.id, false); this.focusAfter(cur.dataset.id); e.preventDefault(); return; } var p = n ? n._p : null; go = p && p !== '__root' ? this.host.querySelector('[data-id="' + p + '"]') : (this.p.root ? this.host.querySelector('[data-id="__root"]') : null); }
+  else if (e.key === 'Enter' || e.key === ' ') { if (cur.dataset.id !== '__root' && !cur.dataset.ghost) { if (this.p.selection !== 'none') this.select(cur.dataset.id); else if (this.p.onPick) { this.p.onPick(cur.dataset.id); this.render(); } this.focusAfter(cur.dataset.id); } e.preventDefault(); return; }
+  else if (e.key.length === 1 && /\S/.test(e.key)) { var k = e.key.toLowerCase(); for (var j = 1; j <= items.length; j++) { var it = items[(i + j) % items.length], nn = this.byId[it.dataset.id] || (it.dataset.id === '__root' ? this.p.root : null); if (nn && nn.name.toLowerCase().charAt(0) === k) { go = it; break; } } }
+  if (go) { go.focus(); e.preventDefault(); }
+};
+Tree.prototype.focusAfter = function (id) { var self = this; setTimeout(function () { var el = self.host.querySelector('[data-id="' + id + '"]'); if (el) el.focus(); }, 0); };
+
+function scopeNodesFor(slug) { return (S2_TREES[slug] || []).map(function (n) { return Object.assign({}, n); }); }
+function scopePath(slug, id) { var by = {}; scopeNodesFor(slug).forEach(function (n) { by[n.id] = n; }); var out = [], n = by[id]; while (n) { out.unshift(n.name); n = n.parentId ? by[n.parentId] : null; } return out; }
+function scopeCrumb(path) {
+  // a deep path truncates its middle; the full path sits in the title (Tooltip)
+  var full = path.join(' › '), shown = path.length > 3 ? [path[0], '…', path[path.length - 1]] : path;
+  return '<span class="inline-flex items-center gap-1 text-xs text-slate-700 whitespace-nowrap" title="' + esc(full) + '">' + shown.map(function (p, i) { return (i ? '<i class="fa-solid fa-chevron-right text-[8px] text-slate-400" aria-hidden="true"></i>' : '') + '<span>' + esc(p) + '</span>'; }).join('') + '</span>';
+}
+function scopeCell(slug, ids, compact) {
+  if (!ids || !ids.length) return '<span class="text-xs text-slate-500">Whole organisation</span>';
+  var paths = ids.map(function (id) { return scopePath(slug, id); }).filter(function (p) { return p.length; });
+  var max = compact ? 1 : 2, shown = paths.slice(0, max), rest = paths.slice(max);
+  return '<span class="flex flex-col gap-0.5 items-start">' + shown.map(scopeCrumb).join('') + (rest.length ? '<span class="inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200" title="' + esc(rest.map(function (p) { return p.join(' › '); }).join('\n')) + '">+' + rest.length + '</span>' : '') + '</span>';
+}
+function scopeText(slug, ids) { if (!ids || !ids.length) return 'Whole organisation'; return ids.map(function (id) { return scopePath(slug, id).join(' › '); }).join(' · '); }
+var scopeTree = null, scopeCtx = null;
+function openScopePicker(o) {
+  // o: { slug, orgName, userName, value, onSave(ids), invite }
+  scopeCtx = o;
+  var nodes = scopeNodesFor(o.slug);
+  document.getElementById('m-scope-t').textContent = o.invite ? 'Scope for the invitation' : 'Set scope — ' + o.userName;
+  document.getElementById('scope-rule').textContent = (o.invite ? 'They will see' : o.userName.split(' ')[0] + ' sees') + ' records at the nodes you tick and everything beneath them, including nodes added later. Tick nothing for the whole organisation.';
+  document.getElementById('scope-search').value = '';
+  document.getElementById('scope-error').style.display = 'none';
+  var empty = !nodes.length || o.state === 'empty';
+  document.getElementById('scope-empty').style.display = empty ? '' : 'none';
+  document.getElementById('scope-tree').style.display = empty ? 'none' : '';
+  document.getElementById('scope-empty-link').href = 'abstract.organisations.structure.html?org=' + ORG_SLUG;
+  if (o.state === 'error') { document.getElementById('scope-error').style.display = ''; document.getElementById('scope-tree').style.display = 'none'; document.getElementById('scope-empty').style.display = 'none'; }
+  scopeTree = new Tree('scope-tree', { nodes: nodes, root: { name: o.orgName }, selection: 'multi', compact: false, showUsers: false, showCost: false, value: (o.value || []).slice(), defaultExpandedDepth: nodes.length >= 50 ? 1 : 99, label: 'Nodes of ' + o.orgName, onChange: scopeSummary });
+  // the root row is the organisation and has no checkbox: the whole organisation is expressed by ticking nothing
+  scopeSummary(scopeTree.value);
+  document.getElementById('scope-search').oninput = function () { scopeTree.setQuery(this.value); };
+  document.getElementById('scope-save').disabled = false;
+  S1.openModal('m-scope');
+}
+function scopeSummary(ids) { document.getElementById('scope-summary').innerHTML = '<span class="font-semibold text-slate-800">Assigned:</span> ' + esc(scopeText(scopeCtx.slug, ids)); }
+function scopeRetry() { document.getElementById('scope-error').style.display = 'none'; document.getElementById('scope-tree').style.display = ''; }
+document.getElementById('scope-save').onclick = function () {
+  var ids = scopeTree ? scopeTree.value.slice() : [], had = (scopeCtx.value || []).length;
+  function done() { S1.closeModal('m-scope'); scopeCtx.onSave(ids); }
+  if (had && !ids.length && !scopeCtx.invite) {
+    // clearing every node is a widening: it takes a ConfirmDialog (TSD §5.8 Decisions)
+    S1.confirm({ title: 'Give ' + scopeCtx.userName + ' the whole organisation?', body: 'Clearing every node widens their scope to every record in ' + scopeCtx.orgName + '. This is recorded in the audit log.', cta: 'Save whole organisation', icon: 'fa-sitemap', onConfirm: done });
+    return;
+  }
+  done();
+};
+
 var ADMIN_KEY = 'user:create_edit';
 var ROLES = ROLESETS[ORG.party];
 var ALL_EMAILS = [];
@@ -511,8 +724,11 @@ function genericUsers() {
   }
   return out;
 }
-var USERS = ORG_SLUG ? (USERSETS[ORG_SLUG] || genericUsers()) : USERSETS.abstract;
+var USERSETS_EXTRA = {"harbour": [{"name": "Marcus Lee", "email": "marcus.lee@harbourretail.co.uk", "roles": ["administrator"], "status": "Invited", "scope": [], "last": null}, {"name": "Jo Patel", "email": "jo.patel@harbourretail.co.uk", "roles": ["hiring"], "status": "Invited", "scope": ["hb-soton"], "last": null}], "summit": [{"name": "Fiona Wallace", "email": "fiona@summitstaffing.co.uk", "roles": ["administrator"], "status": "Invited", "scope": [], "last": null}]};
+var USERS = ORG_SLUG ? (USERSETS[ORG_SLUG] || USERSETS_EXTRA[ORG_SLUG] || genericUsers()) : USERSETS.abstract;
 USERS = JSON.parse(JSON.stringify(USERS));
+var SCOPES = {"rachel.green@acmelogistics.co.uk": [], "mark.davies@acmelogistics.co.uk": ["bhx"], "priya.natarajan@acmelogistics.co.uk": [], "olivia.brown@acmelogistics.co.uk": ["lei", "nth"], "ben.taylor@acmelogistics.co.uk": ["bhx-n"], "daniel.wright@techforce-recruitment.co.uk": [], "sophie.turner@techforce-recruitment.co.uk": ["tf-cov"], "aisha.khan@techforce-recruitment.co.uk": [], "ryan.hughes@techforce-recruitment.co.uk": ["tf-north"], "marcus.lee@harbourretail.co.uk": [], "jo.patel@harbourretail.co.uk": ["hb-soton"], "fiona@summitstaffing.co.uk": []};
+USERS.forEach(function (u) { u.scope = SCOPES[u.email] || u.scope || []; });
 var state = 'default', page = 1, PAGE = 25;
 
 function role(id) { for (var i = 0; i < ROLES.length; i++) if (ROLES[i].id === id) return ROLES[i]; return null; }
@@ -548,6 +764,7 @@ function actionsFor(u) {
   if (u.status === 'Invited') a.push(['resend', 'Resend activation', 'fa-paper-plane']);
   a.push(['name', 'Edit name', 'fa-pen']);
   if (u.status !== 'Inactive') a.push(['roles', 'Set roles', 'fa-user-shield']);
+  if (u.status !== 'Inactive' && ORG_SLUG && !S1.isSlice1Mode()) a.push(['scope', 'Set scope', 'fa-sitemap']);
   if (u.status === 'Inactive') a.push(['reactivate', 'Reactivate', 'fa-rotate-left']);
   else a.push(['deactivate', 'Deactivate', 'fa-user-slash']);
   return a;
@@ -558,19 +775,22 @@ function filtered() {
   var list = state === 'large' ? largeUsers(page) : USERS;
   if (state === 'large') return list;
   var q = document.getElementById('f-search').value.trim().toLowerCase(), s = document.getElementById('f-status').value;
-  return list.filter(function (u) { return (!q || u.name.toLowerCase().indexOf(q) >= 0 || u.email.toLowerCase().indexOf(q) >= 0) && (!s || u.status === s); });
+  var sc = document.getElementById('f-scope').value;
+  return list.filter(function (u) { return (!q || u.name.toLowerCase().indexOf(q) >= 0 || u.email.toLowerCase().indexOf(q) >= 0) && (!s || u.status === s) && inSubtree(u, sc); });
 }
+function inSubtree(u, nodeId) { if (!nodeId) return true; var by = {}; scopeNodesFor(ORG_SLUG).forEach(function (n) { by[n.id] = n; }); return (u.scope || []).some(function (x) { var n = by[x]; while (n) { if (n.id === nodeId) return true; n = n.parentId ? by[n.parentId] : null; } return false; }); }
 function chips() {
   var q = document.getElementById('f-search').value.trim(), s = document.getElementById('f-status').value, c = [];
   if (q) c.push(['Search: ' + q, 'search']);
   if (s) c.push(['Status: ' + s, 'status']);
+  var scSel = document.getElementById('f-scope'); if (scSel.value) c.push(['Scope: ' + scSel.options[scSel.selectedIndex].text + ' and beneath', 'scope']);
   var box = document.getElementById('chips');
   box.style.display = c.length ? '' : 'none';
   box.innerHTML = c.map(function (x) { return '<span class="inline-flex items-center gap-1.5 pl-2.5 pr-1 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">' + esc(x[0]) + '<button type="button" data-clear="' + x[1] + '" aria-label="Remove filter ' + esc(x[0]) + '" class="w-5 h-5 rounded-full hover:bg-blue-100 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark text-[10px]" aria-hidden="true"></i></button></span>'; }).join('') +
     (c.length ? '<button type="button" onclick="clearFilters()" class="text-xs font-semibold text-slate-500 hover:text-slate-800 ml-1 px-1 min-h-[28px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Clear all</button>' : '');
-  box.querySelectorAll('[data-clear]').forEach(function (b) { b.onclick = function () { if (b.dataset.clear === 'search') document.getElementById('f-search').value = ''; else document.getElementById('f-status').value = ''; render(); }; });
+  box.querySelectorAll('[data-clear]').forEach(function (b) { b.onclick = function () { document.getElementById(b.dataset.clear === 'search' ? 'f-search' : b.dataset.clear === 'scope' ? 'f-scope' : 'f-status').value = ''; render(); }; });
 }
-function clearFilters() { document.getElementById('f-search').value = ''; document.getElementById('f-status').value = ''; render(); }
+function clearFilters() { document.getElementById('f-search').value = ''; document.getElementById('f-status').value = ''; document.getElementById('f-scope').value = ''; render(); }
 
 function pager() {
   var total = state === 'large' ? 1240 : filtered().length;
@@ -595,6 +815,7 @@ function render() {
       '<td class="px-4 py-3 max-w-[240px]"><div class="flex items-center gap-3 min-w-0">' + avatar(u) + '<span class="min-w-0"><span class="block text-sm font-semibold text-slate-900 truncate" title="' + esc(u.name) + '">' + esc(u.name) + '</span><span class="xl:hidden block text-xs text-slate-500 truncate" title="' + esc(u.email) + '">' + esc(u.email) + '</span></span></div></td>' +
       '<td class="hidden xl:table-cell px-4 py-3 max-w-[220px]"><span class="block text-sm text-slate-600 truncate" title="' + esc(u.email) + '">' + esc(u.email) + '</span></td>' +
       '<td class="px-4 py-3"><div class="flex flex-wrap gap-1">' + roleChips(u) + '</div></td>' +
+      (ORG_SLUG ? '<td class="px-4 py-3" data-s1-later>' + scopeCell(ORG_SLUG, u.scope || []) + '</td>' : '') +
       '<td class="px-4 py-3">' + badge(u.status) + '</td>' +
       '<td class="px-4 py-3 text-sm text-slate-600 whitespace-nowrap tabular-nums">' + (u.last || '<span class="text-slate-400" aria-label="Never signed in">—</span>') + '</td>' +
       '<td class="px-4 py-3 text-right"><div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">' +
@@ -606,6 +827,7 @@ function render() {
       '<div class="flex-1 min-w-0"><div class="flex items-start justify-between gap-2"><p class="text-sm font-semibold text-slate-900 truncate">' + esc(u.name) + '</p>' + badge(u.status) + '</div>' +
       '<p class="text-xs text-slate-500 truncate mt-0.5">' + esc(u.email) + '</p>' +
       '<div class="flex flex-wrap gap-1 mt-2">' + roleChips(u) + '</div>' +
+      (ORG_SLUG ? '<div class="mt-2" data-s1-later>' + scopeCell(ORG_SLUG, u.scope || [], true) + '</div>' : '') +
       '<div class="flex items-center justify-between mt-3"><p class="text-xs text-slate-500">Last sign-in: <span class="text-slate-700">' + (u.last || 'never') + '</span></p>' +
       '<button type="button" data-sheet="' + i + '" aria-label="Actions for ' + esc(u.name) + '" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></button></div>' +
       '</div></div></li>';
@@ -634,6 +856,7 @@ function act(a, u) {
   current = u;
   if (a === 'name') { document.getElementById('ed-name').value = u.name; document.getElementById('ed-email').textContent = u.email; fieldErr('ed-name', ''); S1.openModal('m-name'); }
   if (a === 'roles') openRoles(u);
+  if (a === 'scope') openScopePicker({ slug: ORG_SLUG, orgName: ORG.name, userName: u.name, value: u.scope || [], state: state === 'empty' ? 'empty' : '', onSave: function (ids) { u.scope = ids; render(); S1.toast('Scope updated for ' + esc(u.name) + '. It applies from their next click.', 'success'); } });
   if (a === 'resend') S1.confirm({ title: 'Resend the activation link to ' + u.name + '?', bodyHtml: 'We\'ll email <strong>' + esc(u.email) + '</strong> a new link that works for 72 hours. The link we sent before will stop working.', cta: 'Resend link', icon: 'fa-paper-plane',
     onConfirm: function () { S1.toast('A new 72-hour activation link was emailed to ' + esc(u.email) + '. The old link no longer works.', 'success'); } });
   if (a === 'deactivate') {
@@ -684,7 +907,9 @@ function saveRoles(e) {
   S1.toast('Roles saved for ' + esc(current.name) + '. They apply from their next click.', 'success');
 }
 
+var invScope = [];
 function openInvite() {
+  invScope = []; document.getElementById('inv-scope').textContent = 'Whole organisation';
   document.getElementById('invite-step1').style.display = ''; document.getElementById('invite-step2').style.display = 'none';
   document.getElementById('inv-name').value = ''; document.getElementById('inv-email').value = '';
   fieldErr('inv-name', ''); fieldErr('inv-email', ''); document.getElementById('invite-summary').style.display = 'none';
@@ -707,8 +932,8 @@ function submitInvite(e) {
   var b = document.getElementById('inv-submit'); b.disabled = true; b.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Sending…';
   setTimeout(function () {
     b.disabled = false; b.innerHTML = '<i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Send invitation';
-    var u = { name: document.getElementById('inv-name').value.trim(), email: document.getElementById('inv-email').value.trim(), roles: [], status: 'Invited', last: '' };
-    USERS.unshift(u); ALL_EMAILS.push(u.email.toLowerCase()); current = u; render();
+    var u = { name: document.getElementById('inv-name').value.trim(), email: document.getElementById('inv-email').value.trim(), roles: [], status: 'Invited', last: '', scope: invScope.slice() };
+    USERS.unshift(u); ALL_EMAILS.push(u.email.toLowerCase()); current = u; render(); if (window.S1 && S1.stepEvent) S1.stepEvent('saved');
     document.getElementById('inv-sent-to').textContent = u.email;
     document.getElementById('invite-step1').style.display = 'none'; document.getElementById('invite-step2').style.display = '';
     document.getElementById('inv-setroles').focus();
@@ -716,6 +941,9 @@ function submitInvite(e) {
 }
 
 document.getElementById('btn-invite').onclick = openInvite;
+document.getElementById('inv-scope-btn').onclick = function () { openScopePicker({ slug: ORG_SLUG, orgName: ORG.name, userName: document.getElementById('inv-name').value.trim() || 'They', value: invScope, invite: true, onSave: function (ids) { invScope = ids; document.getElementById('inv-scope').textContent = scopeText(ORG_SLUG, ids); S1.openModal('m-invite'); } }); };
+document.getElementById('f-scope').addEventListener('change', render);
+(function fillScopeFilter() { if (!ORG_SLUG) return; var sel = document.getElementById('f-scope'); scopeNodesFor(ORG_SLUG).forEach(function (n) { var o = document.createElement('option'); o.value = n.id; o.textContent = scopePath(ORG_SLUG, n.id).join(' › '); sel.appendChild(o); }); if (Q.get('scope')) sel.value = Q.get('scope'); })();
 document.getElementById('inv-setroles').onclick = function () { S1.closeModal('m-invite'); openRoles(current); };
 document.getElementById('f-search').addEventListener('input', render);
 document.getElementById('f-status').addEventListener('change', render);
@@ -723,6 +951,7 @@ document.addEventListener('s1:state', function (e) {
   state = e.detail.state; page = 1;
   ['m-invite', 'm-name', 'm-roles', 'm-actions'].forEach(function (id) { document.getElementById(id).classList.add('hidden'); });
   document.getElementById('f-search').value = state === 'empty' ? 'Kowalski' : '';
+  if (state !== 'default') document.getElementById('f-scope').value = '';
   document.getElementById('f-status').value = '';
   render();
   if (state === 'validation') {
