@@ -440,6 +440,19 @@
         </div>
     </div>
 </div>
+
+<!-- Change email (slice 2, A4): an administrator-initiated change of an Active user's sign-in address, confirmed by link -->
+<div data-s1-modal id="m-email" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-email-t">
+    <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200"><h2 id="m-email-t" class="text-base font-bold text-slate-900">Change sign-in email</h2><button type="button" onclick="S1.closeModal('m-email')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
+        <div class="px-6 py-5 flex flex-col gap-4">
+            <p class="text-sm text-slate-600"><span id="em-name" class="font-semibold text-slate-800"></span> keeps signing in with the current address until they confirm the new one from a link we email them. The link works for 72 hours; the current address is told.</p>
+            <div><p class="block text-xs font-semibold text-slate-700 mb-1.5">Current email</p><p id="em-current" class="text-sm text-slate-600 bg-slate-100 border border-slate-200 rounded-lg px-3 py-2.5 break-all"></p></div>
+            <div><label for="em-new" class="block text-xs font-semibold text-slate-700 mb-1.5">New email address</label><input id="em-new" type="email" autocomplete="off" placeholder="name@company.co.uk" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" aria-describedby="em-new-err"/><p id="em-new-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p></div>
+        </div>
+        <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3 sm:rounded-b-2xl"><button type="button" onclick="S1.closeModal('m-email')" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold min-h-[38px]">Cancel</button><button type="button" id="em-save" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 min-h-[38px]" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Send confirmation link</button></div>
+    </div>
+</div>
 <!-- Mobile action sheet -->
 <div data-s1-modal id="m-actions" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-actions-t">
     <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
@@ -711,6 +724,19 @@ document.getElementById('scope-save').onclick = function () {
   done();
 };
 
+
+/* ---------- Change email (slice 2, A4) ---------- */
+function pendingEmailHtml(u) { return u.pendingEmail ? '<span class="block text-xs text-amber-700 mt-0.5">Pending: <span class="break-all">' + esc(u.pendingEmail) + '</span> · <button type="button" class="font-semibold underline" data-cancel-email="' + esc(u.email) + '">Cancel</button></span>' : ''; }
+function openEmail(u) { current = u; document.getElementById('em-name').textContent = u.name; document.getElementById('em-current').textContent = u.email; document.getElementById('em-new').value = ''; var e = document.getElementById('em-new-err'); e.style.display = 'none'; S1.openModal('m-email'); }
+document.getElementById('em-save').onclick = function () {
+  var v = document.getElementById('em-new').value.trim().toLowerCase(), e = document.getElementById('em-new-err'), msg = '';
+  if (!v) msg = 'Enter the new email address.'; else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) msg = 'Enter an email address like name@company.co.uk.'; else if (v === current.email.toLowerCase()) msg = 'That is already their sign-in address.'; else if (ALL_EMAILS.indexOf(v) >= 0) msg = 'This email address already has an account. One email address is one account.';
+  if (msg) { e.textContent = msg; e.style.display = ''; return; }
+  current.pendingEmail = v; S1.closeModal('m-email'); render();
+  S1.toast("We've emailed " + esc(v) + ' a confirmation link that works for 72 hours. ' + esc(current.email) + ' has been told.', 'success');
+};
+document.addEventListener('click', function (e) { var b = e.target.closest('[data-cancel-email]'); if (!b) return; var u = USERS.find(function (x) { return x.email === b.dataset.cancelEmail; }); if (!u) return; S1.confirm({ title: 'Cancel the email change for ' + u.name + '?', body: 'The link we sent to ' + u.pendingEmail + ' stops working and their sign-in address stays ' + u.email + '.', cta: 'Cancel the change', tone: 'danger', onConfirm: function () { u.pendingEmail = null; render(); S1.toast('Email change cancelled.', 'success'); } }); });
+
 var ADMIN_KEY = 'user:create_edit';
 var ROLES = ROLESETS[ORG.party];
 var ALL_EMAILS = [];
@@ -763,6 +789,7 @@ function actionsFor(u) {
   var a = [];
   if (u.status === 'Invited') a.push(['resend', 'Resend activation', 'fa-paper-plane']);
   a.push(['name', 'Edit name', 'fa-pen']);
+  if (u.status === 'Active' && !S1.isSlice1Mode()) a.push(['email', 'Change email', 'fa-at']);
   if (u.status !== 'Inactive') a.push(['roles', 'Set roles', 'fa-user-shield']);
   if (u.status !== 'Inactive' && ORG_SLUG && !S1.isSlice1Mode()) a.push(['scope', 'Set scope', 'fa-sitemap']);
   if (u.status === 'Inactive') a.push(['reactivate', 'Reactivate', 'fa-rotate-left']);
@@ -819,13 +846,13 @@ function render() {
       '<td class="px-4 py-3">' + badge(u.status) + '</td>' +
       '<td class="px-4 py-3 text-sm text-slate-600 whitespace-nowrap tabular-nums">' + (u.last || '<span class="text-slate-400" aria-label="Never signed in">—</span>') + '</td>' +
       '<td class="px-4 py-3 text-right"><div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">' +
-        actionsFor(u).map(function (a) { return '<button type="button" data-act="' + a[0] + '" data-i="' + i + '" class="whitespace-nowrap rounded-lg px-2 py-1.5 text-xs font-semibold ' + (a[0] === 'deactivate' ? 'text-red-600 hover:bg-red-50' : 'text-slate-600 hover:text-blue-700 hover:bg-blue-50') + ' focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">' + a[1] + '<span class="sr-only"> — ' + esc(u.name) + '</span></button>'; }).join('') +
+        actionsFor(u).map(function (a) { return '<button type="button" data-act="' + a[0] + '" data-i="' + i + '" title="' + a[1] + '" aria-label="' + a[1] + ' — ' + esc(u.name) + '" class="w-9 h-9 rounded-lg flex items-center justify-center ' + (a[0] === 'deactivate' ? 'text-red-600 hover:bg-red-50' : 'text-slate-500 hover:text-blue-700 hover:bg-blue-50') + ' focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid ' + a[2] + ' text-sm" aria-hidden="true"></i></button>'; }).join('') +
       '</div></td></tr>';
   }).join('');
   cards.innerHTML = VIEW.map(function (u, i) {
     return '<li class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4"><div class="flex items-start gap-3">' + avatar(u) +
       '<div class="flex-1 min-w-0"><div class="flex items-start justify-between gap-2"><p class="text-sm font-semibold text-slate-900 truncate">' + esc(u.name) + '</p>' + badge(u.status) + '</div>' +
-      '<p class="text-xs text-slate-500 truncate mt-0.5">' + esc(u.email) + '</p>' +
+      '<p class="text-xs text-slate-500 truncate mt-0.5">' + esc(u.email) + '</p>' + pendingEmailHtml(u) +
       '<div class="flex flex-wrap gap-1 mt-2">' + roleChips(u) + '</div>' +
       (ORG_SLUG ? '<div class="mt-2" data-s1-later>' + scopeCell(ORG_SLUG, u.scope || [], true) + '</div>' : '') +
       '<div class="flex items-center justify-between mt-3"><p class="text-xs text-slate-500">Last sign-in: <span class="text-slate-700">' + (u.last || 'never') + '</span></p>' +
@@ -856,6 +883,7 @@ function act(a, u) {
   current = u;
   if (a === 'name') { document.getElementById('ed-name').value = u.name; document.getElementById('ed-email').textContent = u.email; fieldErr('ed-name', ''); S1.openModal('m-name'); }
   if (a === 'roles') openRoles(u);
+  if (a === 'email') openEmail(u);
   if (a === 'scope') openScopePicker({ slug: ORG_SLUG, orgName: ORG.name, userName: u.name, value: u.scope || [], state: state === 'empty' ? 'empty' : '', onSave: function (ids) { u.scope = ids; render(); S1.toast('Scope updated for ' + esc(u.name) + '. It applies from their next click.', 'success'); } });
   if (a === 'resend') S1.confirm({ title: 'Resend the activation link to ' + u.name + '?', bodyHtml: 'We\'ll email <strong>' + esc(u.email) + '</strong> a new link that works for 72 hours. The link we sent before will stop working.', cta: 'Resend link', icon: 'fa-paper-plane',
     onConfirm: function () { S1.toast('A new 72-hour activation link was emailed to ' + esc(u.email) + '. The old link no longer works.', 'success'); } });
@@ -947,6 +975,7 @@ document.getElementById('f-scope').addEventListener('change', render);
 document.getElementById('inv-setroles').onclick = function () { S1.closeModal('m-invite'); openRoles(current); };
 document.getElementById('f-search').addEventListener('input', render);
 document.getElementById('f-status').addEventListener('change', render);
+USERS.forEach(function (u, i) { if (u.name === 'Mark Davies' || u.name === 'Sophie Turner' || u.name === 'James Okafor') u.pendingEmail = u.email.replace(/@.*/, '@' + (u.email.indexOf('acme') >= 0 ? 'acme-logistics.co.uk' : u.email.indexOf('techforce') >= 0 ? 'techforce.co.uk' : 'abstractvms.co.uk')); });
 document.addEventListener('s1:state', function (e) {
   state = e.detail.state; page = 1;
   ['m-invite', 'm-name', 'm-roles', 'm-actions'].forEach(function (id) { document.getElementById(id).classList.add('hidden'); });

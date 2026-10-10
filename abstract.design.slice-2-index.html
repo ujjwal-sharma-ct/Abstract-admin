@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slice 2 Index · Admin Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>tailwind.config = { theme: { extend: { fontFamily: { inter: ['Inter', 'sans-serif'] } } } }</script>
+</head>
+<!-- Prototype hub, not a product screen: every slice 2 screen of the Admin Portal with its brief item
+     (docs/slices/2/design/DESIGN-BRIEF.md) and deep links to its notable states. -->
+<body class="font-inter bg-slate-100 text-slate-600 min-h-screen" data-s1-states="default">
+  <header class="text-white" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 42%, #1e1a4a 100%);">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
+      <div class="flex items-center gap-4">
+        <img src="logo.png" alt="Abstract VMS" class="h-12 w-auto -ml-[5px]">
+        <div><h1 class="text-lg font-bold">Slice 2 screens · Admin Portal</h1><p class="text-xs text-white/60">Onboarding, profiles, structure, scope, the approval queue, rate cards, approved suppliers and configuration</p></div>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <a href="abstract.design.slice-1-index.html" class="px-4 py-2 rounded-lg text-sm font-semibold border border-white/20 text-white hover:bg-white/10">Slice 1 index</a>
+        <a href="abstract.identity-access.sign-in.html" class="px-4 py-2 rounded-lg text-sm font-semibold border border-white/20 text-white hover:bg-white/10">Sign in</a>
+        <a href="abstract.shell.dashboard-slice-1.html?s2=1" class="px-4 py-2 rounded-lg text-sm font-semibold text-white" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);">Start the slice 2 demo</a>
+      </div>
+    </div>
+  </header>
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-4">
+    <div class="rounded-lg border border-blue-200 bg-blue-50 text-blue-800 text-sm px-4 py-3 flex gap-3">
+      <i class="fa-solid fa-circle-info mt-0.5"></i>
+      <div>
+        <p><strong>Slice 2 mode</strong> shows the slice 1 and slice 2 screens together as the product at slice 2's close: every navigation link and control that belongs to slice 3 or later is hidden. Navigation is <span id="mode-now" class="font-semibold">—</span>.
+          <button id="mode-s2" class="ml-1 underline font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Slices 1 + 2</button> · <button id="mode-s1" class="underline font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Slice 1 only</button> · <button id="mode-full" class="underline font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Full product</button></p>
+        <p class="mt-1 text-blue-700/80">Every screen has a <strong>Prototype</strong> menu (bottom) to switch its states — loading, empty, error, validation, permission denied, large data, and the page's own — and <code>?state=&lt;name&gt;</code> opens one directly. The wizards frame the other pages with <code>?embedded=1</code>.</p>
+      </div>
+    </div>
+    <p class="text-xs text-slate-500">IDs refer to the slice 2 design brief: A = no design before, B = sketched, C = correction to an existing export. P1 = the demo path.</p>
+    
+      <section class="bg-white rounded-2xl border border-slate-200 shadow-sm">
+        <h2 class="px-5 pt-5 pb-3 text-sm font-bold text-slate-900">Onboarding and profiles</h2>
+        <ul class="divide-y divide-slate-100">
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">C9</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.onboarding.onboard-client.html" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Onboard client (wizard)</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.onboarding.onboard-client.html?state=empty" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">New client (Draft, 0 %)</a><a href="abstract.onboarding.onboard-client.html?state=pending" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Pending Activation, read-only</a><a href="abstract.onboarding.onboard-client.html?state=ready" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Every gate met</a><a href="abstract.onboarding.onboard-client.html?state=refused" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Activation refused</a><a href="abstract.onboarding.onboard-client.html?state=validation" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Validation</a><a href="abstract.onboarding.onboard-client.html?state=denied" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Permission denied</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 self-start sm:self-auto">P1 · demo</span>
+          </li>
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">C10</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.onboarding.onboard-agency.html" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Onboard agency (wizard)</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.onboarding.onboard-agency.html?step=compliance" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Compliance step</a><a href="abstract.onboarding.onboard-agency.html?step=self-billing" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Self-billing step</a><a href="abstract.onboarding.onboard-agency.html?state=pending" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Pending Activation</a><a href="abstract.onboarding.onboard-agency.html?state=ready" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Every gate met</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 self-start sm:self-auto">P1 · demo</span>
+          </li>
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">B1</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.organisations.organisations.html" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Organisations list — Onboard client / agency, Resume rows</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.organisations.organisations.html?state=large" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Large list</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 self-start sm:self-auto">P1 · demo</span>
+          </li>
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">B1</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.organisations.organisation-profile.html?org=acme" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Profile (client, Active)</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.organisations.organisation-profile.html?org=techforce" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Agency profile</a><a href="abstract.organisations.organisation-profile.html?org=meridian" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Pending Activation</a><a href="abstract.organisations.organisation-profile.html?state=ready" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Every gate met</a><a href="abstract.organisations.organisation-profile.html?org=pennine" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Suspended</a><a href="abstract.organisations.organisation-profile.html?state=empty" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">New agency (empty compliance)</a><a href="abstract.organisations.organisation-profile.html?state=validation" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Validation</a><a href="abstract.organisations.organisation-profile.html?state=readonly" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">View only</a><a href="abstract.organisations.organisation-profile.html?state=conflict" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Edit conflict</a><a href="abstract.organisations.organisation-profile.html?state=denied" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Permission denied</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 self-start sm:self-auto">P1 · demo</span>
+          </li>
+        </ul>
+      </section>
+      <section class="bg-white rounded-2xl border border-slate-200 shadow-sm">
+        <h2 class="px-5 pt-5 pb-3 text-sm font-bold text-slate-900">Structure</h2>
+        <ul class="divide-y divide-slate-100">
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">B2</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.organisations.structure.html?org=acme" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Structure (administering context; approval on)</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.organisations.structure.html?org=techforce" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Agency tree</a><a href="abstract.organisations.structure.html?state=empty" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Empty</a><a href="abstract.organisations.structure.html?state=large" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Large (340 nodes)</a><a href="abstract.organisations.structure.html?state=validation" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Validation</a><a href="abstract.organisations.structure.html?state=readonly" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">View only</a><a href="abstract.organisations.structure.html?state=denied" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Permission denied</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 self-start sm:self-auto">P1 · demo</span>
+          </li>
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">B3</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.identity-access.users.html?org=acme" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Users (administering) — Scope column, Set scope, Change email</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.identity-access.users.html?org=acme&scope=bhx" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Scope filter</a><a href="abstract.identity-access.users.html?org=acme&state=large" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Large</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 self-start sm:self-auto">P1 · demo</span>
+          </li>
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">B4</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.organisations.structure-changes.html" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Structure changes (queue)</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.organisations.structure-changes.html?status=decided" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Decided</a><a href="abstract.organisations.structure-changes.html?state=empty" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Empty</a><a href="abstract.organisations.structure-changes.html?state=large" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Grouped by organisation</a><a href="abstract.organisations.structure-changes.html?state=denied" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Permission denied</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 self-start sm:self-auto">P1 · demo</span>
+          </li>
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">B4</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.organisations.structure-change.html?id=scr-1041" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Structure change (request page)</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.organisations.structure-change.html?id=scr-1044" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Move</a><a href="abstract.organisations.structure-change.html?id=scr-1043" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Remove</a><a href="abstract.organisations.structure-change.html?state=decided" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Rejected</a><a href="abstract.organisations.structure-change.html?state=notapplicable" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Cannot be applied</a><a href="abstract.organisations.structure-change.html?state=conflict" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Tree moved on approve</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 self-start sm:self-auto">P1 · demo</span>
+          </li>
+        </ul>
+      </section>
+      <section class="bg-white rounded-2xl border border-slate-200 shadow-sm">
+        <h2 class="px-5 pt-5 pb-3 text-sm font-bold text-slate-900">Rates and suppliers</h2>
+        <ul class="divide-y divide-slate-100">
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">B5</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.rates.rate-cards.html" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Rate cards — job roles</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.rates.rate-cards.html?role=jr-wo" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">A role's cards</a><a href="abstract.rates.rate-cards.html?client=harbour&embedded=1" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Client wizard step</a><a href="abstract.rates.rate-cards.html?agency=techforce&embedded=1" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Agency wizard step</a><a href="abstract.rates.rate-cards.html?state=empty" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Empty</a><a href="abstract.rates.rate-cards.html?state=nobreakdown" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Without the breakdown key</a><a href="abstract.rates.rate-cards.html?state=readonly" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">View only</a><a href="abstract.rates.rate-cards.html?state=validation" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Import preview (validation)</a><a href="abstract.rates.rate-cards.html?state=large" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Large</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 self-start sm:self-auto">P1 · demo</span>
+          </li>
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">B5</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.rates.rate-card.html?id=rc-1" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Rate card — read view and versions</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.rates.rate-card.html?id=rc-1&mode=edit" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Editor</a><a href="abstract.rates.rate-card.html?state=floor" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Under the floor (warn)</a><a href="abstract.rates.rate-card.html?state=block" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Under the floor (block)</a><a href="abstract.rates.rate-card.html?state=validation" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Validation</a><a href="abstract.rates.rate-card.html?state=nobreakdown" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Without the breakdown key</a><a href="abstract.rates.rate-card.html?state=noshifts" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">No Shifts</a><a href="abstract.rates.rate-card.html?id=rc-1&version=rv-1z" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Version read-only</a><a href="abstract.rates.rate-card.html?id=rc-1&mode=edit&future=2027-04-01" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Future version editor</a><a href="abstract.rates.rate-card.html?state=conflict" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Edit conflict</a><a href="abstract.rates.rate-card.html?state=large" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Many Shifts</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 self-start sm:self-auto">P1 · demo</span>
+          </li>
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">C1</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.organisations.approved-suppliers.html" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Approved suppliers</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.organisations.approved-suppliers.html?client=harbour&embedded=1" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Client wizard step</a><a href="abstract.organisations.approved-suppliers.html?agency=summit&embedded=1" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Agency wizard step</a><a href="abstract.organisations.approved-suppliers.html?state=empty" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Empty</a><a href="abstract.organisations.approved-suppliers.html?state=validation" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Validation</a><a href="abstract.organisations.approved-suppliers.html?state=readonly" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">View only</a><a href="abstract.organisations.approved-suppliers.html?state=large" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">50 × 200</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 self-start sm:self-auto">P1 · demo</span>
+          </li>
+        </ul>
+      </section>
+      <section class="bg-white rounded-2xl border border-slate-200 shadow-sm">
+        <h2 class="px-5 pt-5 pb-3 text-sm font-bold text-slate-900">Configuration and notifications</h2>
+        <ul class="divide-y divide-slate-100">
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">C3 B6</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.configuration.organisation-configuration.html?org=acme" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Configuration (organisation level)</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.configuration.organisation-configuration.html?org=acme&node=bhx" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">At a site</a><a href="abstract.configuration.organisation-configuration.html?org=techforce" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Agency groups</a><a href="abstract.configuration.organisation-configuration.html?org=coastline" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Fresh organisation</a><a href="abstract.configuration.organisation-configuration.html?state=empty" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">No organisation chosen</a><a href="abstract.configuration.organisation-configuration.html?state=validation" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Validation</a><a href="abstract.configuration.organisation-configuration.html?state=readonly" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">View only</a><a href="abstract.configuration.organisation-configuration.html?org=acme&state=large" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Deep tree</a><a href="abstract.configuration.organisation-configuration.html?org=harbour&group=invoicing&embedded=1" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Wizard step (invoicing)</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 self-start sm:self-auto">P1 · demo</span>
+          </li>
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">B6</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.configuration.system-settings.html#corrections" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">System Configuration — Corrections tab</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.configuration.setting-history.html?key=correction.cutoff_weeks" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">The cutoff key page</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200 self-start sm:self-auto">P2</span>
+          </li>
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">A2</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.notifications.notification-preferences.html" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Notification preferences</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.notifications.notification-preferences.html?state=loading" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Loading</a><a href="abstract.notifications.notification-preferences.html?state=error" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Error</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200 self-start sm:self-auto">P2</span>
+          </li>
+          <li class="px-5 py-3.5 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+            <span class="w-12 shrink-0 text-xs font-semibold text-slate-500">A4</span>
+            <div class="flex-1 min-w-0">
+              <a href="abstract.identity-access.confirm-email.html" class="text-sm font-semibold text-blue-700 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">Confirm email (public)</a>
+              <div class="flex flex-wrap gap-1.5 mt-1.5"><a href="abstract.identity-access.confirm-email.html?state=loading" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Checking the link</a><a href="abstract.identity-access.confirm-email.html?state=expired" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200 hover:bg-slate-200">Expired or used</a></div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200 self-start sm:self-auto">P2</span>
+          </li>
+        </ul>
+      </section>
+  </main>
+  <script>
+    document.addEventListener('s1:ready', function () {
+      var names = { full: 'full product', s1: 'slice 1 only', s2: 'slices 1 + 2' };
+      function paint() { document.getElementById('mode-now').textContent = names[S1.mode()]; }
+      ['full', 's1', 's2'].forEach(function (m) { document.getElementById('mode-' + m).onclick = function () { S1.setMode(m); paint(); }; });
+      paint();
+    });
+  </script>
+<script src="slice1-kit.js"></script>
+</body>
+</html>

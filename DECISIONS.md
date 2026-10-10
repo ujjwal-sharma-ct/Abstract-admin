@@ -42,3 +42,11 @@ so deleting that content would lose the later slices' design.
 
 **Consequences:** The full-product flow is unchanged; the slice 1 demo is one toggle away. Older
 agency/client screens look different from the new kernel-styled ones until they are rebuilt.
+
+## 2026-10-10 — Slice 2 screens: one generator-made shell, embedded framing for the wizard steps, slice 2 mode
+
+**Context:** The slice 2 brief asks for ten corrected exports and eight new screens in the slice 1 shell, each wizard step being the slice 2 page for that record (TSD §3.3.8), with states behind the Prototype menu at 1024 px and 375 px.
+
+**Decision:** (1) Every slice 2 page is built from one shell and one sample-data set, so the pages read as one product and the data agrees across them. (2) The wizards frame the other pages in an iframe with `?embedded=1`; the kit hides the framed page's shell and relays step events. One component, two framings, as the TSD seam demands. (3) The kit gains a third navigation mode, slices 1 + 2, instead of stripping later-slice links from pages. (4) Rate segregation is enforced in the markup: a client or agency page embeds only its own organisation's data, and the agency pages carry no margin figure or sentence.
+
+**Consequences:** The wizards need the framed pages present (they are); a page's states are also its step's states; party pages cannot leak Abstract-only data because the data is not in them.
