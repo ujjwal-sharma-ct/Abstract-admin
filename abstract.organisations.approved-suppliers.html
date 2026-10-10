@@ -1,17 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-GB">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Approved Suppliers</title>
+    <title>Approved suppliers · Abstract VMS</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }</style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }
+    .tnum { font-variant-numeric: tabular-nums; }
+    .row-actions { opacity: 0; } tr:hover .row-actions, tr:focus-within .row-actions, li:hover .row-actions, li:focus-within .row-actions, .tree-row:hover .row-actions, .tree-row:focus-within .row-actions { opacity: 1; }
+    @media (hover: none) { .row-actions { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+    
+    </style>
     <script>
         tailwind.config = {
             theme: {
@@ -26,387 +30,103 @@
         }
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden">
-
+<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s2-page data-s1-states="default loading empty error validation readonly denied large">
 <div id="app-root" class="flex w-full" style="height: 100vh;">
-
-    <!-- Sidebar -->
     <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
         <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
             <img src="logo.png" alt="Abstract VMS" class="h-12 w-auto block -ml-[5px]"/>
             <p class="text-white/40 text-sm mt-2">Admin Portal</p>
         </div>
-
-        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1">
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p>
-            <a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-gauge-high text-white/40 w-4 text-center"></i>
-                <span>Admin Dashboard</span>
-            </a>
-            <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
-                <span>Vacancy List</span>
-            </a>
-            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
-                <span>Create Vacancy Wizard</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
-            <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-users-gear text-white/40 w-4 text-center"></i>
-                <span>Worker Pool</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p>
-            <a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-building-user text-white/40 w-4 text-center"></i>
-                <span>Agency Dashboard</span>
-            </a>
-            <a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);">
-                <i class="fa-solid fa-circle-check text-blue-400 w-4 text-center"></i>
-                <span>Approved Suppliers</span>
-                <div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p>
-            <a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center"></i>
-                <span>AWR Tracking</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p>
-            <a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-clock text-white/40 w-4 text-center"></i>
-                <span>Timesheets</span>
-            </a>
-            <a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center"></i>
-                <span>Invoicing / Self-Bill</span>
-            </a>
-            <a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-chart-bar text-white/40 w-4 text-center"></i>
-                <span>Abstract Backing Report</span>
-            </a>
-            <a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-sterling-sign text-white/40 w-4 text-center"></i>
-                <span>Rate Cards</span>
-            </a>
-            <a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-chart-line text-white/40 w-4 text-center"></i>
-                <span>Reports</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p>
-            <a id="nav-onboard-client" href="abstract.onboarding.onboard-client.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-building-circle-arrow-right text-white/40 w-4 text-center"></i>
-                <span>Onboard Client</span>
-            </a>
-            <a id="nav-onboard-agency" href="abstract.onboarding.onboard-agency.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-user-tie text-white/40 w-4 text-center"></i>
-                <span>Onboard Agency</span>
-            </a>
-            <a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-sliders text-white/40 w-4 text-center"></i>
-                <span>Configuration</span>
-            </a>
-            <a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-gears text-white/40 w-4 text-center"></i>
-                <span>System Configuration</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p>
-            <a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-users text-white/40 w-4 text-center"></i>
-                <span>Users</span>
-            </a>
-            <a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-user-shield text-white/40 w-4 text-center"></i>
-                <span>Roles</span>
-            </a>
-            <a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center"></i>
-                <span>Notification templates</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p>
-            <a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-sitemap text-white/40 w-4 text-center"></i>
-                <span>Organisations</span>
-            </a>
-            <a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-user-lock text-white/40 w-4 text-center"></i>
-                <span>Data subject requests</span>
-            </a>
-            <a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center"></i>
-                <span>Audit Log</span>
-            </a>
-
+        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1" aria-label="Main">
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p><a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-gauge-high text-white/40 w-4 text-center" aria-hidden="true"></i><span>Admin Dashboard</span></a><a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-list-check text-white/40 w-4 text-center" aria-hidden="true"></i><span>Vacancy List</span></a><a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center" aria-hidden="true"></i><span>Create Vacancy Wizard</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p><a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-users-gear text-white/40 w-4 text-center" aria-hidden="true"></i><span>Worker Pool</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p><a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-building-user text-white/40 w-4 text-center" aria-hidden="true"></i><span>Agency Dashboard</span></a><a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);" aria-current="page"><i class="fa-solid fa-circle-check text-blue-400 w-4 text-center" aria-hidden="true"></i><span>Approved Suppliers</span><div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p><a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center" aria-hidden="true"></i><span>AWR Tracking</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p><a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-clock text-white/40 w-4 text-center" aria-hidden="true"></i><span>Timesheets</span></a><a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center" aria-hidden="true"></i><span>Invoicing / Self-Bill</span></a><a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-chart-bar text-white/40 w-4 text-center" aria-hidden="true"></i><span>Abstract Backing Report</span></a><a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-sterling-sign text-white/40 w-4 text-center" aria-hidden="true"></i><span>Rate Cards</span></a><a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-chart-line text-white/40 w-4 text-center" aria-hidden="true"></i><span>Reports</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p><a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-sliders text-white/40 w-4 text-center" aria-hidden="true"></i><span>Configuration</span></a><a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-gears text-white/40 w-4 text-center" aria-hidden="true"></i><span>System Configuration</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p><a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-users text-white/40 w-4 text-center" aria-hidden="true"></i><span>Users</span></a><a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-user-shield text-white/40 w-4 text-center" aria-hidden="true"></i><span>Roles</span></a><a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center" aria-hidden="true"></i><span>Notification templates</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p><a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-sitemap text-white/40 w-4 text-center" aria-hidden="true"></i><span>Organisations</span></a><a id="nav-structure-changes" href="abstract.organisations.structure-changes.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-code-pull-request text-white/40 w-4 text-center" aria-hidden="true"></i><span>Structure changes</span><span id="nav-sc-count" class="ml-auto hidden min-w-[20px] h-5 px-1.5 rounded-full bg-amber-400 text-navy-900 text-[11px] font-bold leading-5 text-center tnum"></span></a><a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-user-lock text-white/40 w-4 text-center" aria-hidden="true"></i><span>Data subject requests</span></a><a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center" aria-hidden="true"></i><span>Audit Log</span></a>
         </nav>
-
         <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
-            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all">
-                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border border-white/20 flex-shrink-0" alt="avatar"/>
+            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 transition-all">
+                <span class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);" aria-hidden="true">SM</span>
                 <div class="flex-1 min-w-0">
                     <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
-                    <p class="text-white/40 text-xs truncate">Abstract Admin</p>
+                    <p class="text-white/40 text-xs truncate">Abstract</p>
                 </div>
-                <a href="abstract.identity-access.sign-in.html" title="Logout"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white"></i></a>
+                <a href="abstract.identity-access.sign-in.html?reason=signed-out" aria-label="Sign out" title="Sign out"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white" aria-hidden="true"></i></a>
             </div>
         </div>
     </aside>
-
-    <!-- Main Content -->
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header id="header" class="flex items-center justify-between px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
-            <div class="flex items-center gap-4">
-                <button id="mobile-menu-btn" class="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"><i class="fa-solid fa-bars text-slate-600 text-sm"></i></button>
-                <div>
-                    <h1 class="text-lg font-bold text-slate-900">Approved Suppliers</h1>
-                    <p class="text-xs text-slate-500 hidden sm:block">Client × agency approval matrix &middot; gates vacancy releases</p>
+        <header id="header" class="flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
+            <div class="flex items-center gap-3 min-w-0">
+                <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-bars text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h1 class="text-lg font-bold text-slate-900 truncate">Approved suppliers</h1>
+                    </div>
+                    <p class="text-xs text-slate-500 hidden sm:block truncate">Which agencies may supply which clients. Each approval and each revocation carries an effective date.</p>
                 </div>
             </div>
-            <div class="flex items-center gap-3">
-                <button class="hidden md:flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-3 py-2 text-xs font-semibold transition-colors"><i class="fa-solid fa-plus text-xs"></i> New Approval Link</button>
-                <div class="hidden sm:flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 w-48 xl:w-56">
-                    <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs"></i>
-                    <input type="text" placeholder="Search agencies..." class="bg-transparent text-xs text-slate-700 placeholder-slate-400 outline-none w-full"/>
-                </div>
-                <button class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors"><i class="fa-regular fa-bell text-slate-600 text-sm"></i><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500"></span></button>
-                <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
-                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border-2 border-blue-100" alt="avatar"/>
-                    <div class="hidden xl:block"><p class="text-xs font-semibold text-slate-700">Sarah Mitchell</p><p class="text-xs text-slate-400">Abstract Admin</p></div>
-                </div>
+            <div class="flex items-center gap-3 flex-shrink-0">
+                
+                <button data-s1-bell aria-label="Notifications" class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-regular fa-bell text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <a href="abstract.identity-access.my-account.html" aria-label="My account (Sarah Mitchell)" class="flex items-center gap-2 pl-3 border-l border-slate-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">
+                    <span class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);" aria-hidden="true">SM</span>
+                    <span class="hidden xl:block"><span class="block text-xs font-semibold text-slate-700">Sarah Mitchell</span><span class="block text-xs text-slate-400">Abstract</span></span>
+                </a>
             </div>
         </header>
-
-        <main class="flex-1 overflow-y-auto px-6 xl:px-8 py-6 bg-slate-100">
-
-            <!-- Info banner -->
-            <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 mb-6 flex items-start gap-3">
-                <i class="fa-solid fa-circle-info text-blue-500 mt-0.5"></i>
-                <p class="text-sm text-blue-800">Only agencies approved for a client can be selected when releasing that client's vacancies <span class="font-semibold">(AB-005)</span>. Revoking approval prevents future releases but does not retract existing releases, proposals, or bookings <span class="font-semibold">(AB-006)</span>.</p>
+        <main id="main" class="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-8 py-6 bg-slate-100">
+            <div data-s1-show="denied" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-14 text-center">
+                <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-lock text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900">You don't have access to this page</h2>
+                <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">Seeing the approved-supplier matrix needs the permission to view it. Ask an Abstract administrator if you need it.</p>
+                <a href="abstract.shell.dashboard.html" data-s1-home class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to the dashboard</a>
             </div>
-
-            <!-- Stat cards -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-                    <div class="flex items-start justify-between mb-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-building-user text-blue-600"></i></div></div>
-                    <p class="text-3xl font-bold text-slate-900 mb-1">7</p>
-                    <p class="text-sm text-slate-500 font-medium">Total Agencies</p>
-                </div>
-                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-                    <div class="flex items-start justify-between mb-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(16,185,129,0.1);"><i class="fa-solid fa-circle-check text-emerald-600"></i></div></div>
-                    <p class="text-3xl font-bold text-slate-900 mb-1">23</p>
-                    <p class="text-sm text-slate-500 font-medium">Approved Links</p>
-                </div>
-                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-                    <div class="flex items-start justify-between mb-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(220,38,38,0.1);"><i class="fa-solid fa-ban text-red-600"></i></div></div>
-                    <p class="text-3xl font-bold text-slate-900 mb-1">2</p>
-                    <p class="text-sm text-slate-500 font-medium">Revoked This Quarter</p>
-                </div>
-                <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
-                    <div class="flex items-start justify-between mb-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(245,158,11,0.1);"><i class="fa-solid fa-triangle-exclamation text-amber-500"></i></div></div>
-                    <p class="text-3xl font-bold text-slate-900 mb-1">3</p>
-                    <p class="text-sm text-slate-500 font-medium">Expiring Compliance</p>
-                </div>
+            <div data-s1-hide="denied">
+            <div data-s1-show="readonly" role="status" class="mb-4 text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-eye text-slate-400 mt-0.5" aria-hidden="true"></i><p>You can see which agencies are approved but not change it. Changing it needs permission to edit approved suppliers.</p></div>
+            <div id="tiles" data-embedded-hide class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4"></div>
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-4">
+              <div class="flex flex-wrap items-center gap-3">
+                <div class="min-w-0 flex-1" id="view-head"></div>
+                <button type="button" id="btn-approve" data-edit class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-handshake-angle" aria-hidden="true"></i> Approve an agency for a client</button>
+              </div>
+              <div class="flex flex-wrap items-center gap-3 mt-3" id="filters" data-embedded-hide>
+                <label class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px]"><i class="fa-solid fa-building text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">Client</span><select id="f-client" class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option value="">All clients</option></select></label>
+                <label class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px]"><i class="fa-solid fa-people-group text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">Agency</span><select id="f-agency" class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option value="">All agencies</option></select></label>
+                <label class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px]"><span class="text-xs text-slate-500">In force on</span><input id="f-on" type="date" class="bg-transparent text-xs font-medium text-slate-700 outline-none"/></label>
+              </div>
             </div>
-
-            <!-- Filter bar -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-6 flex flex-wrap items-center gap-3">
-                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-                    <i class="fa-regular fa-building text-slate-400 text-xs"></i>
-                    <select class="bg-transparent text-xs font-medium text-slate-600 outline-none">
-                        <option>All Clients</option><option>Coventry Logistics Ltd</option><option>HSBC Group</option><option>BT Enterprise</option><option>Nationwide Retail plc</option>
-                    </select>
+            <div data-s1-show="loading" class="bg-white rounded-2xl border border-slate-200 shadow-sm" aria-busy="true" aria-label="Loading approved suppliers">
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:40%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:25%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
                 </div>
-                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 flex-1 min-w-[160px]">
-                    <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs"></i>
-                    <input type="text" placeholder="Search agency name..." class="bg-transparent text-xs text-slate-700 placeholder-slate-400 outline-none w-full"/>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:53%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:42%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
                 </div>
-                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-                    <i class="fa-solid fa-filter text-slate-400 text-xs"></i>
-                    <select class="bg-transparent text-xs font-medium text-slate-600 outline-none">
-                        <option>All Statuses</option><option>Approved</option><option>Not Approved</option><option>Revoked</option>
-                    </select>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:66%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:29%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
                 </div>
-                <button class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors"><i class="fa-solid fa-rotate-left text-xs"></i> Reset</button>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:44%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:46%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div><p class="sr-only">Loading…</p></div>
+            <div data-s1-show="error" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-12 text-center" role="alert">
+                <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-triangle-exclamation text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900">We couldn't load approved suppliers</h2>
+                <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">Something went wrong on our side. Try again — if it keeps happening, quote reference <span class="font-semibold text-slate-800 tnum">ERR-ASL-3F08-5521</span> to Abstract support.</p>
+                <button type="button" onclick="S1.setState('loading');setTimeout(function(){S1.setState('default')},700)" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Retry</button>
             </div>
-
-            <!-- Matrix -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
-                <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-                    <div><h3 class="text-sm font-bold text-slate-800">Approval Matrix</h3><p class="text-xs text-slate-400 mt-0.5">Rows: agencies &middot; Columns: clients &middot; toggle a cell to change approval</p></div>
-                    <div class="flex items-center gap-3 text-xs text-slate-500">
-                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-500"></i> Approved</span>
-                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-minus text-slate-300"></i> Not approved</span>
-                        <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-xmark text-red-500"></i> Revoked</span>
-                    </div>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm min-w-[720px]">
-                        <thead>
-                            <tr class="bg-slate-50 text-left">
-                                <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider sticky left-0 bg-slate-50">Agency</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center">Coventry Logistics</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center">HSBC Group</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center">BT Enterprise</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center">Nationwide Retail</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-center">Meridian Care</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            <!-- helper cells: approved(green), notapproved(dash), revoked(red) -->
-                            <tr class="hover:bg-slate-50/60">
-                                <td class="px-5 py-3 font-semibold text-slate-800 sticky left-0 bg-white">TechForce Agency</td>
-                                <td class="px-4 py-3 text-center" title="Approved 12 Jan 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Approved 03 Feb 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center"><button class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-300 hover:bg-slate-100"><i class="fa-solid fa-minus"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Approved 20 Mar 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center"><button class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-300 hover:bg-slate-100"><i class="fa-solid fa-minus"></i></button></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/60">
-                                <td class="px-5 py-3 font-semibold text-slate-800 sticky left-0 bg-white">Nexus Talent</td>
-                                <td class="px-4 py-3 text-center" title="Approved 08 Jan 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center"><button class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-300 hover:bg-slate-100"><i class="fa-solid fa-minus"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Approved 14 Feb 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Revoked 28 May 2026"><button class="w-8 h-8 rounded-lg bg-red-50 border border-red-200 text-red-600 hover:bg-red-100"><i class="fa-solid fa-xmark"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Approved 02 Apr 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/60">
-                                <td class="px-5 py-3 font-semibold text-slate-800 sticky left-0 bg-white">PeopleBridge</td>
-                                <td class="px-4 py-3 text-center" title="Approved 19 Jan 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Approved 11 Feb 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Approved 05 Mar 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center"><button class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-300 hover:bg-slate-100"><i class="fa-solid fa-minus"></i></button></td>
-                                <td class="px-4 py-3 text-center"><button class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-300 hover:bg-slate-100"><i class="fa-solid fa-minus"></i></button></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/60">
-                                <td class="px-5 py-3 font-semibold text-slate-800 sticky left-0 bg-white">Apex Staffing</td>
-                                <td class="px-4 py-3 text-center"><button class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-300 hover:bg-slate-100"><i class="fa-solid fa-minus"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Approved 22 Feb 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center"><button class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-300 hover:bg-slate-100"><i class="fa-solid fa-minus"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Approved 30 Mar 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center"><button class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-300 hover:bg-slate-100"><i class="fa-solid fa-minus"></i></button></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/60">
-                                <td class="px-5 py-3 font-semibold text-slate-800 sticky left-0 bg-white">Britannia Recruitment</td>
-                                <td class="px-4 py-3 text-center" title="Approved 06 Jan 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center"><button class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-300 hover:bg-slate-100"><i class="fa-solid fa-minus"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Revoked 15 Apr 2026"><button class="w-8 h-8 rounded-lg bg-red-50 border border-red-200 text-red-600 hover:bg-red-100"><i class="fa-solid fa-xmark"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Approved 18 Mar 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Approved 09 Apr 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/60">
-                                <td class="px-5 py-3 font-semibold text-slate-800 sticky left-0 bg-white">Summit Workforce</td>
-                                <td class="px-4 py-3 text-center" title="Approved 24 Jan 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Approved 17 Feb 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center"><button class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-300 hover:bg-slate-100"><i class="fa-solid fa-minus"></i></button></td>
-                                <td class="px-4 py-3 text-center"><button class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-300 hover:bg-slate-100"><i class="fa-solid fa-minus"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Approved 12 Apr 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/60">
-                                <td class="px-5 py-3 font-semibold text-slate-800 sticky left-0 bg-white">Vantage Personnel</td>
-                                <td class="px-4 py-3 text-center"><button class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-300 hover:bg-slate-100"><i class="fa-solid fa-minus"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Approved 21 Feb 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center" title="Approved 07 Mar 2026"><button class="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-600 hover:bg-emerald-100"><i class="fa-solid fa-check"></i></button></td>
-                                <td class="px-4 py-3 text-center"><button class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-300 hover:bg-slate-100"><i class="fa-solid fa-minus"></i></button></td>
-                                <td class="px-4 py-3 text-center"><button class="w-8 h-8 rounded-lg bg-slate-50 border border-slate-200 text-slate-300 hover:bg-slate-100"><i class="fa-solid fa-minus"></i></button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div data-s1-hide="loading error">
+              <section id="matrix-card" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-4" aria-labelledby="matrix-t"><div class="flex flex-wrap items-center justify-between gap-3 px-5 pt-5 pb-3"><div><h2 id="matrix-t" class="text-sm font-bold text-slate-900">Approval matrix</h2><p class="text-xs text-slate-500 mt-0.5">Rows are agencies, columns are clients. A cell shows the link in force on the chosen date, or the next scheduled one. Choose a cell to approve or revoke.</p></div><div id="matrix-pager" class="text-xs text-slate-500"></div></div><div id="matrix" class="overflow-x-auto"></div><div class="px-5 py-3 border-t border-slate-100 flex flex-wrap gap-4 text-xs text-slate-600"><span class="inline-flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-600" aria-hidden="true"></i> In force</span><span class="inline-flex items-center gap-1.5"><i class="fa-regular fa-calendar text-amber-600" aria-hidden="true"></i> Scheduled from a future date</span><span class="inline-flex items-center gap-1.5"><i class="fa-solid fa-circle-minus text-slate-400" aria-hidden="true"></i> Revoked</span><span class="inline-flex items-center gap-1.5"><span class="text-slate-400">—</span> Never approved</span></div></section>
+              <section id="table-card" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" aria-labelledby="table-t"><div class="flex flex-wrap items-center justify-between gap-3 px-5 pt-5 pb-3"><div><h2 id="table-t" class="text-sm font-bold text-slate-900"></h2><p class="text-xs text-slate-500 mt-0.5" id="table-sub"></p></div></div><div id="table"></div></section>
             </div>
-
-            <!-- Per-client detail panel -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl flex items-center justify-center bg-blue-50"><i class="fa-regular fa-building text-blue-600"></i></div>
-                        <div><h3 class="text-sm font-bold text-slate-800">Coventry Logistics Ltd &middot; Approved Agencies</h3><p class="text-xs text-slate-400 mt-0.5">4 agencies approved to supply this client</p></div>
-                    </div>
-                    <button onclick="supplierAction(this,'approve')" class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-3 py-2 text-xs font-semibold transition-colors"><i class="fa-solid fa-plus text-xs"></i> Approve Agency</button>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm">
-                        <thead>
-                            <tr class="bg-slate-50 text-left">
-                                <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Agency</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Approved On</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Payment Terms</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Agreed Margin</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Compliance</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            <tr class="hover:bg-slate-50/60">
-                                <td class="px-5 py-3"><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center"><i class="fa-solid fa-building-user text-blue-600 text-xs"></i></div><span class="font-semibold text-slate-800">TechForce Agency</span></div></td>
-                                <td class="px-4 py-3 text-slate-600">12 Jan 2026</td>
-                                <td class="px-4 py-3 text-slate-600">30 days</td>
-                                <td class="px-4 py-3 font-semibold text-slate-800">14.5%</td>
-                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-circle-check text-[10px]"></i> Compliant</span></td>
-                                <td class="px-4 py-3 text-right"><button onclick="supplierAction(this,'revoke')" class="text-xs font-semibold text-red-600 hover:text-red-700 px-2 py-1 rounded-lg hover:bg-red-50">Revoke</button></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/60">
-                                <td class="px-5 py-3"><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full bg-purple-100 flex items-center justify-center"><i class="fa-solid fa-building-user text-purple-600 text-xs"></i></div><span class="font-semibold text-slate-800">Nexus Talent</span></div></td>
-                                <td class="px-4 py-3 text-slate-600">08 Jan 2026</td>
-                                <td class="px-4 py-3 text-slate-600">45 days</td>
-                                <td class="px-4 py-3 font-semibold text-slate-800">13.0%</td>
-                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-clock text-[10px]"></i> Pending</span></td>
-                                <td class="px-4 py-3 text-right"><button onclick="supplierAction(this,'revoke')" class="text-xs font-semibold text-red-600 hover:text-red-700 px-2 py-1 rounded-lg hover:bg-red-50">Revoke</button></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/60">
-                                <td class="px-5 py-3"><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full bg-emerald-100 flex items-center justify-center"><i class="fa-solid fa-building-user text-emerald-600 text-xs"></i></div><span class="font-semibold text-slate-800">PeopleBridge</span></div></td>
-                                <td class="px-4 py-3 text-slate-600">19 Jan 2026</td>
-                                <td class="px-4 py-3 text-slate-600">30 days</td>
-                                <td class="px-4 py-3 font-semibold text-slate-800">15.2%</td>
-                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-circle-check text-[10px]"></i> Compliant</span></td>
-                                <td class="px-4 py-3 text-right"><button onclick="supplierAction(this,'revoke')" class="text-xs font-semibold text-red-600 hover:text-red-700 px-2 py-1 rounded-lg hover:bg-red-50">Revoke</button></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/60 bg-red-50/30">
-                                <td class="px-5 py-3"><div class="flex items-center gap-2"><div class="w-7 h-7 rounded-full bg-red-100 flex items-center justify-center"><i class="fa-solid fa-building-user text-red-600 text-xs"></i></div><span class="font-semibold text-slate-500 line-through">Britannia Recruitment</span></div></td>
-                                <td class="px-4 py-3 text-slate-400">06 Jan 2026</td>
-                                <td class="px-4 py-3 text-slate-400">30 days</td>
-                                <td class="px-4 py-3 text-slate-400">12.8%</td>
-                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200"><i class="fa-solid fa-circle-xmark text-[10px]"></i> Revoked 15 Apr 2026</span></td>
-                                <td class="px-4 py-3 text-right"><button onclick="supplierAction(this,'approve')" class="text-xs font-semibold text-emerald-600 hover:text-emerald-700 px-2 py-1 rounded-lg hover:bg-emerald-50">Re-approve</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-start gap-2">
-                    <i class="fa-solid fa-circle-info text-slate-400 text-xs mt-0.5"></i>
-                    <p class="text-xs text-slate-500">Revoking Britannia Recruitment on 15 Apr 2026 blocked future releases only; its 2 existing active bookings on VAC-1021 continue unaffected (AB-006).</p>
-                </div>
             </div>
-
         </main>
     </div>
 </div>
-
-<!-- ===== Shared admin shell behaviour: mobile nav · toast · confirm ===== -->
-<div id="confirm-overlay" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
-  <div class="absolute inset-0" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px)" onclick="closeConfirm()"></div>
-  <div role="dialog" aria-modal="true" aria-labelledby="confirm-title"
-       class="relative bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md">
-    <div class="flex items-start gap-3 px-6 pt-6">
-      <div id="confirm-icon" class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-red-50 text-red-600"><i class="fa-solid fa-triangle-exclamation"></i></div>
-      <div class="flex-1">
-        <h3 id="confirm-title" class="text-base font-bold text-slate-900">Are you sure?</h3>
-        <p id="confirm-body" class="text-sm text-slate-500 mt-1"></p>
-      </div>
-    </div>
-    <div class="flex items-center justify-end gap-3 px-6 py-4 mt-4 border-t border-slate-200 bg-slate-50 rounded-b-2xl">
-      <button onclick="closeConfirm()" class="px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-100 transition-colors">Cancel</button>
-      <button id="confirm-ok" class="px-5 py-2 text-white rounded-lg text-sm font-semibold transition-opacity hover:opacity-90">Confirm</button>
-    </div>
-  </div>
-</div>
-<div id="toast-stack" class="fixed bottom-5 right-5 z-[70] flex flex-col gap-2 pointer-events-none"></div>
-
 <script>
 /* Mobile navigation (sidebar is hidden below lg — this is the only way to reveal it) */
 (function () {
@@ -434,81 +154,219 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bd.style.display === 'block') close(); });
   window.addEventListener('resize', function () { if (window.innerWidth >= 1024) close(); });
 })();
-
-/* Toast — feedback after an action */
-function toast(msg, tone) {
-  var wrap = document.getElementById('toast-stack');
-  if (!wrap) return;
-  var tones = { success: 'fa-circle-check text-emerald-500', info: 'fa-circle-info text-blue-500', danger: 'fa-circle-exclamation text-red-500' };
-  var t = document.createElement('div');
-  t.className = 'pointer-events-auto flex items-center gap-2.5 bg-white border border-slate-200 shadow-lg rounded-xl px-4 py-3 text-sm text-slate-700';
-  t.setAttribute('role', 'status');
-  t.innerHTML = '<i class="fa-solid ' + (tones[tone] || tones.success) + '"></i><span></span>';
-  t.querySelector('span').textContent = msg;
-  wrap.appendChild(t);
-  setTimeout(function () { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; setTimeout(function(){ t.remove(); }, 300); }, 3200);
+</script>
+<script>
+var BADGE = {
+  'Draft': ['bg-slate-100 text-slate-700 border border-slate-200', 'fa-file-pen'],
+  'In Setup': ['bg-blue-50 text-blue-700 border border-blue-200', 'fa-screwdriver-wrench'],
+  'Pending Activation': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Active': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Suspended': ['bg-red-50 text-red-700 border border-red-200', 'fa-ban'],
+  'Invited': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-envelope'],
+  'Inactive': ['bg-slate-100 text-slate-500 border border-slate-200', 'fa-circle-minus'],
+  'Pending approval': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Approved': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Rejected': ['bg-red-50 text-red-700 border border-red-200', 'fa-circle-xmark'],
+  'Compliant': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Pending': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Expired': ['bg-red-50 text-red-700 border border-red-200', 'fa-circle-xmark'],
+  'Not Applicable': ['bg-slate-100 text-slate-700 border border-slate-200', 'fa-minus']
+};
+function badge(s, small) {
+  var b = BADGE[s] || BADGE['Draft'];
+  return '<span class="inline-flex items-center gap-1.5 ' + (small ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs') + ' rounded-full font-semibold whitespace-nowrap ' + b[0] + '"><i class="fa-solid ' + b[1] + ' text-[10px]" aria-hidden="true"></i>' + s + '</span>';
 }
-
-/* Confirm — gate every destructive / irreversible action */
-var _confirmAction = null;
-function openConfirm(opts) {
-  var o = opts || {}, danger = o.tone !== 'neutral';
-  document.getElementById('confirm-title').textContent = o.title || 'Are you sure?';
-  document.getElementById('confirm-body').textContent = o.body || '';
-  var ic = document.getElementById('confirm-icon');
-  ic.className = 'w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ' + (danger ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600');
-  ic.innerHTML = '<i class="fa-solid ' + (danger ? 'fa-triangle-exclamation' : 'fa-circle-question') + '"></i>';
-  var ok = document.getElementById('confirm-ok');
-  ok.textContent = o.confirmLabel || 'Confirm';
-  ok.style.background = danger ? '#DC2626' : 'linear-gradient(135deg,#1D4ED8,#5B2E91)';
-  _confirmAction = o.onConfirm || null;
-  document.getElementById('confirm-overlay').classList.remove('hidden');
-  ok.focus();
+/* Markers are not statuses (design-tokens §5): default neutral, success, warning, info */
+var MARK = { 'default': 'bg-slate-100 text-slate-700 border-slate-200', success: 'bg-emerald-50 text-emerald-700 border-emerald-200', warning: 'bg-amber-50 text-amber-700 border-amber-200', info: 'bg-blue-50 text-blue-700 border-blue-200' };
+function marker(text, variant, title) {
+  return '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border whitespace-nowrap ' + MARK[variant || 'default'] + '"' + (title ? ' title="' + esc(title) + '"' : '') + '>' + text + '</span>';
 }
-function closeConfirm() { document.getElementById('confirm-overlay').classList.add('hidden'); _confirmAction = null; }
-document.addEventListener('DOMContentLoaded', function () {
-  var ok = document.getElementById('confirm-ok');
-  if (ok) ok.addEventListener('click', function () { var a = _confirmAction; closeConfirm(); if (a) a(); });
-});
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape' && !document.getElementById('confirm-overlay').classList.contains('hidden')) closeConfirm();
-});
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
+function initials(n) { return String(n).split(/\s+/).map(function (p) { return p[0]; }).slice(0, 2).join('').toUpperCase(); }
+var GBP = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' });
+function money(s) { return GBP.format(Number(s)); }
+function pct(s) { return Number(s).toFixed(2) + ' %'; }
+function fmtDate(iso) { if (!iso) return '—'; var d = new Date(iso + (iso.length === 10 ? 'T00:00:00' : '')); return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }
+function fmtDateTime(iso) { var d = new Date(iso); return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); }
+var BTN_SEC = 'inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
+var BTN_PRI = 'inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed';
+var BTN_PRI_STYLE = 'background:linear-gradient(135deg,#1D4ED8,#5B2E91)';
+var BTN_DANGER = 'inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white rounded-lg px-4 py-2.5 text-xs font-semibold min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-1 disabled:opacity-50';
+var BTN_GHOST = 'inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 hover:text-blue-900 hover:underline rounded px-1 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
+var INPUT = 'w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20';
+var INPUT_ERR = 'border-red-400 bg-red-50/40 focus:border-red-400 focus:ring-red-600/20';
+var Q = new URLSearchParams(location.search);
+/* Structure changes: the sidebar item carries the pending count (K13 SidebarNavItem count; polled every 60 s with X-Activity: passive; absent when zero) */
+var S2_PENDING_COUNT = 5;
+document.addEventListener('s1:ready', function () { var c = document.getElementById('nav-sc-count'); if (c && S2_PENDING_COUNT > 0) { c.textContent = S2_PENDING_COUNT; c.classList.remove('hidden'); c.classList.add('inline-block'); c.setAttribute('aria-label', S2_PENDING_COUNT + ' waiting'); } });
+function setErr(id, msg) { var i = document.getElementById(id), e = document.getElementById(id + '-err'); if (!i) return; if (msg) { i.classList.add.apply(i.classList, INPUT_ERR.split(' ')); i.setAttribute('aria-invalid', 'true'); if (e) { e.textContent = msg; e.style.display = ''; } } else { i.classList.remove.apply(i.classList, INPUT_ERR.split(' ')); i.removeAttribute('aria-invalid'); if (e) e.style.display = 'none'; } }
 </script>
 
-
+<div data-s1-modal id="m-approve" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-approve-t">
+    <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+            <div class="min-w-0"><h2 id="m-approve-t" class="text-base font-bold text-slate-900">Approve an agency for a client</h2></div>
+            <button type="button" onclick="S1.closeModal('m-approve')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500 flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="px-6 py-5 flex flex-col gap-4">
+        <div><label for="a-client" class="block text-xs font-semibold text-slate-700 mb-1.5">Client <span class="text-red-600" aria-hidden="true">*</span></label><select id="a-client" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20"></select></div>
+        <div><label for="a-agency" class="block text-xs font-semibold text-slate-700 mb-1.5">Agency <span class="text-red-600" aria-hidden="true">*</span></label><select id="a-agency" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20"></select><p id="a-agency-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p></div>
+        <div>
+      <label for="a-from" class="block text-xs font-semibold text-slate-700 mb-1.5">Approved from <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input id="a-from" type="date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="" aria-describedby="a-from-err a-from-hint" />
+      <p id="a-from-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      <p id="a-from-hint" class="text-xs text-slate-500 mt-1.5">Today or later. From that date the client's vacancies can be released to this agency. A re-approval after a revocation is a new dated record.</p>
+    </div></div>
+        <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-wrap justify-end gap-3 sm:rounded-b-2xl"><button type="button" onclick="S1.closeModal('m-approve')" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Cancel</button><button type="button" id="a-save" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-check" aria-hidden="true"></i> Approve</button></div>
+    </div>
+</div>
+<div data-s1-modal id="m-revoke" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-revoke-t">
+    <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+            <div class="min-w-0"><h2 id="m-revoke-t" class="text-base font-bold text-slate-900">Revoke approval</h2></div>
+            <button type="button" onclick="S1.closeModal('m-revoke')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500 flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="px-6 py-5 flex flex-col gap-4">
+        <p class="text-sm text-slate-700" id="r-copy"></p>
+        <div>
+      <label for="r-from" class="block text-xs font-semibold text-slate-700 mb-1.5">Revoked from <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input id="r-from" type="date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="" aria-describedby="r-from-err r-from-hint" />
+      <p id="r-from-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      <p id="r-from-hint" class="text-xs text-slate-500 mt-1.5">Today or later, and not before the approval date. From that date no new vacancy of this client is released to this agency.</p>
+    </div>
+        <p class="rounded-lg bg-slate-50 border border-slate-200 px-3 py-2.5 text-xs text-slate-600 flex items-start gap-2"><i class="fa-solid fa-circle-info text-slate-400 mt-0.5" aria-hidden="true"></i><span>Existing releases, proposals and bookings are untouched. Revoking only stops future releases. This is audited.</span></p></div>
+        <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-wrap justify-end gap-3 sm:rounded-b-2xl"><button type="button" onclick="S1.closeModal('m-revoke')" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Cancel</button><button type="button" id="r-save" class="inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white rounded-lg px-4 py-2.5 text-xs font-semibold min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-1"><i class="fa-solid fa-ban" aria-hidden="true"></i> Revoke</button></div>
+    </div>
+</div>
 <script>
-/* Approved supplier matrix — AB-003 approve/revoke with effective dates;
-   AB-006: revoking blocks FUTURE releases but does not retract existing releases/proposals/bookings. */
-function supplierAction(btn, kind){
-  var row = btn.closest('tr'), name = row ? (row.querySelector('td') || {}).textContent : '';
-  name = (name || 'this agency').replace(/\s+/g,' ').trim().slice(0,40);
-  if (kind === 'revoke'){
-    openConfirm({tone:'danger', title:'Revoke approval?',
-      body: name + ' will no longer be selectable when releasing this client\u2019s vacancies. Existing releases, proposals and bookings are NOT retracted (AB-006).',
-      confirmLabel:'Revoke approval', onConfirm:function(){ setSupplier(btn,false,name); }});
-  } else {
-    openConfirm({tone:'neutral', title:'Approve this agency?',
-      body: name + ' becomes selectable for this client\u2019s vacancy releases from today (AB-003, AB-005).',
-      confirmLabel:'Approve agency', onConfirm:function(){ setSupplier(btn,true,name); }});
+var ORGS = {"acme": {"name": "Acme Logistics", "party": "client", "status": "Active", "users": 5, "pct": null, "approval": true, "activatedAt": "2026-03-14T10:12:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-03-15T09:02:00Z", "accessEnabledBy": "Sarah Mitchell", "address": {"line1": "Acme House", "line2": "12 Fenton Way", "town": "Birmingham", "postcode": "B6 7QD", "country": "GB"}, "contacts": [{"name": "Rachel Green", "role": "Procurement lead", "email": "rachel.green@acmelogistics.co.uk", "tel": "0121 496 0102"}, {"name": "Priya Natarajan", "role": "Accounts payable", "email": "priya.natarajan@acmelogistics.co.uk", "tel": "0121 496 0110"}], "contract": {"ref": "ABS-CL-2026-004", "start": "2026-02-01", "end": "2028-01-31", "renewal": "Notice period 90 days; review in Q4 2027."}}, "northgate": {"name": "Northgate Foods", "party": "client", "status": "Active", "users": 4, "pct": null, "approval": false, "activatedAt": "2026-04-02T14:40:00Z", "activatedBy": "James Okafor", "accessEnabledAt": "2026-04-02T15:05:00Z", "accessEnabledBy": "James Okafor", "address": {"line1": "Unit 4, Northgate Business Park", "line2": null, "town": "Leeds", "postcode": "LS9 8AQ", "country": "GB"}, "contacts": [{"name": "Hannah Price", "role": "HR director", "email": "h.price@northgatefoods.co.uk", "tel": "0113 496 0220"}], "contract": {"ref": "ABS-CL-2026-007", "start": "2026-04-01", "end": null, "renewal": null}}, "harbour": {"name": "Harbour Retail Group", "party": "client", "status": "In Setup", "users": 2, "pct": 30, "approval": false, "address": {"line1": "Harbour Point", "line2": "1 Quay Street", "town": "Southampton", "postcode": "SO14 2AQ", "country": "GB"}, "contacts": [{"name": "Marcus Lee", "role": "Operations director", "email": "marcus.lee@harbourretail.co.uk", "tel": "023 8049 0310"}], "contract": {"ref": "ABS-CL-2026-011", "start": "2026-11-01", "end": "2028-10-31", "renewal": "Review six months before the end date."}}, "meridian": {"name": "Meridian Healthcare Services", "party": "client", "status": "Pending Activation", "users": 3, "pct": 90, "approval": false, "address": {"line1": "Meridian House", "line2": "30 Castle Street", "town": "Reading", "postcode": "RG1 7SN", "country": "GB"}, "contacts": [{"name": "Dr Anita Rao", "role": "Director of nursing", "email": "a.rao@meridianhealth.org.uk", "tel": "0118 496 0415"}], "contract": {"ref": "ABS-CL-2026-012", "start": "2026-10-01", "end": "2027-09-30", "renewal": null}}, "coastline": {"name": "Coastline Manufacturing", "party": "client", "status": "Draft", "users": 0, "pct": 0, "approval": false, "address": null, "contacts": [], "contract": {"ref": "", "start": null, "end": null, "renewal": null}}, "pennine": {"name": "Pennine Distribution", "party": "client", "status": "Suspended", "users": 3, "pct": null, "approval": false, "activatedAt": "2026-01-20T11:00:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-01-21T08:30:00Z", "accessEnabledBy": "Sarah Mitchell", "suspension": {"reason": "Contract dispute: invoices unpaid since July 2026. Reinstate once the finance team confirms settlement.", "at": "2026-09-02T16:20:00Z", "by": "Sarah Mitchell"}, "address": {"line1": "Pennine Way Depot", "line2": null, "town": "Huddersfield", "postcode": "HD2 1UA", "country": "GB"}, "contacts": [{"name": "Gary Holmes", "role": "Site director", "email": "g.holmes@penninedist.co.uk", "tel": "01484 496 0501"}], "contract": {"ref": "ABS-CL-2025-019", "start": "2025-11-01", "end": "2026-10-31", "renewal": "Not renewing while suspended."}}, "techforce": {"name": "TechForce Recruitment", "party": "agency", "status": "Active", "users": 4, "pct": null, "approval": false, "activatedAt": "2026-03-10T09:45:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-03-10T10:00:00Z", "accessEnabledBy": "Sarah Mitchell", "address": {"line1": "14 Kingsway House", "line2": null, "town": "Coventry", "postcode": "CV1 2LH", "country": "GB"}, "contacts": [{"name": "Daniel Wright", "role": "Operations director", "email": "daniel.wright@techforce-recruitment.co.uk", "tel": "024 7649 0210"}, {"name": "Aisha Khan", "role": "Payroll", "email": "aisha.khan@techforce-recruitment.co.uk", "tel": null}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "12.50", "sba": {"ref": "SBA-2026-0417", "signed": "2026-07-03", "expiry": "2027-07-02", "doc": "SBA_TechForce_signed.pdf"}}, "nexus": {"name": "Nexus Talent", "party": "agency", "status": "Active", "users": 4, "pct": null, "approval": true, "activatedAt": "2026-03-18T13:00:00Z", "activatedBy": "James Okafor", "accessEnabledAt": "2026-03-19T09:00:00Z", "accessEnabledBy": "James Okafor", "address": {"line1": "2nd Floor, Nexus Court", "line2": "8 Wellington Street", "town": "Sheffield", "postcode": "S1 4HG", "country": "GB"}, "contacts": [{"name": "Aisha Rahman", "role": "Managing director", "email": "a.rahman@nexustalent.co.uk", "tel": "0114 496 0330"}], "paymentTermsDays": 14, "marginBasis": "fixed_per_hour", "marginValue": "2.40", "sba": {"ref": "SBA-2026-0391", "signed": "2026-03-12", "expiry": "2027-03-11", "doc": "SBA_Nexus_signed.pdf"}}, "peoplebridge": {"name": "PeopleBridge", "party": "agency", "status": "Pending Activation", "users": 2, "pct": 88, "approval": false, "address": {"line1": "Bridge House", "line2": "5 Canal Street", "town": "Manchester", "postcode": "M1 3HE", "country": "GB"}, "contacts": [{"name": "Leo Marsh", "role": "Director", "email": "leo@peoplebridge.co.uk", "tel": "0161 496 0180"}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "11.00", "sba": {"ref": "SBA-2026-0442", "signed": "2026-09-28", "expiry": "2027-09-27", "doc": "SBA_PeopleBridge_signed.pdf"}}, "summit": {"name": "Summit Staffing Solutions", "party": "agency", "status": "In Setup", "users": 1, "pct": 33, "approval": false, "address": {"line1": "Summit House", "line2": "22 Peak Road", "town": "Derby", "postcode": "DE1 2QR", "country": "GB"}, "contacts": [{"name": "Fiona Wallace", "role": "Owner", "email": "fiona@summitstaffing.co.uk", "tel": "01332 496 0290"}], "paymentTermsDays": null, "marginBasis": "percentage_of_charge", "marginValue": null, "sba": null}, "rapid": {"name": "Rapid Resource", "party": "agency", "status": "Suspended", "users": 3, "pct": null, "approval": false, "activatedAt": "2026-02-11T10:00:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-02-11T10:30:00Z", "accessEnabledBy": "Sarah Mitchell", "suspension": {"reason": "Employer's liability insurance lapsed on 31 Aug 2026 and no renewal has been received.", "at": "2026-09-01T09:10:00Z", "by": "Hannah Clarke"}, "address": {"line1": "9 Station Approach", "line2": null, "town": "Nottingham", "postcode": "NG1 7AB", "country": "GB"}, "contacts": [{"name": "Kim Barrow", "role": "Director", "email": "kim@rapidresource.co.uk", "tel": "0115 496 0770"}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "12.00", "sba": {"ref": "SBA-2026-0360", "signed": "2026-02-05", "expiry": "2027-02-04", "doc": "SBA_Rapid_signed.pdf"}}};
+var LINKS = [{"id": "asl-1", "client": "acme", "agency": "techforce", "approvedFrom": "2026-03-12", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-2", "client": "northgate", "agency": "techforce", "approvedFrom": "2026-05-01", "revokedFrom": null, "approvedBy": "James Okafor"}, {"id": "asl-3", "client": "acme", "agency": "nexus", "approvedFrom": "2026-03-20", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-4", "client": "northgate", "agency": "nexus", "approvedFrom": "2026-02-01", "revokedFrom": "2026-09-30", "approvedBy": "Sarah Mitchell", "revokedBy": "James Okafor"}, {"id": "asl-5", "client": "acme", "agency": "peoplebridge", "approvedFrom": "2026-11-01", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-6", "client": "pennine", "agency": "rapid", "approvedFrom": "2026-02-15", "revokedFrom": "2026-09-01", "approvedBy": "Sarah Mitchell", "revokedBy": "Hannah Clarke"}, {"id": "asl-7", "client": "harbour", "agency": "techforce", "approvedFrom": "2026-11-01", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-8", "client": "meridian", "agency": "peoplebridge", "approvedFrom": "2026-10-15", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}];
+var COMPLIANCE = {"techforce": [{"id": "acr-1", "name": "Employer's liability insurance", "kind": "insurance", "issuingBody": "Zurich", "coverOrReference": "£10,000,000 · EL-88214", "expiryDate": "2027-03-31", "status": "Compliant", "doc": "EL_Cert_2026.pdf"}, {"id": "acr-2", "name": "Public liability insurance", "kind": "insurance", "issuingBody": "AXA", "coverOrReference": "£5,000,000 · PL-40027", "expiryDate": "2026-11-09", "status": "Pending", "doc": "PL_Cert_2025.pdf"}, {"id": "acr-3", "name": "REC Corporate Membership", "kind": "accreditation", "issuingBody": "REC", "coverOrReference": "REC-2026-1174", "expiryDate": "2027-01-01", "status": "Compliant", "doc": "REC_2026.pdf"}, {"id": "acr-4", "name": "Stronger Together accreditation", "kind": "accreditation", "issuingBody": "Stronger Together", "coverOrReference": "ST-9921", "expiryDate": "2026-06-30", "status": "Expired", "doc": "ST_2025.pdf"}, {"id": "acr-5", "name": "Gangmasters licence", "kind": "certification", "issuingBody": "GLAA", "coverOrReference": null, "expiryDate": null, "status": "Not Applicable", "doc": null}], "summit": [{"id": "acr-9", "name": "Employer's liability insurance", "kind": "insurance", "issuingBody": "Aviva", "coverOrReference": "£10,000,000 · EL-55102", "expiryDate": "2027-09-30", "status": "Compliant", "doc": "Summit_EL_2026.pdf"}], "peoplebridge": [{"id": "acr-11", "name": "Employer's liability insurance", "kind": "insurance", "issuingBody": "Hiscox", "coverOrReference": "£10,000,000 · HX-20991", "expiryDate": "2027-08-31", "status": "Compliant", "doc": "PB_EL_2026.pdf"}, {"id": "acr-12", "name": "REC Corporate Membership", "kind": "accreditation", "issuingBody": "REC", "coverOrReference": "REC-2026-1402", "expiryDate": "2027-06-01", "status": "Pending", "doc": null}]};
+var TODAY = "2026-10-10";
+
+var state = Q.get('state') || 'default', ro = false;
+var fixedClient = Q.get('client'), fixedAgency = Q.get('agency');
+var LINKSX = [], CLIENTS = [], AGENCIES = [], colPage = 1, rowPage = 1, tablePage = 1;
+var TERMS = { techforce: ['30 days', 'Percentage of charge', '12.50 %'], nexus: ['14 days', 'Fixed per hour', '£2.40/h'], peoplebridge: ['30 days', 'Percentage of charge', '11.00 %'], summit: ['—', 'Percentage of charge', '—'], rapid: ['30 days', 'Percentage of charge', '12.00 %'] };
+function onDate() { return document.getElementById('f-on').value || TODAY; }
+function current(client, agency) { var ls = LINKSX.filter(function (l) { return l.client === client && l.agency === agency; }).sort(function (a, b) { return a.approvedFrom < b.approvedFrom ? 1 : -1; }); return ls[0] || null; }
+function stateOf(l, on) { if (!l) return 'none'; if (l.approvedFrom <= on && (!l.revokedFrom || l.revokedFrom > on)) return 'inforce'; if (l.approvedFrom > on) return 'scheduled'; return 'revoked'; }
+function compliance(agency) { var recs = (COMPLIANCE[agency] || []).filter(function (r) { return r.kind === 'insurance'; }).sort(function (a, b) { return (a.expiryDate || '9999') < (b.expiryDate || '9999') ? -1 : 1; }); var r = recs[0]; return r ? badge(r.status, true) + (r.expiryDate ? '<span class="block text-xs text-slate-500 tnum mt-0.5">to ' + fmtDate(r.expiryDate) + '</span>' : '') : '<span class="text-xs text-slate-500">No insurance record</span>'; }
+function load() {
+  ro = state === 'readonly';
+  LINKSX = state === 'empty' ? [] : JSON.parse(JSON.stringify(LINKS));
+  CLIENTS = Object.keys(ORGS).filter(function (k) { return ORGS[k].party === 'client' && ORGS[k].status !== 'Draft'; });
+  AGENCIES = Object.keys(ORGS).filter(function (k) { return ORGS[k].party === 'agency' && ORGS[k].status !== 'Draft'; });
+  if (state === 'large') {
+    var pre = ['Northern', 'Premier', 'Atlas', 'Beacon', 'Crown', 'Elite', 'Harvest', 'Kingfisher', 'Lakeside', 'Metro'];
+    for (var i = 0; CLIENTS.length < 50; i++) { var k = 'c' + i; ORGS[k] = { name: pre[i % 10] + ' ' + ['Foods', 'Logistics', 'Retail', 'Care', 'Packaging'][i % 5], party: 'client', status: 'Active' }; CLIENTS.push(k); }
+    for (var j = 0; AGENCIES.length < 200; j++) { var a = 'a' + j; ORGS[a] = { name: pre[(j * 3) % 10] + ' ' + ['Staffing', 'Talent', 'Personnel', 'Workforce'][j % 4] + ' ' + (j + 1), party: 'agency', status: 'Active' }; AGENCIES.push(a); if (j % 3 === 0) LINKSX.push({ id: 'asl-x' + j, client: CLIENTS[j % 50], agency: a, approvedFrom: '2026-0' + (1 + j % 9) + '-15', revokedFrom: j % 7 === 0 ? '2026-09-30' : null, approvedBy: 'Sarah Mitchell' }); }
   }
+  var fc = document.getElementById('f-client'), fa = document.getElementById('f-agency');
+  fc.innerHTML = '<option value="">All clients</option>' + CLIENTS.map(function (k) { return '<option value="' + k + '">' + esc(ORGS[k].name) + '</option>'; }).join('');
+  fa.innerHTML = '<option value="">All agencies</option>' + AGENCIES.map(function (k) { return '<option value="' + k + '">' + esc(ORGS[k].name) + '</option>'; }).join('');
+  if (fixedClient) fc.value = fixedClient; if (fixedAgency) fa.value = fixedAgency;
+  if (!document.getElementById('f-on').value) document.getElementById('f-on').value = TODAY;
+  document.querySelectorAll('[data-edit]').forEach(function (b) { b.style.display = ro ? 'none' : ''; });
+  colPage = 1; rowPage = 1; tablePage = 1; render();
 }
-function setSupplier(btn, approved, name){
-  var row = btn.closest('tr');
-  if (row){
-    var pill = row.querySelector('.inline-flex.rounded-full, span[class*="rounded-full"]');
-    if (pill){
-      pill.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border ' +
-        (approved ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-slate-100 text-slate-500 border-slate-200');
-      pill.textContent = approved ? 'Approved' : 'Revoked';
-    }
-    btn.textContent = approved ? 'Revoke' : 'Re-approve';
-    btn.setAttribute('onclick', "supplierAction(this,'" + (approved ? 'revoke' : 'approve') + "')");
-    btn.className = approved
-      ? 'text-xs font-semibold text-red-600 hover:text-red-700 px-2 py-1 rounded-lg hover:bg-red-50'
-      : 'text-xs font-semibold text-emerald-600 hover:text-emerald-700 px-2 py-1 rounded-lg hover:bg-emerald-50';
-  }
-  toast(approved ? name + ' approved for this client' : name + ' revoked — future releases only', approved ? 'success' : 'info');
+function render() {
+  var on = onDate(), fc = document.getElementById('f-client').value, fa = document.getElementById('f-agency').value;
+  // tiles
+  var inForce = LINKSX.filter(function (l) { return stateOf(l, on) === 'inforce'; }).length;
+  var expiring = 0; Object.keys(COMPLIANCE).forEach(function (k) { COMPLIANCE[k].forEach(function (r) { if (r.expiryDate && r.expiryDate >= TODAY && r.expiryDate <= '2026-12-09') expiring++; }); });
+  document.getElementById('tiles').innerHTML = [['Agencies', AGENCIES.length, 'fa-people-group'], ['Clients', CLIENTS.length, 'fa-building'], ['Links in force', inForce, 'fa-handshake-angle'], ['Compliance expiring in 60 days', expiring, 'fa-shield-halved']].map(function (t) { return '<div class="' + 'bg-white rounded-2xl border border-slate-200 shadow-sm' + ' p-4"><p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">' + t[0] + '</p><p class="text-2xl font-extrabold text-slate-900 tnum mt-1 tracking-tight">' + t[1] + '</p></div>'; }).join('');
+  var head = document.getElementById('view-head');
+  if (fixedClient) head.innerHTML = '<h2 class="text-base font-bold text-slate-900">Approved agencies for ' + esc(ORGS[fixedClient].name) + '</h2><p class="text-xs text-slate-500 mt-0.5">The agencies this client\'s vacancies may be released to. Save this step once you have reviewed the list, even if no agency is approved yet.</p>';
+  else if (fixedAgency) head.innerHTML = '<h2 class="text-base font-bold text-slate-900">Client approvals for ' + esc(ORGS[fixedAgency].name) + '</h2><p class="text-xs text-slate-500 mt-0.5">The clients this agency may supply. Activation needs one approval in force today.</p>';
+  else head.innerHTML = '<h2 class="text-base font-bold text-slate-900">Approved suppliers</h2><p class="text-xs text-slate-500 mt-0.5">In force on ' + fmtDate(on) + '. A link is a dated record: a revocation closes it, a re-approval starts a new one.</p>';
+  document.getElementById('matrix-card').style.display = (fixedClient || fixedAgency) ? 'none' : '';
+  if (!fixedClient && !fixedAgency) renderMatrix(on, fc, fa);
+  renderTable(on, fixedClient || fc || (fixedAgency ? null : CLIENTS[0]), fixedAgency);
 }
+function cellHtml(l, on, client, agency) {
+  var s = stateOf(l, on), inner;
+  if (s === 'inforce') inner = '<i class="fa-solid fa-circle-check text-emerald-600" aria-hidden="true"></i><span class="block text-[11px] text-slate-600 tnum">from ' + fmtDate(l.approvedFrom) + '</span>';
+  else if (s === 'scheduled') inner = '<i class="fa-regular fa-calendar text-amber-600" aria-hidden="true"></i><span class="block text-[11px] text-slate-600 tnum">from ' + fmtDate(l.approvedFrom) + '</span>';
+  else if (s === 'revoked') inner = '<i class="fa-solid fa-circle-minus text-slate-400" aria-hidden="true"></i><span class="block text-[11px] text-slate-500 tnum">to ' + fmtDate(l.revokedFrom) + '</span>';
+  else inner = '<span class="text-slate-300">—</span>';
+  var label = { inforce: 'In force', scheduled: 'Scheduled', revoked: 'Revoked', none: 'Never approved' }[s] + ': ' + ORGS[agency].name + ' for ' + ORGS[client].name;
+  return '<td class="px-2 py-2 text-center border-l border-slate-100">' + (ro ? '<span aria-label="' + esc(label) + '">' + inner + '</span>' : '<button type="button" data-cell="' + client + '|' + agency + '" aria-label="' + esc(label) + '. Change" class="w-full min-h-[44px] rounded-lg hover:bg-blue-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">' + inner + '</button>') + '</td>';
+}
+function renderMatrix(on, fc, fa) {
+  var cols = fc ? [fc] : CLIENTS, rows = fa ? [fa] : AGENCIES, COLS = 8, ROWS = 25;
+  var cpages = Math.ceil(cols.length / COLS), rpages = Math.ceil(rows.length / ROWS);
+  var cv = cols.slice((colPage - 1) * COLS, colPage * COLS), rv = rows.slice((rowPage - 1) * ROWS, rowPage * ROWS);
+  document.getElementById('matrix-pager').innerHTML = (cpages > 1 ? 'Clients <span class="tnum font-semibold text-slate-700">' + ((colPage - 1) * COLS + 1) + '–' + Math.min(colPage * COLS, cols.length) + '</span> of ' + cols.length + ' <button type="button" data-cp="' + (colPage - 1) + '" ' + (colPage === 1 ? 'disabled' : '') + ' aria-label="Previous clients" class="w-7 h-7 rounded border border-slate-200 bg-white disabled:opacity-40"><i class="fa-solid fa-chevron-left text-[10px]" aria-hidden="true"></i></button> <button type="button" data-cp="' + (colPage + 1) + '" ' + (colPage === cpages ? 'disabled' : '') + ' aria-label="Next clients" class="w-7 h-7 rounded border border-slate-200 bg-white disabled:opacity-40"><i class="fa-solid fa-chevron-right text-[10px]" aria-hidden="true"></i></button>' : '') + (rpages > 1 ? ' · Agencies <span class="tnum font-semibold text-slate-700">' + ((rowPage - 1) * ROWS + 1) + '–' + Math.min(rowPage * ROWS, rows.length) + '</span> of ' + rows.length + ' <button type="button" data-rp="' + (rowPage - 1) + '" ' + (rowPage === 1 ? 'disabled' : '') + ' aria-label="Previous agencies" class="w-7 h-7 rounded border border-slate-200 bg-white disabled:opacity-40"><i class="fa-solid fa-chevron-up text-[10px]" aria-hidden="true"></i></button> <button type="button" data-rp="' + (rowPage + 1) + '" ' + (rowPage === rpages ? 'disabled' : '') + ' aria-label="Next agencies" class="w-7 h-7 rounded border border-slate-200 bg-white disabled:opacity-40"><i class="fa-solid fa-chevron-down text-[10px]" aria-hidden="true"></i></button>' : '');
+  document.getElementById('matrix').innerHTML = '<table class="w-full text-left"><caption class="sr-only">Approval matrix</caption><thead class="bg-slate-50 border-y border-slate-200"><tr><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider sticky left-0 bg-slate-50 z-[1] min-w-[180px]">Agency</th>' + cv.map(function (c) { return '<th scope="col" class="px-2 py-3 text-xs font-semibold text-slate-600 text-center min-w-[120px] border-l border-slate-100">' + esc(ORGS[c].name) + '</th>'; }).join('') + '</tr></thead><tbody class="divide-y divide-slate-100">' +
+    rv.map(function (a) { return '<tr><th scope="row" class="px-4 py-2 text-left text-sm font-semibold text-slate-900 sticky left-0 bg-white z-[1]">' + esc(ORGS[a].name) + (ORGS[a].status !== 'Active' ? '<span class="block text-[11px] font-normal text-slate-500">' + esc(ORGS[a].status) + '</span>' : '') + '</th>' + cv.map(function (c) { return cellHtml(current(c, a), on, c, a); }).join('') + '</tr>'; }).join('') + '</tbody></table>';
+  document.querySelectorAll('[data-cp]').forEach(function (b) { b.onclick = function () { colPage = +b.dataset.cp; render(); }; });
+  document.querySelectorAll('[data-rp]').forEach(function (b) { b.onclick = function () { rowPage = +b.dataset.rp; render(); }; });
+  document.querySelectorAll('[data-cell]').forEach(function (b) { b.onclick = function () { var p = b.dataset.cell.split('|'); cellAction(p[0], p[1]); }; });
+}
+function cellAction(client, agency) {
+  var l = current(client, agency), s = stateOf(l, onDate());
+  if (s === 'inforce' || s === 'scheduled') openRevoke(l); else openApprove(client, agency);
+}
+function renderTable(on, client, agency) {
+  var tc = document.getElementById('table-card'); if (!client && !agency) { tc.style.display = 'none'; return; } tc.style.display = '';
+  var rows, title, sub;
+  if (agency) { rows = CLIENTS.map(function (c) { return { client: c, agency: agency, l: current(c, agency) }; }).filter(function (r) { return r.l; }); title = fixedAgency ? 'Clients' : esc(ORGS[agency].name) + ' · client approvals'; sub = 'Each approval with its effective date.'; }
+  else { rows = AGENCIES.map(function (a) { return { client: client, agency: a, l: current(client, a) }; }).filter(function (r) { return r.l; }); title = fixedClient ? 'Agencies' : esc(ORGS[client].name) + ' · approved agencies'; sub = 'Payment terms and the agreed margin are Abstract-only configuration; the compliance word is the agency\'s insurance record.'; }
+  document.getElementById('table-t').innerHTML = title; document.getElementById('table-sub').textContent = sub;
+  var t = document.getElementById('table');
+  if (!rows.length) { t.innerHTML = '<div class="px-6 py-10 text-center border-t border-slate-200"><div class="w-14 h-14 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-handshake-angle text-xl" aria-hidden="true"></i></div><h3 class="text-base font-bold text-slate-900">' + (agency ? 'No client approval yet' : 'No approved agency yet') + '</h3><p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">' + (agency ? esc(ORGS[agency].name) + ' cannot be released any vacancy until a client approves it.' : 'Until an agency is approved, none of ' + esc(ORGS[client].name) + '\'s vacancies can be released. A client may legitimately have none yet; reviewing this list is what the activation gate needs.') + '</p>' + (ro ? '' : '<button type="button" class="' + BTN_SEC + ' mt-5" onclick="openApprove(' + (client ? '\'' + client + '\'' : 'null') + ',' + (agency ? '\'' + agency + '\'' : 'null') + ')"><i class="fa-solid fa-plus" aria-hidden="true"></i> Approve an agency for a client</button>') + '</div>'; return; }
+  var PAGE = 20, pages = Math.ceil(rows.length / PAGE), view = rows.slice((tablePage - 1) * PAGE, tablePage * PAGE);
+  function actions(r) { if (ro) return ''; var s = stateOf(r.l, on); return s === 'inforce' || s === 'scheduled' ? '<button type="button" class="' + BTN_GHOST + ' text-red-700 hover:text-red-900" data-revoke="' + r.l.id + '">Revoke…</button>' : '<button type="button" class="' + BTN_GHOST + '" data-reapprove="' + r.client + '|' + r.agency + '">Re-approve…</button>'; }
+  function stateCell(r) { var s = stateOf(r.l, on); return s === 'inforce' ? '<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> In force</span>' : s === 'scheduled' ? '<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-700"><i class="fa-regular fa-calendar" aria-hidden="true"></i> From ' + fmtDate(r.l.approvedFrom) + '</span>' : '<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500"><i class="fa-solid fa-circle-minus" aria-hidden="true"></i> Revoked</span>'; }
+  t.innerHTML = '<div class="hidden md:block overflow-x-auto"><table class="w-full text-left"><caption class="sr-only">Approved supplier links</caption><thead class="bg-slate-50 border-y border-slate-200"><tr><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">' + (agency ? 'Client' : 'Agency') + '</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Approved from</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Revoked from</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider"><span class="sr-only">In force</span></th>' + (agency ? '' : '<th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Payment terms</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Agreed margin</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Compliance</th>') + '<th scope="col" class="px-4 py-3"><span class="sr-only">Actions</span></th></tr></thead><tbody class="divide-y divide-slate-100">' +
+    view.map(function (r) { var o = ORGS[agency ? r.client : r.agency], tm = TERMS[r.agency] || ['30 days', 'Percentage of charge', '—']; return '<tr class="group hover:bg-slate-50/60"><td class="px-4 py-3 text-sm font-semibold text-slate-900">' + esc(o.name) + (o.status !== 'Active' ? ' ' + badge(o.status, true) : '') + '</td><td class="px-4 py-3 text-sm text-slate-700 tnum">' + fmtDate(r.l.approvedFrom) + '<span class="block text-xs text-slate-500">by ' + esc(r.l.approvedBy) + '</span></td><td class="px-4 py-3 text-sm text-slate-700 tnum">' + (r.l.revokedFrom ? fmtDate(r.l.revokedFrom) + '<span class="block text-xs text-slate-500">by ' + esc(r.l.revokedBy || '') + '</span>' : '<span class="text-slate-400">—</span>') + '</td><td class="px-4 py-3">' + stateCell(r) + '</td>' + (agency ? '' : '<td class="px-4 py-3 text-sm text-slate-700">' + tm[0] + '</td><td class="px-4 py-3 text-sm text-slate-700">' + tm[2] + '<span class="block text-xs text-slate-500">' + tm[1] + '</span></td><td class="px-4 py-3">' + compliance(r.agency) + '</td>') + '<td class="px-4 py-3 text-right whitespace-nowrap"><span class="row-actions">' + actions(r) + '</span></td></tr>'; }).join('') + '</tbody></table></div>' +
+    '<ul class="md:hidden divide-y divide-slate-100 border-t border-slate-200">' + view.map(function (r) { var o = ORGS[agency ? r.client : r.agency]; return '<li class="px-5 py-3"><div class="flex items-start justify-between gap-2"><p class="text-sm font-semibold text-slate-900">' + esc(o.name) + '</p>' + stateCell(r) + '</div><p class="text-xs text-slate-500 mt-1 tnum">Approved from ' + fmtDate(r.l.approvedFrom) + (r.l.revokedFrom ? ' · revoked from ' + fmtDate(r.l.revokedFrom) : '') + '</p>' + (agency ? '' : '<div class="mt-1">' + compliance(r.agency) + '</div>') + '<div class="mt-2">' + actions(r) + '</div></li>'; }).join('') + '</ul>' +
+    '<p class="px-5 py-3 text-xs text-slate-500 border-t border-slate-100">' + rows.length + (rows.length === 1 ? ' link' : ' links') + (pages > 1 ? ' · <button type="button" class="' + BTN_GHOST + '" data-tp="' + (tablePage - 1) + '" ' + (tablePage === 1 ? 'disabled' : '') + '>‹</button> page ' + tablePage + ' of ' + pages + ' <button type="button" class="' + BTN_GHOST + '" data-tp="' + (tablePage + 1) + '" ' + (tablePage === pages ? 'disabled' : '') + '>›</button>' : '') + '</p>';
+  t.querySelectorAll('[data-tp]').forEach(function (b) { b.onclick = function () { tablePage = +b.dataset.tp; render(); }; });
+  t.querySelectorAll('[data-revoke]').forEach(function (b) { b.onclick = function () { openRevoke(LINKSX.find(function (l) { return l.id === b.dataset.revoke; })); }; });
+  t.querySelectorAll('[data-reapprove]').forEach(function (b) { b.onclick = function () { var p = b.dataset.reapprove.split('|'); openApprove(p[0], p[1]); }; });
+}
+/* ---------- overlays ---------- */
+function openApprove(client, agency) {
+  var ac = document.getElementById('a-client'), aa = document.getElementById('a-agency');
+  ac.innerHTML = CLIENTS.map(function (k) { return '<option value="' + k + '">' + esc(ORGS[k].name) + '</option>'; }).join('');
+  aa.innerHTML = AGENCIES.map(function (k) { return '<option value="' + k + '">' + esc(ORGS[k].name) + '</option>'; }).join('');
+  if (client || fixedClient) ac.value = client || fixedClient; if (agency || fixedAgency) aa.value = agency || fixedAgency;
+  ac.disabled = !!fixedClient; aa.disabled = !!fixedAgency;
+  document.getElementById('a-from').value = TODAY; setErr('a-from', ''); document.getElementById('a-agency-err').style.display = 'none';
+  if (state === 'validation') { document.getElementById('a-from').value = '2026-10-01'; setTimeout(function () { document.getElementById('a-save').click(); }, 50); }
+  S1.openModal('m-approve');
+}
+document.getElementById('a-save').onclick = function () {
+  var c = document.getElementById('a-client').value, a = document.getElementById('a-agency').value, d = document.getElementById('a-from').value, ok = true;
+  if (!d) { setErr('a-from', 'Enter the date the approval takes effect.'); ok = false; } else if (d < TODAY) { setErr('a-from', 'An approval cannot start in the past. Enter today (' + fmtDate(TODAY) + ') or later.'); ok = false; } else setErr('a-from', '');
+  var cur = current(c, a), s = stateOf(cur, TODAY), ae = document.getElementById('a-agency-err');
+  if (cur && (s === 'inforce' || s === 'scheduled')) { ae.textContent = ORGS[a].name + ' is already approved for ' + ORGS[c].name + (s === 'scheduled' ? ' from ' + fmtDate(cur.approvedFrom) : '') + '. Revoke that link first if you want a different date.'; ae.style.display = ''; ok = false; } else ae.style.display = 'none';
+  if (!ok) return;
+  LINKSX.push({ id: 'asl-' + Date.now(), client: c, agency: a, approvedFrom: d, revokedFrom: null, approvedBy: 'Sarah Mitchell' });
+  S1.closeModal('m-approve'); render(); S1.toast(esc(ORGS[a].name) + ' approved for ' + esc(ORGS[c].name) + ' from ' + fmtDate(d) + '.', 'success'); S1.stepEvent('saved');
+};
+var revoking = null;
+function openRevoke(l) {
+  revoking = l; document.getElementById('m-revoke-t').textContent = 'Revoke ' + ORGS[l.agency].name + ' for ' + ORGS[l.client].name + '?';
+  document.getElementById('r-copy').textContent = 'Approved from ' + fmtDate(l.approvedFrom) + ' by ' + l.approvedBy + '.';
+  document.getElementById('r-from').value = l.approvedFrom > TODAY ? l.approvedFrom : TODAY; setErr('r-from', '');
+  if (state === 'validation') { document.getElementById('r-from').value = '2026-01-01'; setTimeout(function () { document.getElementById('r-save').click(); }, 50); }
+  S1.openModal('m-revoke');
+}
+document.getElementById('r-save').onclick = function () {
+  var d = document.getElementById('r-from').value;
+  if (!d) { setErr('r-from', 'Enter the date the revocation takes effect.'); return; }
+  if (d < TODAY) { setErr('r-from', 'A revocation cannot start in the past. Enter today (' + fmtDate(TODAY) + ') or later.'); return; }
+  if (d < revoking.approvedFrom) { setErr('r-from', 'The revocation cannot be before the approval date (' + fmtDate(revoking.approvedFrom) + ').'); return; }
+  revoking.revokedFrom = d; revoking.revokedBy = 'Sarah Mitchell';
+  S1.closeModal('m-revoke'); render(); S1.toast('Approval revoked from ' + fmtDate(d) + '. Existing releases, proposals and bookings are untouched.', 'success'); S1.stepEvent('saved');
+};
+document.getElementById('btn-approve').onclick = function () { openApprove(null, null); };
+['f-client', 'f-agency', 'f-on'].forEach(function (id) { document.getElementById(id).addEventListener('change', function () { colPage = 1; rowPage = 1; tablePage = 1; render(); }); });
+document.addEventListener('s1:state', function (e) { state = e.detail.state; document.getElementById('f-client').value = ''; document.getElementById('f-agency').value = ''; document.getElementById('f-on').value = TODAY; load(); if (state === 'validation') openApprove(fixedClient || 'acme', fixedAgency || 'techforce'); });
+if (fixedClient || fixedAgency) document.addEventListener('s1:ready', function () { document.querySelectorAll('[data-embedded-hide]').forEach(function (x) { x.style.display = 'none'; }); });
 </script>
 <script src="slice1-kit.js"></script>
 </body>
