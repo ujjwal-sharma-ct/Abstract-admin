@@ -1,973 +1,246 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-GB">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Onboard Client</title>
+    <title>Onboard client · Abstract VMS</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }</style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }
+    .tnum { font-variant-numeric: tabular-nums; }
+    .row-actions { opacity: 0; } tr:hover .row-actions, tr:focus-within .row-actions, li:hover .row-actions, li:focus-within .row-actions, .tree-row:hover .row-actions, .tree-row:focus-within .row-actions { opacity: 1; }
+    @media (hover: none) { .row-actions { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+    
+    </style>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        inter: ['Inter', 'sans-serif'],
-                    },
+                    fontFamily: { inter: ['Inter', 'sans-serif'], },
                     colors: {
-                        navy: {
-                            DEFAULT: '#172554',
-                            50: '#EEF1FB',
-                            100: '#D4DCF5',
-                            200: '#A9B9EB',
-                            300: '#7E96E1',
-                            400: '#5373D7',
-                            500: '#2850CD',
-                            600: '#1D3FA4',
-                            700: '#162F7B',
-                            800: '#0F1F52',
-                            900: '#172554',
-                        },
-                        brand: {
-                            blue: '#1D4ED8',
-                            purple: '#5B2E91',
-                            navy: '#172554',
-                        }
+                        navy: { DEFAULT: '#172554', 50: '#EEF1FB', 100: '#D4DCF5', 200: '#A9B9EB', 300: '#7E96E1', 400: '#5373D7', 500: '#2850CD', 600: '#1D3FA4', 700: '#162F7B', 800: '#0F1F52', 900: '#172554', },
+                        brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554', }
                     }
                 }
             }
         }
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden">
-
+<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s2-page data-s1-states="default loading empty validation denied large pending ready refused conflict">
 <div id="app-root" class="flex w-full" style="height: 100vh;">
-
-    <!-- Sidebar -->
     <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
-
-        <!-- Logo -->
         <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
             <img src="logo.png" alt="Abstract VMS" class="h-12 w-auto block -ml-[5px]"/>
             <p class="text-white/40 text-sm mt-2">Admin Portal</p>
         </div>
-
-        <!-- Nav (injected centrally) -->
-        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1">
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p>
-            <a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-gauge-high text-white/40 w-4 text-center"></i>
-                <span>Admin Dashboard</span>
-            </a>
-            <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
-                <span>Vacancy List</span>
-            </a>
-            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
-                <span>Create Vacancy Wizard</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
-            <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-users-gear text-white/40 w-4 text-center"></i>
-                <span>Worker Pool</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p>
-            <a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-building-user text-white/40 w-4 text-center"></i>
-                <span>Agency Dashboard</span>
-            </a>
-            <a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-circle-check text-white/40 w-4 text-center"></i>
-                <span>Approved Suppliers</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p>
-            <a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center"></i>
-                <span>AWR Tracking</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p>
-            <a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-clock text-white/40 w-4 text-center"></i>
-                <span>Timesheets</span>
-            </a>
-            <a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center"></i>
-                <span>Invoicing / Self-Bill</span>
-            </a>
-            <a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-chart-bar text-white/40 w-4 text-center"></i>
-                <span>Abstract Backing Report</span>
-            </a>
-            <a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-sterling-sign text-white/40 w-4 text-center"></i>
-                <span>Rate Cards</span>
-            </a>
-            <a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-chart-line text-white/40 w-4 text-center"></i>
-                <span>Reports</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p>
-            <a id="nav-onboard-client" href="abstract.onboarding.onboard-client.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);">
-                <i class="fa-solid fa-building-circle-arrow-right text-blue-400 w-4 text-center"></i>
-                <span>Onboard Client</span>
-                <div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div>
-            </a>
-            <a id="nav-onboard-agency" href="abstract.onboarding.onboard-agency.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-user-tie text-white/40 w-4 text-center"></i>
-                <span>Onboard Agency</span>
-            </a>
-            <a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-sliders text-white/40 w-4 text-center"></i>
-                <span>Configuration</span>
-            </a>
-            <a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-gears text-white/40 w-4 text-center"></i>
-                <span>System Configuration</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p>
-            <a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-users text-white/40 w-4 text-center"></i>
-                <span>Users</span>
-            </a>
-            <a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-user-shield text-white/40 w-4 text-center"></i>
-                <span>Roles</span>
-            </a>
-            <a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center"></i>
-                <span>Notification templates</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p>
-            <a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-sitemap text-white/40 w-4 text-center"></i>
-                <span>Organisations</span>
-            </a>
-            <a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-user-lock text-white/40 w-4 text-center"></i>
-                <span>Data subject requests</span>
-            </a>
-            <a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center"></i>
-                <span>Audit Log</span>
-            </a>
-
+        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1" aria-label="Main">
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p><a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-gauge-high text-white/40 w-4 text-center" aria-hidden="true"></i><span>Admin Dashboard</span></a><a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-list-check text-white/40 w-4 text-center" aria-hidden="true"></i><span>Vacancy List</span></a><a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center" aria-hidden="true"></i><span>Create Vacancy Wizard</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p><a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-users-gear text-white/40 w-4 text-center" aria-hidden="true"></i><span>Worker Pool</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p><a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-building-user text-white/40 w-4 text-center" aria-hidden="true"></i><span>Agency Dashboard</span></a><a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-circle-check text-white/40 w-4 text-center" aria-hidden="true"></i><span>Approved Suppliers</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p><a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center" aria-hidden="true"></i><span>AWR Tracking</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p><a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-clock text-white/40 w-4 text-center" aria-hidden="true"></i><span>Timesheets</span></a><a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center" aria-hidden="true"></i><span>Invoicing / Self-Bill</span></a><a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-chart-bar text-white/40 w-4 text-center" aria-hidden="true"></i><span>Abstract Backing Report</span></a><a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-sterling-sign text-white/40 w-4 text-center" aria-hidden="true"></i><span>Rate Cards</span></a><a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-chart-line text-white/40 w-4 text-center" aria-hidden="true"></i><span>Reports</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p><a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-sliders text-white/40 w-4 text-center" aria-hidden="true"></i><span>Configuration</span></a><a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-gears text-white/40 w-4 text-center" aria-hidden="true"></i><span>System Configuration</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p><a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-users text-white/40 w-4 text-center" aria-hidden="true"></i><span>Users</span></a><a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-user-shield text-white/40 w-4 text-center" aria-hidden="true"></i><span>Roles</span></a><a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center" aria-hidden="true"></i><span>Notification templates</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p><a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);" aria-current="page"><i class="fa-solid fa-sitemap text-blue-400 w-4 text-center" aria-hidden="true"></i><span>Organisations</span><div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div></a><a id="nav-structure-changes" href="abstract.organisations.structure-changes.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-code-pull-request text-white/40 w-4 text-center" aria-hidden="true"></i><span>Structure changes</span><span id="nav-sc-count" class="ml-auto hidden min-w-[20px] h-5 px-1.5 rounded-full bg-amber-400 text-navy-900 text-[11px] font-bold leading-5 text-center tnum"></span></a><a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-user-lock text-white/40 w-4 text-center" aria-hidden="true"></i><span>Data subject requests</span></a><a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center" aria-hidden="true"></i><span>Audit Log</span></a>
         </nav>
-
-        <!-- Sidebar Footer -->
         <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
-            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all">
-                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border border-white/20 flex-shrink-0" alt="avatar"/>
+            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 transition-all">
+                <span class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);" aria-hidden="true">SM</span>
                 <div class="flex-1 min-w-0">
                     <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
-                    <p class="text-white/40 text-xs truncate">Abstract Admin</p>
+                    <p class="text-white/40 text-xs truncate">Abstract</p>
                 </div>
-                <a href="abstract.identity-access.sign-in.html" title="Logout"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white"></i></a>
+                <a href="abstract.identity-access.sign-in.html?reason=signed-out" aria-label="Sign out" title="Sign out"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white" aria-hidden="true"></i></a>
             </div>
         </div>
     </aside>
-
-    <!-- Main Content -->
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-
-        <!-- Top Header -->
-        <header id="header" class="flex items-center justify-between px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
-            <div class="flex items-center gap-4">
-                <button id="mobile-menu-btn" class="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors">
-                    <i class="fa-solid fa-bars text-slate-600 text-sm"></i>
-                </button>
-                <div class="flex items-center gap-3 flex-wrap">
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <h1 class="text-lg font-bold text-slate-900">Onboard Client</h1>
-                            <span class="text-slate-300">/</span>
-                            <span class="text-lg font-semibold text-slate-700">Nexus Logistics Ltd</span>
-                        </div>
-                        <p class="text-xs text-slate-500 hidden sm:block">Abstract-led client onboarding · Draft ID CLI-ONB-0047</p>
+        <header id="header" class="flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
+            <div class="flex items-center gap-3 min-w-0">
+                <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-bars text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h1 class="text-lg font-bold text-slate-900 truncate">Onboard client</h1>
                     </div>
+                    <p class="text-xs text-slate-500 hidden sm:block truncate">Abstract-led, saved per step and resumable. A client never onboards itself.</p>
                 </div>
             </div>
-
-            <div class="flex items-center gap-3">
-                <span class="hidden md:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                    <i class="fa-solid fa-circle-half-stroke text-[10px]"></i> In Setup
-                </span>
-                <div class="hidden md:flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2">
-                    <span class="text-xs font-medium text-slate-600">Completeness</span>
-                    <div class="w-24 h-1.5 bg-slate-200 rounded-full overflow-hidden">
-                        <div class="h-full rounded-full bg-emerald-500" style="width: 60%"></div>
-                    </div>
-                    <span class="text-xs font-bold text-slate-800">60%</span>
-                </div>
-                <button class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors">
-                    <i class="fa-regular fa-bell text-slate-600 text-sm"></i>
-                    <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500"></span>
-                </button>
-                <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
-                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border-2 border-blue-100" alt="avatar"/>
-                    <div class="hidden xl:block">
-                        <p class="text-xs font-semibold text-slate-700">Sarah Mitchell</p>
-                        <p class="text-xs text-slate-400">Abstract Admin</p>
-                    </div>
-                </div>
+            <div class="flex items-center gap-3 flex-shrink-0">
+                <span id="hdr-badge" class="hidden sm:inline-flex"></span>
+                <button data-s1-bell aria-label="Notifications" class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-regular fa-bell text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <a href="abstract.identity-access.my-account.html" aria-label="My account (Sarah Mitchell)" class="flex items-center gap-2 pl-3 border-l border-slate-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">
+                    <span class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);" aria-hidden="true">SM</span>
+                    <span class="hidden xl:block"><span class="block text-xs font-semibold text-slate-700">Sarah Mitchell</span><span class="block text-xs text-slate-400">Abstract</span></span>
+                </a>
             </div>
         </header>
-
-        <!-- Body -->
-        <main id="onboard-client-main" class="flex-1 overflow-y-auto bg-slate-100">
-            <div class="flex flex-col xl:flex-row gap-6 px-6 xl:px-8 py-6">
-
-                <!-- LEFT: Step rail -->
-                <aside class="xl:w-72 flex-shrink-0">
-                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sticky top-0">
-                        <div class="flex items-center justify-between mb-3">
-                            <h3 class="text-sm font-bold text-slate-800">Onboarding steps</h3>
-                            <span class="text-xs font-semibold text-slate-500">6 / 10</span>
-                        </div>
-                        <div id="step-rail" class="flex flex-col gap-1"></div>
-                        <div class="mt-4 pt-3 border-t border-slate-100 flex items-start gap-2 text-xs text-slate-400">
-                            <i class="fa-solid fa-circle-info mt-0.5"></i>
-                            <span>Progress is saved per step and can be resumed (ONB-001).</span>
-                        </div>
-                    </div>
-                </aside>
-
-                <!-- CENTER: Active step panel -->
-                <section class="flex-1 min-w-0">
-
-                    <!-- STEP 1 — Company & contract -->
-                    <div data-panel="1" class="step-panel bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="px-6 py-5 border-b border-slate-100">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold flex items-center justify-center">1</span>
-                                <h2 class="text-base font-bold text-slate-900">Company &amp; contract</h2>
-                            </div>
-                            <p class="text-xs text-slate-500">Legal identity and the commercial agreement that governs this client (CM-001, CM-007).</p>
-                        </div>
-                        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">Legal name</label>
-                                <input type="text" value="Nexus Logistics Ltd" class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 focus:border-blue-400 outline-none"/>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">Company registration no.</label>
-                                <input type="text" value="09123456" class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 focus:border-blue-400 outline-none"/>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">VAT registration no.</label>
-                                <input type="text" value="GB 314 2765 09" class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 focus:border-blue-400 outline-none"/>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">Contract reference</label>
-                                <input type="text" value="MSA-NEX-2026-014" class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 focus:border-blue-400 outline-none"/>
-                            </div>
-                            <div class="md:col-span-2">
-                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">Registered address</label>
-                                <textarea rows="2" class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 focus:border-blue-400 outline-none">Nexus House, 4 Meridian Way, Coventry, CV6 5NX, United Kingdom</textarea>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">Contract start</label>
-                                <input type="date" value="2026-08-01" class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 focus:border-blue-400 outline-none"/>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">Contract end</label>
-                                <input type="date" value="2028-07-31" class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 focus:border-blue-400 outline-none"/>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">Renewal</label>
-                                <select class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 focus:border-blue-400 outline-none bg-white">
-                                    <option>Auto-renew (12 months)</option>
-                                    <option>Manual review</option>
-                                    <option>No renewal</option>
-                                </select>
-                            </div>
-                            <div class="md:col-span-2 flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                                <div>
-                                    <p class="text-sm font-semibold text-slate-800">Purchase order (PO) required</p>
-                                    <p class="text-xs text-slate-500">When on, every booking must carry a valid PO before it can be invoiced.</p>
-                                </div>
-                                <button class="toggle relative w-11 h-6 rounded-full bg-emerald-500" data-on="true" onclick="flipToggle(this)">
-                                    <span class="dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-all" style="left: 22px;"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- STEP 2 — Business units & cost centres -->
-                    <div data-panel="2" class="step-panel hidden bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="px-6 py-5 border-b border-slate-100">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold flex items-center justify-center">2</span>
-                                <h2 class="text-base font-bold text-slate-900">Business units &amp; cost centres</h2>
-                            </div>
-                            <p class="text-xs text-slate-500">Hierarchical structure (Client → Region → Site → Department), each node carrying a cost-centre code (CM-002, CM-003, CM-006).</p>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex flex-wrap items-center gap-2 mb-4">
-                                <div class="flex items-end gap-2 flex-1 min-w-[240px]">
-                                    <div class="flex-1">
-                                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Add business unit under</label>
-                                        <select class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2 bg-white focus:border-blue-400 outline-none">
-                                            <option>Nexus Logistics Ltd (root)</option>
-                                            <option>— Midlands Region</option>
-                                            <option>—— Coventry DC</option>
-                                            <option>—— Rugby Cross-Dock</option>
-                                            <option>— South East Region</option>
-                                        </select>
-                                    </div>
-                                    <button class="px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700 whitespace-nowrap"><i class="fa-solid fa-plus mr-1"></i>Add business unit</button>
-                                </div>
-                                <button class="px-3 py-2 rounded-lg border border-slate-200 text-slate-600 text-xs font-semibold hover:border-blue-300 whitespace-nowrap"><i class="fa-solid fa-file-csv mr-1"></i>CSV import</button>
-                            </div>
-                            <div class="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 mb-4 flex items-start gap-2 text-xs text-amber-700">
-                                <i class="fa-solid fa-circle-check mt-0.5"></i>
-                                <span>CSV import runs a validation preview before commit — last upload: 24 rows, 22 valid, 2 flagged (duplicate cost-centre code) (ONB-007).</span>
-                            </div>
-
-                            <!-- Tree -->
-                            <div class="rounded-xl border border-slate-200 divide-y divide-slate-100 text-sm">
-                                <div class="flex items-center justify-between px-4 py-2.5 bg-slate-50">
-                                    <div class="flex items-center gap-2 font-semibold text-slate-800"><i class="fa-solid fa-sitemap text-slate-400"></i> Nexus Logistics Ltd</div>
-                                    <span class="text-xs font-mono text-slate-500">CC-NEX-000</span>
-                                </div>
-                                <div class="flex items-center justify-between px-4 py-2.5" style="padding-left:2rem;">
-                                    <div class="flex items-center gap-2 text-slate-700"><i class="fa-solid fa-map-location-dot text-blue-400"></i> Midlands Region</div>
-                                    <span class="text-xs font-mono text-slate-500">CC-NEX-100</span>
-                                </div>
-                                <div class="flex items-center justify-between px-4 py-2.5" style="padding-left:3.5rem;">
-                                    <div class="flex items-center gap-2 text-slate-700"><i class="fa-solid fa-warehouse text-purple-400"></i> Coventry DC</div>
-                                    <span class="text-xs font-mono text-slate-500">CC-NEX-110</span>
-                                </div>
-                                <div class="flex items-center justify-between px-4 py-2.5" style="padding-left:5rem;">
-                                    <div class="flex items-center gap-2 text-slate-500"><i class="fa-solid fa-boxes-stacked text-slate-300"></i> Inbound / Goods-In</div>
-                                    <span class="text-xs font-mono text-slate-400">CC-NEX-111</span>
-                                </div>
-                                <div class="flex items-center justify-between px-4 py-2.5" style="padding-left:5rem;">
-                                    <div class="flex items-center gap-2 text-slate-500"><i class="fa-solid fa-dolly text-slate-300"></i> Outbound / Despatch</div>
-                                    <span class="text-xs font-mono text-slate-400">CC-NEX-112</span>
-                                </div>
-                                <div class="flex items-center justify-between px-4 py-2.5" style="padding-left:3.5rem;">
-                                    <div class="flex items-center gap-2 text-slate-700"><i class="fa-solid fa-warehouse text-purple-400"></i> Rugby Cross-Dock</div>
-                                    <span class="text-xs font-mono text-slate-500">CC-NEX-120</span>
-                                </div>
-                                <div class="flex items-center justify-between px-4 py-2.5" style="padding-left:2rem;">
-                                    <div class="flex items-center gap-2 text-slate-700"><i class="fa-solid fa-map-location-dot text-blue-400"></i> South East Region</div>
-                                    <span class="text-xs font-mono text-slate-500">CC-NEX-200</span>
-                                </div>
-                                <div class="flex items-center justify-between px-4 py-2.5" style="padding-left:3.5rem;">
-                                    <div class="flex items-center gap-2 text-slate-700"><i class="fa-solid fa-warehouse text-purple-400"></i> Dartford Hub</div>
-                                    <span class="text-xs font-mono text-slate-500">CC-NEX-210</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- STEP 3 — Users & roles -->
-                    <div data-panel="3" class="step-panel hidden bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="px-6 py-5 border-b border-slate-100">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold flex items-center justify-center">3</span>
-                                <h2 class="text-base font-bold text-slate-900">Users &amp; roles</h2>
-                            </div>
-                            <p class="text-xs text-slate-500">Client user accounts, each assigned to one or more business units (CM-004, CM-005).</p>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex justify-end mb-3">
-                                <button class="px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700"><i class="fa-solid fa-user-plus mr-1"></i>Invite user</button>
-                            </div>
-                            <div class="overflow-x-auto rounded-xl border border-slate-200">
-                                <table class="w-full text-sm">
-                                    <thead class="bg-slate-50 text-xs text-slate-500">
-                                        <tr>
-                                            <th class="text-left font-semibold px-4 py-2.5">Name</th>
-                                            <th class="text-left font-semibold px-4 py-2.5">Email</th>
-                                            <th class="text-left font-semibold px-4 py-2.5">Role</th>
-                                            <th class="text-left font-semibold px-4 py-2.5">Business units</th>
-                                            <th class="text-left font-semibold px-4 py-2.5">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="divide-y divide-slate-100">
-                                        <tr>
-                                            <td class="px-4 py-3 font-semibold text-slate-800">David Okonkwo</td>
-                                            <td class="px-4 py-3 text-slate-600">d.okonkwo@nexuslogistics.co.uk</td>
-                                            <td class="px-4 py-3"><span class="text-xs font-semibold text-slate-700">Client Admin</span></td>
-                                            <td class="px-4 py-3 text-slate-600">All units</td>
-                                            <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-4 py-3 font-semibold text-slate-800">Rachel Adeyemi</td>
-                                            <td class="px-4 py-3 text-slate-600">r.adeyemi@nexuslogistics.co.uk</td>
-                                            <td class="px-4 py-3"><span class="text-xs font-semibold text-slate-700">Site Manager</span></td>
-                                            <td class="px-4 py-3 text-slate-600">Coventry DC</td>
-                                            <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Pending</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="px-4 py-3 font-semibold text-slate-800">Tom Whitfield</td>
-                                            <td class="px-4 py-3 text-slate-600">t.whitfield@nexuslogistics.co.uk</td>
-                                            <td class="px-4 py-3"><span class="text-xs font-semibold text-slate-700">Timesheet Approver</span></td>
-                                            <td class="px-4 py-3 text-slate-600">Dartford Hub</td>
-                                            <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Pending</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            <p class="mt-3 text-xs text-slate-400"><i class="fa-solid fa-circle-info mr-1"></i>At least one Client Admin is required to activate (ONB-009).</p>
-                        </div>
-                    </div>
-
-                    <!-- STEP 4 — Shifts & rate cards -->
-                    <div data-panel="4" class="step-panel hidden bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="px-6 py-5 border-b border-slate-100">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold flex items-center justify-center">4</span>
-                                <h2 class="text-base font-bold text-slate-900">Shifts &amp; rate cards</h2>
-                            </div>
-                            <p class="text-xs text-slate-500">Define this client's shifts, then set the pay &amp; charge rate <span class="font-semibold text-slate-600">per role, per shift</span>. Night shifts typically pay more. Statutory percentages (NI, WTR, Pension, Levy) are read from System Configuration (SYS-001).</p>
-                        </div>
-                        <div class="p-6 space-y-6">
-
-                            <!-- Shift definitions -->
-                            <div class="rounded-xl border border-slate-200 p-5">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <i class="fa-solid fa-clock text-purple-500"></i>
-                                    <h3 class="text-sm font-bold text-slate-800">Shift definitions</h3>
-                                    <span class="text-xs text-slate-400">(shift-pattern library — SYS-011)</span>
-                                </div>
-                                <p class="text-xs text-slate-500 mb-4">Each shift has a time window and standard hours; the rate card below has one column per shift.</p>
-                                <div class="overflow-x-auto rounded-xl border border-slate-200">
-                                    <table class="w-full text-sm">
-                                        <thead class="bg-slate-50 text-xs text-slate-500">
-                                            <tr>
-                                                <th class="text-left font-semibold px-4 py-2.5">Shift name</th>
-                                                <th class="text-left font-semibold px-4 py-2.5">Start</th>
-                                                <th class="text-left font-semibold px-4 py-2.5">End</th>
-                                                <th class="text-left font-semibold px-4 py-2.5">Std hours</th>
-                                                <th class="px-4 py-2.5"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="divide-y divide-slate-100">
-                                            <tr>
-                                                <td class="px-4 py-2.5"><div class="flex items-center gap-2"><i class="fa-solid fa-sun text-amber-500"></i><input type="text" value="Morning" class="w-32 text-sm text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:border-blue-400 outline-none"/></div></td>
-                                                <td class="px-4 py-2.5"><input type="time" value="06:00" class="text-sm text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-4 py-2.5"><input type="time" value="14:00" class="text-sm text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-4 py-2.5"><input type="number" step="0.5" value="8" class="w-20 text-sm text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-4 py-2.5 text-right"><button class="text-slate-300 hover:text-red-500" title="Remove shift"><i class="fa-solid fa-trash-can text-xs"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-4 py-2.5"><div class="flex items-center gap-2"><i class="fa-solid fa-cloud-sun text-indigo-500"></i><input type="text" value="Afternoon" class="w-32 text-sm text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:border-blue-400 outline-none"/></div></td>
-                                                <td class="px-4 py-2.5"><input type="time" value="14:00" class="text-sm text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-4 py-2.5"><input type="time" value="22:00" class="text-sm text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-4 py-2.5"><input type="number" step="0.5" value="8" class="w-20 text-sm text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-4 py-2.5 text-right"><button class="text-slate-300 hover:text-red-500" title="Remove shift"><i class="fa-solid fa-trash-can text-xs"></i></button></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-4 py-2.5"><div class="flex items-center gap-2"><i class="fa-solid fa-moon text-slate-600"></i><input type="text" value="Night" class="w-32 text-sm text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:border-blue-400 outline-none"/></div></td>
-                                                <td class="px-4 py-2.5"><input type="time" value="22:00" class="text-sm text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-4 py-2.5"><input type="time" value="06:00" class="text-sm text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-4 py-2.5"><input type="number" step="0.5" value="8" class="w-20 text-sm text-slate-800 border border-slate-200 rounded-lg px-2.5 py-1.5 focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-4 py-2.5 text-right"><button class="text-slate-300 hover:text-red-500" title="Remove shift"><i class="fa-solid fa-trash-can text-xs"></i></button></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <button class="mt-3 px-3 py-2 rounded-lg border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50"><i class="fa-solid fa-plus mr-1"></i>Add shift</button>
-                            </div>
-
-                            <!-- Role × shift rate card -->
-                            <div class="rounded-xl border border-slate-200 p-5">
-                                <div class="flex items-center gap-2 mb-1">
-                                    <i class="fa-solid fa-sterling-sign text-purple-500"></i>
-                                    <h3 class="text-sm font-bold text-slate-800">Rate card — pay &amp; charge per role, per shift</h3>
-                                </div>
-                                <p class="text-xs text-slate-500 mb-3">Pay = what Abstract pays the agency; Charge = what the client is billed. Margin is the spread. Clients see charge only; agencies see pay only (RV-001/RV-002).</p>
-                                <div class="rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 mb-4 flex items-start gap-2 text-xs text-blue-700">
-                                    <i class="fa-solid fa-circle-info mt-0.5"></i>
-                                    <span>Effective statutory rates (Employer's NI, WTR, Pension, Apprenticeship Levy) resolve from the central effective-dated table (SYS-001).</span>
-                                </div>
-                                <div class="overflow-x-auto rounded-xl border border-slate-200">
-                                    <table class="w-full text-sm">
-                                        <thead class="text-xs text-slate-500">
-                                            <tr class="bg-slate-50 border-b border-slate-200">
-                                                <th rowspan="2" class="text-left font-semibold px-4 py-2.5 border-r border-slate-200 align-bottom">Role</th>
-                                                <th colspan="3" class="text-center font-semibold px-3 py-2 border-r border-slate-200"><i class="fa-solid fa-sun text-amber-500 mr-1"></i>Morning · 06–14</th>
-                                                <th colspan="3" class="text-center font-semibold px-3 py-2 border-r border-slate-200"><i class="fa-solid fa-cloud-sun text-indigo-500 mr-1"></i>Afternoon · 14–22</th>
-                                                <th colspan="3" class="text-center font-semibold px-3 py-2"><i class="fa-solid fa-moon text-slate-600 mr-1"></i>Night · 22–06</th>
-                                            </tr>
-                                            <tr class="bg-slate-50 border-b border-slate-200 text-[11px]">
-                                                <th class="font-medium px-2 py-1.5 text-slate-500">Pay</th><th class="font-medium px-2 py-1.5 text-slate-500">Charge</th><th class="font-medium px-2 py-1.5 text-slate-400 border-r border-slate-200">Margin</th>
-                                                <th class="font-medium px-2 py-1.5 text-slate-500">Pay</th><th class="font-medium px-2 py-1.5 text-slate-500">Charge</th><th class="font-medium px-2 py-1.5 text-slate-400 border-r border-slate-200">Margin</th>
-                                                <th class="font-medium px-2 py-1.5 text-slate-500">Pay</th><th class="font-medium px-2 py-1.5 text-slate-500">Charge</th><th class="font-medium px-2 py-1.5 text-slate-400">Margin</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="divide-y divide-slate-100">
-                                            <tr>
-                                                <td class="px-4 py-3 font-semibold text-slate-800 border-r border-slate-100">Warehouse Operative</td>
-                                                <td class="px-2 py-2"><input type="text" value="11.20" class="w-16 text-sm text-slate-700 border border-slate-200 rounded px-1.5 py-1 text-center focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-2 py-2"><input type="text" value="14.85" class="w-16 text-sm text-slate-700 border border-slate-200 rounded px-1.5 py-1 text-center focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-2 py-2 text-center text-emerald-600 font-semibold border-r border-slate-100">£3.65</td>
-                                                <td class="px-2 py-2"><input type="text" value="12.10" class="w-16 text-sm text-slate-700 border border-slate-200 rounded px-1.5 py-1 text-center focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-2 py-2"><input type="text" value="16.05" class="w-16 text-sm text-slate-700 border border-slate-200 rounded px-1.5 py-1 text-center focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-2 py-2 text-center text-emerald-600 font-semibold border-r border-slate-100">£3.95</td>
-                                                <td class="px-2 py-2"><input type="text" value="13.45" class="w-16 text-sm text-slate-700 border border-slate-200 rounded px-1.5 py-1 text-center focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-2 py-2"><input type="text" value="17.80" class="w-16 text-sm text-slate-700 border border-slate-200 rounded px-1.5 py-1 text-center focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-2 py-2 text-center text-emerald-600 font-semibold">£4.35</td>
-                                            </tr>
-                                            <tr>
-                                                <td class="px-4 py-3 font-semibold text-slate-800 border-r border-slate-100">Forklift Driver (Reach)</td>
-                                                <td class="px-2 py-2"><input type="text" value="13.10" class="w-16 text-sm text-slate-700 border border-slate-200 rounded px-1.5 py-1 text-center focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-2 py-2"><input type="text" value="17.40" class="w-16 text-sm text-slate-700 border border-slate-200 rounded px-1.5 py-1 text-center focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-2 py-2 text-center text-emerald-600 font-semibold border-r border-slate-100">£4.30</td>
-                                                <td class="px-2 py-2"><input type="text" value="14.15" class="w-16 text-sm text-slate-700 border border-slate-200 rounded px-1.5 py-1 text-center focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-2 py-2"><input type="text" value="18.80" class="w-16 text-sm text-slate-700 border border-slate-200 rounded px-1.5 py-1 text-center focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-2 py-2 text-center text-emerald-600 font-semibold border-r border-slate-100">£4.65</td>
-                                                <td class="px-2 py-2"><input type="text" value="15.70" class="w-16 text-sm text-slate-700 border border-slate-200 rounded px-1.5 py-1 text-center focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-2 py-2"><input type="text" value="20.90" class="w-16 text-sm text-slate-700 border border-slate-200 rounded px-1.5 py-1 text-center focus:border-blue-400 outline-none"/></td>
-                                                <td class="px-2 py-2 text-center text-emerald-600 font-semibold">£5.20</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="mt-4 flex items-center justify-between flex-wrap gap-3">
-                                    <div class="flex items-center gap-2">
-                                        <label class="text-xs font-semibold text-slate-600">Effective from</label>
-                                        <input type="date" value="2026-08-01" class="text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2 focus:border-blue-400 outline-none"/>
-                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200">Draft</span>
-                                    </div>
-                                    <button class="px-3 py-2 rounded-lg bg-blue-600 text-white text-xs font-semibold hover:bg-blue-700"><i class="fa-solid fa-plus mr-1"></i>Add role</button>
-                                </div>
-                                <div class="mt-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 flex items-start gap-2 text-xs text-red-700">
-                                    <i class="fa-solid fa-triangle-exclamation mt-0.5"></i>
-                                    <span>No rate card is effective yet — all cards are Draft. At least one effective charge rate card is needed before activation (ONB-009).</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- STEP 5 — Invoicing & VAT -->
-                    <div data-panel="5" class="step-panel hidden bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="px-6 py-5 border-b border-slate-100">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold flex items-center justify-center">5</span>
-                                <h2 class="text-base font-bold text-slate-900">Invoicing &amp; VAT</h2>
-                            </div>
-                            <p class="text-xs text-slate-500">Client invoicing policy — cadence, PO enforcement, terms, VAT treatment, grouping and delivery (CFG-004).</p>
-                        </div>
-                        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">Invoice cadence</label>
-                                <select class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 bg-white focus:border-blue-400 outline-none">
-                                    <option>Weekly — Monday PM (default)</option>
-                                    <option>Fortnightly — Monday PM</option>
-                                    <option>Monthly — 1st working day</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">Payment terms (net days)</label>
-                                <input type="number" value="30" class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 focus:border-blue-400 outline-none"/>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">VAT treatment</label>
-                                <select class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 bg-white focus:border-blue-400 outline-none">
-                                    <option>Standard 20% (system default)</option>
-                                    <option>Reduced 5%</option>
-                                    <option>Zero-rated</option>
-                                    <option>Exempt</option>
-                                </select>
-                                <p class="mt-1 text-xs text-amber-600"><i class="fa-solid fa-circle-info mr-1"></i>This overrides the system VAT default (SYS-004) for this client only.</p>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">Invoice numbering scheme</label>
-                                <input type="text" value="NEX-INV-{YYYY}-{0000}" class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 font-mono focus:border-blue-400 outline-none"/>
-                            </div>
-                            <div class="md:col-span-2 flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                                <div>
-                                    <p class="text-sm font-semibold text-slate-800">Enforce PO on invoices</p>
-                                    <p class="text-xs text-slate-500">Block invoicing of any booking that has no valid PO reference.</p>
-                                </div>
-                                <button class="toggle relative w-11 h-6 rounded-full bg-emerald-500" data-on="true" onclick="flipToggle(this)">
-                                    <span class="dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-all" style="left: 22px;"></span>
-                                </button>
-                            </div>
-                            <div class="md:col-span-2 flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                                <div>
-                                    <p class="text-sm font-semibold text-slate-800">Group invoices by business unit</p>
-                                    <p class="text-xs text-slate-500">One invoice per business unit rather than a single consolidated invoice.</p>
-                                </div>
-                                <button class="toggle relative w-11 h-6 rounded-full bg-emerald-500" data-on="true" onclick="flipToggle(this)">
-                                    <span class="dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-all" style="left: 22px;"></span>
-                                </button>
-                            </div>
-                            <div class="md:col-span-2">
-                                <label class="block text-xs font-semibold text-slate-600 mb-1.5">Delivery recipients</label>
-                                <input type="text" value="accountspayable@nexuslogistics.co.uk, d.okonkwo@nexuslogistics.co.uk" class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 focus:border-blue-400 outline-none"/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- STEP 6 — Timesheet & absence policy -->
-                    <div data-panel="6" class="step-panel hidden bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="px-6 py-5 border-b border-slate-100">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold flex items-center justify-center">6</span>
-                                <h2 class="text-base font-bold text-slate-900">Timesheet &amp; absence policy</h2>
-                            </div>
-                            <p class="text-xs text-slate-500">Timesheet deadlines, approval mode, overtime, and the leave/absence policy this client uses (CFG-005, CFG-006).</p>
-                        </div>
-                        <div class="p-6 space-y-6">
-
-                            <!-- Timesheet config -->
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Submission deadline — day</label>
-                                    <select class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 bg-white focus:border-blue-400 outline-none">
-                                        <option>Monday</option><option>Tuesday</option><option>Sunday</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Submission deadline — time</label>
-                                    <input type="time" value="12:00" class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 focus:border-blue-400 outline-none"/>
-                                </div>
-                                <div>
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Abstract approval</label>
-                                    <select class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 bg-white focus:border-blue-400 outline-none">
-                                        <option>Mandatory</option>
-                                        <option>Optional</option>
-                                    </select>
-                                    <p class="mt-1 text-xs text-slate-400">Whether Abstract sign-off is required for this client (CFG-005).</p>
-                                </div>
-                                <div class="md:col-span-3">
-                                    <label class="block text-xs font-semibold text-slate-600 mb-1.5">Overtime ruleset</label>
-                                    <select class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 bg-white focus:border-blue-400 outline-none">
-                                        <option>Standard Logistics OT (from System Configuration, SYS-005)</option>
-                                        <option>Enhanced Weekend / Bank Holiday (SYS-005)</option>
-                                    </select>
-                                    <p class="mt-1 text-xs text-slate-400">Overtime and premium rules are defined centrally and referenced here (SYS-005).</p>
-                                </div>
-                            </div>
-
-                            <!-- Leave / absence policy -->
-                            <div class="rounded-xl border border-slate-200 p-5">
-                                <div class="flex items-center gap-2 mb-4">
-                                    <i class="fa-solid fa-notes-medical text-purple-500"></i>
-                                    <h3 class="text-sm font-bold text-slate-800">Leave / absence policy</h3>
-                                    <span class="text-xs text-slate-400">(CFG-006 — client-scoped, BU-overridable)</span>
-                                </div>
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Paid sick allowance</label>
-                                        <div class="flex items-center gap-2">
-                                            <input type="number" value="2" class="w-20 text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 focus:border-blue-400 outline-none"/>
-                                            <span class="text-sm text-slate-600">paid sick days per</span>
-                                            <select class="text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 bg-white focus:border-blue-400 outline-none">
-                                                <option>rolling month</option>
-                                                <option>rolling quarter</option>
-                                                <option>calendar year</option>
-                                            </select>
-                                        </div>
-                                        <p class="mt-1 text-xs text-slate-400">Reset window governs when the allowance replenishes.</p>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Holiday-pay rule</label>
-                                        <select class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 bg-white focus:border-blue-400 outline-none">
-                                            <option>Accrued 12.07% (rolled-up)</option>
-                                            <option>Booked from accrued balance</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">No-show default pay</label>
-                                        <select class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 bg-white focus:border-blue-400 outline-none">
-                                            <option>Unpaid</option>
-                                            <option>Paid</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label class="block text-xs font-semibold text-slate-600 mb-1.5">Default Paid-absence cost bearer</label>
-                                        <select class="w-full text-sm text-slate-800 border border-slate-200 rounded-lg px-3 py-2.5 bg-white focus:border-blue-400 outline-none">
-                                            <option selected>Client (default)</option>
-                                            <option>Agency</option>
-                                            <option>Abstract</option>
-                                        </select>
-                                        <p class="mt-1 text-xs text-slate-400">Who bears the cost of a Paid absence day; Abstract can toggle per day later (TS-035 / CFG-006).</p>
-                                    </div>
-                                </div>
-                                <div class="mt-5 flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                                    <div>
-                                        <p class="text-sm font-semibold text-slate-800">Auto-request agency confirmation</p>
-                                        <p class="text-xs text-slate-500">Automatically ask the agency to justify a recorded absence (agency-sourced bookings only).</p>
-                                    </div>
-                                    <button class="toggle relative w-11 h-6 rounded-full bg-emerald-500" data-on="true" onclick="flipToggle(this)">
-                                        <span class="dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-all" style="left: 22px;"></span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- STEP 7 — Worker-compliance requirements -->
-                    <div data-panel="7" class="step-panel hidden bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="px-6 py-5 border-b border-slate-100">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold flex items-center justify-center">7</span>
-                                <h2 class="text-base font-bold text-slate-900">Worker-compliance requirements</h2>
-                            </div>
-                            <p class="text-xs text-slate-500">Which checks / licences this client mandates, and whether an expired one blocks a booking (CFG-008).</p>
-                        </div>
-                        <div class="p-6 space-y-3">
-                            <div class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3">
-                                <label class="flex items-center gap-3 text-sm font-semibold text-slate-800"><input type="checkbox" checked class="w-4 h-4 accent-blue-600"/> Right to Work check</label>
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Mandatory</span>
-                            </div>
-                            <div class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3">
-                                <label class="flex items-center gap-3 text-sm font-semibold text-slate-800"><input type="checkbox" checked class="w-4 h-4 accent-blue-600"/> CSCS card</label>
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Mandatory</span>
-                            </div>
-                            <div class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3">
-                                <label class="flex items-center gap-3 text-sm font-semibold text-slate-800"><input type="checkbox" checked class="w-4 h-4 accent-blue-600"/> Site induction</label>
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Mandatory</span>
-                            </div>
-                            <div class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3">
-                                <label class="flex items-center gap-3 text-sm font-semibold text-slate-500"><input type="checkbox" class="w-4 h-4 accent-blue-600"/> DBS (Basic)</label>
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200">Not Applicable</span>
-                            </div>
-                            <div class="mt-4 flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3">
-                                <div>
-                                    <p class="text-sm font-semibold text-slate-800">Block booking if a mandated check is expired</p>
-                                    <p class="text-xs text-slate-500">A worker with an expired mandatory item cannot be booked to this client (CFG-008).</p>
-                                </div>
-                                <button class="toggle relative w-11 h-6 rounded-full bg-emerald-500" data-on="true" onclick="flipToggle(this)">
-                                    <span class="dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-all" style="left: 22px;"></span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- STEP 8 — Approved agencies -->
-                    <div data-panel="8" class="step-panel hidden bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="px-6 py-5 border-b border-slate-100">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold flex items-center justify-center">8</span>
-                                <h2 class="text-base font-bold text-slate-900">Approved agencies</h2>
-                            </div>
-                            <p class="text-xs text-slate-500">The agencies this client's vacancies may be released to. Only approved agencies can receive a release wave (AB-005).</p>
-                        </div>
-                        <div class="p-6 space-y-3">
-                            <div class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3">
-                                <label class="flex items-center gap-3 text-sm font-semibold text-slate-800"><input type="checkbox" checked class="w-4 h-4 accent-blue-600"/> TechForce Agency</label>
-                                <span class="text-xs text-slate-400">Approved for 6 clients</span>
-                            </div>
-                            <div class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3">
-                                <label class="flex items-center gap-3 text-sm font-semibold text-slate-800"><input type="checkbox" checked class="w-4 h-4 accent-blue-600"/> Nexus Talent</label>
-                                <span class="text-xs text-slate-400">Approved for 4 clients</span>
-                            </div>
-                            <div class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3">
-                                <label class="flex items-center gap-3 text-sm font-semibold text-slate-800"><input type="checkbox" class="w-4 h-4 accent-blue-600"/> PeopleBridge</label>
-                                <span class="text-xs text-slate-400">Approved for 3 clients</span>
-                            </div>
-                            <div class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3">
-                                <label class="flex items-center gap-3 text-sm font-semibold text-slate-800"><input type="checkbox" class="w-4 h-4 accent-blue-600"/> Apex Staffing</label>
-                                <span class="text-xs text-slate-400">Approved for 2 clients</span>
-                            </div>
-                            <p class="text-xs text-slate-400"><i class="fa-solid fa-circle-info mr-1"></i>2 of 4 agencies selected. The approved-agency list must be reviewed before activation (ONB-009).</p>
-                        </div>
-                    </div>
-
-                    <!-- STEP 9 — Notifications -->
-                    <div data-panel="9" class="step-panel hidden bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="px-6 py-5 border-b border-slate-100">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold flex items-center justify-center">9</span>
-                                <h2 class="text-base font-bold text-slate-900">Notifications</h2>
-                            </div>
-                            <p class="text-xs text-slate-500">Which events notify this client's users.</p>
-                        </div>
-                        <div class="p-6 space-y-3">
-                            <div class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3">
-                                <span class="text-sm font-semibold text-slate-800">Timesheet submission deadline approaching</span>
-                                <button class="toggle relative w-11 h-6 rounded-full bg-emerald-500" data-on="true" onclick="flipToggle(this)"><span class="dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-all" style="left: 22px;"></span></button>
-                            </div>
-                            <div class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3">
-                                <span class="text-sm font-semibold text-slate-800">New booking confirmed</span>
-                                <button class="toggle relative w-11 h-6 rounded-full bg-emerald-500" data-on="true" onclick="flipToggle(this)"><span class="dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-all" style="left: 22px;"></span></button>
-                            </div>
-                            <div class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3">
-                                <span class="text-sm font-semibold text-slate-800">Invoice generated</span>
-                                <button class="toggle relative w-11 h-6 rounded-full bg-emerald-500" data-on="true" onclick="flipToggle(this)"><span class="dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-all" style="left: 22px;"></span></button>
-                            </div>
-                            <div class="flex items-center justify-between rounded-xl border border-slate-200 px-4 py-3">
-                                <span class="text-sm font-semibold text-slate-800">Worker compliance item expiring</span>
-                                <button class="toggle relative w-11 h-6 rounded-full bg-slate-300" data-on="false" onclick="flipToggle(this)"><span class="dot absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white transition-all" style="left: 2px;"></span></button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- STEP 10 — Review & activate -->
-                    <div data-panel="10" class="step-panel hidden bg-white rounded-2xl border border-slate-200 shadow-sm">
-                        <div class="px-6 py-5 border-b border-slate-100">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="w-6 h-6 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold flex items-center justify-center">10</span>
-                                <h2 class="text-base font-bold text-slate-900">Review &amp; activate</h2>
-                            </div>
-                            <p class="text-xs text-slate-500">All activation gates must pass before Nexus Logistics Ltd can go Active (ONB-008, ONB-009).</p>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-sm font-bold text-slate-800 mb-3">Activation gates</h3>
-                            <div class="rounded-xl border border-slate-200 divide-y divide-slate-100">
-                                <div class="flex items-center justify-between px-4 py-3">
-                                    <span class="flex items-center gap-3 text-sm text-slate-700"><i class="fa-solid fa-circle-check text-emerald-500"></i> At least 1 business unit</span>
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Passed</span>
-                                </div>
-                                <div class="flex items-center justify-between px-4 py-3">
-                                    <span class="flex items-center gap-3 text-sm text-slate-700"><i class="fa-solid fa-circle-check text-emerald-500"></i> At least 1 Client Admin user</span>
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Passed</span>
-                                </div>
-                                <div class="flex items-center justify-between px-4 py-3 bg-red-50/40">
-                                    <span class="flex items-center gap-3 text-sm font-semibold text-slate-800"><i class="fa-solid fa-circle-xmark text-red-500"></i> At least 1 effective charge rate card</span>
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-700 border border-red-200">Not met</span>
-                                </div>
-                                <div class="flex items-center justify-between px-4 py-3">
-                                    <span class="flex items-center gap-3 text-sm text-slate-700"><i class="fa-solid fa-circle-check text-emerald-500"></i> Invoicing + VAT configured</span>
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Passed</span>
-                                </div>
-                                <div class="flex items-center justify-between px-4 py-3">
-                                    <span class="flex items-center gap-3 text-sm text-slate-700"><i class="fa-solid fa-circle-check text-emerald-500"></i> Approved-agency list reviewed</span>
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Passed</span>
-                                </div>
-                            </div>
-
-                            <div class="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 flex items-start gap-2 text-sm text-red-700">
-                                <i class="fa-solid fa-lock mt-0.5"></i>
-                                <span><span class="font-semibold">1 gate outstanding:</span> add a charge rate card. Activation is blocked until every gate passes.</span>
-                            </div>
-
-                            <div class="mt-5 flex items-center gap-3">
-                                <button disabled class="px-5 py-2.5 rounded-lg bg-slate-200 text-slate-400 text-sm font-semibold cursor-not-allowed">
-                                    <i class="fa-solid fa-rocket mr-1.5"></i>Activate client
-                                </button>
-                                <span class="text-xs text-slate-400">Moves the client from <span class="font-semibold">In Setup</span> to <span class="font-semibold">Active</span> once all gates pass.</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Wizard footer -->
-                    <div class="mt-5 bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-4 flex flex-wrap items-center justify-between gap-3">
-                        <p class="text-xs text-slate-400 flex items-center gap-2 max-w-xl">
-                            <i class="fa-solid fa-circle-info"></i>
-                            Onboarding is saved per step and can be resumed (ONB-001). Abstract-led — clients do not self-onboard (ONB-013).
-                        </p>
-                        <div class="flex items-center gap-2">
-                            <button class="px-4 py-2 rounded-lg border border-slate-200 text-slate-600 text-sm font-semibold hover:border-blue-300">Save &amp; exit</button>
-                            <button onclick="nextStep()" class="px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700">Save &amp; continue</button>
-                        </div>
-                    </div>
-
-                </section>
+        <main id="main" class="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-8 py-6 bg-slate-100">
+            <div data-s1-show="denied" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-14 text-center">
+                <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-lock text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900">You don't have access to this page</h2>
+                <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">Starting or resuming an onboarding needs the permission to onboard organisations. Ask an Abstract administrator if you need it.</p>
+                <a href="abstract.shell.dashboard.html" data-s1-home class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to the dashboard</a>
             </div>
+            <div data-s1-hide="denied">
+            <div data-s1-show="conflict" role="alert" class="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 flex items-start gap-3 text-sm text-amber-900">
+                <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5" aria-hidden="true"></i>
+                <div class="flex-1"><p class="font-semibold">Someone else changed this onboarding record while you were editing.</p><p class="text-amber-800 mt-0.5">Nothing you typed has been saved. Reload to see their version, then make your change again.</p></div>
+                <button type="button" onclick="S1.setState('default')" class="inline-flex items-center gap-2 bg-white border border-amber-300 text-amber-900 hover:bg-amber-100 rounded-lg px-3 py-2 text-xs font-semibold min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-600 focus-visible:ring-offset-1"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Reload</button>
+            </div>
+            <div id="pending-banner" style="display:none" role="status" class="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 flex items-start gap-3 text-sm text-amber-900">
+              <i class="fa-solid fa-hourglass-half text-amber-600 mt-0.5" aria-hidden="true"></i>
+              <p><span class="font-semibold"><span data-org-name></span> is awaiting activation.</span> Its steps are read-only here; the records stay editable from its profile and settings. Meet every gate below, then activate.</p>
+            </div>
+
+            <!-- Loading -->
+            <div data-s1-show="loading" class="grid gap-4 lg:grid-cols-[300px_1fr]" aria-busy="true" aria-label="Loading">
+              <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-3"><div class="flex items-center gap-3"><div class="w-6 h-6 rounded-full bg-slate-200 animate-pulse"></div><div class="h-3 bg-slate-200 rounded animate-pulse flex-1"></div></div><div class="flex items-center gap-3"><div class="w-6 h-6 rounded-full bg-slate-200 animate-pulse"></div><div class="h-3 bg-slate-200 rounded animate-pulse flex-1"></div></div><div class="flex items-center gap-3"><div class="w-6 h-6 rounded-full bg-slate-200 animate-pulse"></div><div class="h-3 bg-slate-200 rounded animate-pulse flex-1"></div></div><div class="flex items-center gap-3"><div class="w-6 h-6 rounded-full bg-slate-200 animate-pulse"></div><div class="h-3 bg-slate-200 rounded animate-pulse flex-1"></div></div><div class="flex items-center gap-3"><div class="w-6 h-6 rounded-full bg-slate-200 animate-pulse"></div><div class="h-3 bg-slate-200 rounded animate-pulse flex-1"></div></div><div class="flex items-center gap-3"><div class="w-6 h-6 rounded-full bg-slate-200 animate-pulse"></div><div class="h-3 bg-slate-200 rounded animate-pulse flex-1"></div></div><div class="flex items-center gap-3"><div class="w-6 h-6 rounded-full bg-slate-200 animate-pulse"></div><div class="h-3 bg-slate-200 rounded animate-pulse flex-1"></div></div><div class="flex items-center gap-3"><div class="w-6 h-6 rounded-full bg-slate-200 animate-pulse"></div><div class="h-3 bg-slate-200 rounded animate-pulse flex-1"></div></div><div class="flex items-center gap-3"><div class="w-6 h-6 rounded-full bg-slate-200 animate-pulse"></div><div class="h-3 bg-slate-200 rounded animate-pulse flex-1"></div></div><div class="flex items-center gap-3"><div class="w-6 h-6 rounded-full bg-slate-200 animate-pulse"></div><div class="h-3 bg-slate-200 rounded animate-pulse flex-1"></div></div></div>
+              <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 space-y-4"><div class="h-4 bg-slate-200 rounded animate-pulse w-1/3"></div><div class="h-3 bg-slate-200 rounded animate-pulse w-2/3"></div><div class="h-10 bg-slate-200 rounded-lg animate-pulse"></div><div class="h-10 bg-slate-200 rounded-lg animate-pulse"></div><div class="h-24 bg-slate-200 rounded-lg animate-pulse"></div></div>
+            </div>
+
+            <div data-s1-hide="loading">
+            <!-- Top bar: organisation, status, completeness -->
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-4 flex flex-col md:flex-row md:items-center gap-4">
+              <div class="flex items-center gap-3 min-w-0 flex-1">
+                <span id="org-logo" class="w-10 h-10 rounded-lg bg-slate-100 text-slate-600 border border-slate-200 flex items-center justify-center text-xs font-bold flex-shrink-0" aria-hidden="true"></span>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap"><h2 class="text-base font-bold text-slate-900 truncate" data-org-name></h2><span id="status-badge"></span></div>
+                  <p class="text-xs text-slate-500 mt-0.5" id="started-line"></p>
+                </div>
+              </div>
+              <div class="md:w-72">
+                <div class="flex items-center justify-between text-xs"><span class="font-semibold text-slate-700" id="progress-label"></span><span class="text-slate-500 tnum" id="progress-pct"></span></div>
+                <div class="h-2 rounded-full bg-slate-200 mt-1.5 overflow-hidden" role="progressbar" aria-valuemin="0" aria-valuemax="100" id="progress-bar" aria-label="Onboarding completeness"><div class="h-full rounded-full" style="width:0%;background:linear-gradient(135deg,#1D4ED8,#5B2E91)"></div></div>
+              </div>
+              <button type="button" id="btn-save-exit-top" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save &amp; exit</button>
+            </div>
+
+            <div class="grid gap-4 grid-cols-1 lg:grid-cols-[300px_minmax(0,1fr)] items-start">
+              <!-- Step rail -->
+              <nav class="bg-white rounded-2xl border border-slate-200 shadow-sm min-w-0 lg:sticky lg:top-0" aria-label="Onboarding steps">
+                <div class="px-4 pt-4 pb-2 flex items-center justify-between"><h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Steps</h3><span class="text-xs text-slate-500 tnum" id="rail-count"></span></div>
+                <ol id="step-rail" class="flex lg:flex-col gap-1 px-3 pb-3 overflow-x-auto lg:overflow-visible whitespace-nowrap lg:whitespace-normal"></ol>
+              </nav>
+
+              <!-- Step panel -->
+              <section class="bg-white rounded-2xl border border-slate-200 shadow-sm min-w-0" aria-labelledby="step-title">
+                <div class="px-5 pt-5 pb-4 border-b border-slate-200 flex items-start justify-between gap-3">
+                  <div class="min-w-0">
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider" id="step-count"></p>
+                    <h2 id="step-title" class="text-xl font-bold text-slate-900 mt-0.5"></h2>
+                    <p class="text-sm text-slate-600 mt-1" id="step-desc"></p>
+                  </div>
+                  <span id="step-complete-mark" class="flex-shrink-0"></span>
+                </div>
+                <div class="p-5 bg-slate-50/60" id="step-body">
+                  <div id="validation-summary" style="display:none" role="alert" class="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 flex items-start gap-3 text-sm text-red-800"><i class="fa-solid fa-circle-exclamation mt-0.5" aria-hidden="true"></i><span>Check the highlighted fields. Nothing is saved until they are right.</span></div>
+                  <div class="step-panel flex flex-col gap-4" data-panel="identity" style="display:none">
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5" aria-labelledby="id-card-t">
+  <h2 id="id-card-t" class="text-sm font-bold text-slate-900 mb-4">Identity</h2>
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div class="sm:col-span-2"><div>
+      <label for="f-name" class="block text-xs font-semibold text-slate-700 mb-1.5">Name <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input id="f-name" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="The client's name as it appears on the contract" aria-describedby="f-name-err f-name-hint" />
+      <p id="f-name-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      <p id="f-name-hint" class="text-xs text-slate-500 mt-1.5">Shown on the Organisations list, in the administering context and on every audit row.</p>
+    </div></div>
+    <div class="sm:col-span-2">
+      <p class="block text-xs font-semibold text-slate-700 mb-1.5">Registered address <span class="text-red-600" aria-hidden="true">*</span></p>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <div class="sm:col-span-2"><input id="f-addr1" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="Address line 1" aria-describedby="f-addr1-err f-addr1-hint" aria-label="Address line 1"/><p id="f-addr1-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p></div>
+        <div class="sm:col-span-2"><input id="f-addr2" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="Address line 2 (optional)" aria-describedby="f-addr2-err f-addr2-hint" aria-label="Address line 2"/></div>
+        <div><input id="f-town" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="Town or city" aria-describedby="f-town-err f-town-hint" aria-label="Town or city"/><p id="f-town-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p></div>
+        <div><input id="f-postcode" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="Postcode" aria-describedby="f-postcode-err f-postcode-hint" aria-label="Postcode"/><p id="f-postcode-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p></div>
+        <div><label for="f-country" class="sr-only">Country</label><select id="f-country" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20"><option value="GB" selected>United Kingdom</option><option value="IE">Ireland</option><option value="JE">Jersey</option><option value="GG">Guernsey</option><option value="IM">Isle of Man</option></select></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm" aria-labelledby="ct-card-t">
+  <div class="flex items-center justify-between gap-3 px-5 pt-5 pb-3">
+    <div><h2 id="ct-card-t" class="text-sm font-bold text-slate-900">Contacts</h2><p class="text-xs text-slate-500 mt-0.5">At least one contact, each with an email address or a telephone number.</p></div>
+    <button type="button" id="btn-add-contact" data-edit class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add contact</button>
+  </div>
+  <div class="hidden md:block overflow-x-auto">
+    <table class="w-full text-left">
+      <caption class="sr-only">Contacts</caption>
+      <thead class="bg-slate-50 border-y border-slate-200"><tr>
+        <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Name</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Role at client</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Email</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Telephone</th><th scope="col" class="px-4 py-3"><span class="sr-only">Actions</span></th>
+      </tr></thead>
+      <tbody id="contacts-tbody" class="divide-y divide-slate-100"></tbody>
+    </table>
+  </div>
+  <ul id="contacts-cards" class="md:hidden divide-y divide-slate-100 border-t border-slate-200"></ul>
+  <p id="contacts-empty" style="display:none" class="px-5 py-6 text-sm text-slate-500 text-center border-t border-slate-200">No contacts yet. Add the person Abstract speaks to about this organisation.</p>
+  <p id="contacts-err" class="px-5 pb-4 text-xs text-red-600" style="display:none" role="alert"></p>
+  <p id="contacts-foot" class="px-5 py-3 text-xs text-slate-500 border-t border-slate-100"></p>
+</section>
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5" aria-labelledby="cn-card-t">
+  <h2 id="cn-card-t" class="text-sm font-bold text-slate-900 mb-4">Contract</h2>
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div class="sm:col-span-2"><div>
+      <label for="f-contract-ref" class="block text-xs font-semibold text-slate-700 mb-1.5">Contract reference <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input id="f-contract-ref" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="e.g. ABS-CL-2026-004" aria-describedby="f-contract-ref-err f-contract-ref-hint" />
+      <p id="f-contract-ref-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div></div>
+    <div>
+      <label for="f-contract-start" class="block text-xs font-semibold text-slate-700 mb-1.5">Contract start</label>
+      <input id="f-contract-start" type="date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="" aria-describedby="f-contract-start-err f-contract-start-hint" />
+      <p id="f-contract-start-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div>
+    <div>
+      <label for="f-contract-end" class="block text-xs font-semibold text-slate-700 mb-1.5">Contract end</label>
+      <input id="f-contract-end" type="date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="" aria-describedby="f-contract-end-err f-contract-end-hint" />
+      <p id="f-contract-end-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      <p id="f-contract-end-hint" class="text-xs text-slate-500 mt-1.5">Leave blank for an open-ended contract.</p>
+    </div>
+    <div class="sm:col-span-2">
+      <label for="f-renewal" class="block text-xs font-semibold text-slate-700 mb-1.5">Renewal information</label>
+      <textarea id="f-renewal" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="Notice period, review dates, anything the account team should know"></textarea>
+    </div>
+  </div>
+</section></div><div class="step-panel flex flex-col gap-4" data-panel="review" style="display:none">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+          <div class="flex items-start justify-between gap-3 mb-4 flex-wrap">
+            <div><h3 class="text-sm font-bold text-slate-900">Activation gates</h3><p class="text-xs text-slate-500 mt-0.5">Evaluated as of today, every time this step is read. The gates decide activation, not the step list.</p></div>
+            <div id="activate-wrap" class="flex items-center gap-3"></div>
+          </div>
+          
+<div id="gates-wrap">
+  <div id="refused-banner" data-s1-show="refused" role="alert" class="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 flex items-start gap-3 text-sm text-red-900">
+    <i class="fa-solid fa-circle-exclamation text-red-600 mt-0.5" aria-hidden="true"></i>
+    <div><p class="font-semibold">Activation refused.</p><p class="text-red-800 mt-0.5">A gate stopped being met between this page loading and you confirming. The list below is re-evaluated as of now; meet every gate and try again.</p></div>
+  </div>
+  <ul id="gates-list" class="divide-y divide-slate-100 rounded-xl border border-slate-200 overflow-hidden"></ul>
+  <p id="gates-summary" class="text-xs text-slate-500 mt-3"></p>
+</div>
+        </div>
+        <div id="activated-panel" style="display:none" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-10 text-center">
+          <div class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-circle-check text-xl" aria-hidden="true"></i></div>
+          <h3 class="text-base font-bold text-slate-900"><span data-org-name></span> is <span class="inline-flex align-middle" id="activated-badge"></span></h3>
+          <p class="text-sm text-slate-600 mt-2 max-w-md mx-auto">Its users still cannot sign in until you enable access. That is a separate, audited action on the profile.</p>
+          <a id="activated-link" href="#" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed mt-5" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-id-card" aria-hidden="true"></i> Open the profile</a>
+        </div></div><div class="step-panel" data-panel="__frame" style="display:none">
+          <div class="relative rounded-xl overflow-hidden border border-slate-200 bg-slate-50">
+            <div id="frame-loading" class="absolute inset-0 bg-white flex flex-col items-center justify-center gap-3 text-sm text-slate-500" aria-busy="true"><i class="fa-solid fa-spinner fa-spin text-slate-400" aria-hidden="true"></i>Loading this step…</div>
+            <iframe id="step-frame" title="" src="about:blank" class="w-full block bg-slate-100" style="height:560px;border:0"></iframe>
+          </div>
+          <p class="text-xs text-slate-500 mt-2 flex items-start gap-2"><i class="fa-solid fa-circle-info mt-0.5 text-slate-400" aria-hidden="true"></i><span>This step is the same page Abstract uses after onboarding, framed inside the wizard. Open it on its own: <a id="frame-open" href="#" class="text-blue-700 font-semibold hover:underline" target="_blank" rel="noopener">full page</a>.</span></p>
+        </div>
+                </div>
+                <div class="px-5 py-4 border-t border-slate-200 bg-white flex flex-wrap items-center gap-3 sm:rounded-b-2xl">
+                  <button type="button" id="btn-prev" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Previous</button>
+                  <p id="dirty-note" class="text-xs text-slate-500 flex-1 min-w-[160px]" aria-live="polite"></p>
+                  <button type="button" id="btn-save-exit" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save &amp; exit</button>
+                  <button type="button" id="btn-continue" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><span id="btn-continue-label">Save &amp; continue</span> <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
+                </div>
+              </section>
+            </div>
+            </div>
+            </div>
+    
         </main>
     </div>
 </div>
-
-<script>
-    // Step definitions
-    var steps = [
-        { n: 1,  label: 'Company & contract',              status: 'done' },
-        { n: 2,  label: 'Business units & cost centres',   status: 'done' },
-        { n: 3,  label: 'Users & roles',                   status: 'done' },
-        { n: 4,  label: 'Shifts & rate cards',             status: 'todo' },
-        { n: 5,  label: 'Invoicing & VAT',                 status: 'done' },
-        { n: 6,  label: 'Timesheet & absence policy',      status: 'current' },
-        { n: 7,  label: 'Worker-compliance requirements',  status: 'todo' },
-        { n: 8,  label: 'Approved agencies',               status: 'done' },
-        { n: 9,  label: 'Notifications',                   status: 'todo' },
-        { n: 10, label: 'Review & activate',               status: 'todo' }
-    ];
-    var currentStep = 1;
-
-    function iconFor(status, active) {
-        if (status === 'done')    return '<span class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-check text-[10px]"></i></span>';
-        if (status === 'current' || active) return '<span class="w-6 h-6 rounded-full bg-blue-600 text-white flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-pen text-[10px]"></i></span>';
-        return '<span class="w-6 h-6 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center flex-shrink-0 text-xs font-semibold"></span>';
-    }
-
-    function renderRail() {
-        var rail = document.getElementById('step-rail');
-        rail.innerHTML = '';
-        steps.forEach(function(s) {
-            var active = (s.n === currentStep);
-            var btn = document.createElement('button');
-            btn.className = 'w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-left transition-all ' +
-                (active ? 'bg-blue-50 border border-blue-200' : 'hover:bg-slate-50 border border-transparent');
-            var numHtml = iconFor(s.status, active);
-            if (s.status === 'todo' && !active) {
-                numHtml = '<span class="w-6 h-6 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center flex-shrink-0 text-xs font-semibold">' + s.n + '</span>';
-            }
-            btn.innerHTML = numHtml +
-                '<span class="text-sm ' + (active ? 'font-semibold text-slate-900' : 'text-slate-600') + ' truncate">' + s.n + '. ' + s.label + '</span>';
-            btn.onclick = function() { showStep(s.n); };
-            rail.appendChild(btn);
-        });
-    }
-
-    function showStep(n) {
-        currentStep = n;
-        document.querySelectorAll('.step-panel').forEach(function(p) {
-            p.classList.toggle('hidden', p.getAttribute('data-panel') !== String(n));
-        });
-        renderRail();
-        document.getElementById('onboard-client-main').scrollTop = 0;
-    }
-
-    function nextStep() {
-        if (currentStep < 10) showStep(currentStep + 1);
-    }
-
-    function flipToggle(btn) {
-        var on = btn.getAttribute('data-on') === 'true';
-        on = !on;
-        btn.setAttribute('data-on', on ? 'true' : 'false');
-        btn.classList.toggle('bg-emerald-500', on);
-        btn.classList.toggle('bg-slate-300', !on);
-        var dot = btn.querySelector('.dot');
-        dot.style.left = on ? '22px' : '2px';
-    }
-
-    renderRail();
-    showStep(1);
-</script>
-
-
-<!-- ===== Shared admin shell behaviour: mobile nav · toast · confirm ===== -->
-<div id="confirm-overlay" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
-  <div class="absolute inset-0" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px)" onclick="closeConfirm()"></div>
-  <div role="dialog" aria-modal="true" aria-labelledby="confirm-title"
-       class="relative bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md">
-    <div class="flex items-start gap-3 px-6 pt-6">
-      <div id="confirm-icon" class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-red-50 text-red-600"><i class="fa-solid fa-triangle-exclamation"></i></div>
-      <div class="flex-1">
-        <h3 id="confirm-title" class="text-base font-bold text-slate-900">Are you sure?</h3>
-        <p id="confirm-body" class="text-sm text-slate-500 mt-1"></p>
-      </div>
-    </div>
-    <div class="flex items-center justify-end gap-3 px-6 py-4 mt-4 border-t border-slate-200 bg-slate-50 rounded-b-2xl">
-      <button onclick="closeConfirm()" class="px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-100 transition-colors">Cancel</button>
-      <button id="confirm-ok" class="px-5 py-2 text-white rounded-lg text-sm font-semibold transition-opacity hover:opacity-90">Confirm</button>
-    </div>
-  </div>
-</div>
-<div id="toast-stack" class="fixed bottom-5 right-5 z-[70] flex flex-col gap-2 pointer-events-none"></div>
-
 <script>
 /* Mobile navigation (sidebar is hidden below lg — this is the only way to reveal it) */
 (function () {
@@ -995,47 +268,475 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bd.style.display === 'block') close(); });
   window.addEventListener('resize', function () { if (window.innerWidth >= 1024) close(); });
 })();
-
-/* Toast — feedback after an action */
-function toast(msg, tone) {
-  var wrap = document.getElementById('toast-stack');
-  if (!wrap) return;
-  var tones = { success: 'fa-circle-check text-emerald-500', info: 'fa-circle-info text-blue-500', danger: 'fa-circle-exclamation text-red-500' };
-  var t = document.createElement('div');
-  t.className = 'pointer-events-auto flex items-center gap-2.5 bg-white border border-slate-200 shadow-lg rounded-xl px-4 py-3 text-sm text-slate-700';
-  t.setAttribute('role', 'status');
-  t.innerHTML = '<i class="fa-solid ' + (tones[tone] || tones.success) + '"></i><span></span>';
-  t.querySelector('span').textContent = msg;
-  wrap.appendChild(t);
-  setTimeout(function () { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; setTimeout(function(){ t.remove(); }, 300); }, 3200);
+</script>
+<script>
+var BADGE = {
+  'Draft': ['bg-slate-100 text-slate-700 border border-slate-200', 'fa-file-pen'],
+  'In Setup': ['bg-blue-50 text-blue-700 border border-blue-200', 'fa-screwdriver-wrench'],
+  'Pending Activation': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Active': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Suspended': ['bg-red-50 text-red-700 border border-red-200', 'fa-ban'],
+  'Invited': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-envelope'],
+  'Inactive': ['bg-slate-100 text-slate-500 border border-slate-200', 'fa-circle-minus'],
+  'Pending approval': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Approved': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Rejected': ['bg-red-50 text-red-700 border border-red-200', 'fa-circle-xmark'],
+  'Compliant': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Pending': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Expired': ['bg-red-50 text-red-700 border border-red-200', 'fa-circle-xmark'],
+  'Not Applicable': ['bg-slate-100 text-slate-700 border border-slate-200', 'fa-minus']
+};
+function badge(s, small) {
+  var b = BADGE[s] || BADGE['Draft'];
+  return '<span class="inline-flex items-center gap-1.5 ' + (small ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs') + ' rounded-full font-semibold whitespace-nowrap ' + b[0] + '"><i class="fa-solid ' + b[1] + ' text-[10px]" aria-hidden="true"></i>' + s + '</span>';
 }
-
-/* Confirm — gate every destructive / irreversible action */
-var _confirmAction = null;
-function openConfirm(opts) {
-  var o = opts || {}, danger = o.tone !== 'neutral';
-  document.getElementById('confirm-title').textContent = o.title || 'Are you sure?';
-  document.getElementById('confirm-body').textContent = o.body || '';
-  var ic = document.getElementById('confirm-icon');
-  ic.className = 'w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ' + (danger ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600');
-  ic.innerHTML = '<i class="fa-solid ' + (danger ? 'fa-triangle-exclamation' : 'fa-circle-question') + '"></i>';
-  var ok = document.getElementById('confirm-ok');
-  ok.textContent = o.confirmLabel || 'Confirm';
-  ok.style.background = danger ? '#DC2626' : 'linear-gradient(135deg,#1D4ED8,#5B2E91)';
-  _confirmAction = o.onConfirm || null;
-  document.getElementById('confirm-overlay').classList.remove('hidden');
-  ok.focus();
+/* Markers are not statuses (design-tokens §5): default neutral, success, warning, info */
+var MARK = { 'default': 'bg-slate-100 text-slate-700 border-slate-200', success: 'bg-emerald-50 text-emerald-700 border-emerald-200', warning: 'bg-amber-50 text-amber-700 border-amber-200', info: 'bg-blue-50 text-blue-700 border-blue-200' };
+function marker(text, variant, title) {
+  return '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border whitespace-nowrap ' + MARK[variant || 'default'] + '"' + (title ? ' title="' + esc(title) + '"' : '') + '>' + text + '</span>';
 }
-function closeConfirm() { document.getElementById('confirm-overlay').classList.add('hidden'); _confirmAction = null; }
-document.addEventListener('DOMContentLoaded', function () {
-  var ok = document.getElementById('confirm-ok');
-  if (ok) ok.addEventListener('click', function () { var a = _confirmAction; closeConfirm(); if (a) a(); });
-});
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape' && !document.getElementById('confirm-overlay').classList.contains('hidden')) closeConfirm();
-});
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
+function initials(n) { return String(n).split(/\s+/).map(function (p) { return p[0]; }).slice(0, 2).join('').toUpperCase(); }
+var GBP = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' });
+function money(s) { return GBP.format(Number(s)); }
+function pct(s) { return Number(s).toFixed(2) + ' %'; }
+function fmtDate(iso) { if (!iso) return '—'; var d = new Date(iso + (iso.length === 10 ? 'T00:00:00' : '')); return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }
+function fmtDateTime(iso) { var d = new Date(iso); return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); }
+var BTN_SEC = 'inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
+var BTN_PRI = 'inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed';
+var BTN_PRI_STYLE = 'background:linear-gradient(135deg,#1D4ED8,#5B2E91)';
+var BTN_DANGER = 'inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white rounded-lg px-4 py-2.5 text-xs font-semibold min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-1 disabled:opacity-50';
+var BTN_GHOST = 'inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 hover:text-blue-900 hover:underline rounded px-1 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
+var INPUT = 'w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20';
+var INPUT_ERR = 'border-red-400 bg-red-50/40 focus:border-red-400 focus:ring-red-600/20';
+var Q = new URLSearchParams(location.search);
+function setErr(id, msg) { var i = document.getElementById(id), e = document.getElementById(id + '-err'); if (!i) return; if (msg) { i.classList.add.apply(i.classList, INPUT_ERR.split(' ')); i.setAttribute('aria-invalid', 'true'); if (e) { e.textContent = msg; e.style.display = ''; } } else { i.classList.remove.apply(i.classList, INPUT_ERR.split(' ')); i.removeAttribute('aria-invalid'); if (e) e.style.display = 'none'; } }
 </script>
 
+<div data-s1-modal id="m-contact" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-contact-t">
+    <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+            <div class="min-w-0"><h2 id="m-contact-t" class="text-base font-bold text-slate-900">Add contact</h2></div>
+            <button type="button" onclick="S1.closeModal('m-contact')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500 flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="px-6 py-5 flex flex-col gap-4">
+        <div>
+      <label for="k-name" class="block text-xs font-semibold text-slate-700 mb-1.5">Name <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input id="k-name" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="e.g. Rachel Green" aria-describedby="k-name-err k-name-hint" />
+      <p id="k-name-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div>
+        <div>
+      <label for="k-role" class="block text-xs font-semibold text-slate-700 mb-1.5">Role at client</label>
+      <input id="k-role" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="e.g. Procurement lead" aria-describedby="k-role-err k-role-hint" />
+      <p id="k-role-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      <p id="k-role-hint" class="text-xs text-slate-500 mt-1.5">A free-text label, not a system role.</p>
+    </div>
+        <div class="grid gap-4 sm:grid-cols-2"><div>
+      <label for="k-email" class="block text-xs font-semibold text-slate-700 mb-1.5">Email</label>
+      <input id="k-email" type="email" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="name@company.co.uk" aria-describedby="k-email-err k-email-hint" />
+      <p id="k-email-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div><div>
+      <label for="k-tel" class="block text-xs font-semibold text-slate-700 mb-1.5">Telephone</label>
+      <input id="k-tel" type="tel" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="0121 496 0000" aria-describedby="k-tel-err k-tel-hint" />
+      <p id="k-tel-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div></div>
+        <p id="k-either" class="text-xs text-slate-500">Give an email address or a telephone number, or both.</p></div>
+        <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-wrap justify-end gap-3 sm:rounded-b-2xl"><button type="button" onclick="S1.closeModal('m-contact')" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Cancel</button><button type="button" id="k-save" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-check" aria-hidden="true"></i> Save contact</button></div>
+    </div>
+</div>
+<script>
+var ORGS = {"acme": {"name": "Acme Logistics", "party": "client", "status": "Active", "users": 5, "pct": null, "approval": true, "activatedAt": "2026-03-14T10:12:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-03-15T09:02:00Z", "accessEnabledBy": "Sarah Mitchell", "address": {"line1": "Acme House", "line2": "12 Fenton Way", "town": "Birmingham", "postcode": "B6 7QD", "country": "GB"}, "contacts": [{"name": "Rachel Green", "role": "Procurement lead", "email": "rachel.green@acmelogistics.co.uk", "tel": "0121 496 0102"}, {"name": "Priya Natarajan", "role": "Accounts payable", "email": "priya.natarajan@acmelogistics.co.uk", "tel": "0121 496 0110"}], "contract": {"ref": "ABS-CL-2026-004", "start": "2026-02-01", "end": "2028-01-31", "renewal": "Notice period 90 days; review in Q4 2027."}}, "northgate": {"name": "Northgate Foods", "party": "client", "status": "Active", "users": 4, "pct": null, "approval": false, "activatedAt": "2026-04-02T14:40:00Z", "activatedBy": "James Okafor", "accessEnabledAt": "2026-04-02T15:05:00Z", "accessEnabledBy": "James Okafor", "address": {"line1": "Unit 4, Northgate Business Park", "line2": null, "town": "Leeds", "postcode": "LS9 8AQ", "country": "GB"}, "contacts": [{"name": "Hannah Price", "role": "HR director", "email": "h.price@northgatefoods.co.uk", "tel": "0113 496 0220"}], "contract": {"ref": "ABS-CL-2026-007", "start": "2026-04-01", "end": null, "renewal": null}}, "harbour": {"name": "Harbour Retail Group", "party": "client", "status": "In Setup", "users": 2, "pct": 30, "approval": false, "address": {"line1": "Harbour Point", "line2": "1 Quay Street", "town": "Southampton", "postcode": "SO14 2AQ", "country": "GB"}, "contacts": [{"name": "Marcus Lee", "role": "Operations director", "email": "marcus.lee@harbourretail.co.uk", "tel": "023 8049 0310"}], "contract": {"ref": "ABS-CL-2026-011", "start": "2026-11-01", "end": "2028-10-31", "renewal": "Review six months before the end date."}}, "meridian": {"name": "Meridian Healthcare Services", "party": "client", "status": "Pending Activation", "users": 3, "pct": 90, "approval": false, "address": {"line1": "Meridian House", "line2": "30 Castle Street", "town": "Reading", "postcode": "RG1 7SN", "country": "GB"}, "contacts": [{"name": "Dr Anita Rao", "role": "Director of nursing", "email": "a.rao@meridianhealth.org.uk", "tel": "0118 496 0415"}], "contract": {"ref": "ABS-CL-2026-012", "start": "2026-10-01", "end": "2027-09-30", "renewal": null}}, "coastline": {"name": "Coastline Manufacturing", "party": "client", "status": "Draft", "users": 0, "pct": 0, "approval": false, "address": null, "contacts": [], "contract": {"ref": "", "start": null, "end": null, "renewal": null}}, "pennine": {"name": "Pennine Distribution", "party": "client", "status": "Suspended", "users": 3, "pct": null, "approval": false, "activatedAt": "2026-01-20T11:00:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-01-21T08:30:00Z", "accessEnabledBy": "Sarah Mitchell", "suspension": {"reason": "Contract dispute: invoices unpaid since July 2026. Reinstate once the finance team confirms settlement.", "at": "2026-09-02T16:20:00Z", "by": "Sarah Mitchell"}, "address": {"line1": "Pennine Way Depot", "line2": null, "town": "Huddersfield", "postcode": "HD2 1UA", "country": "GB"}, "contacts": [{"name": "Gary Holmes", "role": "Site director", "email": "g.holmes@penninedist.co.uk", "tel": "01484 496 0501"}], "contract": {"ref": "ABS-CL-2025-019", "start": "2025-11-01", "end": "2026-10-31", "renewal": "Not renewing while suspended."}}, "techforce": {"name": "TechForce Recruitment", "party": "agency", "status": "Active", "users": 4, "pct": null, "approval": false, "activatedAt": "2026-03-10T09:45:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-03-10T10:00:00Z", "accessEnabledBy": "Sarah Mitchell", "address": {"line1": "14 Kingsway House", "line2": null, "town": "Coventry", "postcode": "CV1 2LH", "country": "GB"}, "contacts": [{"name": "Daniel Wright", "role": "Operations director", "email": "daniel.wright@techforce-recruitment.co.uk", "tel": "024 7649 0210"}, {"name": "Aisha Khan", "role": "Payroll", "email": "aisha.khan@techforce-recruitment.co.uk", "tel": null}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "12.50", "sba": {"ref": "SBA-2026-0417", "signed": "2026-07-03", "expiry": "2027-07-02", "doc": "SBA_TechForce_signed.pdf"}}, "nexus": {"name": "Nexus Talent", "party": "agency", "status": "Active", "users": 4, "pct": null, "approval": true, "activatedAt": "2026-03-18T13:00:00Z", "activatedBy": "James Okafor", "accessEnabledAt": "2026-03-19T09:00:00Z", "accessEnabledBy": "James Okafor", "address": {"line1": "2nd Floor, Nexus Court", "line2": "8 Wellington Street", "town": "Sheffield", "postcode": "S1 4HG", "country": "GB"}, "contacts": [{"name": "Aisha Rahman", "role": "Managing director", "email": "a.rahman@nexustalent.co.uk", "tel": "0114 496 0330"}], "paymentTermsDays": 14, "marginBasis": "fixed_per_hour", "marginValue": "2.40", "sba": {"ref": "SBA-2026-0391", "signed": "2026-03-12", "expiry": "2027-03-11", "doc": "SBA_Nexus_signed.pdf"}}, "peoplebridge": {"name": "PeopleBridge", "party": "agency", "status": "Pending Activation", "users": 2, "pct": 88, "approval": false, "address": {"line1": "Bridge House", "line2": "5 Canal Street", "town": "Manchester", "postcode": "M1 3HE", "country": "GB"}, "contacts": [{"name": "Leo Marsh", "role": "Director", "email": "leo@peoplebridge.co.uk", "tel": "0161 496 0180"}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "11.00", "sba": {"ref": "SBA-2026-0442", "signed": "2026-09-28", "expiry": "2027-09-27", "doc": "SBA_PeopleBridge_signed.pdf"}}, "summit": {"name": "Summit Staffing Solutions", "party": "agency", "status": "In Setup", "users": 1, "pct": 33, "approval": false, "address": {"line1": "Summit House", "line2": "22 Peak Road", "town": "Derby", "postcode": "DE1 2QR", "country": "GB"}, "contacts": [{"name": "Fiona Wallace", "role": "Owner", "email": "fiona@summitstaffing.co.uk", "tel": "01332 496 0290"}], "paymentTermsDays": null, "marginBasis": "percentage_of_charge", "marginValue": null, "sba": null}, "rapid": {"name": "Rapid Resource", "party": "agency", "status": "Suspended", "users": 3, "pct": null, "approval": false, "activatedAt": "2026-02-11T10:00:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-02-11T10:30:00Z", "accessEnabledBy": "Sarah Mitchell", "suspension": {"reason": "Employer's liability insurance lapsed on 31 Aug 2026 and no renewal has been received.", "at": "2026-09-01T09:10:00Z", "by": "Hannah Clarke"}, "address": {"line1": "9 Station Approach", "line2": null, "town": "Nottingham", "postcode": "NG1 7AB", "country": "GB"}, "contacts": [{"name": "Kim Barrow", "role": "Director", "email": "kim@rapidresource.co.uk", "tel": "0115 496 0770"}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "12.00", "sba": {"ref": "SBA-2026-0360", "signed": "2026-02-05", "expiry": "2027-02-04", "doc": "SBA_Rapid_signed.pdf"}}};
+var TREES = {"acme": [{"id": "mid", "parentId": null, "name": "Midlands", "nodeType": "region", "cc": "CC-MID", "userCount": 0}, {"id": "bhx", "parentId": "mid", "name": "Birmingham DC", "nodeType": "site", "cc": "CC-BHX-01", "userCount": 1}, {"id": "bhx-n", "parentId": "bhx", "name": "Nights", "nodeType": "department", "cc": "CC-BHX-01-N", "userCount": 1}, {"id": "bhx-d", "parentId": "bhx", "name": "Days", "nodeType": "department", "cc": "CC-BHX-01-D", "userCount": 0}, {"id": "lei", "parentId": "mid", "name": "Leicester DC", "nodeType": "site", "cc": "CC-LEI-02", "userCount": 1}, {"id": "nth", "parentId": null, "name": "Northern", "nodeType": "region", "cc": "CC-NTH", "userCount": 1}, {"id": "lds", "parentId": "nth", "name": "Leeds Hub", "nodeType": "site", "cc": "CC-LDS-01", "userCount": 0}, {"id": "lgw", "parentId": null, "name": "London Gateway", "nodeType": "site", "cc": "CC-LGW-03", "userCount": 0}], "northgate": [{"id": "ng-hq", "parentId": null, "name": "Head office", "nodeType": "business_unit", "cc": "NG-100", "userCount": 2}, {"id": "ng-prod", "parentId": null, "name": "Production", "nodeType": "business_unit", "cc": "NG-200", "userCount": 1}, {"id": "ng-leeds", "parentId": "ng-prod", "name": "Leeds bakery", "nodeType": "site", "cc": "NG-210", "userCount": 1}], "harbour": [{"id": "hb-south", "parentId": null, "name": "South coast", "nodeType": "region", "cc": "HB-S", "userCount": 0}, {"id": "hb-soton", "parentId": "hb-south", "name": "Southampton store", "nodeType": "site", "cc": "HB-S-01", "userCount": 1}], "meridian": [{"id": "md-rdg", "parentId": null, "name": "Reading hospital", "nodeType": "site", "cc": "MH-RDG", "userCount": 2}, {"id": "md-rdg-w", "parentId": "md-rdg", "name": "Wards", "nodeType": "department", "cc": "MH-RDG-W", "userCount": 0}], "coastline": [], "pennine": [{"id": "pn-hud", "parentId": null, "name": "Huddersfield depot", "nodeType": "site", "cc": "PN-HUD", "userCount": 2}], "techforce": [{"id": "tf-cov", "parentId": null, "name": "Coventry", "nodeType": "branch", "userCount": 1}, {"id": "tf-mk", "parentId": null, "name": "Milton Keynes", "nodeType": "branch", "userCount": 0}, {"id": "tf-north", "parentId": null, "name": "North Division", "nodeType": "division", "userCount": 1}, {"id": "tf-shf", "parentId": "tf-north", "name": "Sheffield Hub", "nodeType": "branch", "userCount": 0}, {"id": "tf-lds", "parentId": "tf-north", "name": "Leeds Branch", "nodeType": "branch", "userCount": 0}], "nexus": [{"id": "nx-north", "parentId": null, "name": "North Division", "nodeType": "division", "userCount": 1}, {"id": "nx-shf", "parentId": "nx-north", "name": "Sheffield", "nodeType": "branch", "userCount": 1}, {"id": "nx-south", "parentId": null, "name": "South Division", "nodeType": "division", "userCount": 0}, {"id": "nx-hub", "parentId": "nx-south", "name": "Hub", "nodeType": "branch", "userCount": 1}], "peoplebridge": [{"id": "pb-man", "parentId": null, "name": "Manchester", "nodeType": "branch", "userCount": 1}], "summit": [], "rapid": [{"id": "rr-not", "parentId": null, "name": "Nottingham", "nodeType": "branch", "userCount": 2}]};
+var USERS = {"acme": [{"name": "Rachel Green", "email": "rachel.green@acmelogistics.co.uk", "roles": ["Administrator"], "status": "Active", "scope": [], "last": "2026-10-09T08:02:00Z"}, {"name": "Mark Davies", "email": "mark.davies@acmelogistics.co.uk", "roles": ["Hiring manager"], "status": "Active", "scope": ["bhx"], "last": "2026-10-08T14:18:00Z"}, {"name": "Priya Natarajan", "email": "priya.natarajan@acmelogistics.co.uk", "roles": ["Finance approver"], "status": "Active", "scope": [], "last": "2026-10-07T10:47:00Z"}, {"name": "Olivia Brown", "email": "olivia.brown@acmelogistics.co.uk", "roles": ["Hiring manager"], "status": "Invited", "scope": ["lei", "nth"], "last": null}, {"name": "Ben Taylor", "email": "ben.taylor@acmelogistics.co.uk", "roles": ["Hiring manager", "Seasonal supervisors"], "status": "Inactive", "scope": ["bhx-n"], "last": "2026-08-02T16:20:00Z"}], "techforce": [{"name": "Daniel Wright", "email": "daniel.wright@techforce-recruitment.co.uk", "roles": ["Administrator"], "status": "Active", "scope": [], "last": "2026-10-09T07:55:00Z"}, {"name": "Sophie Turner", "email": "sophie.turner@techforce-recruitment.co.uk", "roles": ["Recruiter"], "status": "Active", "scope": ["tf-cov"], "last": "2026-10-08T12:09:00Z"}, {"name": "Aisha Khan", "email": "aisha.khan@techforce-recruitment.co.uk", "roles": ["Payroll"], "status": "Active", "scope": [], "last": "2026-10-06T09:30:00Z"}, {"name": "Ryan Hughes", "email": "ryan.hughes@techforce-recruitment.co.uk", "roles": ["Recruiter"], "status": "Invited", "scope": ["tf-north"], "last": null}], "harbour": [{"name": "Marcus Lee", "email": "marcus.lee@harbourretail.co.uk", "roles": ["Administrator"], "status": "Invited", "scope": [], "last": null}, {"name": "Jo Patel", "email": "jo.patel@harbourretail.co.uk", "roles": ["Hiring manager"], "status": "Invited", "scope": ["hb-soton"], "last": null}], "summit": [{"name": "Fiona Wallace", "email": "fiona@summitstaffing.co.uk", "roles": ["Administrator"], "status": "Invited", "scope": [], "last": null}]};
+var COMPLIANCE = {"techforce": [{"id": "acr-1", "name": "Employer's liability insurance", "kind": "insurance", "issuingBody": "Zurich", "coverOrReference": "£10,000,000 · EL-88214", "expiryDate": "2027-03-31", "status": "Compliant", "doc": "EL_Cert_2026.pdf"}, {"id": "acr-2", "name": "Public liability insurance", "kind": "insurance", "issuingBody": "AXA", "coverOrReference": "£5,000,000 · PL-40027", "expiryDate": "2026-11-09", "status": "Pending", "doc": "PL_Cert_2025.pdf"}, {"id": "acr-3", "name": "REC Corporate Membership", "kind": "accreditation", "issuingBody": "REC", "coverOrReference": "REC-2026-1174", "expiryDate": "2027-01-01", "status": "Compliant", "doc": "REC_2026.pdf"}, {"id": "acr-4", "name": "Stronger Together accreditation", "kind": "accreditation", "issuingBody": "Stronger Together", "coverOrReference": "ST-9921", "expiryDate": "2026-06-30", "status": "Expired", "doc": "ST_2025.pdf"}, {"id": "acr-5", "name": "Gangmasters licence", "kind": "certification", "issuingBody": "GLAA", "coverOrReference": null, "expiryDate": null, "status": "Not Applicable", "doc": null}], "summit": [{"id": "acr-9", "name": "Employer's liability insurance", "kind": "insurance", "issuingBody": "Aviva", "coverOrReference": "£10,000,000 · EL-55102", "expiryDate": "2027-09-30", "status": "Compliant", "doc": "Summit_EL_2026.pdf"}], "peoplebridge": [{"id": "acr-11", "name": "Employer's liability insurance", "kind": "insurance", "issuingBody": "Hiscox", "coverOrReference": "£10,000,000 · HX-20991", "expiryDate": "2027-08-31", "status": "Compliant", "doc": "PB_EL_2026.pdf"}, {"id": "acr-12", "name": "REC Corporate Membership", "kind": "accreditation", "issuingBody": "REC", "coverOrReference": "REC-2026-1402", "expiryDate": "2027-06-01", "status": "Pending", "doc": null}]};
+var LINKS = [{"id": "asl-1", "client": "acme", "agency": "techforce", "approvedFrom": "2026-03-12", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-2", "client": "northgate", "agency": "techforce", "approvedFrom": "2026-05-01", "revokedFrom": null, "approvedBy": "James Okafor"}, {"id": "asl-3", "client": "acme", "agency": "nexus", "approvedFrom": "2026-03-20", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-4", "client": "northgate", "agency": "nexus", "approvedFrom": "2026-02-01", "revokedFrom": "2026-09-30", "approvedBy": "Sarah Mitchell", "revokedBy": "James Okafor"}, {"id": "asl-5", "client": "acme", "agency": "peoplebridge", "approvedFrom": "2026-11-01", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-6", "client": "pennine", "agency": "rapid", "approvedFrom": "2026-02-15", "revokedFrom": "2026-09-01", "approvedBy": "Sarah Mitchell", "revokedBy": "Hannah Clarke"}, {"id": "asl-7", "client": "harbour", "agency": "techforce", "approvedFrom": "2026-11-01", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-8", "client": "meridian", "agency": "peoplebridge", "approvedFrom": "2026-10-15", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}];
+var SHIFTS = {"acme": [{"id": "sh-am", "name": "Morning", "start": "06:00", "end": "14:00", "hours": 8, "position": 1, "deactivatedAt": null}, {"id": "sh-pm", "name": "Afternoon", "start": "14:00", "end": "22:00", "hours": 8, "position": 2, "deactivatedAt": null}, {"id": "sh-nt", "name": "Night", "start": "22:00", "end": "06:00", "hours": 8, "position": 3, "deactivatedAt": null}, {"id": "sh-tw", "name": "Twilight", "start": "18:00", "end": "22:00", "hours": 4, "position": 4, "deactivatedAt": "2026-09-15"}], "northgate": [{"id": "ng-d", "name": "Days", "start": "07:00", "end": "15:00", "hours": 8, "position": 1, "deactivatedAt": null}, {"id": "ng-l", "name": "Lates", "start": "15:00", "end": "23:00", "hours": 8, "position": 2, "deactivatedAt": null}], "harbour": [{"id": "hb-d", "name": "Day", "start": "08:00", "end": "16:00", "hours": 8, "position": 1, "deactivatedAt": null}, {"id": "hb-e", "name": "Evening", "start": "16:00", "end": "22:00", "hours": 6, "position": 2, "deactivatedAt": null}], "meridian": [{"id": "md-ed", "name": "Early", "start": "07:00", "end": "15:00", "hours": 7.5, "position": 1, "deactivatedAt": null}, {"id": "md-lt", "name": "Late", "start": "14:30", "end": "22:30", "hours": 7.5, "position": 2, "deactivatedAt": null}, {"id": "md-nt", "name": "Night", "start": "22:00", "end": "07:30", "hours": 9, "position": 3, "deactivatedAt": null}], "coastline": [], "pennine": [{"id": "pn-d", "name": "Day", "start": "06:00", "end": "18:00", "hours": 11, "position": 1, "deactivatedAt": null}]};
+var RATE_CARDS = [{"id": "rc-1", "jobRoleId": "jr-wo", "client": "acme", "orgNodeId": null, "comparatorRate": "14.10", "versions": [{"id": "rv-1b", "effectiveFrom": "2027-01-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-10-01T10:00:00Z", "ack": false, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "14.30", "basePay": "13.00", "employerNi": "1.95", "wtrAccrual": "1.57", "pension": "0.39", "apprenticeshipLevy": "0.07", "chargeRate": "20.40", "spread": "6.10", "margin": "3.42", "marginPct": "16.76", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "14.60", "basePay": "13.30", "employerNi": "2.00", "wtrAccrual": "1.61", "pension": "0.40", "apprenticeshipLevy": "0.07", "chargeRate": "20.80", "spread": "6.20", "margin": "3.42", "marginPct": "16.44", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "15.90", "basePay": "14.50", "employerNi": "2.18", "wtrAccrual": "1.75", "pension": "0.44", "apprenticeshipLevy": "0.07", "chargeRate": "21.60", "spread": "5.70", "margin": "2.66", "marginPct": "12.31", "belowFloor": false}]}, {"id": "rv-1a", "effectiveFrom": "2026-01-01", "effectiveTo": "2026-12-31", "createdBy": "Sarah Mitchell", "createdAt": "2025-12-18T15:20:00Z", "ack": false, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "13.90", "basePay": "12.60", "employerNi": "1.89", "wtrAccrual": "1.52", "pension": "0.38", "apprenticeshipLevy": "0.06", "chargeRate": "19.80", "spread": "5.90", "margin": "3.35", "marginPct": "16.92", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "14.20", "basePay": "12.90", "employerNi": "1.94", "wtrAccrual": "1.56", "pension": "0.39", "apprenticeshipLevy": "0.06", "chargeRate": "20.20", "spread": "6.00", "margin": "3.35", "marginPct": "16.58", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "15.50", "basePay": "14.10", "employerNi": "2.12", "wtrAccrual": "1.70", "pension": "0.42", "apprenticeshipLevy": "0.07", "chargeRate": "21.00", "spread": "5.50", "margin": "2.59", "marginPct": "12.33", "belowFloor": false}]}, {"id": "rv-1z", "effectiveFrom": "2025-04-01", "effectiveTo": "2025-12-31", "createdBy": "Sarah Mitchell", "createdAt": "2025-03-20T09:00:00Z", "ack": true, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "13.20", "basePay": "12.00", "employerNi": "1.80", "wtrAccrual": "1.45", "pension": "0.36", "apprenticeshipLevy": "0.06", "chargeRate": "18.60", "spread": "5.40", "margin": "2.93", "marginPct": "15.75", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "13.40", "basePay": "12.20", "employerNi": "1.83", "wtrAccrual": "1.47", "pension": "0.37", "apprenticeshipLevy": "0.06", "chargeRate": "18.90", "spread": "5.50", "margin": "2.97", "marginPct": "15.71", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "14.70", "basePay": "13.40", "employerNi": "2.01", "wtrAccrual": "1.62", "pension": "0.40", "apprenticeshipLevy": "0.07", "chargeRate": "19.60", "spread": "4.90", "margin": "2.10", "marginPct": "10.71", "belowFloor": false}]}]}, {"id": "rc-2", "jobRoleId": "jr-wo", "client": "acme", "orgNodeId": "bhx", "comparatorRate": "14.40", "versions": [{"id": "rv-2a", "effectiveFrom": "2026-04-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-03-25T11:00:00Z", "ack": false, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "14.10", "basePay": "12.80", "employerNi": "1.92", "wtrAccrual": "1.54", "pension": "0.38", "apprenticeshipLevy": "0.06", "chargeRate": "20.10", "spread": "6.00", "margin": "3.40", "marginPct": "16.92", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "14.40", "basePay": "13.10", "employerNi": "1.97", "wtrAccrual": "1.58", "pension": "0.39", "apprenticeshipLevy": "0.07", "chargeRate": "20.50", "spread": "6.10", "margin": "3.39", "marginPct": "16.54", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "15.70", "basePay": "14.30", "employerNi": "2.15", "wtrAccrual": "1.73", "pension": "0.43", "apprenticeshipLevy": "0.07", "chargeRate": "21.30", "spread": "5.60", "margin": "2.62", "marginPct": "12.30", "belowFloor": false}]}]}, {"id": "rc-3", "jobRoleId": "jr-fd", "client": "acme", "orgNodeId": null, "comparatorRate": null, "versions": [{"id": "rv-3a", "effectiveFrom": "2026-01-01", "effectiveTo": null, "createdBy": "Sarah Mitchell", "createdAt": "2025-12-18T15:30:00Z", "ack": false, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "15.60", "basePay": "14.20", "employerNi": "2.13", "wtrAccrual": "1.71", "pension": "0.43", "apprenticeshipLevy": "0.07", "chargeRate": "22.10", "spread": "6.50", "margin": "3.56", "marginPct": "16.11", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "15.90", "basePay": "14.50", "employerNi": "2.18", "wtrAccrual": "1.75", "pension": "0.44", "apprenticeshipLevy": "0.07", "chargeRate": "22.50", "spread": "6.60", "margin": "3.56", "marginPct": "15.82", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "17.30", "basePay": "15.80", "employerNi": "2.37", "wtrAccrual": "1.91", "pension": "0.47", "apprenticeshipLevy": "0.08", "chargeRate": "24.00", "spread": "6.70", "margin": "3.37", "marginPct": "14.04", "belowFloor": false}]}]}, {"id": "rc-4", "jobRoleId": "jr-pp", "client": "northgate", "orgNodeId": null, "comparatorRate": "13.00", "versions": [{"id": "rv-4a", "effectiveFrom": "2026-05-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-04-20T09:00:00Z", "ack": false, "lines": [{"shiftId": "ng-d", "shiftName": "Days", "hourType": "standard", "agencyPayRate": "13.60", "basePay": "12.30", "employerNi": "1.85", "wtrAccrual": "1.48", "pension": "0.37", "apprenticeshipLevy": "0.06", "chargeRate": "19.40", "spread": "5.80", "margin": "3.34", "marginPct": "17.22", "belowFloor": false}, {"shiftId": "ng-l", "shiftName": "Lates", "hourType": "standard", "agencyPayRate": "13.90", "basePay": "12.60", "employerNi": "1.89", "wtrAccrual": "1.52", "pension": "0.38", "apprenticeshipLevy": "0.06", "chargeRate": "19.80", "spread": "5.90", "margin": "3.35", "marginPct": "16.92", "belowFloor": false}]}]}, {"id": "rc-5", "jobRoleId": "jr-wo", "client": "northgate", "orgNodeId": null, "comparatorRate": null, "versions": [{"id": "rv-5a", "effectiveFrom": "2026-05-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-04-20T09:10:00Z", "ack": false, "lines": [{"shiftId": "ng-d", "shiftName": "Days", "hourType": "standard", "agencyPayRate": "14.00", "basePay": "12.70", "employerNi": "1.91", "wtrAccrual": "1.53", "pension": "0.38", "apprenticeshipLevy": "0.06", "chargeRate": "19.90", "spread": "5.90", "margin": "3.32", "marginPct": "16.68", "belowFloor": false}, {"shiftId": "ng-l", "shiftName": "Lates", "hourType": "standard", "agencyPayRate": "14.30", "basePay": "13.00", "employerNi": "1.95", "wtrAccrual": "1.57", "pension": "0.39", "apprenticeshipLevy": "0.07", "chargeRate": "20.30", "spread": "6.00", "margin": "3.32", "marginPct": "16.35", "belowFloor": false}]}]}, {"id": "rc-6", "jobRoleId": "jr-hca", "client": "meridian", "orgNodeId": null, "comparatorRate": "14.80", "versions": [{"id": "rv-6a", "effectiveFrom": "2026-10-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-09-29T12:00:00Z", "ack": false, "lines": [{"shiftId": "md-ed", "shiftName": "Early", "hourType": "standard", "agencyPayRate": "14.50", "basePay": "13.20", "employerNi": "1.98", "wtrAccrual": "1.59", "pension": "0.40", "apprenticeshipLevy": "0.07", "chargeRate": "20.60", "spread": "6.10", "margin": "3.36", "marginPct": "16.31", "belowFloor": false}, {"shiftId": "md-lt", "shiftName": "Late", "hourType": "standard", "agencyPayRate": "14.50", "basePay": "13.20", "employerNi": "1.98", "wtrAccrual": "1.59", "pension": "0.40", "apprenticeshipLevy": "0.07", "chargeRate": "20.60", "spread": "6.10", "margin": "3.36", "marginPct": "16.31", "belowFloor": false}, {"shiftId": "md-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "16.30", "basePay": "14.90", "employerNi": "2.24", "wtrAccrual": "1.80", "pension": "0.45", "apprenticeshipLevy": "0.07", "chargeRate": "22.80", "spread": "6.50", "margin": "3.34", "marginPct": "14.65", "belowFloor": false}]}]}];
+var TODAY = "2026-10-10";
+
+var PARTY = 'client';
+var STEPS = [{"key": "identity", "title": "Company and contract", "desc": "Who the client is and the agreement that governs them.", "frame": null}, {"key": "structure", "title": "Business units", "desc": "The structure its users are scoped to: regions, sites and departments, each with a cost centre.", "frame": "abstract.organisations.structure.html?org={org}&embedded=1"}, {"key": "users", "title": "Users and roles", "desc": "The client's own users, their roles and the nodes they are scoped to. Activation needs one who can manage users and roles.", "frame": "abstract.identity-access.users.html?org={org}&embedded=1"}, {"key": "rates", "title": "Rate cards", "desc": "Charge and pay per job role and Shift, with the client-provided comparator per card. Activation needs a card with a version in force.", "frame": "abstract.rates.rate-cards.html?client={org}&embedded=1"}, {"key": "invoicing", "title": "Invoicing and VAT", "desc": "Cadence, PO rule, payment terms, VAT treatment, grouping and the invoice recipients.", "frame": "abstract.configuration.organisation-configuration.html?org={org}&group=invoicing&embedded=1"}, {"key": "timesheets", "title": "Timesheets, Shifts and absence", "desc": "Submission deadline, approval mode, overtime ruleset, the Shifts rate cards are cut by, the default Shift, and the leave and absence policy.", "frame": "abstract.configuration.organisation-configuration.html?org={org}&group=timesheets&embedded=1"}, {"key": "compliance", "title": "Worker-compliance requirements", "desc": "The checks this client requires of a worker.", "frame": "abstract.configuration.organisation-configuration.html?org={org}&group=compliance&embedded=1"}, {"key": "approved-agencies", "title": "Approved agencies", "desc": "Which agencies may supply this client. Save this step once you have reviewed the list, even if no agency is approved yet.", "frame": "abstract.organisations.approved-suppliers.html?client={org}&embedded=1"}, {"key": "notifications", "title": "Notification defaults", "desc": "The organisation's default channel per event; each user can change their own later.", "frame": "abstract.configuration.organisation-configuration.html?org={org}&group=notifications&embedded=1"}, {"key": "review", "title": "Review and activate", "desc": "Every activation gate, with the way to meet each one.", "frame": null}];
+var ONBOARDING = {"harbour": {"complete": ["identity", "structure", "users"], "startedBy": "Sarah Mitchell", "startedAt": "2026-10-02T09:30:00Z"}, "coastline": {"complete": [], "startedBy": "James Okafor", "startedAt": "2026-10-09T15:10:00Z"}, "meridian": {"complete": ["identity", "structure", "users", "rates", "invoicing", "timesheets", "compliance", "approved-agencies", "notifications"], "startedBy": "Sarah Mitchell", "startedAt": "2026-09-22T10:00:00Z", "reviewedAt": "2026-10-08T16:40:00Z"}, "summit": {"complete": ["identity", "compliance", "self-billing"], "startedBy": "Sarah Mitchell", "startedAt": "2026-10-06T11:20:00Z"}, "peoplebridge": {"complete": ["identity", "compliance", "self-billing", "structure", "users", "rates", "client-approvals", "notifications"], "startedBy": "James Okafor", "startedAt": "2026-09-24T09:00:00Z", "reviewedAt": "2026-10-09T12:05:00Z"}};
+var GATE_DEFS = [{"key": "structure", "label": "At least one node in the structure", "detail": "Add a region, site or department in step 2.", "stepKey": "structure"}, {"key": "administrator", "label": "A user who can manage users and roles", "detail": "Invite a user in step 3 and give them a role that can manage users and roles.", "stepKey": "users"}, {"key": "rate_card", "label": "A rate card with a version in force today", "detail": "Add a rate card in step 4 with an effective date of today or earlier.", "stepKey": "rates"}, {"key": "invoicing", "label": "Payment terms, VAT treatment and invoice recipients set", "detail": "Set the three required invoicing values in step 5.", "stepKey": "invoicing"}, {"key": "approved_agencies", "label": "The approved-agency list reviewed", "detail": "Open step 8 and save it once you have reviewed the list, even if no agency is approved yet.", "stepKey": "approved-agencies"}];
+var GATE_MET = {"harbour": {"structure": true, "administrator": true, "rate_card": false, "invoicing": false, "approved_agencies": false}, "coastline": {"structure": false, "administrator": false, "rate_card": false, "invoicing": false, "approved_agencies": false}, "meridian": {"structure": true, "administrator": true, "rate_card": true, "invoicing": false, "approved_agencies": false}, "summit": {"insurance": true, "self_billing_agreement": false, "structure": false, "administrator": true, "rate_card": false, "client_approval": false}, "peoplebridge": {"insurance": true, "self_billing_agreement": true, "structure": true, "administrator": true, "rate_card": false, "client_approval": false}};
+var DEFAULT_ORG = 'harbour', PENDING_ORG = 'meridian', NEW_ORG = "coastline";
+var PROFILE_URL = 'abstract.organisations.organisation-profile.html?org=';
+
+/* ---------- which record, which state ---------- */
+var state = (Q.get('state') || 'default');
+var slug = Q.get('org');
+var isNew = Q.has('new') || state === 'empty';
+if (state === 'pending' || state === 'ready' || state === 'refused') slug = PENDING_ORG;
+if (!slug && !isNew) slug = DEFAULT_ORG;
+var ORG, REC, dirty = false, current = null, gatesMet = null, stepStates = {};
+
+function loadRecord() {
+  if (isNew) {
+    ORG = { name: '', party: PARTY, status: 'Draft', pct: 0, address: null, contacts: [], contract: { ref: '', start: null, end: null, renewal: null } };
+    REC = { complete: [], startedBy: 'Sarah Mitchell', startedAt: new Date().toISOString() };
+  } else {
+    ORG = JSON.parse(JSON.stringify(ORGS[slug] || ORGS[DEFAULT_ORG]));
+    REC = JSON.parse(JSON.stringify(ONBOARDING[slug] || { complete: [], startedBy: 'Sarah Mitchell', startedAt: TODAY + 'T09:00:00Z' }));
+  }
+  gatesMet = null;
+  if (ORG.status === 'Pending Activation') { gatesMet = Object.assign({}, GATE_MET[slug] || {}); }
+  if (state === 'ready' || state === 'refused') { GATE_DEFS.forEach(function (g) { gatesMet[g.key] = true; }); }
+}
+function completePct() { return Math.floor(REC.complete.length / STEPS.length * 100); }
+function nextIncomplete() { for (var i = 0; i < STEPS.length; i++) if (REC.complete.indexOf(STEPS[i].key) < 0) return STEPS[i].key; return STEPS[STEPS.length - 1].key; }
+function readOnly() { return ORG.status !== 'Draft' && ORG.status !== 'In Setup'; }
+
+/* ---------- top bar, header, rail ---------- */
+function paintTop() {
+  var nm = ORG.name || ('New ' + PARTY);
+  document.querySelectorAll('[data-org-name]').forEach(function (e) { e.textContent = nm; });
+  document.title = 'Onboard ' + PARTY + ' · ' + nm + ' · Abstract VMS';
+  document.getElementById('org-logo').textContent = ORG.name ? initials(ORG.name) : '?';
+  document.getElementById('status-badge').innerHTML = badge(ORG.status);
+  document.getElementById('hdr-badge').innerHTML = badge(ORG.status);
+  var pct = completePct();
+  document.getElementById('progress-label').textContent = REC.complete.length + ' of ' + STEPS.length + ' steps complete';
+  document.getElementById('progress-pct').textContent = pct + ' %';
+  var bar = document.getElementById('progress-bar'); bar.setAttribute('aria-valuenow', pct); bar.firstElementChild.style.width = pct + '%';
+  document.getElementById('started-line').textContent = isNew ? 'Not saved yet. The organisation is created, as Draft, when you save the first step.' : 'Started ' + fmtDate(REC.startedAt.slice(0, 10)) + ' by ' + REC.startedBy + (REC.reviewedAt ? ' · Review opened ' + fmtDate(REC.reviewedAt.slice(0, 10)) : '');
+  document.getElementById('pending-banner').style.display = ORG.status === 'Pending Activation' ? '' : 'none';
+  document.getElementById('rail-count').textContent = pct + ' %';
+}
+function paintRail() {
+  var rail = document.getElementById('step-rail');
+  rail.innerHTML = STEPS.map(function (s, i) {
+    var done = REC.complete.indexOf(s.key) >= 0, active = s.key === current;
+    var mark = done ? '<span class="w-6 h-6 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center flex-shrink-0" aria-hidden="true"><i class="fa-solid fa-check text-[10px]"></i></span>'
+                    : '<span class="w-6 h-6 rounded-full ' + (active ? 'bg-blue-700 text-white' : 'bg-slate-100 text-slate-500 border border-slate-200') + ' flex items-center justify-center flex-shrink-0 text-[11px] font-bold tnum" aria-hidden="true">' + (i + 1) + '</span>';
+    return '<li class="flex-shrink-0 lg:flex-shrink"><button type="button" data-step="' + s.key + '" ' + (active ? 'aria-current="step"' : '') + ' class="w-full flex items-center gap-3 px-2.5 py-2 rounded-lg text-left min-h-[40px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 ' + (active ? 'bg-blue-50 border border-blue-200' : 'border border-transparent hover:bg-slate-50') + '">' + mark +
+      '<span class="text-sm ' + (active ? 'font-semibold text-slate-900' : 'text-slate-600') + ' truncate">' + esc(s.title) + '</span><span class="sr-only">' + (done ? ', complete' : ', not complete') + '</span></button></li>';
+  }).join('');
+  rail.querySelectorAll('[data-step]').forEach(function (b) { b.onclick = function () { goTo(b.dataset.step); }; });
+}
+
+/* ---------- navigation between steps ---------- */
+function goTo(key) {
+  if (key === current) return;
+  if (dirty && !readOnly()) {
+    S1.confirm({ title: 'Leave this step without saving?', body: 'Your changes to this step will be lost. Save & continue keeps them.', cta: 'Leave without saving', tone: 'danger', onConfirm: function () { dirty = false; openStep(key); } });
+    return;
+  }
+  if (key === 'review' && ORG.status === 'Draft') { S1.toast('Save the first step before opening the review.', 'info'); return; }
+  if (key === 'review' && ORG.status === 'In Setup') {
+    S1.confirm({ title: 'Open Review and activate?', bodyHtml: esc(ORG.name) + ' moves to <strong>Pending Activation</strong>. Its steps become read-only here; the records stay editable from its profile and settings. The gates, not the step list, decide activation.', cta: 'Open review', onConfirm: function () {
+      ORG.status = 'Pending Activation'; REC.reviewedAt = new Date().toISOString(); gatesMet = Object.assign({}, GATE_MET[slug] || {});
+      S1.toast(esc(ORG.name) + ' is now Pending Activation.', 'success'); openStep('review');
+    } });
+    return;
+  }
+  openStep(key);
+}
+function openStep(key) {
+  current = key; dirty = false;
+  var idx = STEPS.findIndex(function (s) { return s.key === key; }), s = STEPS[idx];
+  document.getElementById('step-count').textContent = 'Step ' + (idx + 1) + ' of ' + STEPS.length;
+  document.getElementById('step-title').textContent = s.title;
+  document.getElementById('step-desc').textContent = s.desc;
+  var done = REC.complete.indexOf(key) >= 0;
+  document.getElementById('step-complete-mark').innerHTML = done ? '<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700"><i class="fa-solid fa-circle-check" aria-hidden="true"></i> Complete</span>' : '';
+  document.querySelectorAll('.step-panel').forEach(function (p) { p.style.display = 'none'; });
+  document.getElementById('validation-summary').style.display = 'none';
+  if (s.frame) {
+    var p = document.querySelector('[data-panel="__frame"]'); p.style.display = '';
+    var f = document.getElementById('step-frame'), url = s.frame.replace('{org}', slug || 'coastline') + (state === 'large' ? '&state=large' : '') + (readOnly() ? '&readonly=1' : '');
+    f.title = 'Step ' + (idx + 1) + ': ' + s.title;
+    document.getElementById('frame-loading').style.display = '';
+    f.onload = function () { document.getElementById('frame-loading').style.display = 'none'; };
+    f.src = url;
+    document.getElementById('frame-open').href = url.replace('&embedded=1', '').replace('?embedded=1&', '?').replace('?embedded=1', '');
+    sizeFrame();
+  } else {
+    document.querySelector('[data-panel="' + key + '"]').style.display = '';
+    if (key === 'identity') fillIdentity();
+    if (key === 'compliance') paintCompliance();
+    if (key === 'self-billing') fillSba();
+    if (key === 'review') paintGates();
+    setReadOnly(readOnly());
+  }
+  paintFooter(); paintRail(); paintTop();
+  document.getElementById('main').scrollTop = 0;
+}
+function sizeFrame() {
+  var f = document.getElementById('step-frame'); if (!f) return;
+  var top = f.getBoundingClientRect().top, h = Math.max(480, window.innerHeight - top - 120);
+  f.style.height = h + 'px';
+}
+window.addEventListener('resize', sizeFrame);
+function paintFooter() {
+  var idx = STEPS.findIndex(function (s) { return s.key === current; });
+  document.getElementById('btn-prev').style.visibility = idx === 0 ? 'hidden' : '';
+  var cont = document.getElementById('btn-continue'), lab = document.getElementById('btn-continue-label');
+  var isReview = current === 'review', ro = readOnly();
+  cont.style.display = (isReview || ro) ? 'none' : '';
+  lab.textContent = idx === STEPS.length - 2 ? 'Save & continue to review' : 'Save & continue';
+  document.getElementById('dirty-note').textContent = ro ? 'Read-only while awaiting activation.' : (dirty ? 'Unsaved changes in this step.' : '');
+}
+
+/* ---------- Save & continue / Save & exit ---------- */
+function markComplete(key) {
+  if (REC.complete.indexOf(key) < 0) REC.complete.push(key);
+  if (ORG.status === 'Draft') { ORG.status = 'In Setup'; if (isNew) { isNew = false; slug = slug || 'new-' + PARTY; } }
+}
+document.getElementById('btn-continue').onclick = function () {
+  var s = STEPS.find(function (x) { return x.key === current; });
+  if (!s.frame) {
+    var ok = current === 'identity' ? validateIdentity() : current === 'self-billing' ? validateSba() : true;
+    if (!ok) { document.getElementById('validation-summary').style.display = ''; return; }
+    if (current === 'identity') readIdentity();
+  } else if (dirty) {
+    S1.confirm({ title: 'Save the changes in this step first', body: 'This step has unsaved changes. Save or discard them inside the step, then continue.', cta: null, cancel: 'Back to the step' }); return;
+  }
+  var wasDraft = ORG.status === 'Draft';
+  markComplete(current); dirty = false;
+  S1.toast('Step saved' + (wasDraft ? '. ' + esc(ORG.name) + ' is now In Setup.' : '.'), 'success');
+  var idx = STEPS.findIndex(function (x) { return x.key === current; });
+  var next = STEPS[Math.min(idx + 1, STEPS.length - 1)].key;
+  if (next === 'review') goTo('review'); else openStep(next);
+};
+document.getElementById('btn-prev').onclick = function () { var idx = STEPS.findIndex(function (x) { return x.key === current; }); if (idx > 0) goTo(STEPS[idx - 1].key); };
+function saveExit() {
+  if (dirty && !readOnly()) {
+    S1.confirm({ title: 'Save this step before leaving?', body: 'You have unsaved changes in this step. Save them now, or leave and lose them. Progress is saved per step; you can resume from the Organisations list.', cta: 'Save and leave', cancel: 'Leave without saving', onConfirm: function () { location.href = 'abstract.organisations.organisations.html'; } });
+    return;
+  }
+  location.href = 'abstract.organisations.organisations.html';
+}
+document.getElementById('btn-save-exit').onclick = saveExit;
+document.getElementById('btn-save-exit-top').onclick = saveExit;
+
+/* step events from a framed page (S1.stepEvent) */
+window.addEventListener('message', function (e) {
+  var d = e.data || {}; if (!d.s1Step) return;
+  if (d.s1Step === 'dirty') { dirty = !!(d.data && d.data.dirty); paintFooter(); }
+  if (d.s1Step === 'saved') { dirty = false; markComplete(current); paintRail(); paintTop(); paintFooter(); }
+});
+
+/* ---------- Identity step (in place) ---------- */
+var contacts = [];
+function fillIdentity() {
+  var a = ORG.address || {};
+  document.getElementById('f-name').value = ORG.name || '';
+  document.getElementById('f-addr1').value = a.line1 || ''; document.getElementById('f-addr2').value = a.line2 || '';
+  document.getElementById('f-town').value = a.town || ''; document.getElementById('f-postcode').value = a.postcode || '';
+  document.getElementById('f-country').value = a.country || 'GB';
+  contacts = (ORG.contacts || []).map(function (c) { return Object.assign({}, c); });
+  if (PARTY === 'client') {
+    var c = ORG.contract || {};
+    document.getElementById('f-contract-ref').value = c.ref || ''; document.getElementById('f-contract-start').value = c.start || '';
+    document.getElementById('f-contract-end').value = c.end || ''; document.getElementById('f-renewal').value = c.renewal || '';
+  } else {
+    document.getElementById('f-terms-days').value = ORG.paymentTermsDays == null ? '' : ORG.paymentTermsDays;
+    document.getElementById('f-margin-basis').value = ORG.marginBasis || 'percentage_of_charge';
+    document.getElementById('f-margin-value').value = ORG.marginValue == null ? '' : ORG.marginValue;
+    document.getElementById('f-margin-unit').textContent = document.getElementById('f-margin-basis').value === 'fixed_per_hour' ? '£ per hour' : '% of charge';
+  }
+  ['f-name', 'f-addr1', 'f-town', 'f-postcode', 'f-contract-ref', 'f-contract-end', 'f-terms-days', 'f-margin-value'].forEach(function (id) { setErr(id, ''); });
+  document.getElementById('contacts-err').style.display = 'none';
+  paintContacts();
+  if (state === 'validation' && current === 'identity') {
+    document.getElementById('f-name').value = '';
+    if (PARTY === 'client') { document.getElementById('f-contract-start').value = '2026-11-01'; document.getElementById('f-contract-end').value = '2026-10-01'; }
+    else { document.getElementById('f-terms-days').value = '-5'; }
+    contacts = [{ name: 'Sam Field', role: 'Site contact', email: '', tel: '' }];
+    paintContacts(); validateIdentity(); document.getElementById('validation-summary').style.display = '';
+  }
+}
+function readIdentity() {
+  ORG.name = document.getElementById('f-name').value.trim();
+  ORG.address = { line1: document.getElementById('f-addr1').value.trim(), line2: document.getElementById('f-addr2').value.trim() || null, town: document.getElementById('f-town').value.trim(), postcode: document.getElementById('f-postcode').value.trim(), country: document.getElementById('f-country').value };
+  ORG.contacts = contacts.slice();
+  if (PARTY === 'client') ORG.contract = { ref: document.getElementById('f-contract-ref').value.trim(), start: document.getElementById('f-contract-start').value || null, end: document.getElementById('f-contract-end').value || null, renewal: document.getElementById('f-renewal').value.trim() || null };
+  else { ORG.paymentTermsDays = Number(document.getElementById('f-terms-days').value); ORG.marginBasis = document.getElementById('f-margin-basis').value; ORG.marginValue = document.getElementById('f-margin-value').value; }
+}
+function validateIdentity() {
+  var ok = true;
+  function req(id, msg) { var v = document.getElementById(id).value.trim(); setErr(id, v ? '' : msg); if (!v) ok = false; }
+  req('f-name', 'Enter the ' + PARTY + "'s name."); req('f-addr1', 'Enter the first line of the address.'); req('f-town', 'Enter the town or city.'); req('f-postcode', 'Enter the postcode.');
+  if (PARTY === 'client') {
+    req('f-contract-ref', 'Enter the contract reference.');
+    var s = document.getElementById('f-contract-start').value, e = document.getElementById('f-contract-end').value;
+    if (s && e && e < s) { setErr('f-contract-end', 'The contract end must be after its start (' + fmtDate(s) + ').'); ok = false; } else setErr('f-contract-end', '');
+  } else {
+    var d = document.getElementById('f-terms-days').value;
+    if (d === '' || Number(d) < 0 || Number(d) > 120 || Number(d) % 1) { setErr('f-terms-days', 'Enter whole days between 0 and 120.'); ok = false; } else setErr('f-terms-days', '');
+    var m = document.getElementById('f-margin-value').value;
+    if (m === '' || Number(m) < 0) { setErr('f-margin-value', 'Enter the agreed margin as a figure of zero or more.'); ok = false; } else setErr('f-margin-value', '');
+  }
+  var cerr = document.getElementById('contacts-err');
+  var bad = contacts.filter(function (c) { return !c.email && !c.tel; });
+  if (!contacts.length) { cerr.textContent = 'Add at least one contact.'; cerr.style.display = ''; ok = false; }
+  else if (bad.length) { cerr.textContent = bad.map(function (c) { return c.name; }).join(', ') + ' has neither an email address nor a telephone number. Give one or the other.'; cerr.style.display = ''; ok = false; }
+  else cerr.style.display = 'none';
+  return ok;
+}
+function paintContacts() {
+  var ro = readOnly();
+  var rows = contacts.map(function (c, i) {
+    var missing = !c.email && !c.tel;
+    return '<tr class="' + (missing ? 'bg-red-50/40' : '') + '"><td class="px-4 py-3 text-sm font-semibold text-slate-900">' + esc(c.name) + '</td><td class="px-4 py-3 text-sm text-slate-600">' + esc(c.role || '—') + '</td><td class="px-4 py-3 text-sm text-slate-700">' + (c.email ? '<a class="text-blue-700 hover:underline" href="mailto:' + esc(c.email) + '">' + esc(c.email) + '</a>' : '<span class="text-slate-400">—</span>') + '</td><td class="px-4 py-3 text-sm text-slate-700 tnum">' + esc(c.tel || '—') + '</td>' +
+      '<td class="px-4 py-3 text-right whitespace-nowrap"><span class="row-actions inline-flex gap-1">' + (ro ? '' : '<button type="button" class="' + BTN_GHOST + '" data-edit-contact="' + i + '">Edit</button><button type="button" class="' + BTN_GHOST + ' text-red-700 hover:text-red-900" data-del-contact="' + i + '" aria-label="Remove ' + esc(c.name) + '"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>') + '</span></td></tr>';
+  }).join('');
+  document.getElementById('contacts-tbody').innerHTML = rows;
+  document.getElementById('contacts-cards').innerHTML = contacts.map(function (c, i) {
+    return '<li class="px-5 py-3 flex items-start gap-3"><div class="flex-1 min-w-0"><p class="text-sm font-semibold text-slate-900">' + esc(c.name) + '</p><p class="text-xs text-slate-500">' + esc(c.role || '') + '</p><p class="text-xs text-slate-700 mt-1 break-all">' + esc(c.email || '') + (c.email && c.tel ? ' · ' : '') + esc(c.tel || '') + (!c.email && !c.tel ? '<span class="text-red-700">No email or telephone</span>' : '') + '</p></div>' + (ro ? '' : '<button type="button" class="w-9 h-9 rounded-lg border border-slate-200 bg-white text-slate-500 flex-shrink-0" aria-label="Actions for ' + esc(c.name) + '" data-contact-sheet="' + i + '"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></button>') + '</li>';
+  }).join('');
+  document.getElementById('contacts-empty').style.display = contacts.length ? 'none' : '';
+  document.getElementById('contacts-foot').textContent = contacts.length + (contacts.length === 1 ? ' contact' : ' contacts') + (contacts.length > 20 ? ' · showing the first 20; search to find the rest' : '');
+  document.querySelectorAll('[data-del-contact]').forEach(function (b) { b.onclick = function () { contacts.splice(+b.dataset.delContact, 1); dirty = true; paintContacts(); paintFooter(); }; });
+  document.querySelectorAll('[data-edit-contact]').forEach(function (b) { b.onclick = function () { openContact(+b.dataset.editContact); }; });
+  document.querySelectorAll('[data-contact-sheet]').forEach(function (b) { b.onclick = function () { var i = +b.dataset.contactSheet; S1.confirm({ title: contacts[i].name, body: 'What do you want to do with this contact?', cta: 'Edit', cancel: 'Remove', onConfirm: function () { openContact(i); } }); }; });
+}
+var editingContact = null;
+function openContact(i) {
+  editingContact = i == null ? null : i;
+  var c = i == null ? {} : contacts[i];
+  document.getElementById('m-contact-t').textContent = i == null ? 'Add contact' : 'Edit contact';
+  document.getElementById('k-name').value = c.name || ''; document.getElementById('k-role').value = c.role || ''; document.getElementById('k-email').value = c.email || ''; document.getElementById('k-tel').value = c.tel || '';
+  ['k-name', 'k-email'].forEach(function (id) { setErr(id, ''); });
+  S1.openModal('m-contact');
+}
+document.getElementById('btn-add-contact').onclick = function () { openContact(null); };
+document.getElementById('k-save').onclick = function () {
+  var n = document.getElementById('k-name').value.trim(), em = document.getElementById('k-email').value.trim(), tel = document.getElementById('k-tel').value.trim();
+  var ok = true;
+  setErr('k-name', n ? '' : 'Enter the contact\'s name.'); if (!n) ok = false;
+  if (!em && !tel) { setErr('k-email', 'Give an email address or a telephone number.'); ok = false; } else if (em && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) { setErr('k-email', 'That does not look like an email address.'); ok = false; } else setErr('k-email', '');
+  if (!ok) return;
+  var c = { name: n, role: document.getElementById('k-role').value.trim() || null, email: em || null, tel: tel || null };
+  if (editingContact == null) contacts.push(c); else contacts[editingContact] = c;
+  dirty = true; paintContacts(); paintFooter(); S1.closeModal('m-contact');
+};
+document.getElementById('step-body').addEventListener('input', function (e) { if (e.target.closest('[data-panel="identity"],[data-panel="self-billing"]')) { dirty = true; paintFooter(); } });
+if (PARTY === 'agency') document.getElementById('f-margin-basis').addEventListener('change', function () { document.getElementById('f-margin-unit').textContent = this.value === 'fixed_per_hour' ? '£ per hour' : '% of charge'; });
+
+function setReadOnly(ro) {
+  document.querySelectorAll('.step-panel input, .step-panel select, .step-panel textarea').forEach(function (i) { i.disabled = ro; });
+  document.querySelectorAll('.step-panel [data-edit]').forEach(function (b) { b.style.display = ro ? 'none' : ''; });
+}
+
+/* ---------- Agency: compliance (step 2) and self-billing (step 3) ---------- */
+var records = [];
+function paintCompliance() {
+  if (PARTY !== 'agency') return;
+  records = JSON.parse(JSON.stringify(COMPLIANCE[slug] || []));
+  var ro = readOnly();
+  var sorted = records.slice().sort(function (a, b) { return (a.expiryDate || '9999') < (b.expiryDate || '9999') ? -1 : 1; });
+  function expiryCell(r) { if (!r.expiryDate) return '<span class="text-slate-400">—</span>'; var past = r.expiryDate < TODAY; return '<span class="tnum ' + (past ? 'text-red-700 font-semibold' : 'text-slate-700') + '">' + fmtDate(r.expiryDate) + '</span>' + (past && r.status !== 'Expired' ? '<span class="block text-[11px] text-red-700">Past its expiry</span>' : ''); }
+  document.getElementById('compliance-tbody').innerHTML = sorted.map(function (r, i) {
+    return '<tr><td class="px-4 py-3 text-sm font-semibold text-slate-900">' + esc(r.name) + '</td><td class="px-4 py-3 text-sm text-slate-600 capitalize">' + esc(r.kind) + '</td><td class="px-4 py-3 text-sm text-slate-600">' + esc(r.issuingBody || '—') + '</td><td class="px-4 py-3 text-sm text-slate-700 tnum">' + esc(r.coverOrReference || '—') + '</td><td class="px-4 py-3 text-sm">' + expiryCell(r) + '</td><td class="px-4 py-3">' + badge(r.status) + '</td>' +
+      '<td class="px-4 py-3 text-sm">' + (r.doc ? '<a href="#" onclick="event.preventDefault();S1.toast(\'Downloading ' + esc(r.doc) + '.\',\'success\')" class="inline-flex items-center gap-1.5 text-blue-700 hover:underline"><i class="fa-regular fa-file-pdf text-red-600" aria-hidden="true"></i>' + esc(r.doc) + '</a>' : '<span class="text-slate-400">—</span>') + '</td>' +
+      '<td class="px-4 py-3 text-right whitespace-nowrap"><span class="row-actions inline-flex gap-1">' + (ro ? '' : '<button type="button" class="' + BTN_GHOST + '" onclick="S1.openModal(\'m-compliance\')">Edit</button><button type="button" class="' + BTN_GHOST + ' text-red-700 hover:text-red-900" data-withdraw="' + esc(r.id) + '">Withdraw</button>') + '</span></td></tr>';
+  }).join('');
+  document.getElementById('compliance-cards').innerHTML = sorted.map(function (r) {
+    return '<li class="px-5 py-3"><div class="flex items-start justify-between gap-2"><p class="text-sm font-semibold text-slate-900">' + esc(r.name) + '</p>' + badge(r.status, true) + '</div><p class="text-xs text-slate-500 mt-0.5 capitalize">' + esc(r.kind) + (r.issuingBody ? ' · ' + esc(r.issuingBody) : '') + (r.expiryDate ? ' · expires ' + fmtDate(r.expiryDate) : '') + '</p>' + (r.doc ? '<a href="#" onclick="event.preventDefault()" class="text-xs text-blue-700 font-semibold mt-1 inline-block">' + esc(r.doc) + '</a>' : '') + '</li>';
+  }).join('');
+  document.querySelectorAll('[data-withdraw]').forEach(function (b) { b.onclick = function () {
+    var r = records.find(function (x) { return x.id === b.dataset.withdraw; });
+    S1.confirm({ title: 'Withdraw ' + r.name + '?', body: 'It leaves this list and the compliance summary. Its document stays with the record and nothing is deleted. This is audited.', cta: 'Withdraw', tone: 'danger', onConfirm: function () { COMPLIANCE[slug] = (COMPLIANCE[slug] || []).filter(function (x) { return x.id !== r.id; }); paintCompliance(); S1.toast(esc(r.name) + ' withdrawn.', 'success'); } });
+  }; });
+  if (!records.length && state !== 'empty') { /* the card's own empty state when the agency has none */
+    document.querySelector('[data-panel="compliance"] [data-s1-show="empty"]').style.setProperty('display', 'block', 'important');
+    document.querySelector('[data-panel="compliance"] [data-s1-hide="empty"]').style.setProperty('display', 'none', 'important');
+  }
+}
+if (PARTY === 'agency') {
+  document.getElementById('btn-add-compliance').onclick = function () { document.getElementById('compliance-form').reset(); clearFile('c'); ['c-name', 'c-expiry'].forEach(function (id) { setErr(id, ''); }); S1.openModal('m-compliance'); };
+  document.getElementById('compliance-form').onsubmit = function (e) {
+    e.preventDefault(); var ok = true;
+    var n = document.getElementById('c-name').value.trim(); setErr('c-name', n ? '' : 'Name the item.'); if (!n) ok = false;
+    var ex = document.getElementById('c-expiry').value; if (ex && ex < TODAY) { setErr('c-expiry', 'A new item cannot already have expired. Enter today or a later date.'); ok = false; } else setErr('c-expiry', '');
+    if (!ok) return;
+    (COMPLIANCE[slug] = COMPLIANCE[slug] || []).push({ id: 'acr-' + Date.now(), name: n, kind: document.getElementById('c-kind').value, issuingBody: document.getElementById('c-body').value.trim() || null, coverOrReference: document.getElementById('c-cover').value.trim() || null, expiryDate: ex || null, status: document.getElementById('c-status').value, doc: window._cFile || null });
+    S1.closeModal('m-compliance'); paintCompliance(); S1.toast('Compliance item saved.', 'success'); dirty = false;
+  };
+  var up = document.getElementById('c-upload');
+  up.onclick = function () { pickFile('c'); }; up.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickFile('c'); } };
+  up.ondragover = function (e) { e.preventDefault(); up.classList.add('border-blue-400', 'bg-blue-50'); }; up.ondragleave = function () { up.classList.remove('border-blue-400', 'bg-blue-50'); };
+  up.ondrop = function (e) { e.preventDefault(); up.classList.remove('border-blue-400', 'bg-blue-50'); var f = e.dataTransfer.files[0]; if (f) showFile('c', f.name, f.size, f.type); };
+}
+function pickFile(prefix) { var i = document.createElement('input'); i.type = 'file'; i.accept = '.pdf,.png,.jpg,.jpeg'; i.onchange = function () { var f = i.files[0]; if (f) showFile(prefix, f.name, f.size, f.type); }; i.click(); }
+function showFile(prefix, name, size, type) {
+  var err = document.getElementById(prefix + '-file-err');
+  if (size > 10 * 1024 * 1024) { if (err) { err.textContent = 'That file is ' + (size / 1048576).toFixed(1) + ' MB; the limit is 10 MB.'; err.style.display = ''; } return; }
+  if (!/pdf|png|jpe?g/i.test(type + name)) { if (err) { err.textContent = 'Only PDF, PNG or JPG files are accepted.'; err.style.display = ''; } return; }
+  if (err) err.style.display = 'none';
+  var box = document.getElementById(prefix + '-file'); box.style.display = '';
+  document.getElementById(prefix + '-file-name').textContent = name; document.getElementById(prefix + '-file-size').textContent = (size / 1024).toFixed(0) + ' KB';
+  var bar = document.getElementById(prefix + '-file-bar').firstElementChild, p = 0;
+  var t = setInterval(function () { p += 20; bar.style.width = Math.min(100, p) + '%'; if (p >= 100) { clearInterval(t); window['_' + prefix + 'File'] = name; if (prefix === 'sba') { document.getElementById('sba-doc-link').textContent = name; document.getElementById('sba-doc').style.display = ''; document.getElementById('sba-upload').style.display = 'none'; dirty = true; paintFooter(); } } }, 120);
+}
+function clearFile(prefix) { var b = document.getElementById(prefix + '-file'); if (b) { b.style.display = 'none'; document.getElementById(prefix + '-file-bar').firstElementChild.style.width = '0%'; } window['_' + prefix + 'File'] = null; var e = document.getElementById(prefix + '-file-err'); if (e) e.style.display = 'none'; }
+function fillSba() {
+  var s = ORG.sba;
+  document.getElementById('f-sba-ref').value = s ? s.ref : ''; document.getElementById('f-sba-signed').value = s ? s.signed : ''; document.getElementById('f-sba-expiry').value = s ? s.expiry : '';
+  document.getElementById('sba-doc').style.display = s && s.doc ? '' : 'none'; document.getElementById('sba-upload').style.display = s && s.doc ? 'none' : '';
+  if (s && s.doc) document.getElementById('sba-doc-link').textContent = s.doc;
+  var inDate = s && s.signed <= TODAY && s.expiry >= TODAY;
+  document.getElementById('sba-indate').innerHTML = s ? (inDate ? '<span class="text-xs text-slate-600">Signed ' + fmtDate(s.signed) + ' · expires ' + fmtDate(s.expiry) + '</span>' : '<span class="text-xs text-red-700 font-semibold">Not in date today</span>') : '<span class="text-xs text-slate-500">No agreement recorded yet</span>';
+  ['f-sba-ref', 'f-sba-signed', 'f-sba-expiry'].forEach(function (id) { setErr(id, ''); });
+  if (state === 'validation' && current === 'self-billing') { document.getElementById('f-sba-signed').value = '2026-10-01'; document.getElementById('f-sba-expiry').value = '2026-09-30'; validateSba(); document.getElementById('validation-summary').style.display = ''; }
+}
+function validateSba() {
+  var ok = true, ref = document.getElementById('f-sba-ref').value.trim(), s = document.getElementById('f-sba-signed').value, e = document.getElementById('f-sba-expiry').value;
+  setErr('f-sba-ref', ref ? '' : 'Enter the agreement reference.'); if (!ref) ok = false;
+  setErr('f-sba-signed', s ? '' : 'Enter the signed date.'); if (!s) ok = false;
+  if (!e) { setErr('f-sba-expiry', 'Enter the expiry date.'); ok = false; } else if (s && e < s) { setErr('f-sba-expiry', 'The expiry must be after the signed date (' + fmtDate(s) + ').'); ok = false; } else if (e < TODAY) { setErr('f-sba-expiry', 'A new agreement cannot already have expired. Enter today or a later date.'); ok = false; } else setErr('f-sba-expiry', '');
+  if (ok) ORG.sba = { ref: ref, signed: s, expiry: e, doc: document.getElementById('sba-doc-link').textContent || null };
+  return ok;
+}
+
+/* ---------- Review step: gates (ONB-008..010) ---------- */
+function paintGates() {
+  var list = document.getElementById('gates-list'), wrap = document.getElementById('activate-wrap');
+  document.getElementById('activated-panel').style.display = 'none'; document.getElementById('gates-wrap').style.display = '';
+  if (ORG.status !== 'Pending Activation') {
+    list.innerHTML = '<li class="px-4 py-6 text-sm text-slate-500 text-center">Gates are evaluated once the organisation is Pending Activation.</li>'; wrap.innerHTML = ''; document.getElementById('gates-summary').textContent = ''; return;
+  }
+  var unmet = 0;
+  list.innerHTML = GATE_DEFS.map(function (g, i) {
+    var met = !!gatesMet[g.key]; if (!met) unmet++;
+    var stepIdx = STEPS.findIndex(function (s) { return s.key === g.stepKey; });
+    return '<li class="px-4 py-3 flex items-start gap-3 bg-white"><span class="mt-0.5">' + (met ? marker('<i class="fa-solid fa-check text-[10px]" aria-hidden="true"></i> Met', 'success') : marker('<i class="fa-solid fa-xmark text-[10px]" aria-hidden="true"></i> Not met', 'warning')) + '</span>' +
+      '<div class="flex-1 min-w-0"><p class="text-sm font-semibold text-slate-900">' + esc(g.label) + '</p>' + (met ? '' : '<p class="text-xs text-slate-600 mt-0.5">' + esc(g.detail) + ' <button type="button" class="text-blue-700 font-semibold hover:underline" data-goto="' + g.stepKey + '">Open step ' + (stepIdx + 1) + '</button></p>') + '</div></li>';
+  }).join('');
+  list.querySelectorAll('[data-goto]').forEach(function (b) { b.onclick = function () { goTo(b.dataset.goto); }; });
+  document.getElementById('gates-summary').textContent = unmet ? unmet + (unmet === 1 ? ' gate is' : ' gates are') + ' not met. Activate appears once every gate is met; the records are edited from the profile and settings while this organisation awaits activation.' : 'Every gate is met.';
+  wrap.innerHTML = unmet ? '' : '<button type="button" id="btn-activate" class="' + BTN_PRI + '" style="' + BTN_PRI_STYLE + '"><i class="fa-solid fa-bolt" aria-hidden="true"></i> Activate ' + PARTY + '</button>';
+  var ab = document.getElementById('btn-activate');
+  if (ab) ab.onclick = function () {
+    S1.confirm({ title: 'Activate ' + ORG.name + '?', bodyHtml: 'Every activation gate is met. ' + esc(ORG.name) + ' becomes <strong>Active</strong>. Its users still cannot sign in until you enable access from the profile; that is a separate, audited action.', cta: 'Activate', onConfirm: function () {
+      if (state === 'refused') { /* 409 ACTIVATION_GATES_UNMET: the server re-evaluated and one gate is not met */
+        var fail = PARTY === 'client' ? 'invoicing' : 'client_approval'; gatesMet[fail] = false; paintGates();
+        document.getElementById('refused-banner').style.setProperty('display', 'flex', 'important'); document.getElementById('main').scrollTop = 0; return;
+      }
+      ORG.status = 'Active'; REC.completedAt = new Date().toISOString(); markComplete('review'); paintTop(); paintRail(); paintFooter();
+      document.getElementById('gates-wrap').style.display = 'none'; var ap = document.getElementById('activated-panel'); ap.style.display = '';
+      document.getElementById('activated-badge').innerHTML = badge('Active'); document.getElementById('activated-link').href = PROFILE_URL + slug;
+      S1.toast(esc(ORG.name) + ' is Active. Enable access from its profile when the ' + PARTY + ' is ready to sign in.', 'success');
+    } });
+  };
+}
+
+/* ---------- boot ---------- */
+document.addEventListener('s1:state', function (e) {
+  state = e.detail.state;
+  isNew = state === 'empty' || Q.has('new');
+  slug = (state === 'pending' || state === 'ready' || state === 'refused') ? PENDING_ORG : (Q.get('org') || (isNew ? (NEW_ORG || null) : DEFAULT_ORG));
+  if (state === 'empty') { slug = null; isNew = true; }
+  loadRecord();
+  var start = state === 'validation' ? (PARTY === 'agency' && Q.get('step') === 'self-billing' ? 'self-billing' : 'identity') : (ORG.status === 'Pending Activation' ? 'review' : nextIncomplete());
+  if (Q.get('step') && STEPS.some(function (s) { return s.key === Q.get('step'); }) && state === 'default') start = Q.get('step');
+  current = null; openStep(start);
+});
+</script>
 <script src="slice1-kit.js"></script>
 </body>
 </html>
