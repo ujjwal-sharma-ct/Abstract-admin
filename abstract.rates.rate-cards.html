@@ -1,17 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-GB">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rate Cards</title>
+    <title>Rate cards · Abstract VMS</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script> window.FontAwesomeConfig = { autoReplaceSvg: 'nest'};</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }</style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>::-webkit-scrollbar { display: none;} * { scrollbar-width: none; }
+    .tnum { font-variant-numeric: tabular-nums; }
+    .row-actions { opacity: 0; } tr:hover .row-actions, tr:focus-within .row-actions, li:hover .row-actions, li:focus-within .row-actions, .tree-row:hover .row-actions, .tree-row:focus-within .row-actions { opacity: 1; }
+    @media (hover: none) { .row-actions { opacity: 1; } }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+    
+    </style>
     <script>
         tailwind.config = {
             theme: {
@@ -26,416 +30,99 @@
         }
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden">
-
+<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s2-page data-s1-states="default loading empty error validation readonly nobreakdown denied large">
 <div id="app-root" class="flex w-full" style="height: 100vh;">
-
-    <!-- Sidebar -->
     <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
         <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
             <img src="logo.png" alt="Abstract VMS" class="h-12 w-auto block -ml-[5px]"/>
             <p class="text-white/40 text-sm mt-2">Admin Portal</p>
         </div>
-
-        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1">
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p>
-            <a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-gauge-high text-white/40 w-4 text-center"></i>
-                <span>Admin Dashboard</span>
-            </a>
-            <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
-                <span>Vacancy List</span>
-            </a>
-            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
-                <span>Create Vacancy Wizard</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
-            <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-users-gear text-white/40 w-4 text-center"></i>
-                <span>Worker Pool</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p>
-            <a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-building-user text-white/40 w-4 text-center"></i>
-                <span>Agency Dashboard</span>
-            </a>
-            <a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-circle-check text-white/40 w-4 text-center"></i>
-                <span>Approved Suppliers</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p>
-            <a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center"></i>
-                <span>AWR Tracking</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p>
-            <a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-clock text-white/40 w-4 text-center"></i>
-                <span>Timesheets</span>
-            </a>
-            <a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center"></i>
-                <span>Invoicing / Self-Bill</span>
-            </a>
-            <a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-chart-bar text-white/40 w-4 text-center"></i>
-                <span>Abstract Backing Report</span>
-            </a>
-            <a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);">
-                <i class="fa-solid fa-sterling-sign text-blue-400 w-4 text-center"></i>
-                <span>Rate Cards</span>
-                <div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div>
-            </a>
-            <a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-chart-line text-white/40 w-4 text-center"></i>
-                <span>Reports</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p>
-            <a id="nav-onboard-client" href="abstract.onboarding.onboard-client.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-building-circle-arrow-right text-white/40 w-4 text-center"></i>
-                <span>Onboard Client</span>
-            </a>
-            <a id="nav-onboard-agency" href="abstract.onboarding.onboard-agency.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-user-tie text-white/40 w-4 text-center"></i>
-                <span>Onboard Agency</span>
-            </a>
-            <a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-sliders text-white/40 w-4 text-center"></i>
-                <span>Configuration</span>
-            </a>
-            <a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-gears text-white/40 w-4 text-center"></i>
-                <span>System Configuration</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p>
-            <a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-users text-white/40 w-4 text-center"></i>
-                <span>Users</span>
-            </a>
-            <a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-user-shield text-white/40 w-4 text-center"></i>
-                <span>Roles</span>
-            </a>
-            <a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center"></i>
-                <span>Notification templates</span>
-            </a>
-
-            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p>
-            <a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-sitemap text-white/40 w-4 text-center"></i>
-                <span>Organisations</span>
-            </a>
-            <a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-user-lock text-white/40 w-4 text-center"></i>
-                <span>Data subject requests</span>
-            </a>
-            <a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center"></i>
-                <span>Audit Log</span>
-            </a>
-
+        <nav id="sidebar-nav" class="flex-1 px-3 py-4 flex flex-col gap-1" aria-label="Main">
+            <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2">MAIN</p><a id="nav-dashboard" href="abstract.shell.dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-gauge-high text-white/40 w-4 text-center" aria-hidden="true"></i><span>Admin Dashboard</span></a><a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-list-check text-white/40 w-4 text-center" aria-hidden="true"></i><span>Vacancy List</span></a><a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center" aria-hidden="true"></i><span>Create Vacancy Wizard</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p><a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-users-gear text-white/40 w-4 text-center" aria-hidden="true"></i><span>Worker Pool</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">AGENCY</p><a id="nav-agency-dashboard" href="abstract.organisations.agency-dashboard.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-building-user text-white/40 w-4 text-center" aria-hidden="true"></i><span>Agency Dashboard</span></a><a id="nav-approved-suppliers" href="abstract.organisations.approved-suppliers.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-circle-check text-white/40 w-4 text-center" aria-hidden="true"></i><span>Approved Suppliers</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">COMPLIANCE</p><a id="nav-awr" href="abstract.awr.awr-tracking.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-hourglass-half text-white/40 w-4 text-center" aria-hidden="true"></i><span>AWR Tracking</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FINANCE</p><a id="nav-timesheet" href="abstract.timesheets.timesheets.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-clock text-white/40 w-4 text-center" aria-hidden="true"></i><span>Timesheets</span></a><a id="nav-invoicing" href="abstract.money.invoicing-self-bill.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-file-invoice-dollar text-white/40 w-4 text-center" aria-hidden="true"></i><span>Invoicing / Self-Bill</span></a><a id="nav-backing-report" href="abstract.money.backing-report.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-chart-bar text-white/40 w-4 text-center" aria-hidden="true"></i><span>Abstract Backing Report</span></a><a id="nav-rate-cards" href="abstract.rates.rate-cards.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white font-semibold text-sm transition-all duration-150" style="background: linear-gradient(135deg, rgba(29,78,216,0.5), rgba(91,46,145,0.4)); border: 1px solid rgba(255,255,255,0.15);" aria-current="page"><i class="fa-solid fa-sterling-sign text-blue-400 w-4 text-center" aria-hidden="true"></i><span>Rate Cards</span><div class="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400"></div></a><a id="nav-reports" href="abstract.reporting.reports.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-chart-line text-white/40 w-4 text-center" aria-hidden="true"></i><span>Reports</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETUP</p><a id="nav-org-config" href="abstract.configuration.organisation-configuration.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-sliders text-white/40 w-4 text-center" aria-hidden="true"></i><span>Configuration</span></a><a id="nav-system-config" href="abstract.configuration.system-settings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-gears text-white/40 w-4 text-center" aria-hidden="true"></i><span>System Configuration</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SETTINGS</p><a id="nav-users" href="abstract.identity-access.users.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-users text-white/40 w-4 text-center" aria-hidden="true"></i><span>Users</span></a><a id="nav-roles" href="abstract.identity-access.roles.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-user-shield text-white/40 w-4 text-center" aria-hidden="true"></i><span>Roles</span></a><a id="nav-notification-templates" href="abstract.notifications.notification-templates.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center" aria-hidden="true"></i><span>Notification templates</span></a><p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p><a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-sitemap text-white/40 w-4 text-center" aria-hidden="true"></i><span>Organisations</span></a><a id="nav-structure-changes" href="abstract.organisations.structure-changes.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-code-pull-request text-white/40 w-4 text-center" aria-hidden="true"></i><span>Structure changes</span><span id="nav-sc-count" class="ml-auto hidden min-w-[20px] h-5 px-1.5 rounded-full bg-amber-400 text-navy-900 text-[11px] font-bold leading-5 text-center tnum"></span></a><a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-user-lock text-white/40 w-4 text-center" aria-hidden="true"></i><span>Data subject requests</span></a><a id="nav-audit-log" href="abstract.audit.audit-log.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150"><i class="fa-solid fa-clipboard-list text-white/40 w-4 text-center" aria-hidden="true"></i><span>Audit Log</span></a>
         </nav>
-
         <div id="sidebar-footer" class="px-4 py-4 border-t border-white/10">
-            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 cursor-pointer transition-all">
-                <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border border-white/20 flex-shrink-0" alt="avatar"/>
+            <div class="flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/5 transition-all">
+                <span class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center flex-shrink-0" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);" aria-hidden="true">SM</span>
                 <div class="flex-1 min-w-0">
                     <a href="abstract.identity-access.my-account.html" class="block text-white text-xs font-semibold truncate hover:underline" title="My account">Sarah Mitchell</a>
-                    <p class="text-white/40 text-xs truncate">Abstract Admin</p>
+                    <p class="text-white/40 text-xs truncate">Abstract</p>
                 </div>
-                <a href="abstract.identity-access.sign-in.html" title="Logout"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white"></i></a>
+                <a href="abstract.identity-access.sign-in.html?reason=signed-out" aria-label="Sign out" title="Sign out"><i class="fa-solid fa-arrow-right-from-bracket text-white/30 text-xs hover:text-white" aria-hidden="true"></i></a>
             </div>
         </div>
     </aside>
-
-    <!-- Main Content -->
     <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
-        <header id="header" class="flex items-center justify-between px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
-            <div class="flex items-center gap-4">
-                <button id="mobile-menu-btn" class="lg:hidden w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors"><i class="fa-solid fa-bars text-slate-600 text-sm"></i></button>
-                <div>
-                    <h1 class="text-lg font-bold text-slate-900">Rate Cards</h1>
-                    <p class="text-xs text-slate-500 hidden sm:block">Charge &amp; pay rates, statutory breakdown, and effective-dating per job role</p>
+        <header id="header" class="flex items-center justify-between gap-3 px-4 sm:px-6 xl:px-8 py-4 bg-white border-b border-slate-200 flex-shrink-0">
+            <div class="flex items-center gap-3 min-w-0">
+                <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 flex-shrink-0 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-bars text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <div class="min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <h1 class="text-lg font-bold text-slate-900 truncate">Rate cards</h1>
+                    </div>
+                    <p class="text-xs text-slate-500 hidden sm:block truncate">A job role is the unit every rate hangs off. Each role lists its rate cards; a card prices one client, optionally one business unit or site.</p>
                 </div>
             </div>
-            <div class="flex items-center gap-3">
-                <button class="hidden md:flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg px-3 py-2 text-xs font-semibold transition-colors"><i class="fa-solid fa-file-csv text-xs"></i> CSV Bulk Upload</button>
-                <button class="hidden md:flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-3 py-2 text-xs font-semibold transition-colors"><i class="fa-solid fa-plus text-xs"></i> New Rate Card</button>
-                <button class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors"><i class="fa-regular fa-bell text-slate-600 text-sm"></i><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500"></span></button>
-                <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
-                    <img src="https://storage.googleapis.com/uxpilot-auth.appspot.com/avatars/avatar-5.jpg" class="w-8 h-8 rounded-full object-cover border-2 border-blue-100" alt="avatar"/>
-                    <div class="hidden xl:block"><p class="text-xs font-semibold text-slate-700">Sarah Mitchell</p><p class="text-xs text-slate-400">Abstract Admin</p></div>
-                </div>
+            <div class="flex items-center gap-3 flex-shrink-0">
+                
+                <button data-s1-bell aria-label="Notifications" class="relative w-9 h-9 flex items-center justify-center rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-regular fa-bell text-slate-600 text-sm" aria-hidden="true"></i></button>
+                <a href="abstract.identity-access.my-account.html" aria-label="My account (Sarah Mitchell)" class="flex items-center gap-2 pl-3 border-l border-slate-200 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">
+                    <span class="w-8 h-8 rounded-full text-white text-xs font-bold flex items-center justify-center" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);" aria-hidden="true">SM</span>
+                    <span class="hidden xl:block"><span class="block text-xs font-semibold text-slate-700">Sarah Mitchell</span><span class="block text-xs text-slate-400">Abstract</span></span>
+                </a>
             </div>
         </header>
-
-        <main class="flex-1 overflow-y-auto px-6 xl:px-8 py-6 bg-slate-100">
-
-            <!-- Info banner -->
-            <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 mb-6 flex items-start gap-3">
-                <i class="fa-solid fa-lock text-blue-500 mt-0.5"></i>
-                <p class="text-sm text-blue-800">Rate cards are visible only to Abstract Admin and Abstract Finance <span class="font-semibold">(RT-014)</span>. Clients see charge rates only; agencies see pay rates only <span class="font-semibold">(RV-001, RV-002)</span>. Abstract's remuneration is the <span class="font-semibold">spread</span> (Charge &minus; Pay) plus its statutory breakdown.</p>
+        <main id="main" class="flex-1 overflow-y-auto px-4 sm:px-6 xl:px-8 py-6 bg-slate-100">
+            <div data-s1-show="denied" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-14 text-center">
+                <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-lock text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900">You don't have access to this page</h2>
+                <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">Seeing rate cards needs the permission to view them. Ask an Abstract administrator if you need it.</p>
+                <a href="abstract.shell.dashboard.html" data-s1-home class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Back to the dashboard</a>
             </div>
-
-            <!-- Master table -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
-                <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-                    <div><h3 class="text-sm font-bold text-slate-800">Job Role Rate Cards</h3><p class="text-xs text-slate-400 mt-0.5">Standard-hour rates shown &middot; expand a role for the full hour-type matrix</p></div>
-                    <div class="flex items-center gap-2">
-                        <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"><i class="fa-regular fa-building text-slate-400 text-xs"></i><select class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option>All Clients</option><option>Coventry Logistics Ltd</option><option>HSBC Group</option></select></div>
-                    </div>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-sm min-w-[900px]">
-                        <thead>
-                            <tr class="bg-slate-50 text-left">
-                                <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Job Role</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Client</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Business Unit</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Effective From</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Charge</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Pay</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Margin</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100">
-                            <tr class="bg-blue-50/40 hover:bg-blue-50/60">
-                                <td class="px-5 py-3"><div class="flex items-center gap-2"><i class="fa-solid fa-chevron-down text-blue-500 text-xs"></i><span class="font-semibold text-slate-800">Warehouse Operative</span></div></td>
-                                <td class="px-4 py-3 text-slate-600">Coventry Logistics</td>
-                                <td class="px-4 py-3 text-slate-600">Coventry DC</td>
-                                <td class="px-4 py-3 text-slate-600">01 Apr 2026</td>
-                                <td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;15.80</td>
-                                <td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;12.60</td>
-                                <td class="px-4 py-3 text-right"><span class="font-semibold text-emerald-600">&pound;3.20</span> <span class="text-xs text-slate-400">20.3%</span></td>
-                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span></td>
-                                <td class="px-4 py-3 text-right"><button class="text-slate-400 hover:text-blue-600 px-1.5"><i class="fa-solid fa-pen"></i></button></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/60">
-                                <td class="px-5 py-3"><div class="flex items-center gap-2"><i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i><span class="font-semibold text-slate-800">Forklift Driver (Reach)</span></div></td>
-                                <td class="px-4 py-3 text-slate-600">Coventry Logistics</td>
-                                <td class="px-4 py-3 text-slate-600">Coventry DC</td>
-                                <td class="px-4 py-3 text-slate-600">01 Apr 2026</td>
-                                <td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;18.40</td>
-                                <td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;14.90</td>
-                                <td class="px-4 py-3 text-right"><span class="font-semibold text-emerald-600">&pound;3.50</span> <span class="text-xs text-slate-400">19.0%</span></td>
-                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span></td>
-                                <td class="px-4 py-3 text-right"><button class="text-slate-400 hover:text-blue-600 px-1.5"><i class="fa-solid fa-pen"></i></button></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/60">
-                                <td class="px-5 py-3"><div class="flex items-center gap-2"><i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i><span class="font-semibold text-slate-800">Picker / Packer</span></div></td>
-                                <td class="px-4 py-3 text-slate-600">Nationwide Retail</td>
-                                <td class="px-4 py-3 text-slate-600">All Units</td>
-                                <td class="px-4 py-3 text-slate-600">01 May 2026</td>
-                                <td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;14.20</td>
-                                <td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;11.90</td>
-                                <td class="px-4 py-3 text-right"><span class="font-semibold text-emerald-600">&pound;2.30</span> <span class="text-xs text-slate-400">16.2%</span></td>
-                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span></td>
-                                <td class="px-4 py-3 text-right"><button class="text-slate-400 hover:text-blue-600 px-1.5"><i class="fa-solid fa-pen"></i></button></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/60">
-                                <td class="px-5 py-3"><div class="flex items-center gap-2"><i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i><span class="font-semibold text-slate-800">HGV Class 2 Driver</span></div></td>
-                                <td class="px-4 py-3 text-slate-600">BT Enterprise</td>
-                                <td class="px-4 py-3 text-slate-600">Fleet North</td>
-                                <td class="px-4 py-3 text-slate-600">01 Aug 2026</td>
-                                <td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;21.50</td>
-                                <td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;17.20</td>
-                                <td class="px-4 py-3 text-right"><span class="font-semibold text-emerald-600">&pound;4.30</span> <span class="text-xs text-slate-400">20.0%</span></td>
-                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Scheduled</span></td>
-                                <td class="px-4 py-3 text-right"><button class="text-slate-400 hover:text-blue-600 px-1.5"><i class="fa-solid fa-pen"></i></button></td>
-                            </tr>
-                            <tr class="hover:bg-slate-50/60">
-                                <td class="px-5 py-3"><div class="flex items-center gap-2"><i class="fa-solid fa-chevron-right text-slate-300 text-xs"></i><span class="font-semibold text-slate-500">Warehouse Operative</span></div></td>
-                                <td class="px-4 py-3 text-slate-400">Coventry Logistics</td>
-                                <td class="px-4 py-3 text-slate-400">Coventry DC</td>
-                                <td class="px-4 py-3 text-slate-400">01 Jan 2026</td>
-                                <td class="px-4 py-3 text-right text-slate-400">&pound;15.20</td>
-                                <td class="px-4 py-3 text-right text-slate-400">&pound;12.20</td>
-                                <td class="px-4 py-3 text-right text-slate-400">&pound;3.00 &middot; 19.7%</td>
-                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200">Superseded</span></td>
-                                <td class="px-4 py-3 text-right"><button class="text-slate-400 hover:text-blue-600 px-1.5"><i class="fa-regular fa-eye"></i></button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+            <div data-s1-hide="denied">
+            <div data-s1-show="readonly" role="status" class="mb-4 text-sm text-slate-600 flex items-start gap-2"><i class="fa-solid fa-eye text-slate-400 mt-0.5" aria-hidden="true"></i><p>You can see rate cards but not change them. Changing them needs permission to edit rate cards.</p></div>
+            <nav aria-label="Breadcrumb" id="crumbs" style="display:none" data-embedded-hide class="mb-4 text-xs text-slate-500 flex items-center gap-2 flex-wrap"><a href="abstract.rates.rate-cards.html" class="font-semibold text-blue-700 hover:underline">Rate cards</a><i class="fa-solid fa-chevron-right text-[9px]" aria-hidden="true"></i><span id="crumb-here" class="text-slate-900 font-semibold"></span></nav>
+            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-4">
+              <div class="flex flex-wrap items-center gap-3">
+                <div class="min-w-0 flex-1" id="view-head"></div>
+                <div class="flex items-center gap-2" id="view-actions"></div>
+              </div>
+              <div class="flex flex-wrap items-center gap-3 mt-3" id="filters">
+                <label class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px] focus-within:border-blue-300 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-600/20 flex-1 min-w-[200px]"><i class="fa-solid fa-magnifying-glass text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">Search roles</span><input id="f-search" type="search" placeholder="Search roles" class="bg-transparent text-sm text-slate-700 placeholder-slate-400 outline-none w-full"/></label>
+                <label class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px]"><i class="fa-solid fa-building text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">Client</span><select id="f-client" class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option value="">All clients</option></select></label>
+              </div>
             </div>
-
-            <!-- Detail panels grid -->
-            <div class="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-6">
-
-                <!-- Rate Card detail: hour-type matrix -->
-                <div class="xl:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-                        <div><h3 class="text-sm font-bold text-slate-800">Rate Card &middot; Warehouse Operative</h3><p class="text-xs text-slate-400 mt-0.5">Coventry Logistics &middot; Coventry DC &middot; effective 01 Apr 2026</p></div>
-                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm">
-                            <thead>
-                                <tr class="bg-slate-50 text-left">
-                                    <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Hour Type</th>
-                                    <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Charge Rate</th>
-                                    <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Pay Rate</th>
-                                    <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Spread</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100">
-                                <tr class="hover:bg-slate-50/60"><td class="px-5 py-3 font-medium text-slate-700">Standard</td><td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;15.80</td><td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;12.60</td><td class="px-4 py-3 text-right font-semibold text-emerald-600">&pound;3.20</td></tr>
-                                <tr class="hover:bg-slate-50/60"><td class="px-5 py-3 font-medium text-slate-700">Overtime (1.5&times;)</td><td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;23.70</td><td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;18.90</td><td class="px-4 py-3 text-right font-semibold text-emerald-600">&pound;4.80</td></tr>
-                                <tr class="hover:bg-slate-50/60"><td class="px-5 py-3 font-medium text-slate-700">Weekend</td><td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;21.30</td><td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;17.00</td><td class="px-4 py-3 text-right font-semibold text-emerald-600">&pound;4.30</td></tr>
-                                <tr class="hover:bg-slate-50/60"><td class="px-5 py-3 font-medium text-slate-700">Bank Holiday (2&times;)</td><td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;31.60</td><td class="px-4 py-3 text-right font-semibold text-slate-800">&pound;25.20</td><td class="px-4 py-3 text-right font-semibold text-emerald-600">&pound;6.40</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="px-5 py-4 border-t border-slate-100 bg-slate-50 flex flex-wrap items-center gap-4">
-                        <div class="flex items-center gap-2">
-                            <i class="fa-solid fa-hourglass-half text-slate-400 text-xs"></i>
-                            <span class="text-xs text-slate-500">Post-AWR pay rate (standard)</span>
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-sm font-semibold text-slate-800">&pound;13.45 / hr</span>
-                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200">Post-AWR</span>
-                        </div>
-                        <span class="text-xs text-slate-400">Applied after 12 qualifying weeks (RT-009, AW-005)</span>
-                    </div>
+            <div data-s1-show="loading" class="bg-white rounded-2xl border border-slate-200 shadow-sm" aria-busy="true" aria-label="Loading rate cards">
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:40%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:25%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
                 </div>
-
-                <!-- Statutory breakdown -->
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="px-5 py-4 border-b border-slate-100"><h3 class="text-sm font-bold text-slate-800">Statutory Breakdown</h3><p class="text-xs text-slate-400 mt-0.5">Per standard hour &middot; Abstract view only (RV-003)</p></div>
-                    <div class="px-5 pt-4">
-                        <a href="abstract.configuration.system-settings.html" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 transition-colors" title="These statutory rates are maintained centrally, not on this rate card">
-                            <i class="fa-solid fa-gears text-[10px]"></i> Statutory rates sourced from System Configuration (SYS-001)
-                        </a>
-                    </div>
-                    <div class="p-5 flex flex-col gap-2.5 text-sm">
-                        <div class="flex items-center justify-between"><span class="text-slate-500">Base Pay</span><span class="font-semibold text-slate-800">&pound;12.60</span></div>
-                        <div class="flex items-center justify-between"><span class="text-slate-500">Employer's NI <span class="text-xs text-slate-400">(13.8%)</span></span><span class="font-semibold text-slate-800">&pound;1.74</span></div>
-                        <div class="flex items-center justify-between"><span class="text-slate-500">WTR / Holiday Accrual <span class="text-xs text-slate-400">(12.07%)</span></span><span class="font-semibold text-slate-800">&pound;1.52</span></div>
-                        <div class="flex items-center justify-between"><span class="text-slate-500">Pension <span class="text-xs text-slate-400">(3.0%)</span></span><span class="font-semibold text-slate-800">&pound;0.38</span></div>
-                        <div class="flex items-center justify-between"><span class="text-slate-500">Apprenticeship Levy <span class="text-xs text-slate-400">(0.5%)</span></span><span class="font-semibold text-slate-800">&pound;0.06</span></div>
-                        <div class="border-t border-slate-200 my-1"></div>
-                        <div class="flex items-center justify-between"><span class="text-slate-500">Fully-loaded cost</span><span class="font-semibold text-slate-800">&pound;16.30</span></div>
-                        <div class="flex items-center justify-between"><span class="text-slate-500">Charge Rate</span><span class="font-semibold text-slate-800">&pound;15.80</span></div>
-                        <div class="rounded-xl bg-slate-50 border border-slate-200 px-3 py-2.5 mt-1 flex items-center justify-between">
-                            <span class="text-xs font-semibold text-slate-600">Net Margin</span>
-                            <span class="text-sm font-bold text-slate-500">&minus;&pound;0.50 &middot; &minus;3.2%</span>
-                        </div>
-                        <p class="text-xs text-slate-400 mt-1 leading-relaxed">Net Margin = Charge Rate &minus; (Base Pay + NI + WTR + Pension + Levy). This standard-hour role runs at a small statutory loss recovered on overtime and weekend spreads (BRD &sect;7.6.2).</p>
-                    </div>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:53%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:42%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
                 </div>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:66%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:29%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div>
+                <div class="flex items-center gap-4 px-5 py-4 border-b border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-slate-200 animate-pulse flex-shrink-0"></div>
+                    <div class="flex-1 space-y-2"><div class="h-3 bg-slate-200 rounded animate-pulse" style="width:44%"></div><div class="h-2.5 bg-slate-200 rounded animate-pulse" style="width:46%"></div></div>
+                    <div class="hidden sm:block w-20 h-6 rounded-full bg-slate-200 animate-pulse"></div>
+                </div><p class="sr-only">Loading…</p></div>
+            <div data-s1-show="error" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-12 text-center" role="alert">
+                <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-triangle-exclamation text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900">We couldn't load rate cards</h2>
+                <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">Something went wrong on our side. Try again — if it keeps happening, quote reference <span class="font-semibold text-slate-800 tnum">ERR-RTC-6E19-2204</span> to Abstract support.</p>
+                <button type="button" onclick="S1.setState('loading');setTimeout(function(){S1.setState('default')},700)" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 mt-5"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Retry</button>
             </div>
-
-            <!-- Version history + CSV upload -->
-            <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
-
-                <!-- Version history timeline -->
-                <div class="xl:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="flex items-center justify-between px-5 py-4 border-b border-slate-100">
-                        <div><h3 class="text-sm font-bold text-slate-800">Version History &middot; Warehouse Operative</h3><p class="text-xs text-slate-400 mt-0.5">Effective-dated rate versions (RT-007, RT-012)</p></div>
-                        <button class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-3 py-2 text-xs font-semibold transition-colors"><i class="fa-regular fa-calendar-plus text-xs"></i> Schedule future-dated change</button>
-                    </div>
-                    <div class="p-5">
-                        <div class="relative pl-6">
-                            <div class="absolute left-[7px] top-2 bottom-2 w-px bg-slate-200"></div>
-
-                            <div class="relative mb-5">
-                                <div class="absolute -left-[22px] top-1 w-3.5 h-3.5 rounded-full bg-amber-400 border-2 border-white"></div>
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="text-sm font-semibold text-slate-800">01 Aug 2026 &rarr; open</span>
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Scheduled</span>
-                                </div>
-                                <p class="text-xs text-slate-500 mt-1">Charge &pound;16.20 &middot; Pay &pound;12.90 &middot; spread &pound;3.30 &middot; scheduled by Sarah Mitchell</p>
-                            </div>
-
-                            <div class="relative mb-5">
-                                <div class="absolute -left-[22px] top-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white"></div>
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="text-sm font-semibold text-slate-800">01 Apr 2026 &rarr; 31 Jul 2026</span>
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">Active</span>
-                                </div>
-                                <p class="text-xs text-slate-500 mt-1">Charge &pound;15.80 &middot; Pay &pound;12.60 &middot; spread &pound;3.20 &middot; NMW increase applied</p>
-                            </div>
-
-                            <div class="relative mb-5">
-                                <div class="absolute -left-[22px] top-1 w-3.5 h-3.5 rounded-full bg-slate-300 border-2 border-white"></div>
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="text-sm font-semibold text-slate-500">01 Jan 2026 &rarr; 31 Mar 2026</span>
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200">Superseded</span>
-                                </div>
-                                <p class="text-xs text-slate-400 mt-1">Charge &pound;15.20 &middot; Pay &pound;12.20 &middot; spread &pound;3.00</p>
-                            </div>
-
-                            <div class="relative">
-                                <div class="absolute -left-[22px] top-1 w-3.5 h-3.5 rounded-full bg-slate-300 border-2 border-white"></div>
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="text-sm font-semibold text-slate-500">01 Oct 2025 &rarr; 31 Dec 2025</span>
-                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-500 border border-slate-200">Superseded</span>
-                                </div>
-                                <p class="text-xs text-slate-400 mt-1">Charge &pound;14.80 &middot; Pay &pound;11.85 &middot; spread &pound;2.95</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- CSV bulk upload -->
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                    <div class="px-5 py-4 border-b border-slate-100"><h3 class="text-sm font-bold text-slate-800">CSV Bulk Upload</h3><p class="text-xs text-slate-400 mt-0.5">Validation preview before commit (RT-013)</p></div>
-                    <div class="p-5">
-                        <div class="border-2 border-dashed border-slate-200 rounded-xl p-6 text-center hover:border-blue-300 transition-colors cursor-pointer">
-                            <i class="fa-solid fa-cloud-arrow-up text-slate-300 text-2xl mb-2"></i>
-                            <p class="text-sm font-semibold text-slate-600">Drop rate-card CSV here</p>
-                            <p class="text-xs text-slate-400 mt-1">or click to browse &middot; .csv up to 5MB</p>
-                        </div>
-                        <div class="mt-4 rounded-xl border border-slate-200 overflow-hidden">
-                            <div class="px-4 py-2.5 bg-slate-50 border-b border-slate-100 flex items-center justify-between"><span class="text-xs font-semibold text-slate-600">rates_q3_2026.csv</span><span class="text-xs text-slate-400">42 rows</span></div>
-                            <div class="p-4 flex flex-col gap-2 text-xs">
-                                <div class="flex items-center gap-2 text-emerald-600"><i class="fa-solid fa-circle-check"></i><span>38 rows valid &amp; ready to import</span></div>
-                                <div class="flex items-center gap-2 text-amber-600"><i class="fa-solid fa-triangle-exclamation"></i><span>3 rows warning &middot; effective date in the past</span></div>
-                                <div class="flex items-center gap-2 text-red-600"><i class="fa-solid fa-circle-xmark"></i><span>1 row error &middot; pay &gt; charge (negative spread)</span></div>
-                            </div>
-                            <div class="px-4 py-3 border-t border-slate-100 flex gap-2">
-                                <button class="flex-1 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-3 py-2 text-xs font-semibold transition-colors">Commit 38 rows</button>
-                                <button class="bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors">Cancel</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div data-s1-hide="loading error" id="content"></div>
             </div>
-
         </main>
     </div>
 </div>
-
-<!-- ===== Shared admin shell behaviour: mobile nav · toast · confirm ===== -->
-<div id="confirm-overlay" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
-  <div class="absolute inset-0" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px)" onclick="closeConfirm()"></div>
-  <div role="dialog" aria-modal="true" aria-labelledby="confirm-title"
-       class="relative bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md">
-    <div class="flex items-start gap-3 px-6 pt-6">
-      <div id="confirm-icon" class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 bg-red-50 text-red-600"><i class="fa-solid fa-triangle-exclamation"></i></div>
-      <div class="flex-1">
-        <h3 id="confirm-title" class="text-base font-bold text-slate-900">Are you sure?</h3>
-        <p id="confirm-body" class="text-sm text-slate-500 mt-1"></p>
-      </div>
-    </div>
-    <div class="flex items-center justify-end gap-3 px-6 py-4 mt-4 border-t border-slate-200 bg-slate-50 rounded-b-2xl">
-      <button onclick="closeConfirm()" class="px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-100 transition-colors">Cancel</button>
-      <button id="confirm-ok" class="px-5 py-2 text-white rounded-lg text-sm font-semibold transition-opacity hover:opacity-90">Confirm</button>
-    </div>
-  </div>
-</div>
-<div id="toast-stack" class="fixed bottom-5 right-5 z-[70] flex flex-col gap-2 pointer-events-none"></div>
-
 <script>
 /* Mobile navigation (sidebar is hidden below lg — this is the only way to reveal it) */
 (function () {
@@ -463,47 +150,443 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && bd.style.display === 'block') close(); });
   window.addEventListener('resize', function () { if (window.innerWidth >= 1024) close(); });
 })();
-
-/* Toast — feedback after an action */
-function toast(msg, tone) {
-  var wrap = document.getElementById('toast-stack');
-  if (!wrap) return;
-  var tones = { success: 'fa-circle-check text-emerald-500', info: 'fa-circle-info text-blue-500', danger: 'fa-circle-exclamation text-red-500' };
-  var t = document.createElement('div');
-  t.className = 'pointer-events-auto flex items-center gap-2.5 bg-white border border-slate-200 shadow-lg rounded-xl px-4 py-3 text-sm text-slate-700';
-  t.setAttribute('role', 'status');
-  t.innerHTML = '<i class="fa-solid ' + (tones[tone] || tones.success) + '"></i><span></span>';
-  t.querySelector('span').textContent = msg;
-  wrap.appendChild(t);
-  setTimeout(function () { t.style.opacity = '0'; t.style.transition = 'opacity .3s'; setTimeout(function(){ t.remove(); }, 300); }, 3200);
+</script>
+<script>
+var BADGE = {
+  'Draft': ['bg-slate-100 text-slate-700 border border-slate-200', 'fa-file-pen'],
+  'In Setup': ['bg-blue-50 text-blue-700 border border-blue-200', 'fa-screwdriver-wrench'],
+  'Pending Activation': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Active': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Suspended': ['bg-red-50 text-red-700 border border-red-200', 'fa-ban'],
+  'Invited': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-envelope'],
+  'Inactive': ['bg-slate-100 text-slate-500 border border-slate-200', 'fa-circle-minus'],
+  'Pending approval': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Approved': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Rejected': ['bg-red-50 text-red-700 border border-red-200', 'fa-circle-xmark'],
+  'Compliant': ['bg-emerald-50 text-emerald-700 border border-emerald-200', 'fa-circle-check'],
+  'Pending': ['bg-amber-50 text-amber-700 border border-amber-200', 'fa-hourglass-half'],
+  'Expired': ['bg-red-50 text-red-700 border border-red-200', 'fa-circle-xmark'],
+  'Not Applicable': ['bg-slate-100 text-slate-700 border border-slate-200', 'fa-minus']
+};
+function badge(s, small) {
+  var b = BADGE[s] || BADGE['Draft'];
+  return '<span class="inline-flex items-center gap-1.5 ' + (small ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs') + ' rounded-full font-semibold whitespace-nowrap ' + b[0] + '"><i class="fa-solid ' + b[1] + ' text-[10px]" aria-hidden="true"></i>' + s + '</span>';
 }
-
-/* Confirm — gate every destructive / irreversible action */
-var _confirmAction = null;
-function openConfirm(opts) {
-  var o = opts || {}, danger = o.tone !== 'neutral';
-  document.getElementById('confirm-title').textContent = o.title || 'Are you sure?';
-  document.getElementById('confirm-body').textContent = o.body || '';
-  var ic = document.getElementById('confirm-icon');
-  ic.className = 'w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ' + (danger ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600');
-  ic.innerHTML = '<i class="fa-solid ' + (danger ? 'fa-triangle-exclamation' : 'fa-circle-question') + '"></i>';
-  var ok = document.getElementById('confirm-ok');
-  ok.textContent = o.confirmLabel || 'Confirm';
-  ok.style.background = danger ? '#DC2626' : 'linear-gradient(135deg,#1D4ED8,#5B2E91)';
-  _confirmAction = o.onConfirm || null;
-  document.getElementById('confirm-overlay').classList.remove('hidden');
-  ok.focus();
+/* Markers are not statuses (design-tokens §5): default neutral, success, warning, info */
+var MARK = { 'default': 'bg-slate-100 text-slate-700 border-slate-200', success: 'bg-emerald-50 text-emerald-700 border-emerald-200', warning: 'bg-amber-50 text-amber-700 border-amber-200', info: 'bg-blue-50 text-blue-700 border-blue-200' };
+function marker(text, variant, title) {
+  return '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border whitespace-nowrap ' + MARK[variant || 'default'] + '"' + (title ? ' title="' + esc(title) + '"' : '') + '>' + text + '</span>';
 }
-function closeConfirm() { document.getElementById('confirm-overlay').classList.add('hidden'); _confirmAction = null; }
-document.addEventListener('DOMContentLoaded', function () {
-  var ok = document.getElementById('confirm-ok');
-  if (ok) ok.addEventListener('click', function () { var a = _confirmAction; closeConfirm(); if (a) a(); });
-});
-document.addEventListener('keydown', function (e) {
-  if (e.key === 'Escape' && !document.getElementById('confirm-overlay').classList.contains('hidden')) closeConfirm();
-});
+function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]; }); }
+function initials(n) { return String(n).split(/\s+/).map(function (p) { return p[0]; }).slice(0, 2).join('').toUpperCase(); }
+var GBP = new Intl.NumberFormat('en-GB', { style: 'currency', currency: 'GBP' });
+function money(s) { return GBP.format(Number(s)); }
+function pct(s) { return Number(s).toFixed(2) + ' %'; }
+function fmtDate(iso) { if (!iso) return '—'; var d = new Date(iso + (iso.length === 10 ? 'T00:00:00' : '')); return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }
+function fmtDateTime(iso) { var d = new Date(iso); return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) + ', ' + d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); }
+var BTN_SEC = 'inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
+var BTN_PRI = 'inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed';
+var BTN_PRI_STYLE = 'background:linear-gradient(135deg,#1D4ED8,#5B2E91)';
+var BTN_DANGER = 'inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white rounded-lg px-4 py-2.5 text-xs font-semibold min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-1 disabled:opacity-50';
+var BTN_GHOST = 'inline-flex items-center gap-1.5 text-xs font-semibold text-blue-700 hover:text-blue-900 hover:underline rounded px-1 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
+var INPUT = 'w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20';
+var INPUT_ERR = 'border-red-400 bg-red-50/40 focus:border-red-400 focus:ring-red-600/20';
+var Q = new URLSearchParams(location.search);
+/* Structure changes: the sidebar item carries the pending count (K13 SidebarNavItem count; polled every 60 s with X-Activity: passive; absent when zero) */
+var S2_PENDING_COUNT = 5;
+document.addEventListener('s1:ready', function () { var c = document.getElementById('nav-sc-count'); if (c && S2_PENDING_COUNT > 0) { c.textContent = S2_PENDING_COUNT; c.classList.remove('hidden'); c.classList.add('inline-block'); c.setAttribute('aria-label', S2_PENDING_COUNT + ' waiting'); } });
+function setErr(id, msg) { var i = document.getElementById(id), e = document.getElementById(id + '-err'); if (!i) return; if (msg) { i.classList.add.apply(i.classList, INPUT_ERR.split(' ')); i.setAttribute('aria-invalid', 'true'); if (e) { e.textContent = msg; e.style.display = ''; } } else { i.classList.remove.apply(i.classList, INPUT_ERR.split(' ')); i.removeAttribute('aria-invalid'); if (e) e.style.display = 'none'; } }
 </script>
 
+<div data-s1-modal id="m-role" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-role-t">
+    <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+            <div class="min-w-0"><h2 id="m-role-t" class="text-base font-bold text-slate-900">New job role</h2></div>
+            <button type="button" onclick="S1.closeModal('m-role')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500 flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="px-6 py-5 flex flex-col gap-4">
+        <div>
+      <label for="r-title" class="block text-xs font-semibold text-slate-700 mb-1.5">Title <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input id="r-title" type="text" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="e.g. Warehouse Operative" aria-describedby="r-title-err r-title-hint" />
+      <p id="r-title-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      
+    </div>
+        <div><label for="r-desc" class="block text-xs font-semibold text-slate-700 mb-1.5">Description</label><textarea id="r-desc" rows="2" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="What the role does, in a line"></textarea></div>
+        <div>
+      <label for="r-awr" class="block text-xs font-semibold text-slate-700 mb-1.5">AWR rate (per hour)</label>
+      <div class="flex items-center gap-2"><span class="text-sm text-slate-600">£</span><input id="r-awr" type="number" min="0" step="0.01" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20 max-w-[160px] tnum" aria-describedby="r-awr-err r-awr-hint"/></div>
+      <p id="r-awr-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      <p id="r-awr-hint" class="text-xs text-slate-500 mt-1.5">The pay rate a worker moves to once they qualify under the Agency Workers Regulations. Leave blank if none.</p>
+    </div></div>
+        <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-wrap justify-end gap-3 sm:rounded-b-2xl"><button type="button" onclick="S1.closeModal('m-role')" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Cancel</button><button type="button" id="r-save" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-check" aria-hidden="true"></i> Save role</button></div>
+    </div>
+</div>
+<div data-s1-modal id="m-new" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-new-t">
+    <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+            <div class="min-w-0"><h2 id="m-new-t" class="text-base font-bold text-slate-900">New rate card</h2></div>
+            <button type="button" onclick="S1.closeModal('m-new')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500 flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="px-6 py-5 flex flex-col gap-4">
+        <div><label for="n-role" class="block text-xs font-semibold text-slate-700 mb-1.5">Job role <span class="text-red-600" aria-hidden="true">*</span></label><select id="n-role" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20"></select></div>
+        <div><label for="n-client" class="block text-xs font-semibold text-slate-700 mb-1.5">Client <span class="text-red-600" aria-hidden="true">*</span></label><select id="n-client" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20"></select><p id="n-client-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p></div>
+        <div>
+          <p class="block text-xs font-semibold text-slate-700 mb-1.5">Scope</p>
+          <label class="flex items-center gap-2 text-sm text-slate-800"><input type="radio" name="n-scope" value="client" checked class="w-4 h-4 text-blue-700"/> Whole client</label>
+          <label class="flex items-center gap-2 text-sm text-slate-800 mt-1.5"><input type="radio" name="n-scope" value="node" class="w-4 h-4 text-blue-700"/> A business unit or site</label>
+          <div id="n-node-wrap" style="display:none" class="mt-2"><div id="n-node-tree" class="rounded-xl border border-slate-200 max-h-56 overflow-y-auto"></div><p class="text-xs text-slate-500 mt-1.5">A node card applies to that node and everything beneath it; where a node and an ancestor both have a card for this role, the nearest wins. The whole-client card is the fallback.</p></div>
+          <p id="n-scope-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+        </div>
+        <div>
+      <label for="n-from" class="block text-xs font-semibold text-slate-700 mb-1.5">Effective from <span class="text-red-600" aria-hidden="true">*</span><span class="sr-only"> (required)</span></label>
+      <input id="n-from" type="date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" placeholder="" aria-describedby="n-from-err n-from-hint" />
+      <p id="n-from-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p>
+      <p id="n-from-hint" class="text-xs text-slate-500 mt-1.5">Today or later. A card effective today is in force at once.</p>
+    </div></div>
+        <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-wrap justify-end gap-3 sm:rounded-b-2xl"><button type="button" onclick="S1.closeModal('m-new')" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Cancel</button><button type="button" id="n-continue" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1 disabled:opacity-50 disabled:cursor-not-allowed" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)">Continue to the editor <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button></div>
+    </div>
+</div>
+<div data-s1-modal id="m-import" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-import-t">
+    <div class="bg-white w-full sm:max-w-4xl rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200 flex-shrink-0">
+            <div class="min-w-0"><h2 id="m-import-t" class="text-base font-bold text-slate-900">Import rates</h2><p class="text-xs text-slate-500 mt-0.5" id="imp-sub">A CSV with the columns job_role, client, scope, shift, effective_from, base_pay, agency_pay_rate, charge_rate, comparator_rate. Up to 5,000 rows, 2 MB.</p></div>
+            <button type="button" onclick="S1.closeModal('m-import')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500 flex-shrink-0"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+        </div>
+        <div class="px-6 py-5 flex-1 overflow-y-auto" id="imp-body"></div>
+        <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-wrap justify-end gap-3 sm:rounded-b-2xl flex-shrink-0" id="imp-foot"></div>
+    </div>
+</div>
+<script>
+var ORGS = {"acme": {"name": "Acme Logistics", "party": "client", "status": "Active", "users": 5, "pct": null, "approval": true, "activatedAt": "2026-03-14T10:12:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-03-15T09:02:00Z", "accessEnabledBy": "Sarah Mitchell", "address": {"line1": "Acme House", "line2": "12 Fenton Way", "town": "Birmingham", "postcode": "B6 7QD", "country": "GB"}, "contacts": [{"name": "Rachel Green", "role": "Procurement lead", "email": "rachel.green@acmelogistics.co.uk", "tel": "0121 496 0102"}, {"name": "Priya Natarajan", "role": "Accounts payable", "email": "priya.natarajan@acmelogistics.co.uk", "tel": "0121 496 0110"}], "contract": {"ref": "ABS-CL-2026-004", "start": "2026-02-01", "end": "2028-01-31", "renewal": "Notice period 90 days; review in Q4 2027."}}, "northgate": {"name": "Northgate Foods", "party": "client", "status": "Active", "users": 4, "pct": null, "approval": false, "activatedAt": "2026-04-02T14:40:00Z", "activatedBy": "James Okafor", "accessEnabledAt": "2026-04-02T15:05:00Z", "accessEnabledBy": "James Okafor", "address": {"line1": "Unit 4, Northgate Business Park", "line2": null, "town": "Leeds", "postcode": "LS9 8AQ", "country": "GB"}, "contacts": [{"name": "Hannah Price", "role": "HR director", "email": "h.price@northgatefoods.co.uk", "tel": "0113 496 0220"}], "contract": {"ref": "ABS-CL-2026-007", "start": "2026-04-01", "end": null, "renewal": null}}, "harbour": {"name": "Harbour Retail Group", "party": "client", "status": "In Setup", "users": 2, "pct": 30, "approval": false, "address": {"line1": "Harbour Point", "line2": "1 Quay Street", "town": "Southampton", "postcode": "SO14 2AQ", "country": "GB"}, "contacts": [{"name": "Marcus Lee", "role": "Operations director", "email": "marcus.lee@harbourretail.co.uk", "tel": "023 8049 0310"}], "contract": {"ref": "ABS-CL-2026-011", "start": "2026-11-01", "end": "2028-10-31", "renewal": "Review six months before the end date."}}, "meridian": {"name": "Meridian Healthcare Services", "party": "client", "status": "Pending Activation", "users": 3, "pct": 90, "approval": false, "address": {"line1": "Meridian House", "line2": "30 Castle Street", "town": "Reading", "postcode": "RG1 7SN", "country": "GB"}, "contacts": [{"name": "Dr Anita Rao", "role": "Director of nursing", "email": "a.rao@meridianhealth.org.uk", "tel": "0118 496 0415"}], "contract": {"ref": "ABS-CL-2026-012", "start": "2026-10-01", "end": "2027-09-30", "renewal": null}}, "coastline": {"name": "Coastline Manufacturing", "party": "client", "status": "Draft", "users": 0, "pct": 0, "approval": false, "address": null, "contacts": [], "contract": {"ref": "", "start": null, "end": null, "renewal": null}}, "pennine": {"name": "Pennine Distribution", "party": "client", "status": "Suspended", "users": 3, "pct": null, "approval": false, "activatedAt": "2026-01-20T11:00:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-01-21T08:30:00Z", "accessEnabledBy": "Sarah Mitchell", "suspension": {"reason": "Contract dispute: invoices unpaid since July 2026. Reinstate once the finance team confirms settlement.", "at": "2026-09-02T16:20:00Z", "by": "Sarah Mitchell"}, "address": {"line1": "Pennine Way Depot", "line2": null, "town": "Huddersfield", "postcode": "HD2 1UA", "country": "GB"}, "contacts": [{"name": "Gary Holmes", "role": "Site director", "email": "g.holmes@penninedist.co.uk", "tel": "01484 496 0501"}], "contract": {"ref": "ABS-CL-2025-019", "start": "2025-11-01", "end": "2026-10-31", "renewal": "Not renewing while suspended."}}, "techforce": {"name": "TechForce Recruitment", "party": "agency", "status": "Active", "users": 4, "pct": null, "approval": false, "activatedAt": "2026-03-10T09:45:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-03-10T10:00:00Z", "accessEnabledBy": "Sarah Mitchell", "address": {"line1": "14 Kingsway House", "line2": null, "town": "Coventry", "postcode": "CV1 2LH", "country": "GB"}, "contacts": [{"name": "Daniel Wright", "role": "Operations director", "email": "daniel.wright@techforce-recruitment.co.uk", "tel": "024 7649 0210"}, {"name": "Aisha Khan", "role": "Payroll", "email": "aisha.khan@techforce-recruitment.co.uk", "tel": null}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "12.50", "sba": {"ref": "SBA-2026-0417", "signed": "2026-07-03", "expiry": "2027-07-02", "doc": "SBA_TechForce_signed.pdf"}}, "nexus": {"name": "Nexus Talent", "party": "agency", "status": "Active", "users": 4, "pct": null, "approval": true, "activatedAt": "2026-03-18T13:00:00Z", "activatedBy": "James Okafor", "accessEnabledAt": "2026-03-19T09:00:00Z", "accessEnabledBy": "James Okafor", "address": {"line1": "2nd Floor, Nexus Court", "line2": "8 Wellington Street", "town": "Sheffield", "postcode": "S1 4HG", "country": "GB"}, "contacts": [{"name": "Aisha Rahman", "role": "Managing director", "email": "a.rahman@nexustalent.co.uk", "tel": "0114 496 0330"}], "paymentTermsDays": 14, "marginBasis": "fixed_per_hour", "marginValue": "2.40", "sba": {"ref": "SBA-2026-0391", "signed": "2026-03-12", "expiry": "2027-03-11", "doc": "SBA_Nexus_signed.pdf"}}, "peoplebridge": {"name": "PeopleBridge", "party": "agency", "status": "Pending Activation", "users": 2, "pct": 88, "approval": false, "address": {"line1": "Bridge House", "line2": "5 Canal Street", "town": "Manchester", "postcode": "M1 3HE", "country": "GB"}, "contacts": [{"name": "Leo Marsh", "role": "Director", "email": "leo@peoplebridge.co.uk", "tel": "0161 496 0180"}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "11.00", "sba": {"ref": "SBA-2026-0442", "signed": "2026-09-28", "expiry": "2027-09-27", "doc": "SBA_PeopleBridge_signed.pdf"}}, "summit": {"name": "Summit Staffing Solutions", "party": "agency", "status": "In Setup", "users": 1, "pct": 33, "approval": false, "address": {"line1": "Summit House", "line2": "22 Peak Road", "town": "Derby", "postcode": "DE1 2QR", "country": "GB"}, "contacts": [{"name": "Fiona Wallace", "role": "Owner", "email": "fiona@summitstaffing.co.uk", "tel": "01332 496 0290"}], "paymentTermsDays": null, "marginBasis": "percentage_of_charge", "marginValue": null, "sba": null}, "rapid": {"name": "Rapid Resource", "party": "agency", "status": "Suspended", "users": 3, "pct": null, "approval": false, "activatedAt": "2026-02-11T10:00:00Z", "activatedBy": "Sarah Mitchell", "accessEnabledAt": "2026-02-11T10:30:00Z", "accessEnabledBy": "Sarah Mitchell", "suspension": {"reason": "Employer's liability insurance lapsed on 31 Aug 2026 and no renewal has been received.", "at": "2026-09-01T09:10:00Z", "by": "Hannah Clarke"}, "address": {"line1": "9 Station Approach", "line2": null, "town": "Nottingham", "postcode": "NG1 7AB", "country": "GB"}, "contacts": [{"name": "Kim Barrow", "role": "Director", "email": "kim@rapidresource.co.uk", "tel": "0115 496 0770"}], "paymentTermsDays": 30, "marginBasis": "percentage_of_charge", "marginValue": "12.00", "sba": {"ref": "SBA-2026-0360", "signed": "2026-02-05", "expiry": "2027-02-04", "doc": "SBA_Rapid_signed.pdf"}}};
+var TREES = {"acme": [{"id": "mid", "parentId": null, "name": "Midlands", "nodeType": "region", "cc": "CC-MID", "userCount": 0}, {"id": "bhx", "parentId": "mid", "name": "Birmingham DC", "nodeType": "site", "cc": "CC-BHX-01", "userCount": 1}, {"id": "bhx-n", "parentId": "bhx", "name": "Nights", "nodeType": "department", "cc": "CC-BHX-01-N", "userCount": 1}, {"id": "bhx-d", "parentId": "bhx", "name": "Days", "nodeType": "department", "cc": "CC-BHX-01-D", "userCount": 0}, {"id": "lei", "parentId": "mid", "name": "Leicester DC", "nodeType": "site", "cc": "CC-LEI-02", "userCount": 1}, {"id": "nth", "parentId": null, "name": "Northern", "nodeType": "region", "cc": "CC-NTH", "userCount": 1}, {"id": "lds", "parentId": "nth", "name": "Leeds Hub", "nodeType": "site", "cc": "CC-LDS-01", "userCount": 0}, {"id": "lgw", "parentId": null, "name": "London Gateway", "nodeType": "site", "cc": "CC-LGW-03", "userCount": 0}], "northgate": [{"id": "ng-hq", "parentId": null, "name": "Head office", "nodeType": "business_unit", "cc": "NG-100", "userCount": 2}, {"id": "ng-prod", "parentId": null, "name": "Production", "nodeType": "business_unit", "cc": "NG-200", "userCount": 1}, {"id": "ng-leeds", "parentId": "ng-prod", "name": "Leeds bakery", "nodeType": "site", "cc": "NG-210", "userCount": 1}], "harbour": [{"id": "hb-south", "parentId": null, "name": "South coast", "nodeType": "region", "cc": "HB-S", "userCount": 0}, {"id": "hb-soton", "parentId": "hb-south", "name": "Southampton store", "nodeType": "site", "cc": "HB-S-01", "userCount": 1}], "meridian": [{"id": "md-rdg", "parentId": null, "name": "Reading hospital", "nodeType": "site", "cc": "MH-RDG", "userCount": 2}, {"id": "md-rdg-w", "parentId": "md-rdg", "name": "Wards", "nodeType": "department", "cc": "MH-RDG-W", "userCount": 0}], "coastline": [], "pennine": [{"id": "pn-hud", "parentId": null, "name": "Huddersfield depot", "nodeType": "site", "cc": "PN-HUD", "userCount": 2}], "techforce": [{"id": "tf-cov", "parentId": null, "name": "Coventry", "nodeType": "branch", "userCount": 1}, {"id": "tf-mk", "parentId": null, "name": "Milton Keynes", "nodeType": "branch", "userCount": 0}, {"id": "tf-north", "parentId": null, "name": "North Division", "nodeType": "division", "userCount": 1}, {"id": "tf-shf", "parentId": "tf-north", "name": "Sheffield Hub", "nodeType": "branch", "userCount": 0}, {"id": "tf-lds", "parentId": "tf-north", "name": "Leeds Branch", "nodeType": "branch", "userCount": 0}], "nexus": [{"id": "nx-north", "parentId": null, "name": "North Division", "nodeType": "division", "userCount": 1}, {"id": "nx-shf", "parentId": "nx-north", "name": "Sheffield", "nodeType": "branch", "userCount": 1}, {"id": "nx-south", "parentId": null, "name": "South Division", "nodeType": "division", "userCount": 0}, {"id": "nx-hub", "parentId": "nx-south", "name": "Hub", "nodeType": "branch", "userCount": 1}], "peoplebridge": [{"id": "pb-man", "parentId": null, "name": "Manchester", "nodeType": "branch", "userCount": 1}], "summit": [], "rapid": [{"id": "rr-not", "parentId": null, "name": "Nottingham", "nodeType": "branch", "userCount": 2}]};
+var JOB_ROLES = [{"id": "jr-wo", "title": "Warehouse Operative", "description": "General warehouse duties: picking, loading, stock movement.", "awrRate": "13.45"}, {"id": "jr-fd", "title": "Forklift Driver (Reach)", "description": "Reach-truck licensed; racking and replenishment.", "awrRate": null}, {"id": "jr-pp", "title": "Picker / Packer", "description": "Order picking and packing to despatch.", "awrRate": "12.60"}, {"id": "jr-tl", "title": "Team Leader", "description": "Leads a shift team; first-line supervision.", "awrRate": "15.20"}, {"id": "jr-hca", "title": "Healthcare Assistant", "description": "Ward-based personal care under nursing supervision.", "awrRate": null}];
+var RATE_CARDS = [{"id": "rc-1", "jobRoleId": "jr-wo", "client": "acme", "orgNodeId": null, "comparatorRate": "14.10", "versions": [{"id": "rv-1b", "effectiveFrom": "2027-01-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-10-01T10:00:00Z", "ack": false, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "14.30", "basePay": "13.00", "employerNi": "1.95", "wtrAccrual": "1.57", "pension": "0.39", "apprenticeshipLevy": "0.07", "chargeRate": "20.40", "spread": "6.10", "margin": "3.42", "marginPct": "16.76", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "14.60", "basePay": "13.30", "employerNi": "2.00", "wtrAccrual": "1.61", "pension": "0.40", "apprenticeshipLevy": "0.07", "chargeRate": "20.80", "spread": "6.20", "margin": "3.42", "marginPct": "16.44", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "15.90", "basePay": "14.50", "employerNi": "2.18", "wtrAccrual": "1.75", "pension": "0.44", "apprenticeshipLevy": "0.07", "chargeRate": "21.60", "spread": "5.70", "margin": "2.66", "marginPct": "12.31", "belowFloor": false}]}, {"id": "rv-1a", "effectiveFrom": "2026-01-01", "effectiveTo": "2026-12-31", "createdBy": "Sarah Mitchell", "createdAt": "2025-12-18T15:20:00Z", "ack": false, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "13.90", "basePay": "12.60", "employerNi": "1.89", "wtrAccrual": "1.52", "pension": "0.38", "apprenticeshipLevy": "0.06", "chargeRate": "19.80", "spread": "5.90", "margin": "3.35", "marginPct": "16.92", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "14.20", "basePay": "12.90", "employerNi": "1.94", "wtrAccrual": "1.56", "pension": "0.39", "apprenticeshipLevy": "0.06", "chargeRate": "20.20", "spread": "6.00", "margin": "3.35", "marginPct": "16.58", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "15.50", "basePay": "14.10", "employerNi": "2.12", "wtrAccrual": "1.70", "pension": "0.42", "apprenticeshipLevy": "0.07", "chargeRate": "21.00", "spread": "5.50", "margin": "2.59", "marginPct": "12.33", "belowFloor": false}]}, {"id": "rv-1z", "effectiveFrom": "2025-04-01", "effectiveTo": "2025-12-31", "createdBy": "Sarah Mitchell", "createdAt": "2025-03-20T09:00:00Z", "ack": true, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "13.20", "basePay": "12.00", "employerNi": "1.80", "wtrAccrual": "1.45", "pension": "0.36", "apprenticeshipLevy": "0.06", "chargeRate": "18.60", "spread": "5.40", "margin": "2.93", "marginPct": "15.75", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "13.40", "basePay": "12.20", "employerNi": "1.83", "wtrAccrual": "1.47", "pension": "0.37", "apprenticeshipLevy": "0.06", "chargeRate": "18.90", "spread": "5.50", "margin": "2.97", "marginPct": "15.71", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "14.70", "basePay": "13.40", "employerNi": "2.01", "wtrAccrual": "1.62", "pension": "0.40", "apprenticeshipLevy": "0.07", "chargeRate": "19.60", "spread": "4.90", "margin": "2.10", "marginPct": "10.71", "belowFloor": false}]}]}, {"id": "rc-2", "jobRoleId": "jr-wo", "client": "acme", "orgNodeId": "bhx", "comparatorRate": "14.40", "versions": [{"id": "rv-2a", "effectiveFrom": "2026-04-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-03-25T11:00:00Z", "ack": false, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "14.10", "basePay": "12.80", "employerNi": "1.92", "wtrAccrual": "1.54", "pension": "0.38", "apprenticeshipLevy": "0.06", "chargeRate": "20.10", "spread": "6.00", "margin": "3.40", "marginPct": "16.92", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "14.40", "basePay": "13.10", "employerNi": "1.97", "wtrAccrual": "1.58", "pension": "0.39", "apprenticeshipLevy": "0.07", "chargeRate": "20.50", "spread": "6.10", "margin": "3.39", "marginPct": "16.54", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "15.70", "basePay": "14.30", "employerNi": "2.15", "wtrAccrual": "1.73", "pension": "0.43", "apprenticeshipLevy": "0.07", "chargeRate": "21.30", "spread": "5.60", "margin": "2.62", "marginPct": "12.30", "belowFloor": false}]}]}, {"id": "rc-3", "jobRoleId": "jr-fd", "client": "acme", "orgNodeId": null, "comparatorRate": null, "versions": [{"id": "rv-3a", "effectiveFrom": "2026-01-01", "effectiveTo": null, "createdBy": "Sarah Mitchell", "createdAt": "2025-12-18T15:30:00Z", "ack": false, "lines": [{"shiftId": "sh-am", "shiftName": "Morning", "hourType": "standard", "agencyPayRate": "15.60", "basePay": "14.20", "employerNi": "2.13", "wtrAccrual": "1.71", "pension": "0.43", "apprenticeshipLevy": "0.07", "chargeRate": "22.10", "spread": "6.50", "margin": "3.56", "marginPct": "16.11", "belowFloor": false}, {"shiftId": "sh-pm", "shiftName": "Afternoon", "hourType": "standard", "agencyPayRate": "15.90", "basePay": "14.50", "employerNi": "2.18", "wtrAccrual": "1.75", "pension": "0.44", "apprenticeshipLevy": "0.07", "chargeRate": "22.50", "spread": "6.60", "margin": "3.56", "marginPct": "15.82", "belowFloor": false}, {"shiftId": "sh-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "17.30", "basePay": "15.80", "employerNi": "2.37", "wtrAccrual": "1.91", "pension": "0.47", "apprenticeshipLevy": "0.08", "chargeRate": "24.00", "spread": "6.70", "margin": "3.37", "marginPct": "14.04", "belowFloor": false}]}]}, {"id": "rc-4", "jobRoleId": "jr-pp", "client": "northgate", "orgNodeId": null, "comparatorRate": "13.00", "versions": [{"id": "rv-4a", "effectiveFrom": "2026-05-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-04-20T09:00:00Z", "ack": false, "lines": [{"shiftId": "ng-d", "shiftName": "Days", "hourType": "standard", "agencyPayRate": "13.60", "basePay": "12.30", "employerNi": "1.85", "wtrAccrual": "1.48", "pension": "0.37", "apprenticeshipLevy": "0.06", "chargeRate": "19.40", "spread": "5.80", "margin": "3.34", "marginPct": "17.22", "belowFloor": false}, {"shiftId": "ng-l", "shiftName": "Lates", "hourType": "standard", "agencyPayRate": "13.90", "basePay": "12.60", "employerNi": "1.89", "wtrAccrual": "1.52", "pension": "0.38", "apprenticeshipLevy": "0.06", "chargeRate": "19.80", "spread": "5.90", "margin": "3.35", "marginPct": "16.92", "belowFloor": false}]}]}, {"id": "rc-5", "jobRoleId": "jr-wo", "client": "northgate", "orgNodeId": null, "comparatorRate": null, "versions": [{"id": "rv-5a", "effectiveFrom": "2026-05-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-04-20T09:10:00Z", "ack": false, "lines": [{"shiftId": "ng-d", "shiftName": "Days", "hourType": "standard", "agencyPayRate": "14.00", "basePay": "12.70", "employerNi": "1.91", "wtrAccrual": "1.53", "pension": "0.38", "apprenticeshipLevy": "0.06", "chargeRate": "19.90", "spread": "5.90", "margin": "3.32", "marginPct": "16.68", "belowFloor": false}, {"shiftId": "ng-l", "shiftName": "Lates", "hourType": "standard", "agencyPayRate": "14.30", "basePay": "13.00", "employerNi": "1.95", "wtrAccrual": "1.57", "pension": "0.39", "apprenticeshipLevy": "0.07", "chargeRate": "20.30", "spread": "6.00", "margin": "3.32", "marginPct": "16.35", "belowFloor": false}]}]}, {"id": "rc-6", "jobRoleId": "jr-hca", "client": "meridian", "orgNodeId": null, "comparatorRate": "14.80", "versions": [{"id": "rv-6a", "effectiveFrom": "2026-10-01", "effectiveTo": null, "createdBy": "Liam Foster", "createdAt": "2026-09-29T12:00:00Z", "ack": false, "lines": [{"shiftId": "md-ed", "shiftName": "Early", "hourType": "standard", "agencyPayRate": "14.50", "basePay": "13.20", "employerNi": "1.98", "wtrAccrual": "1.59", "pension": "0.40", "apprenticeshipLevy": "0.07", "chargeRate": "20.60", "spread": "6.10", "margin": "3.36", "marginPct": "16.31", "belowFloor": false}, {"shiftId": "md-lt", "shiftName": "Late", "hourType": "standard", "agencyPayRate": "14.50", "basePay": "13.20", "employerNi": "1.98", "wtrAccrual": "1.59", "pension": "0.40", "apprenticeshipLevy": "0.07", "chargeRate": "20.60", "spread": "6.10", "margin": "3.36", "marginPct": "16.31", "belowFloor": false}, {"shiftId": "md-nt", "shiftName": "Night", "hourType": "standard", "agencyPayRate": "16.30", "basePay": "14.90", "employerNi": "2.24", "wtrAccrual": "1.80", "pension": "0.45", "apprenticeshipLevy": "0.07", "chargeRate": "22.80", "spread": "6.50", "margin": "3.34", "marginPct": "14.65", "belowFloor": false}]}]}];
+var SHIFTS = {"acme": [{"id": "sh-am", "name": "Morning", "start": "06:00", "end": "14:00", "hours": 8, "position": 1, "deactivatedAt": null}, {"id": "sh-pm", "name": "Afternoon", "start": "14:00", "end": "22:00", "hours": 8, "position": 2, "deactivatedAt": null}, {"id": "sh-nt", "name": "Night", "start": "22:00", "end": "06:00", "hours": 8, "position": 3, "deactivatedAt": null}, {"id": "sh-tw", "name": "Twilight", "start": "18:00", "end": "22:00", "hours": 4, "position": 4, "deactivatedAt": "2026-09-15"}], "northgate": [{"id": "ng-d", "name": "Days", "start": "07:00", "end": "15:00", "hours": 8, "position": 1, "deactivatedAt": null}, {"id": "ng-l", "name": "Lates", "start": "15:00", "end": "23:00", "hours": 8, "position": 2, "deactivatedAt": null}], "harbour": [{"id": "hb-d", "name": "Day", "start": "08:00", "end": "16:00", "hours": 8, "position": 1, "deactivatedAt": null}, {"id": "hb-e", "name": "Evening", "start": "16:00", "end": "22:00", "hours": 6, "position": 2, "deactivatedAt": null}], "meridian": [{"id": "md-ed", "name": "Early", "start": "07:00", "end": "15:00", "hours": 7.5, "position": 1, "deactivatedAt": null}, {"id": "md-lt", "name": "Late", "start": "14:30", "end": "22:30", "hours": 7.5, "position": 2, "deactivatedAt": null}, {"id": "md-nt", "name": "Night", "start": "22:00", "end": "07:30", "hours": 9, "position": 3, "deactivatedAt": null}], "coastline": [], "pennine": [{"id": "pn-d", "name": "Day", "start": "06:00", "end": "18:00", "hours": 11, "position": 1, "deactivatedAt": null}]};
+var LINKS = [{"id": "asl-1", "client": "acme", "agency": "techforce", "approvedFrom": "2026-03-12", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-2", "client": "northgate", "agency": "techforce", "approvedFrom": "2026-05-01", "revokedFrom": null, "approvedBy": "James Okafor"}, {"id": "asl-3", "client": "acme", "agency": "nexus", "approvedFrom": "2026-03-20", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-4", "client": "northgate", "agency": "nexus", "approvedFrom": "2026-02-01", "revokedFrom": "2026-09-30", "approvedBy": "Sarah Mitchell", "revokedBy": "James Okafor"}, {"id": "asl-5", "client": "acme", "agency": "peoplebridge", "approvedFrom": "2026-11-01", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-6", "client": "pennine", "agency": "rapid", "approvedFrom": "2026-02-15", "revokedFrom": "2026-09-01", "approvedBy": "Sarah Mitchell", "revokedBy": "Hannah Clarke"}, {"id": "asl-7", "client": "harbour", "agency": "techforce", "approvedFrom": "2026-11-01", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}, {"id": "asl-8", "client": "meridian", "agency": "peoplebridge", "approvedFrom": "2026-10-15", "revokedFrom": null, "approvedBy": "Sarah Mitchell"}];
+var STAT = {"ni": "0.15", "wtr": "0.1207", "pension": "0.03", "levy": "0.005"};
+var PREMIUM = {"overtime": "1.5", "weekend": "1.25", "bank_holiday": "2"};
+var FLOOR_PCT = "10.00";
+var TYPE_LABEL = {"business_unit": "Business unit", "region": "Region", "site": "Site", "department": "Department", "branch": "Branch", "division": "Division"};
+var TODAY = "2026-10-10";
+
+
+/* ---------- Tree (kernel K13) ---------- */
+function Tree(host, props) {
+  var self = this;
+  host = typeof host === 'string' ? document.getElementById(host) : host;
+  this.host = host; this.p = Object.assign({ selection: 'none', value: [], disabledIds: [], defaultExpandedDepth: 99, search: false, root: null, columns: [], decorate: null, renderRow: null, ghosts: [], readOnly: false, compact: false }, props || {});
+  this.expanded = {}; this.focusId = null; this.query = ''; this.value = (this.p.value || []).slice();
+  this.setNodes(this.p.nodes || []);
+  host.classList.add('s2-tree');
+  host.addEventListener('keydown', function (e) { self.onKey(e); });
+  this.render();
+}
+Tree.prototype.setNodes = function (nodes) {
+  var self = this;
+  this.nodes = nodes.map(function (n) { return Object.assign({}, n); });
+  this.byId = {}; this.children = {}; this.nodes.forEach(function (n) { self.byId[n.id] = n; });
+  this.nodes.forEach(function (n) { var p = n.parentId && self.byId[n.parentId] ? n.parentId : '__root'; n._p = p; (self.children[p] = self.children[p] || []).push(n); });
+  this.nodes.forEach(function (n) { n.depth = self.depthOf(n.id); n.path = self.pathOf(n.id); });
+  var self2 = this; if (!Object.keys(this.expanded).length) this.nodes.forEach(function (n) { self2.expanded[n.id] = n.depth < self2.p.defaultExpandedDepth; });
+};
+Tree.prototype.depthOf = function (id) { var d = 0, n = this.byId[id]; while (n && n._p !== '__root') { d++; n = this.byId[n._p]; } return d; };
+Tree.prototype.pathOf = function (id) { var out = [], n = this.byId[id]; while (n) { out.unshift(n.name); n = n._p === '__root' ? null : this.byId[n._p]; } return out; };
+Tree.prototype.descendants = function (id) { var out = [], self = this; (function walk(x) { (self.children[x] || []).forEach(function (c) { out.push(c.id); walk(c.id); }); })(id); return out; };
+Tree.prototype.ancestors = function (id) { var out = [], n = this.byId[id]; while (n && n._p !== '__root') { out.push(n._p); n = this.byId[n._p]; } return out; };
+Tree.prototype.matches = function (n) { return !this.query || n.name.toLowerCase().indexOf(this.query) >= 0; };
+Tree.prototype.visible = function () {
+  // depth-first list of rows to draw: with a query, every match plus its ancestors (expanded)
+  var self = this, out = [], keep = null;
+  if (this.query) { keep = {}; this.nodes.forEach(function (n) { if (self.matches(n)) { keep[n.id] = 1; self.ancestors(n.id).forEach(function (a) { keep[a] = 1; }); } }); }
+  (function walk(p) {
+    (self.children[p] || []).forEach(function (n) {
+      if (keep && !keep[n.id]) return;
+      out.push(n);
+      var open = keep ? true : self.expanded[n.id];
+      if (open) walk(n.id);
+      (self.p.ghosts || []).filter(function (g) { return g.parentId === n.id && (open || keep); }).forEach(function (g) { out.push(Object.assign({ _ghost: true, _p: n.id, depth: n.depth + 1 }, g)); });
+    });
+  })('__root');
+  (self.p.ghosts || []).filter(function (g) { return !g.parentId; }).forEach(function (g) { out.push(Object.assign({ _ghost: true, _p: '__root', depth: 0 }, g)); });
+  return out;
+};
+Tree.prototype.covered = function (id) { var self = this; return this.ancestors(id).some(function (a) { return self.value.indexOf(a) >= 0; }); };
+Tree.prototype.isDisabled = function (id) { return (this.p.disabledIds || []).indexOf(id) >= 0 || (this.p.selection === 'multi' && this.covered(id)); };
+Tree.prototype.toggle = function (id, open) { this.expanded[id] = open == null ? !this.expanded[id] : open; if (this.p.onExpandedChange) this.p.onExpandedChange(this.expanded); this.render(); };
+Tree.prototype.expandAll = function () { var self = this; this.nodes.forEach(function (n) { self.expanded[n.id] = true; }); this.render(); };
+Tree.prototype.collapseTo = function (depth) { var self = this; this.nodes.forEach(function (n) { self.expanded[n.id] = n.depth < depth; }); this.render(); };
+Tree.prototype.setQuery = function (q) { this.query = (q || '').trim().toLowerCase(); this.render(); };
+Tree.prototype.select = function (id) {
+  if (this.p.selection === 'none' || this.isDisabled(id)) return;
+  if (this.p.selection === 'single') this.value = this.value[0] === id ? [] : [id];
+  else { var i = this.value.indexOf(id); if (i >= 0) this.value.splice(i, 1); else { var self = this; this.value = this.value.filter(function (v) { return self.ancestors(v).indexOf(id) < 0; }); this.value.push(id); } }
+  if (this.p.onChange) this.p.onChange(this.value.slice());
+  this.render();
+};
+Tree.prototype.render = function () {
+  var self = this, rows = this.visible(), ro = this.p.readOnly, sel = this.p.selection, hasRoot = !!this.p.root;
+  var html = '';
+  if (hasRoot) html += this.rowHtml(Object.assign({ id: '__root', depth: -1, name: this.p.root.name, nodeType: 'Organisation', _root: true, userCount: this.p.root.userCount }, {}), true, rows.length > 0);
+  rows.forEach(function (n) { html += self.rowHtml(n, false, (self.children[n.id] || []).length > 0 || (self.p.ghosts || []).some(function (g) { return g.parentId === n.id; })); });
+  this.host.innerHTML = '<ul role="tree" aria-label="' + esc(this.p.label || 'Structure') + '" class="divide-y divide-slate-100">' + html + '</ul>';
+  if (this.query) {
+    var m = this.nodes.filter(function (n) { return self.matches(n); }).length;
+    this.host.insertAdjacentHTML('beforeend', '<p class="px-4 py-2 text-xs text-slate-500 border-t border-slate-100" role="status">' + m + ' of ' + this.nodes.length + ' nodes match</p>');
+  }
+  this.host.querySelectorAll('[data-toggle]').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); self.toggle(b.dataset.toggle); }; });
+  this.host.querySelectorAll('[role="treeitem"]').forEach(function (li) {
+    li.onfocus = function () { self.focusId = li.dataset.id; self.host.querySelectorAll('[role="treeitem"]').forEach(function (x) { x.tabIndex = -1; }); li.tabIndex = 0; };
+    li.onclick = function (e) { if (e.target.closest('button,a,input,label')) return; self.focusId = li.dataset.id; if (sel !== 'none' && !li.dataset.ghost && li.dataset.id !== '__root') self.select(li.dataset.id); if (sel === 'none' && self.p.onPick && !li.dataset.ghost) { self.p.onPick(li.dataset.id); self.render(); } };
+  });
+  this.host.querySelectorAll('input[type="checkbox"][data-check]').forEach(function (c) { c.onchange = function () { self.select(c.dataset.check); }; });
+  var first = this.host.querySelector('[role="treeitem"][data-id="' + (this.focusId || '') + '"]') || this.host.querySelector('[role="treeitem"]');
+  if (first) first.tabIndex = 0;
+  if (this.p.afterRender) this.p.afterRender();
+};
+Tree.prototype.rowHtml = function (n, isRoot, hasKids) {
+  var sel = this.p.selection, open = isRoot ? true : !!this.expanded[n.id], ghost = !!n._ghost, depth = isRoot ? 0 : n.depth + 1;
+  var disabled = !isRoot && !ghost && this.isDisabled(n.id), covered = !isRoot && !ghost && sel === 'multi' && this.covered(n.id);
+  var selected = !isRoot && !ghost && this.value.indexOf(n.id) >= 0;
+  var picked = this.p.picked === n.id;
+  var indent = '<span class="flex-shrink-0 flex" style="width:' + (depth * 20) + 'px" aria-hidden="true">' + (depth ? Array.apply(null, Array(depth)).map(function () { return '<span class="block w-5 border-l border-slate-200 h-full"></span>'; }).join('') : '') + '</span>';
+  var chevron = (hasKids && !isRoot) ? '<button type="button" data-toggle="' + esc(n.id) + '" class="w-6 h-6 rounded flex items-center justify-center text-slate-500 hover:bg-slate-100 flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" aria-label="' + (open ? 'Collapse' : 'Expand') + ' ' + esc(n.name) + '" tabindex="-1"><i class="fa-solid fa-chevron-' + (open ? 'down' : 'right') + ' text-[10px]" aria-hidden="true"></i></button>' : '<span class="w-6 h-6 flex-shrink-0 flex items-center justify-center text-slate-300" aria-hidden="true">' + (isRoot ? '<i class="fa-solid fa-building text-xs text-slate-500"></i>' : ghost ? '<i class="fa-regular fa-circle-dot text-[10px] text-amber-500"></i>' : '<i class="fa-solid fa-circle text-[5px]"></i>') + '</span>';
+  var check = '';
+  if (sel === 'multi' && !isRoot && !ghost) check = '<input type="checkbox" data-check="' + esc(n.id) + '" ' + (selected || covered ? 'checked' : '') + ' ' + (disabled ? 'disabled' : '') + ' class="w-4 h-4 rounded border-slate-300 text-blue-700 focus:ring-blue-600 flex-shrink-0" aria-label="' + esc(n.name) + (covered ? ' (covered)' : '') + '" tabindex="-1"/>';
+  if (sel === 'single' && !ghost) check = '<span class="w-4 h-4 rounded-full border flex-shrink-0 flex items-center justify-center ' + (selected || picked ? 'border-blue-700' : 'border-slate-300') + (disabled ? ' opacity-40' : '') + '" aria-hidden="true">' + (selected || picked ? '<span class="w-2 h-2 rounded-full bg-blue-700"></span>' : '') + '</span>';
+  var typeLabel = isRoot ? 'Organisation' : (TYPE_LABEL[n.nodeType] || n.nodeType);
+  var name = '<span class="text-sm ' + (isRoot ? 'font-bold text-slate-900' : ghost ? 'font-medium text-slate-500 italic' : 'font-medium text-slate-900') + ' truncate">' + esc(n.name) + (n.marker ? ' ' + n.marker : '') + '</span>';
+  var meta = '<span class="text-xs text-slate-500 md:hidden block truncate">' + esc(typeLabel) + (this.p.showCost && n.cc ? ' · ' + esc(n.cc) : '') + (covered ? ' · covered' : '') + '</span>';
+  var cols = '';
+  if (!this.p.compact) {
+    cols += '<span class="hidden md:block w-28 flex-shrink-0 text-xs text-slate-600 truncate">' + esc(typeLabel) + (covered ? '<span class="text-slate-400"> · covered</span>' : '') + '</span>';
+    if (this.p.showCost) cols += '<span class="hidden md:block w-28 flex-shrink-0 text-xs text-slate-600 tnum truncate">' + esc(n.cc || (isRoot ? '—' : '')) + '</span>';
+    if (this.p.showUsers) cols += '<span class="hidden md:block w-14 flex-shrink-0 text-xs text-slate-700 tnum text-right">' + (ghost ? '' : (this.p.userLink && !isRoot && n.userCount ? '<a href="' + this.p.userLink(n) + '" class="text-blue-700 hover:underline" title="Users scoped at this node">' + n.userCount + '</a>' : (n.userCount == null ? '' : n.userCount))) + '</span>';
+  } else if (covered) { cols += '<span class="hidden md:inline text-xs text-slate-400">covered</span>'; }
+  var deco = this.p.decorate && !isRoot ? (this.p.decorate(n) || '') : '';
+  var actions = this.p.renderRow && !ghost ? (this.p.renderRow(n, isRoot) || '') : '';
+  var cls = 'tree-row group flex items-start gap-2 px-3 py-2 min-h-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600 ' + (selected || picked ? 'bg-blue-50 ' : 'hover:bg-slate-50 ') + (ghost ? 'bg-amber-50/40 ' : '') + (disabled && sel !== 'none' ? 'opacity-60 ' : '') + (sel !== 'none' && !disabled && !isRoot && !ghost ? 'cursor-pointer ' : '');
+  return '<li role="treeitem" data-id="' + esc(n.id) + '" ' + (ghost ? 'data-ghost="1" ' : '') + 'aria-level="' + (depth + 1) + '" ' + (hasKids || isRoot ? 'aria-expanded="' + open + '" ' : '') + (sel !== 'none' ? 'aria-selected="' + selected + '" ' : '') + (disabled ? 'aria-disabled="true" ' : '') + 'tabindex="-1" class="' + cls + '"' + (disabled && this.p.disabledTitle ? ' title="' + esc(this.p.disabledTitle) + '"' : '') + '>' +
+    indent + chevron + (check ? '<span class="flex items-center h-5 flex-shrink-0">' + check + '</span>' : '') +
+    '<span class="flex-1 min-w-0"><span class="flex items-center gap-2 min-w-0">' + name + (this.p.showUsers && !ghost && !this.p.compact ? '<span class="md:hidden text-xs text-slate-500 tnum ml-auto flex-shrink-0">' + (n.userCount == null ? '' : n.userCount + ' <i class="fa-regular fa-user text-[10px]" aria-hidden="true"></i>') + '</span>' : '') + '</span>' + meta + deco + '</span>' +
+    cols + (actions ? '<span class="flex-shrink-0 flex items-center">' + actions + '</span>' : '') + '</li>';
+};
+Tree.prototype.onKey = function (e) {
+  var items = Array.prototype.slice.call(this.host.querySelectorAll('[role="treeitem"]'));
+  var cur = document.activeElement.closest ? document.activeElement.closest('[role="treeitem"]') : null;
+  var i = items.indexOf(cur); if (i < 0) return;
+  var n = this.byId[cur.dataset.id], go = null;
+  if (e.key === 'ArrowDown') go = items[i + 1];
+  else if (e.key === 'ArrowUp') go = items[i - 1];
+  else if (e.key === 'Home') go = items[0];
+  else if (e.key === 'End') go = items[items.length - 1];
+  else if (e.key === 'ArrowRight') { if (cur.getAttribute('aria-expanded') === 'false') { this.toggle(cur.dataset.id, true); this.focusAfter(cur.dataset.id); e.preventDefault(); return; } go = items[i + 1]; }
+  else if (e.key === 'ArrowLeft') { if (cur.getAttribute('aria-expanded') === 'true' && cur.dataset.id !== '__root') { this.toggle(cur.dataset.id, false); this.focusAfter(cur.dataset.id); e.preventDefault(); return; } var p = n ? n._p : null; go = p && p !== '__root' ? this.host.querySelector('[data-id="' + p + '"]') : (this.p.root ? this.host.querySelector('[data-id="__root"]') : null); }
+  else if (e.key === 'Enter' || e.key === ' ') { if (cur.dataset.id !== '__root' && !cur.dataset.ghost) { if (this.p.selection !== 'none') this.select(cur.dataset.id); else if (this.p.onPick) { this.p.onPick(cur.dataset.id); this.render(); } this.focusAfter(cur.dataset.id); } e.preventDefault(); return; }
+  else if (e.key.length === 1 && /\S/.test(e.key)) { var k = e.key.toLowerCase(); for (var j = 1; j <= items.length; j++) { var it = items[(i + j) % items.length], nn = this.byId[it.dataset.id] || (it.dataset.id === '__root' ? this.p.root : null); if (nn && nn.name.toLowerCase().charAt(0) === k) { go = it; break; } } }
+  if (go) { go.focus(); e.preventDefault(); }
+};
+Tree.prototype.focusAfter = function (id) { var self = this; setTimeout(function () { var el = self.host.querySelector('[data-id="' + id + '"]'); if (el) el.focus(); }, 0); };
+
+
+/* ---------- rate maths (TSD §3.1.3; the server computes, the editor mirrors it live) ---------- */
+function d2(x) { return (Math.round((Number(x) + Number.EPSILON) * 100) / 100).toFixed(2); }
+function computeLine(shift, basePay, agencyPay, charge) {
+  var b = Number(basePay) || 0, p = Number(agencyPay) || 0, c = Number(charge) || 0;
+  var ni = Number(d2(b * STAT.ni)), wtr = Number(d2(b * STAT.wtr)), pen = Number(d2(b * STAT.pension)), levy = Number(d2(b * STAT.levy));
+  var spread = c - p, margin = c - (b + ni + wtr + pen + levy), mpct = c ? margin / c * 100 : 0;
+  return { shiftId: shift.id, shiftName: shift.name, agencyPayRate: d2(p), basePay: d2(b), employerNi: d2(ni), wtrAccrual: d2(wtr), pension: d2(pen), apprenticeshipLevy: d2(levy), chargeRate: d2(c), spread: d2(spread), margin: d2(margin), marginPct: d2(mpct), belowFloor: mpct < Number(FLOOR_PCT) };
+}
+var HOUR_TYPES = [['overtime', 'Overtime'], ['weekend', 'Weekend'], ['bank_holiday', 'Bank holiday']];
+function versionMarker(v) { if (v.effectiveFrom > TODAY) return marker('Future', 'warning'); if (!v.effectiveTo || v.effectiveTo >= TODAY) return marker('In force', 'success'); return ''; }
+function inForce(card) { return card.versions.find(function (v) { return v.effectiveFrom <= TODAY && (!v.effectiveTo || v.effectiveTo >= TODAY); }) || null; }
+function scheduled(card) { return card.versions.filter(function (v) { return v.effectiveFrom > TODAY; }).sort(function (a, b) { return a.effectiveFrom < b.effectiveFrom ? -1 : 1; })[0] || null; }
+function roleOf(id) { return JOB_ROLES.find(function (r) { return r.id === id; }); }
+function nodeName(slug, id) { if (!id) return null; var n = (TREES[slug] || []).find(function (x) { return x.id === id; }); return n ? n.name : id; }
+function nodeType(slug, id) { var n = (TREES[slug] || []).find(function (x) { return x.id === id; }); return n ? TYPE_LABEL[n.nodeType] : ''; }
+function scopeLabel(card) { return card.orgNodeId ? nodeName(card.client, card.orgNodeId) + ' (' + nodeType(card.client, card.orgNodeId).toLowerCase() + ')' : 'Whole client'; }
+function rangeText(v) { return fmtDate(v.effectiveFrom) + ' – ' + (v.effectiveTo ? fmtDate(v.effectiveTo) : 'open'); }
+
+var state = Q.get('state') || 'default', ro = false, breakdown = true;
+var roleId = Q.get('role'), clientId = Q.get('client'), agencyId = Q.get('agency');
+var ROLES = JSON.parse(JSON.stringify(JOB_ROLES)), CARDS = JSON.parse(JSON.stringify(RATE_CARDS));
+function cardsOf(roleId) { return CARDS.filter(function (c) { return c.jobRoleId === roleId; }); }
+function approvedClientsOf(agency) { return LINKS.filter(function (l) { return l.agency === agency && l.approvedFrom <= TODAY && (!l.revokedFrom || l.revokedFrom > TODAY); }).map(function (l) { return l.client; }); }
+function load() {
+  ro = state === 'readonly'; breakdown = state !== 'nobreakdown';
+  if (state === 'empty') { ROLES = []; CARDS = []; } else { ROLES = JSON.parse(JSON.stringify(JOB_ROLES)); CARDS = JSON.parse(JSON.stringify(RATE_CARDS)); }
+  if (state === 'large') { for (var i = 0; i < 40; i++) ROLES.push({ id: 'jr-x' + i, title: ['Driver', 'Cleaner', 'Chef', 'Porter', 'Packer', 'Loader', 'Assembler', 'Operator'][i % 8] + ' ' + (i + 2), description: 'Sample role ' + (i + 2), awrRate: i % 2 ? d2(11 + i * 0.1) : null }); }
+  var sel = document.getElementById('f-client'); sel.innerHTML = '<option value="">All clients</option>'; Object.keys(ORGS).filter(function (k) { return ORGS[k].party === 'client'; }).forEach(function (k) { var o = document.createElement('option'); o.value = k; o.textContent = ORGS[k].name; sel.appendChild(o); });
+  render();
+}
+function render() {
+  if (agencyId) return renderAgency();
+  if (clientId) return renderClient();
+  if (roleId) return renderRole();
+  renderRoles();
+}
+function headBlock(title, sub) { document.getElementById('view-head').innerHTML = '<h2 class="text-base font-bold text-slate-900">' + title + '</h2>' + (sub ? '<p class="text-xs text-slate-500 mt-0.5">' + sub + '</p>' : ''); }
+function actionButtons(list) { document.getElementById('view-actions').innerHTML = ro ? '' : list.join(''); wireActions(); }
+var BTN_IMPORT = '<button type="button" id="btn-import" class="' + BTN_SEC + '"><i class="fa-solid fa-file-csv" aria-hidden="true"></i> Import CSV</button>';
+var BTN_NEWROLE = '<button type="button" id="btn-newrole" class="' + BTN_PRI + '" style="' + BTN_PRI_STYLE + '"><i class="fa-solid fa-plus" aria-hidden="true"></i> New job role</button>';
+var BTN_NEWCARD = '<button type="button" id="btn-newcard" class="' + BTN_PRI + '" style="' + BTN_PRI_STYLE + '"><i class="fa-solid fa-plus" aria-hidden="true"></i> New rate card</button>';
+function wireActions() {
+  var b;
+  if ((b = document.getElementById('btn-import'))) b.onclick = openImport;
+  if ((b = document.getElementById('btn-newrole'))) b.onclick = function () { openRole(null); };
+  if ((b = document.getElementById('btn-newcard'))) b.onclick = openNew;
+  if ((b = document.getElementById('btn-editrole'))) b.onclick = function () { openRole(roleId); };
+}
+/* ---------- Job roles list ---------- */
+function renderRoles() {
+  document.getElementById('crumbs').style.display = 'none'; document.getElementById('filters').style.display = '';
+  headBlock('Job roles', 'Each role lists its rate cards. The AWR rate is a per-role figure: the pay rate a worker moves to once they qualify.');
+  actionButtons([BTN_IMPORT, BTN_NEWROLE]);
+  var q = document.getElementById('f-search').value.trim().toLowerCase(), cl = document.getElementById('f-client').value;
+  var list = ROLES.filter(function (r) { return (!q || r.title.toLowerCase().indexOf(q) >= 0) && (!cl || cardsOf(r.id).some(function (c) { return c.client === cl; })); });
+  var c = document.getElementById('content');
+  if (!ROLES.length) { c.innerHTML = emptyBlock('fa-briefcase', 'No job roles yet', 'A job role is the unit every rate hangs off. Add the first one, then its rate cards.', ro ? '' : '<button type="button" class="' + BTN_SEC + ' mt-5" onclick="openRole(null)"><i class="fa-solid fa-plus" aria-hidden="true"></i> New job role</button>'); return; }
+  if (!list.length) { c.innerHTML = emptyBlock('fa-magnifying-glass', 'No job roles match', 'Try another title or clear the client filter.', '<button type="button" class="' + BTN_SEC + ' mt-5" onclick="document.getElementById(\'f-search\').value=\'\';document.getElementById(\'f-client\').value=\'\';render()">Clear filters</button>'); return; }
+  c.innerHTML = '<div class="hidden md:block ' + 'bg-white rounded-2xl border border-slate-200 shadow-sm' + ' overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left"><caption class="sr-only">Job roles</caption><thead class="bg-slate-50 border-b border-slate-200"><tr><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Job role</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Description</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Rate cards</th>' + (breakdown ? '<th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">AWR rate</th>' : '') + '<th scope="col" class="px-4 py-3"><span class="sr-only">Actions</span></th></tr></thead><tbody class="divide-y divide-slate-100">' +
+    list.map(function (r) { var n = cardsOf(r.id).length; return '<tr class="group hover:bg-slate-50/60"><td class="px-4 py-3"><a href="abstract.rates.rate-cards.html?role=' + r.id + '" class="text-sm font-semibold text-slate-900 hover:text-blue-700 hover:underline">' + esc(r.title) + '</a></td><td class="px-4 py-3 text-sm text-slate-600 max-w-[360px] truncate" title="' + esc(r.description || '') + '">' + esc(r.description || '—') + '</td><td class="px-4 py-3 text-right"><a href="abstract.rates.rate-cards.html?role=' + r.id + '" class="text-sm font-semibold text-blue-700 tnum hover:underline">' + n + '</a></td>' + (breakdown ? '<td class="px-4 py-3 text-right text-sm text-slate-800 tnum">' + (r.awrRate ? money(r.awrRate) + '/h' : '<span class="text-slate-400" aria-label="Not set">—</span>') + '</td>' : '') + '<td class="px-4 py-3 text-right"><span class="row-actions inline-flex gap-1">' + (ro ? '' : '<button type="button" class="' + BTN_GHOST + '" onclick="openRole(\'' + r.id + '\')">Edit</button>') + '<a href="abstract.rates.rate-cards.html?role=' + r.id + '" class="' + BTN_GHOST + '">Rate cards</a></span></td></tr>'; }).join('') +
+    '</tbody></table></div><p class="px-4 py-3 text-xs text-slate-500 border-t border-slate-200 bg-slate-50">' + list.length + (list.length === 1 ? ' job role' : ' job roles') + '</p></div>' +
+    '<ul class="md:hidden flex flex-col gap-3">' + list.map(function (r) { var n = cardsOf(r.id).length; return '<li><a href="abstract.rates.rate-cards.html?role=' + r.id + '" class="block ' + 'bg-white rounded-2xl border border-slate-200 shadow-sm' + ' p-4"><span class="flex items-start justify-between gap-2"><span class="text-sm font-semibold text-slate-900">' + esc(r.title) + '</span><span class="text-xs text-slate-500 tnum">' + n + (n === 1 ? ' card' : ' cards') + '</span></span><span class="block text-xs text-slate-500 mt-1">' + esc(r.description || '') + '</span>' + (breakdown && r.awrRate ? '<span class="block text-xs text-slate-700 mt-1 tnum">AWR rate ' + money(r.awrRate) + '/h</span>' : '') + '</a></li>'; }).join('') + '</ul>';
+}
+function emptyBlock(icon, t, p, action) { return '<div class="' + 'bg-white rounded-2xl border border-slate-200 shadow-sm' + ' px-6 py-12 text-center"><div class="w-14 h-14 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-4"><i class="fa-solid ' + icon + ' text-xl" aria-hidden="true"></i></div><h2 class="text-base font-bold text-slate-900">' + t + '</h2><p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">' + p + '</p>' + (action || '') + '</div>'; }
+/* ---------- a role's cards ---------- */
+function cardRows(cards, showRole) {
+  var byNode = {};
+  return '<div class="hidden md:block ' + 'bg-white rounded-2xl border border-slate-200 shadow-sm' + ' overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left"><caption class="sr-only">Rate cards</caption><thead class="bg-slate-50 border-b border-slate-200"><tr>' + (showRole ? '<th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Job role</th>' : '') + '<th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Client</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Scope</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Effective from</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Effective to</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider"><span class="sr-only">Marker</span></th>' + (breakdown ? '<th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Comparator</th>' : '') + '<th scope="col" class="px-4 py-3"><span class="sr-only">Open</span></th></tr></thead><tbody class="divide-y divide-slate-100">' +
+    cards.map(function (c) { var v = inForce(c), s = scheduled(c), href = 'abstract.rates.rate-card.html?id=' + c.id;
+      var line = function (ver, first) { return '<tr class="hover:bg-slate-50/60 cursor-pointer" data-href="' + href + (first ? '' : '&version=' + ver.id) + '">' + (showRole ? '<td class="px-4 py-3 text-sm font-semibold text-slate-900">' + (first ? esc(roleOf(c.jobRoleId).title) : '') + '</td>' : '') + '<td class="px-4 py-3 text-sm ' + (first ? 'font-semibold text-slate-900' : 'text-slate-400') + '">' + (first ? esc(ORGS[c.client].name) : '') + '</td><td class="px-4 py-3 text-sm text-slate-700">' + (first ? esc(scopeLabel(c)) : '') + '</td><td class="px-4 py-3 text-sm text-slate-700 tnum">' + fmtDate(ver.effectiveFrom) + '</td><td class="px-4 py-3 text-sm text-slate-700 tnum">' + (ver.effectiveTo ? fmtDate(ver.effectiveTo) : '—') + '</td><td class="px-4 py-3">' + versionMarker(ver) + '</td>' + (breakdown ? '<td class="px-4 py-3 text-right text-sm text-slate-800 tnum">' + (first && c.comparatorRate ? money(c.comparatorRate) + '/h' : (first ? '<span class="text-slate-400">—</span>' : '')) + '</td>' : '') + '<td class="px-4 py-3 text-right"><i class="fa-solid fa-chevron-right text-[10px] text-slate-400" aria-hidden="true"></i></td></tr>'; };
+      return (v ? line(v, true) : '') + (s ? line(s, !v) : ''); }).join('') + '</tbody></table></div></div>' +
+    '<ul class="md:hidden flex flex-col gap-3">' + cards.map(function (c) { var v = inForce(c), s = scheduled(c); return '<li><a href="abstract.rates.rate-card.html?id=' + c.id + '" class="block ' + 'bg-white rounded-2xl border border-slate-200 shadow-sm' + ' p-4"><span class="flex items-start justify-between gap-2"><span class="text-sm font-semibold text-slate-900">' + (showRole ? esc(roleOf(c.jobRoleId).title) + ' · ' : '') + esc(ORGS[c.client].name) + '</span>' + (v ? versionMarker(v) : (s ? versionMarker(s) : '')) + '</span><span class="block text-xs text-slate-500 mt-1">' + esc(scopeLabel(c)) + (v ? ' · ' + rangeText(v) : '') + '</span>' + (s ? '<span class="block text-xs text-slate-500 mt-1">Future from ' + fmtDate(s.effectiveFrom) + '</span>' : '') + '</a></li>'; }).join('') + '</ul>';
+}
+function wireRows() { document.querySelectorAll('tr[data-href]').forEach(function (tr) { tr.onclick = function (e) { if (!e.target.closest('a,button')) location.href = tr.dataset.href; }; }); }
+function renderRole() {
+  var r = roleOf(roleId); if (!r) { roleId = null; return renderRoles(); }
+  document.getElementById('crumbs').style.display = ''; document.getElementById('crumb-here').textContent = r.title; document.getElementById('filters').style.display = 'none';
+  document.title = r.title + ' · Rate cards · Abstract VMS';
+  headBlock(esc(r.title), esc(r.description || '') + (breakdown ? ' · AWR rate ' + (r.awrRate ? money(r.awrRate) + '/h' : 'not set') : ''));
+  actionButtons(['<button type="button" id="btn-editrole" class="' + BTN_SEC + '"><i class="fa-solid fa-pen" aria-hidden="true"></i> Edit role</button>', BTN_NEWCARD]);
+  var cards = cardsOf(roleId), c = document.getElementById('content');
+  if (!cards.length) { c.innerHTML = emptyBlock('fa-sterling-sign', 'No rate cards for this role', 'A card prices one client, optionally one business unit or site, per Shift.', ro ? '' : '<button type="button" class="' + BTN_SEC + ' mt-5" onclick="openNew()"><i class="fa-solid fa-plus" aria-hidden="true"></i> New rate card</button>'); return; }
+  var groups = {}; cards.forEach(function (x) { (groups[x.client] = groups[x.client] || []).push(x); });
+  var versions = cards.reduce(function (n, x) { return n + x.versions.length; }, 0);
+  c.innerHTML = (Object.keys(groups).length > 1 ? Object.keys(groups).map(function (k) { return '<h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-4 mb-2 first:mt-0">' + esc(ORGS[k].name) + '</h3>' + cardRows(groups[k].sort(function (a, b) { return (a.orgNodeId ? 1 : 0) - (b.orgNodeId ? 1 : 0); }), false); }).join('') : cardRows(cards.sort(function (a, b) { return (a.orgNodeId ? 1 : 0) - (b.orgNodeId ? 1 : 0); }), false)) +
+    '<p class="text-xs text-slate-500 mt-3">' + cards.length + (cards.length === 1 ? ' rate card' : ' rate cards') + ' · ' + versions + (versions === 1 ? ' version' : ' versions') + '. A node card overrides the whole-client card for that node and everything beneath it.</p>';
+  wireRows();
+}
+/* ---------- the client wizard's rates step: this client's cards across roles ---------- */
+function renderClient() {
+  var org = ORGS[clientId]; document.getElementById('filters').style.display = 'none';
+  headBlock('Rate cards for ' + esc(org.name), 'One card per job role, per Shift; optionally one per business unit or site. Activation needs a card with a version in force today.');
+  actionButtons([BTN_IMPORT, BTN_NEWCARD]);
+  var cards = CARDS.filter(function (c) { return c.client === clientId; }), c = document.getElementById('content');
+  if (!(SHIFTS[clientId] || []).filter(function (s) { return !s.deactivatedAt; }).length) { c.innerHTML = emptyBlock('fa-clock', org.name + ' has no Shifts yet', 'A rate card prices each Shift, so add the Shifts first.', '<a href="abstract.configuration.organisation-configuration.html?org=' + clientId + '&group=timesheets" class="' + BTN_SEC + ' mt-5"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i> Configuration › Shifts</a>'); return; }
+  if (!cards.length) { c.innerHTML = emptyBlock('fa-sterling-sign', 'No rate cards for ' + esc(org.name) + ' yet', 'Add a card for a job role; the Shifts are ' + (SHIFTS[clientId] || []).filter(function (s) { return !s.deactivatedAt; }).map(function (s) { return s.name; }).join(', ') + '.', ro ? '' : '<button type="button" class="' + BTN_SEC + ' mt-5" onclick="openNew()"><i class="fa-solid fa-plus" aria-hidden="true"></i> New rate card</button>'); return; }
+  c.innerHTML = cardRows(cards, true); wireRows();
+}
+/* ---------- the agency wizard's rates step: the cards of the clients this agency is approved for, as this Abstract caller sees them ---------- */
+function renderAgency() {
+  var org = ORGS[agencyId], clients = approvedClientsOf(agencyId); document.getElementById('filters').style.display = 'none';
+  headBlock('Rate cards for the clients ' + esc(org.name) + ' is approved for', 'The pay side of each card is what Abstract pays this agency. Shown as you see them; the agency portal shows no rate page in slice 2.');
+  actionButtons([]);
+  var c = document.getElementById('content');
+  if (!clients.length) { c.innerHTML = emptyBlock('fa-handshake-angle', 'No client approval in force today', esc(org.name) + ' is not yet approved for a client with an effective date of today or earlier. Approve it in the client approvals step; a scheduled approval counts from its date.', ''); return; }
+  var cards = CARDS.filter(function (x) { return clients.indexOf(x.client) >= 0; });
+  if (!cards.length) { c.innerHTML = emptyBlock('fa-sterling-sign', 'No rate card in force for an approved client', 'Approved: ' + clients.map(function (k) { return esc(ORGS[k].name); }).join(', ') + '. Add a card for one of them under its job role.', ''); return; }
+  c.innerHTML = cardRows(cards, true); wireRows();
+}
+/* ---------- overlays ---------- */
+function openRole(id) {
+  var r = id ? roleOf(id) : null;
+  document.getElementById('m-role-t').textContent = r ? 'Edit job role' : 'New job role';
+  document.getElementById('r-title').value = r ? r.title : ''; document.getElementById('r-desc').value = r ? (r.description || '') : ''; document.getElementById('r-awr').value = r && r.awrRate ? r.awrRate : '';
+  setErr('r-title', ''); setErr('r-awr', ''); document.getElementById('r-save').dataset.id = id || '';
+  S1.openModal('m-role');
+}
+document.getElementById('r-save').onclick = function () {
+  var id = this.dataset.id, t = document.getElementById('r-title').value.trim(), a = document.getElementById('r-awr').value, ok = true;
+  setErr('r-title', t ? '' : 'Give the role a title.'); if (!t) ok = false;
+  if (t && ROLES.some(function (r) { return r.id !== id && r.title.toLowerCase() === t.toLowerCase(); })) { setErr('r-title', 'A job role called ' + t + ' already exists.'); ok = false; }
+  if (a !== '' && Number(a) < 0) { setErr('r-awr', 'The AWR rate cannot be negative.'); ok = false; } else setErr('r-awr', '');
+  if (!ok) return;
+  if (id) { var r = roleOf(id); r.title = t; r.description = document.getElementById('r-desc').value.trim() || null; r.awrRate = a === '' ? null : d2(a); }
+  else ROLES.unshift({ id: 'jr-' + Date.now(), title: t, description: document.getElementById('r-desc').value.trim() || null, awrRate: a === '' ? null : d2(a) });
+  S1.closeModal('m-role'); render(); S1.toast('Job role saved.', 'success');
+};
+var nodeTree = null;
+function openNew() {
+  var rs = document.getElementById('n-role'); rs.innerHTML = ROLES.map(function (r) { return '<option value="' + r.id + '" ' + (r.id === roleId ? 'selected' : '') + '>' + esc(r.title) + '</option>'; }).join('');
+  var cs = document.getElementById('n-client'); cs.innerHTML = Object.keys(ORGS).filter(function (k) { return ORGS[k].party === 'client' && ORGS[k].status !== 'Draft'; }).map(function (k) { return '<option value="' + k + '" ' + (k === clientId ? 'selected' : '') + '>' + esc(ORGS[k].name) + '</option>'; }).join('');
+  cs.disabled = !!clientId; document.querySelector('input[name="n-scope"][value="client"]').checked = true; document.getElementById('n-node-wrap').style.display = 'none';
+  document.getElementById('n-from').value = TODAY; setErr('n-from', ''); document.getElementById('n-client-err').style.display = 'none'; document.getElementById('n-scope-err').style.display = 'none';
+  buildNodeTree();
+  if (state === 'validation') { rs.value = 'jr-wo'; cs.value = 'acme'; document.getElementById('n-from').value = '2026-10-01'; setTimeout(function () { document.getElementById('n-continue').click(); }, 50); }
+  S1.openModal('m-new');
+}
+function buildNodeTree() { var cl = document.getElementById('n-client').value; nodeTree = new Tree('n-node-tree', { nodes: (TREES[cl] || []).map(function (n) { return Object.assign({}, n); }), root: { name: ORGS[cl].name }, selection: 'single', compact: true, label: 'Choose a node' }); }
+document.getElementById('n-client').addEventListener('change', buildNodeTree);
+document.querySelectorAll('input[name="n-scope"]').forEach(function (r) { r.addEventListener('change', function () { document.getElementById('n-node-wrap').style.display = this.value === 'node' ? '' : 'none'; }); });
+document.getElementById('n-continue').onclick = function () {
+  var role = document.getElementById('n-role').value, cl = document.getElementById('n-client').value, scopeNode = document.querySelector('input[name="n-scope"]:checked').value === 'node' ? (nodeTree && nodeTree.value[0]) || null : null, from = document.getElementById('n-from').value, ok = true;
+  var se = document.getElementById('n-scope-err'), ce = document.getElementById('n-client-err');
+  if (document.querySelector('input[name="n-scope"]:checked').value === 'node' && !scopeNode) { se.textContent = 'Choose a business unit or site, or price the whole client.'; se.style.display = ''; ok = false; } else se.style.display = 'none';
+  if (!from) { setErr('n-from', 'Enter the effective date.'); ok = false; } else if (from < TODAY) { setErr('n-from', 'A card cannot start in the past. Enter today (' + fmtDate(TODAY) + ') or later.'); ok = false; } else setErr('n-from', '');
+  var dup = CARDS.find(function (c) { return c.jobRoleId === role && c.client === cl && (c.orgNodeId || null) === scopeNode; });
+  if (dup) { ce.innerHTML = 'A card for ' + esc(roleOf(role).title) + ' at ' + esc(ORGS[cl].name) + ' (' + esc(scopeLabel(dup)) + ') already exists. <a class="font-semibold underline" href="abstract.rates.rate-card.html?id=' + dup.id + '&mode=edit">Add a version there</a> instead.'; ce.style.display = ''; ok = false; } else ce.style.display = 'none';
+  if (!(SHIFTS[cl] || []).filter(function (s) { return !s.deactivatedAt; }).length) { ce.innerHTML = esc(ORGS[cl].name) + ' has no Shifts yet. A rate card prices each Shift, so <a class="font-semibold underline" href="abstract.configuration.organisation-configuration.html?org=' + cl + '&group=timesheets">add the Shifts first</a>.'; ce.style.display = ''; ok = false; }
+  if (!ok) return;
+  location.href = 'abstract.rates.rate-card.html?new=1&role=' + role + '&client=' + cl + (scopeNode ? '&node=' + scopeNode : '') + '&from=' + from + (S1.embedded ? '&embedded=1' : '');
+};
+/* ---------- Import CSV (RT-008, RT-013): drop zone → validation preview → Commit N rows ---------- */
+var IMPORT_ROWS = [
+  { row: 1, jobRoleTitle: 'Warehouse Operative', clientName: 'Acme Logistics', scope: null, shiftName: 'Morning', effectiveFrom: '2027-01-01', basePay: '13.00', agencyPayRate: '14.30', chargeRate: '20.40', outcome: 'update', message: null },
+  { row: 2, jobRoleTitle: 'Warehouse Operative', clientName: 'Acme Logistics', scope: null, shiftName: 'Afternoon', effectiveFrom: '2027-01-01', basePay: '13.30', agencyPayRate: '14.60', chargeRate: '20.80', outcome: 'update', message: null },
+  { row: 3, jobRoleTitle: 'Warehouse Operative', clientName: 'Acme Logistics', scope: null, shiftName: 'Night', effectiveFrom: '2027-01-01', basePay: '14.50', agencyPayRate: '15.90', chargeRate: '21.60', outcome: 'update', message: null },
+  { row: 4, jobRoleTitle: 'Team Leader', clientName: 'Acme Logistics', scope: null, shiftName: 'Morning', effectiveFrom: '2026-11-01', basePay: '15.20', agencyPayRate: '16.70', chargeRate: '23.80', outcome: 'create', message: null },
+  { row: 5, jobRoleTitle: 'Team Leader', clientName: 'Acme Logistics', scope: null, shiftName: 'Afternoon', effectiveFrom: '2026-11-01', basePay: '15.40', agencyPayRate: '16.90', chargeRate: '24.10', outcome: 'create', message: null },
+  { row: 6, jobRoleTitle: 'Team Leader', clientName: 'Acme Logistics', scope: null, shiftName: 'Night', effectiveFrom: '2026-11-01', basePay: '16.60', agencyPayRate: '18.20', chargeRate: '25.60', outcome: 'create', message: null },
+  { row: 7, jobRoleTitle: 'Picker / Packer', clientName: 'Northgate Foods', scope: null, shiftName: 'Days', effectiveFrom: '2026-11-01', basePay: '11.90', agencyPayRate: '13.10', chargeRate: '11.20', outcome: 'error', message: 'Pay is above charge: agency_pay_rate 13.10 is more than charge_rate 11.20.' },
+  { row: 8, jobRoleTitle: 'Picker / Packer', clientName: 'Northgate Foods', scope: null, shiftName: 'Twilight', effectiveFrom: '2026-11-01', basePay: '11.90', agencyPayRate: '13.10', chargeRate: '18.90', outcome: 'error', message: 'Northgate Foods has no active Shift called Twilight.' },
+  { row: 9, jobRoleTitle: 'Forklift Driver (Reach)', clientName: 'Acme Logistics', scope: 'Birmingham DC', shiftName: 'Morning', effectiveFrom: '2026-09-01', basePay: '14.40', agencyPayRate: '15.80', chargeRate: '22.40', outcome: 'error', message: 'effective_from 2026-09-01 is in the past; a version never rewrites history.' },
+  { row: 10, jobRoleTitle: 'Healthcare Assistant', clientName: 'Meridian Healthcare Services', scope: null, shiftName: 'Early', effectiveFrom: '2026-11-01', basePay: '13.40', agencyPayRate: '14.70', chargeRate: '20.90', outcome: 'update', message: null }
+];
+var impStep = 1, impRows = [], impFile = null;
+function openImport() { impStep = 1; impRows = []; impFile = null; paintImport(); S1.openModal('m-import'); }
+function paintImport() {
+  var b = document.getElementById('imp-body'), f = document.getElementById('imp-foot');
+  document.getElementById('m-import-t').textContent = impStep === 1 ? 'Import rates' : 'Import rates · ' + impFile + ' · ' + impRows.length + ' rows';
+  if (impStep === 1) {
+    b.innerHTML = '<div id="imp-drop" tabindex="0" role="button" aria-label="Drop a CSV here or choose a file" class="rounded-xl border-2 border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center hidden sm:block"><i class="fa-solid fa-cloud-arrow-up text-slate-400 text-2xl" aria-hidden="true"></i><p class="text-sm text-slate-700 mt-3">Drop the CSV here, or <span class="text-blue-700 font-semibold">choose a file</span></p><p class="text-xs text-slate-500 mt-1">Nothing is written until you confirm the preview. A file with one error commits nothing.</p></div><button type="button" class="' + BTN_SEC + ' w-full sm:hidden" onclick="impPick()"><i class="fa-solid fa-paperclip" aria-hidden="true"></i> Choose a CSV file</button><p id="imp-err" style="display:none" role="alert" class="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800"></p>';
+    f.innerHTML = '<button type="button" onclick="S1.closeModal(\'m-import\')" class="' + BTN_SEC + '">Cancel</button>';
+    var dz = document.getElementById('imp-drop'); dz.onclick = impPick; dz.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); impPick(); } }; dz.ondragover = function (e) { e.preventDefault(); dz.classList.add('border-blue-400', 'bg-blue-50'); }; dz.ondragleave = function () { dz.classList.remove('border-blue-400', 'bg-blue-50'); }; dz.ondrop = function (e) { e.preventDefault(); var fl = e.dataTransfer.files[0]; impGot(fl ? fl.name : 'rates_q4_2026.csv', fl ? fl.size : 4096, fl ? fl.type : 'text/csv'); };
+  } else if (impStep === 2) {
+    var errs = impRows.filter(function (r) { return r.outcome === 'error'; }).length, okN = impRows.length - errs;
+    b.innerHTML = '<div role="status" class="rounded-xl border ' + (errs ? 'border-red-200 bg-red-50 text-red-900' : 'border-emerald-200 bg-emerald-50 text-emerald-900') + ' px-4 py-3 text-sm flex items-start gap-3 mb-4"><i class="fa-solid ' + (errs ? 'fa-circle-exclamation' : 'fa-circle-check') + ' mt-0.5" aria-hidden="true"></i><p>' + (errs ? '<span class="font-semibold">' + okN + ' rows ready · ' + errs + (errs === 1 ? ' row' : ' rows') + ' with errors</span> — fix the file and drop it again. A file with one error commits nothing.' : '<span class="font-semibold">' + okN + ' rows ready.</span> Create adds a new card; Update adds a new version of an existing card.') + '</p></div>' +
+      '<div class="hidden md:block rounded-xl border border-slate-200 overflow-hidden"><div class="overflow-x-auto"><table class="w-full text-left"><caption class="sr-only">Preview</caption><thead class="bg-slate-50 border-b border-slate-200"><tr><th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Row</th><th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Job role</th><th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Client</th><th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Scope</th><th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Shift</th><th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">From</th><th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Base pay</th><th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Agency pay</th><th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Charge</th><th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Outcome</th></tr></thead><tbody class="divide-y divide-slate-100">' +
+      impRows.map(function (r) { var bad = r.outcome === 'error'; return '<tr class="' + (bad ? 'bg-red-50/40' : '') + '"><td class="px-4 py-2.5 text-xs text-slate-500 tnum">' + r.row + '</td><td class="px-4 py-2.5 text-sm text-slate-900">' + esc(r.jobRoleTitle) + '</td><td class="px-4 py-2.5 text-sm text-slate-700">' + esc(r.clientName) + '</td><td class="px-4 py-2.5 text-sm text-slate-700">' + esc(r.scope || 'Whole client') + '</td><td class="px-4 py-2.5 text-sm text-slate-700">' + esc(r.shiftName) + '</td><td class="px-4 py-2.5 text-sm text-slate-700 tnum">' + fmtDate(r.effectiveFrom) + '</td><td class="px-4 py-2.5 text-sm text-right tnum">' + r.basePay + '</td><td class="px-4 py-2.5 text-sm text-right tnum">' + r.agencyPayRate + '</td><td class="px-4 py-2.5 text-sm text-right tnum">' + r.chargeRate + '</td><td class="px-4 py-2.5">' + (bad ? '<span class="inline-flex items-center gap-1 text-xs font-semibold text-red-700"><i class="fa-solid fa-circle-xmark" aria-hidden="true"></i> Error</span>' : '<span class="text-xs font-semibold text-slate-700">' + (r.outcome === 'create' ? 'Create' : 'Update') + '</span>') + '</td></tr>' + (bad ? '<tr class="bg-red-50/40"><td></td><td colspan="9" class="px-4 pb-2.5 text-xs text-red-700">' + esc(r.message) + '</td></tr>' : ''); }).join('') + '</tbody></table></div></div>' +
+      '<ul class="md:hidden divide-y divide-slate-100 rounded-xl border border-slate-200">' + impRows.map(function (r) { var bad = r.outcome === 'error'; return '<li class="px-4 py-3 ' + (bad ? 'bg-red-50/40' : '') + '"><div class="flex items-start justify-between gap-2"><p class="text-sm font-semibold text-slate-900">' + r.row + ' · ' + esc(r.jobRoleTitle) + '</p>' + (bad ? '<span class="text-xs font-semibold text-red-700">Error</span>' : '<span class="text-xs font-semibold text-slate-700">' + (r.outcome === 'create' ? 'Create' : 'Update') + '</span>') + '</div><p class="text-xs text-slate-500 mt-0.5">' + esc(r.clientName) + ' · ' + esc(r.scope || 'Whole client') + ' · ' + esc(r.shiftName) + ' · from ' + fmtDate(r.effectiveFrom) + '</p><p class="text-xs text-slate-700 mt-0.5 tnum">Base ' + r.basePay + ' · Agency pay ' + r.agencyPayRate + ' · Charge ' + r.chargeRate + '</p>' + (bad ? '<p class="text-xs text-red-700 mt-1">' + esc(r.message) + '</p>' : '') + '</li>'; }).join('') + '</ul>' +
+      (impRows.length > 20 ? '<p class="text-xs text-slate-500 mt-3">Showing the first 20 of ' + impRows.length + ' rows.</p>' : '');
+    f.innerHTML = '<button type="button" onclick="impStep=1;paintImport()" class="' + BTN_SEC + '"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i> Another file</button><button type="button" onclick="S1.closeModal(\'m-import\')" class="' + BTN_SEC + '">Cancel</button>' + (errs ? '' : '<button type="button" id="imp-commit" class="' + BTN_PRI + '" style="' + BTN_PRI_STYLE + '"><i class="fa-solid fa-check" aria-hidden="true"></i> Commit ' + okN + ' rows</button>');
+    var cm = document.getElementById('imp-commit'); if (cm) cm.onclick = function () { cm.disabled = true; cm.innerHTML = '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Committing…'; setTimeout(function () { if (state === 'error') { cm.disabled = false; cm.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i> Commit ' + okN + ' rows'; b.insertAdjacentHTML('afterbegin', '<div role="alert" class="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 mb-4"><span class="font-semibold">This preview has expired.</span> It was older than 24 hours, or a card it touches changed since. Drop the file again for a fresh preview.</div>'); return; } S1.closeModal('m-import'); S1.toast(okN + ' rows committed: ' + impRows.filter(function (r) { return r.outcome === 'create'; }).length + ' cards created, ' + impRows.filter(function (r) { return r.outcome === 'update'; }).length + ' versions added.', 'success'); }, 900); };
+  }
+}
+function impPick() { var i = document.createElement('input'); i.type = 'file'; i.accept = '.csv,text/csv'; i.onchange = function () { var fl = i.files[0]; if (fl) impGot(fl.name, fl.size, fl.type); }; i.click(); }
+function impGot(name, size, type) {
+  var err = document.getElementById('imp-err');
+  if (!/\.csv$/i.test(name)) { err.textContent = 'Only a CSV file can be imported. ' + name + ' is not one.'; err.style.display = ''; return; }
+  if (size > 2 * 1024 * 1024) { err.textContent = 'That file is ' + (size / 1048576).toFixed(1) + ' MB; the limit is 2 MB (about 5,000 rows).'; err.style.display = ''; return; }
+  impFile = name; impRows = IMPORT_ROWS.map(function (r) { return Object.assign({}, r); });
+  if (state === 'validation' || state === 'default' || state === 'error') { /* two bad rows as the TV describes */ } else { impRows = impRows.filter(function (r) { return r.outcome !== 'error'; }); }
+  if (state === 'large') { for (var i = 11; i <= 1200; i++) impRows.push(Object.assign({}, IMPORT_ROWS[i % 6], { row: i, message: null, outcome: i % 2 ? 'update' : 'create' })); }
+  impStep = 2; paintImport();
+}
+/* ---------- boot ---------- */
+['f-search', 'f-client'].forEach(function (id) { document.getElementById(id).addEventListener(id === 'f-search' ? 'input' : 'change', render); });
+document.addEventListener('s1:state', function (e) { state = e.detail.state; load(); if (state === 'validation') { if (roleId) openNew(); else openImport(); } });
+if (clientId || agencyId) document.addEventListener('s1:ready', function () { document.querySelectorAll('[data-embedded-hide]').forEach(function (x) { x.style.display = 'none'; }); });
+</script>
 <script src="slice1-kit.js"></script>
 </body>
 </html>
