@@ -197,9 +197,9 @@
             </div>
 
             <nav aria-label="Organisation" data-embedded-hide class="flex items-center gap-6 border-b border-slate-200 mb-5 overflow-x-auto whitespace-nowrap">
-                <!-- slice 2 (B1, B2): Profile and Structure tabs exist only inside the administering context -->
-                <a href="abstract.organisations.organisation-profile.html" data-keep-org data-ctx-only style="display:none" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-id-card text-xs" aria-hidden="true"></i>Profile</a>
-                <a href="abstract.organisations.structure.html" data-keep-org data-ctx-only style="display:none" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-sitemap text-xs" aria-hidden="true"></i>Structure</a>
+                <!-- slice 2 (B1, B2): Profile and Structure tabs exist only inside the administering context, and not in Slice 1 only -->
+                <a href="abstract.organisations.organisation-profile.html" data-keep-org data-ctx-only data-s1-later style="display:none" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-id-card text-xs" aria-hidden="true"></i>Profile</a>
+                <a href="abstract.organisations.structure.html" data-keep-org data-ctx-only data-s1-later style="display:none" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-sitemap text-xs" aria-hidden="true"></i>Structure</a>
                 <a href="abstract.identity-access.users.html" data-keep-org aria-current="page" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-blue-700 text-sm font-semibold text-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-users text-xs" aria-hidden="true"></i>Users</a>
                 <a href="abstract.identity-access.roles.html" data-keep-org class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-user-shield text-xs" aria-hidden="true"></i>Roles</a>
                 <a href="abstract.identity-access.permission-matrix.html" data-keep-org class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 border-transparent text-sm font-medium text-slate-500 hover:text-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-table-cells text-xs" aria-hidden="true"></i>Permissions</a>
@@ -261,7 +261,7 @@
             </div>
                 <div data-s1-hide="loading error">
                     <div id="users-table-card" class="hidden md:block bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto relative">
                             <table class="w-full text-left">
                                 <caption class="sr-only">Users of <span data-org-name></span></caption>
                                 <thead class="bg-slate-50 border-b border-slate-200">
@@ -355,6 +355,21 @@
     </div>
 </div>
 
+<!-- Correct email (slice 1; PATCH /users/:id takes an email only while the user is Invited): the address is corrected before the
+     person activates, a new activation link goes to the corrected address and the earlier one stops working -->
+<div data-s1-modal id="m-correct" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-correct-t">
+    <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200"><h2 id="m-correct-t" class="text-base font-bold text-slate-900">Correct email address</h2><button type="button" onclick="S1.closeModal('m-correct')" aria-label="Close" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 hover:border-blue-300 flex items-center justify-center text-slate-500 flex-shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button></div>
+        <form novalidate onsubmit="saveCorrect(event)">
+        <div class="px-6 py-5 flex flex-col gap-4">
+            <p class="text-sm text-slate-600"><span id="cx-name" class="font-semibold text-slate-800"></span> hasn't activated their account yet, so the address can still be corrected. We'll email a new activation link to the corrected address; it works for 72 hours. The link sent to <span id="cx-old" class="break-all"></span> stops working.</p>
+            <div><p class="block text-xs font-semibold text-slate-700 mb-1.5">Current email</p><p id="cx-current" class="text-sm text-slate-600 bg-slate-100 border border-slate-200 rounded-lg px-3 py-2.5 break-all"></p></div>
+            <div><label for="cx-new" class="block text-xs font-semibold text-slate-700 mb-1.5">Corrected email address</label><input id="cx-new" type="email" autocomplete="off" placeholder="name@company.co.uk" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-blue-300 focus:bg-white focus:ring-2 focus:ring-blue-600/20" aria-describedby="cx-new-err"/><p id="cx-new-err" class="text-xs text-red-600 mt-1.5" style="display:none" role="alert"></p></div>
+        </div>
+        <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-wrap justify-end gap-3 sm:rounded-b-2xl"><button type="button" onclick="S1.closeModal('m-correct')" class="inline-flex items-center justify-center gap-2 bg-slate-50 border border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600 rounded-lg px-3 py-2 text-xs font-semibold transition-colors min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Cancel</button><button type="submit" class="inline-flex items-center justify-center gap-2 text-white rounded-lg px-4 py-2.5 text-xs font-semibold hover:opacity-95 transition-opacity min-h-[38px] focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Save and send link</button></div>
+        </form>
+    </div>
+</div>
 <!-- Edit name -->
 <div data-s1-modal id="m-name" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="m-name-t">
     <div class="bg-white w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
@@ -550,9 +565,12 @@ function withOrg(href) {
     var d = document.createElement('div'); d.className = 'ml-auto w-1.5 h-1.5 rounded-full bg-blue-400'; org.appendChild(d);
   }
 })();
+/* Parts that exist only inside the administering context stay hidden outside it whatever the navigation mode: the kit
+   shows every data-s1-later element again outside Slice 1 only, which would otherwise undo the context-only hiding. */
+document.addEventListener('s1:mode', function () { if (!ORG_SLUG) document.querySelectorAll('[data-ctx-only]').forEach(function (e) { e.style.display = 'none'; }); });
 
-var ROLESETS = {"abstract":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:reset_two_factor","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions","organisation:view","organisation:administer_all","audit_log:view","audit_log:export","audit_log:view_before_after","system_config:view","system_config:create_edit","system_config:edit_security","notification_template:view","notification_template:create_edit","data_subject:view","data_subject:compile","data_subject:export","data_subject:erase","shift_pattern:view","shift_pattern:create_edit","shift_pattern:delete","bank_holiday:create_edit"]},{"id":"operations","name":"Operations","def":true,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view","audit_log:view","system_config:view","shift_pattern:view","shift_pattern:create_edit","shift_pattern:delete","bank_holiday:create_edit"]},{"id":"finance","name":"Finance","def":true,"status":"Active","grants":["user:view","role:view","organisation:view","audit_log:view","audit_log:export","audit_log:view_before_after","system_config:view"]},{"id":"compliance","name":"Compliance","def":false,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view","role:view_permissions","organisation:view","audit_log:view","audit_log:export","audit_log:view_before_after","data_subject:view","data_subject:compile","data_subject:export","data_subject:erase"]},{"id":"auditor","name":"External auditor","def":false,"status":"Inactive","grants":["audit_log:view","audit_log:export","audit_log:view_before_after"]},{"id":"temporary","name":"Temporary access","def":false,"status":"Active","grants":[]}],"client":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:reset_two_factor","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions"]},{"id":"hiring","name":"Hiring manager","def":true,"status":"Active","grants":["user:view","role:view"]},{"id":"finance","name":"Finance approver","def":true,"status":"Active","grants":["user:view"]},{"id":"seasonal","name":"Seasonal supervisors","def":false,"status":"Inactive","grants":["user:view"]}],"agency":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:reset_two_factor","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions"]},{"id":"recruiter","name":"Recruiter","def":true,"status":"Active","grants":["user:view","role:view"]},{"id":"payroll","name":"Payroll","def":true,"status":"Active","grants":["user:view"]}]};
-var USERSETS = {"abstract":[{"name":"Sarah Mitchell","email":"s.mitchell@abstractrecruitment.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 09:12"},{"name":"James Okafor","email":"j.okafor@abstractrecruitment.co.uk","roles":["operations","finance"],"status":"Active","last":"25 Sep 2026, 17:40"},{"name":"Hannah Clarke","email":"h.clarke@abstractrecruitment.co.uk","roles":["compliance"],"status":"Active","last":"24 Sep 2026, 11:02"},{"name":"David Chen","email":"d.chen@abstractrecruitment.co.uk","roles":["operations"],"status":"Active","last":"26 Sep 2026, 08:31"},{"name":"Tom Rees","email":"t.rees@abstractrecruitment.co.uk","roles":["operations"],"status":"Invited","last":""},{"name":"Amara Okoye","email":"a.okoye@abstractrecruitment.co.uk","roles":[],"status":"Invited","last":""},{"name":"Liam Foster","email":"l.foster@abstractrecruitment.co.uk","roles":["finance"],"status":"Active","last":"19 Sep 2026, 15:26"},{"name":"Priya Shah","email":"p.shah@abstractrecruitment.co.uk","roles":["finance"],"status":"Inactive","last":"14 Aug 2026, 09:05"}],"acme":[{"name":"Rachel Green","email":"rachel.green@acmelogistics.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 08:02"},{"name":"Mark Davies","email":"mark.davies@acmelogistics.co.uk","roles":["hiring"],"status":"Active","last":"25 Sep 2026, 14:18"},{"name":"Priya Natarajan","email":"priya.natarajan@acmelogistics.co.uk","roles":["finance"],"status":"Active","last":"23 Sep 2026, 10:47"},{"name":"Olivia Brown","email":"olivia.brown@acmelogistics.co.uk","roles":["hiring"],"status":"Invited","last":""},{"name":"Ben Taylor","email":"ben.taylor@acmelogistics.co.uk","roles":["hiring","seasonal"],"status":"Inactive","last":"02 Aug 2026, 16:20"}],"techforce":[{"name":"Daniel Wright","email":"daniel.wright@techforce-recruitment.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 07:55"},{"name":"Sophie Turner","email":"sophie.turner@techforce-recruitment.co.uk","roles":["recruiter"],"status":"Active","last":"25 Sep 2026, 12:09"},{"name":"Aisha Khan","email":"aisha.khan@techforce-recruitment.co.uk","roles":["payroll"],"status":"Active","last":"22 Sep 2026, 09:30"},{"name":"Ryan Hughes","email":"ryan.hughes@techforce-recruitment.co.uk","roles":["recruiter"],"status":"Invited","last":""}]};
+var ROLESETS = {"abstract":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:reset_two_factor","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions","organisation:view","organisation:administer_all","audit_log:view","audit_log:export","audit_log:view_before_after","system_config:view","system_config:create_edit","system_config:edit_security","notification_template:view","notification_template:create_edit","data_subject:view","data_subject:compile","data_subject:export","data_subject:erase","shift_pattern:view","shift_pattern:create_edit","shift_pattern:delete","bank_holiday:create_edit"]},{"id":"operations","name":"Operations","def":true,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view","audit_log:view","system_config:view","shift_pattern:view","shift_pattern:create_edit","shift_pattern:delete","bank_holiday:create_edit"]},{"id":"finance","name":"Finance","def":true,"status":"Active","grants":["user:view","role:view","organisation:view","audit_log:view","audit_log:export","audit_log:view_before_after","system_config:view"]},{"id":"compliance","name":"Compliance","def":false,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view","role:view_permissions","organisation:view","audit_log:view","audit_log:export","audit_log:view_before_after","data_subject:view","data_subject:compile","data_subject:export","data_subject:erase"]},{"id":"auditor","name":"External auditor","def":false,"status":"Inactive","grants":["audit_log:view","audit_log:export","audit_log:view_before_after"]},{"id":"temporary","name":"Temporary access","def":false,"status":"Active","grants":[]}],"client":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:reset_two_factor","user:view_last_sign_in","role:view","role:create_edit","role:assign","role:configure_permissions","role:delete"]},{"id":"manager","name":"Manager","def":true,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view"]},{"id":"viewer","name":"Viewer","def":true,"status":"Active","grants":["user:view"]},{"id":"seasonal","name":"Seasonal supervisors","def":false,"status":"Inactive","grants":[]}],"agency":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:resend_activation","user:reset_two_factor","user:delete","user:view_email","user:view_last_sign_in","role:view","role:create_edit","role:assign","role:configure_permissions","role:delete"]},{"id":"recruiter","name":"Recruiter","def":true,"status":"Active","grants":["user:view","user:view_email","role:view"]},{"id":"finance","name":"Finance","def":true,"status":"Active","grants":["user:view"]},{"id":"teamlead","name":"Team Lead","def":false,"status":"Active","grants":[]}]};
+var USERSETS = {"abstract":[{"name":"Sarah Mitchell","email":"sarah.mitchell@abstract.com","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 09:12"},{"name":"James Okafor","email":"j.okafor@abstractrecruitment.co.uk","roles":["operations","finance"],"status":"Active","last":"25 Sep 2026, 17:40"},{"name":"Hannah Clarke","email":"h.clarke@abstractrecruitment.co.uk","roles":["compliance"],"status":"Active","last":"24 Sep 2026, 11:02"},{"name":"David Chen","email":"d.chen@abstractrecruitment.co.uk","roles":["operations"],"status":"Active","last":"26 Sep 2026, 08:31"},{"name":"Tom Rees","email":"t.rees@abstractrecruitment.co.uk","roles":["operations"],"status":"Invited","last":""},{"name":"Amara Okoye","email":"a.okoye@abstractrecruitment.co.uk","roles":[],"status":"Invited","last":""},{"name":"Liam Foster","email":"l.foster@abstractrecruitment.co.uk","roles":["finance"],"status":"Active","last":"19 Sep 2026, 15:26"},{"name":"Priya Shah","email":"p.shah@abstractrecruitment.co.uk","roles":["finance"],"status":"Inactive","last":"14 Aug 2026, 09:05"}],"acme":[{"name":"Rachel Green","email":"rachel.green@acmelogistics.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 08:02"},{"name":"Mark Davies","email":"mark.davies@acmelogistics.co.uk","roles":["manager"],"status":"Active","last":"25 Sep 2026, 14:18"},{"name":"Priya Natarajan","email":"priya.natarajan@acmelogistics.co.uk","roles":["viewer"],"status":"Active","last":"23 Sep 2026, 10:47"},{"name":"Olivia Brown","email":"olivia.brown@acmelogistics.co.uk","roles":["manager"],"status":"Invited","last":""},{"name":"Ben Taylor","email":"ben.taylor@acmelogistics.co.uk","roles":["manager","seasonal"],"status":"Inactive","last":"02 Aug 2026, 16:20"}],"techforce":[{"name":"Daniel Wright","email":"daniel.wright@techforce-recruitment.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 07:55"},{"name":"Sophie Turner","email":"sophie.turner@techforce-recruitment.co.uk","roles":["recruiter"],"status":"Active","last":"25 Sep 2026, 12:09"},{"name":"Aisha Khan","email":"aisha.khan@techforce-recruitment.co.uk","roles":["finance"],"status":"Active","last":"22 Sep 2026, 09:30"},{"name":"Ryan Hughes","email":"ryan.hughes@techforce-recruitment.co.uk","roles":["recruiter"],"status":"Invited","last":""}]};
 var Q = new URLSearchParams(location.search);
 
 /* ---------- Scope (slice 2, B3): breadcrumbs, the picker, My Account line ---------- */
@@ -751,20 +769,24 @@ function genericUsers() {
   }
   return out;
 }
-var USERSETS_EXTRA = {"harbour": [{"name": "Marcus Lee", "email": "marcus.lee@harbourretail.co.uk", "roles": ["administrator"], "status": "Invited", "scope": [], "last": null}, {"name": "Jo Patel", "email": "jo.patel@harbourretail.co.uk", "roles": ["hiring"], "status": "Invited", "scope": ["hb-soton"], "last": null}], "summit": [{"name": "Fiona Wallace", "email": "fiona@summitstaffing.co.uk", "roles": ["administrator"], "status": "Invited", "scope": [], "last": null}]};
+var USERSETS_EXTRA = {"harbour": [{"name": "Marcus Lee", "email": "marcus.lee@harbourretail.co.uk", "roles": ["administrator"], "status": "Invited", "scope": [], "last": null}, {"name": "Jo Patel", "email": "jo.patel@harbourretail.co.uk", "roles": ["manager"], "status": "Invited", "scope": ["hb-soton"], "last": null}], "summit": [{"name": "Fiona Wallace", "email": "fiona@summitstaffing.co.uk", "roles": ["administrator"], "status": "Invited", "scope": [], "last": null}]};
 var USERS = ORG_SLUG ? (USERSETS[ORG_SLUG] || USERSETS_EXTRA[ORG_SLUG] || genericUsers()) : USERSETS.abstract;
 USERS = JSON.parse(JSON.stringify(USERS));
 var SCOPES = {"rachel.green@acmelogistics.co.uk": [], "mark.davies@acmelogistics.co.uk": ["bhx"], "priya.natarajan@acmelogistics.co.uk": [], "olivia.brown@acmelogistics.co.uk": ["lei", "nth"], "ben.taylor@acmelogistics.co.uk": ["bhx-n"], "daniel.wright@techforce-recruitment.co.uk": [], "sophie.turner@techforce-recruitment.co.uk": ["tf-cov"], "aisha.khan@techforce-recruitment.co.uk": [], "ryan.hughes@techforce-recruitment.co.uk": ["tf-north"], "marcus.lee@harbourretail.co.uk": [], "jo.patel@harbourretail.co.uk": ["hb-soton"], "fiona@summitstaffing.co.uk": []};
 USERS.forEach(function (u) { u.scope = SCOPES[u.email] || u.scope || []; });
+/* A row opens the person's detail page (/{portal}/settings/users/:id), keeping the administering context. In the prototype only
+   the listed people have one, so generated rows (Large data) and someone invited a moment ago stay plain text. */
+var DETAIL = {}; USERS.forEach(function (u) { DETAIL[u.email] = 1; });
+function nameLink(u) { var key = u.seedEmail || u.email; return DETAIL[key] ? '<a href="abstract.identity-access.user-detail.html' + withOrg('?user=' + encodeURIComponent(key)) + '" class="hover:text-blue-700 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded">' + esc(u.name) + '</a>' : esc(u.name); }
 
 /* ---------- Two-step verification (slice 1 brief A12; TSD §3.1.4, 1.9 TV-9) ----------
    Every row shows User.twoFactorEnrolled. A holder of user:reset_two_factor (every catalogue, TSD R-39) resets a user
    who has it on: an organisation's own administrators first, Abstract from the administering context when they cannot.
    Nobody resets their own, so the action is absent on the signed-in person's row. */
-var TWO_STEP_ON = { 's.mitchell@abstractrecruitment.co.uk': 1, 'j.okafor@abstractrecruitment.co.uk': 1, 'd.chen@abstractrecruitment.co.uk': 1, 'p.shah@abstractrecruitment.co.uk': 1, 'rachel.green@acmelogistics.co.uk': 1, 'priya.natarajan@acmelogistics.co.uk': 1, 'ben.taylor@acmelogistics.co.uk': 1, 'daniel.wright@techforce-recruitment.co.uk': 1, 'aisha.khan@techforce-recruitment.co.uk': 1 };
+var TWO_STEP_ON = { 'sarah.mitchell@abstract.com': 1, 'j.okafor@abstractrecruitment.co.uk': 1, 'd.chen@abstractrecruitment.co.uk': 1, 'p.shah@abstractrecruitment.co.uk': 1, 'rachel.green@acmelogistics.co.uk': 1, 'priya.natarajan@acmelogistics.co.uk': 1, 'ben.taylor@acmelogistics.co.uk': 1, 'daniel.wright@techforce-recruitment.co.uk': 1, 'aisha.khan@techforce-recruitment.co.uk': 1 };
 USERS.forEach(function (u, i) { u.twoFactor = u.status !== 'Invited' && (!!TWO_STEP_ON[u.email] || (!!ORG_SLUG && !USERSETS[ORG_SLUG] && i === 0)); });
 var CAN_RESET_TWO_STEP = true;   // the signed-in Abstract user holds user:reset_two_factor; without it the action is absent
-var ME_EMAIL = 's.mitchell@abstractrecruitment.co.uk';   // the signed-in person: no reset on their own row
+var ME_EMAIL = 'sarah.mitchell@abstract.com';   // the signed-in person: no reset on their own row
 // UserSummary.twoFactorRequired: the resolved policy of the organisation being viewed. Acme requires it; Abstract's own list and the others do not.
 var TWO_STEP_REQUIRED = !!(ORG_SLUG && { acme: true }[ORG_SLUG]);
 function twoStepLine(u, card) {
@@ -805,7 +827,7 @@ function roleChips(u) {
 }
 function actionsFor(u) {
   var a = [];
-  if (u.status === 'Invited') a.push(['resend', 'Resend activation', 'fa-paper-plane']);
+  if (u.status === 'Invited') { a.push(['resend', 'Resend activation', 'fa-paper-plane']); a.push(['correct', 'Correct email', 'fa-envelope-circle-check']); }
   a.push(['name', 'Edit name', 'fa-pen']);
   if (u.status === 'Active' && !S1.isSlice1Mode()) a.push(['email', 'Change email', 'fa-at']);
   if (u.status !== 'Inactive') a.push(['roles', 'Set roles', 'fa-user-shield']);
@@ -821,7 +843,7 @@ function filtered() {
   var list = state === 'large' ? largeUsers(page) : USERS;
   if (state === 'large') return list;
   var q = document.getElementById('f-search').value.trim().toLowerCase(), s = document.getElementById('f-status').value;
-  var sc = document.getElementById('f-scope').value;
+  var sc = ORG_SLUG && !S1.isSlice1Mode() ? document.getElementById('f-scope').value : '';
   return list.filter(function (u) { return (!q || u.name.toLowerCase().indexOf(q) >= 0 || u.email.toLowerCase().indexOf(q) >= 0) && (!s || u.status === s) && inSubtree(u, sc); });
 }
 function inSubtree(u, nodeId) { if (!nodeId) return true; var by = {}; scopeNodesFor(ORG_SLUG).forEach(function (n) { by[n.id] = n; }); return (u.scope || []).some(function (x) { var n = by[x]; while (n) { if (n.id === nodeId) return true; n = n.parentId ? by[n.parentId] : null; } return false; }); }
@@ -829,7 +851,7 @@ function chips() {
   var q = document.getElementById('f-search').value.trim(), s = document.getElementById('f-status').value, c = [];
   if (q) c.push(['Search: ' + q, 'search']);
   if (s) c.push(['Status: ' + s, 'status']);
-  var scSel = document.getElementById('f-scope'); if (scSel.value) c.push(['Scope: ' + scSel.options[scSel.selectedIndex].text + ' and beneath', 'scope']);
+  var scSel = document.getElementById('f-scope'); if (scSel.value && ORG_SLUG && !S1.isSlice1Mode()) c.push(['Scope: ' + scSel.options[scSel.selectedIndex].text + ' and beneath', 'scope']);
   var box = document.getElementById('chips');
   box.style.display = c.length ? '' : 'none';
   box.innerHTML = c.map(function (x) { return '<span class="inline-flex items-center gap-1.5 pl-2.5 pr-1 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">' + esc(x[0]) + '<button type="button" data-clear="' + x[1] + '" aria-label="Remove filter ' + esc(x[0]) + '" class="w-5 h-5 rounded-full hover:bg-blue-100 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark text-[10px]" aria-hidden="true"></i></button></span>'; }).join('') +
@@ -858,10 +880,10 @@ function render() {
   var tb = document.getElementById('users-tbody'), cards = document.getElementById('users-cards');
   tb.innerHTML = VIEW.map(function (u, i) {
     return '<tr class="group hover:bg-slate-50/60">' +
-      '<td class="px-4 py-3 max-w-[240px]"><div class="flex items-center gap-3 min-w-0">' + avatar(u) + '<span class="min-w-0"><span class="block text-sm font-semibold text-slate-900 truncate" title="' + esc(u.name) + '">' + esc(u.name) + '</span><span class="xl:hidden block text-xs text-slate-500 truncate" title="' + esc(u.email) + '">' + esc(u.email) + '</span></span></div></td>' +
+      '<td class="px-4 py-3 max-w-[240px]"><div class="flex items-center gap-3 min-w-0">' + avatar(u) + '<span class="min-w-0"><span class="block text-sm font-semibold text-slate-900 truncate" title="' + esc(u.name) + '">' + nameLink(u) + '</span><span class="xl:hidden block text-xs text-slate-500 truncate" title="' + esc(u.email) + '">' + esc(u.email) + '</span></span></div></td>' +
       '<td class="hidden xl:table-cell px-4 py-3 max-w-[220px]"><span class="block text-sm text-slate-600 truncate" title="' + esc(u.email) + '">' + esc(u.email) + '</span></td>' +
       '<td class="px-4 py-3"><div class="flex flex-wrap gap-1">' + roleChips(u) + '</div></td>' +
-      (ORG_SLUG ? '<td class="px-4 py-3" data-s1-later>' + scopeCell(ORG_SLUG, u.scope || []) + '</td>' : '') +
+      (ORG_SLUG && !S1.isSlice1Mode() ? '<td class="px-4 py-3">' + scopeCell(ORG_SLUG, u.scope || []) + '</td>' : '') +
       '<td class="px-4 py-3">' + badge(u.status) + twoStepLine(u) + '</td>' +
       '<td class="px-4 py-3 text-sm text-slate-600 whitespace-nowrap tabular-nums">' + (u.last || '<span class="text-slate-400" aria-label="Never signed in">—</span>') + '</td>' +
       '<td class="px-4 py-3 text-right"><div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">' +
@@ -870,10 +892,10 @@ function render() {
   }).join('');
   cards.innerHTML = VIEW.map(function (u, i) {
     return '<li class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4"><div class="flex items-start gap-3">' + avatar(u) +
-      '<div class="flex-1 min-w-0"><div class="flex items-start justify-between gap-2"><p class="text-sm font-semibold text-slate-900 truncate">' + esc(u.name) + '</p>' + badge(u.status) + '</div>' +
-      '<p class="text-xs text-slate-500 truncate mt-0.5">' + esc(u.email) + '</p>' + pendingEmailHtml(u) +
+      '<div class="flex-1 min-w-0"><div class="flex items-start justify-between gap-2"><p class="text-sm font-semibold text-slate-900 truncate">' + nameLink(u) + '</p>' + badge(u.status) + '</div>' +
+      '<p class="text-xs text-slate-500 truncate mt-0.5">' + esc(u.email) + '</p>' + (S1.isSlice1Mode() ? '' : pendingEmailHtml(u)) +
       '<div class="flex flex-wrap gap-1 mt-2">' + roleChips(u) + '</div>' +
-      (ORG_SLUG ? '<div class="mt-2" data-s1-later>' + scopeCell(ORG_SLUG, u.scope || [], true) + '</div>' : '') +
+      (ORG_SLUG && !S1.isSlice1Mode() ? '<div class="mt-2">' + scopeCell(ORG_SLUG, u.scope || [], true) + '</div>' : '') +
       twoStepLine(u, true) +
       '<div class="flex items-center justify-between mt-3"><p class="text-xs text-slate-500">Last sign-in: <span class="text-slate-700">' + (u.last || 'never') + '</span></p>' +
       '<button type="button" data-sheet="' + i + '" aria-label="Actions for ' + esc(u.name) + '" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></button></div>' +
@@ -899,11 +921,28 @@ function sheet(u) {
 }
 
 var current = null;
+/* ---------- Correct email (slice 1): only while the user is Invited; a new activation link goes to the corrected address ---------- */
+function cxErr(msg) { var i = document.getElementById('cx-new'), e = document.getElementById('cx-new-err'); e.textContent = msg; e.style.display = msg ? '' : 'none'; i.classList.toggle('border-red-500', !!msg); i.classList.toggle('border-slate-200', !msg); i.setAttribute('aria-invalid', msg ? 'true' : 'false'); }
+function openCorrect(u) { current = u; document.getElementById('cx-name').textContent = u.name; document.getElementById('cx-current').textContent = u.email; document.getElementById('cx-old').textContent = u.email; document.getElementById('cx-new').value = ''; cxErr(''); S1.openModal('m-correct'); document.getElementById('cx-new').focus(); }
+function saveCorrect(e) {
+  if (e) e.preventDefault();
+  var v = document.getElementById('cx-new').value.trim().toLowerCase(), old = current.email, msg = '';
+  var taken = window.ALL_EMAILS ? ALL_EMAILS.indexOf(v) >= 0 : USERS.some(function (x) { return x.email.toLowerCase() === v; });
+  if (!v) msg = 'Enter the corrected email address.';
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) msg = 'Enter an email address like name@company.co.uk.';
+  else if (v === old.toLowerCase()) msg = 'That is the address they already have.';
+  else if (taken) msg = 'This email address already has an account. One email address is one account.';   // 409 USER_EMAIL_TAKEN
+  if (msg) { cxErr(msg); document.getElementById('cx-new').focus(); return; }
+  current.seedEmail = current.seedEmail || old;   // the prototype's detail page still knows this person by the first address
+  current.email = v; S1.closeModal('m-correct'); render();
+  S1.toast('Email corrected. A new 72-hour activation link was sent to ' + esc(v) + '. The link sent to ' + esc(old) + ' no longer works.', 'success', { ms: 7000 });
+}
 function act(a, u) {
   current = u;
   if (a === 'name') { document.getElementById('ed-name').value = u.name; document.getElementById('ed-email').textContent = u.email; fieldErr('ed-name', ''); S1.openModal('m-name'); }
   if (a === 'roles') openRoles(u);
   if (a === 'email') openEmail(u);
+  if (a === 'correct') openCorrect(u);
   if (a === 'scope') openScopePicker({ slug: ORG_SLUG, orgName: ORG.name, userName: u.name, value: u.scope || [], state: state === 'empty' ? 'empty' : '', onSave: function (ids) { u.scope = ids; render(); S1.toast('Scope updated for ' + esc(u.name) + '. It applies from their next click.', 'success'); } });
   if (a === 'resend') S1.confirm({ title: 'Resend the activation link to ' + u.name + '?', bodyHtml: 'We\'ll email <strong>' + esc(u.email) + '</strong> a new link that works for 72 hours. The link we sent before will stop working.', cta: 'Resend link', icon: 'fa-paper-plane',
     onConfirm: function () { S1.toast('A new 72-hour activation link was emailed to ' + esc(u.email) + '. The old link no longer works.', 'success'); } });
@@ -1007,9 +1046,11 @@ document.getElementById('inv-setroles').onclick = function () { S1.closeModal('m
 document.getElementById('f-search').addEventListener('input', render);
 document.getElementById('f-status').addEventListener('change', render);
 USERS.forEach(function (u, i) { if (u.name === 'Mark Davies' || u.name === 'Sophie Turner' || u.name === 'James Okafor') u.pendingEmail = u.email.replace(/@.*/, '@' + (u.email.indexOf('acme') >= 0 ? 'acme-logistics.co.uk' : u.email.indexOf('techforce') >= 0 ? 'techforce.co.uk' : 'abstractvms.co.uk')); });
+/* The rows carry slice 2 parts (Scope, a pending email change, Set scope, Change email): draw them again when the mode changes */
+document.addEventListener('s1:mode', function () { if (window.S1 && document.body.getAttribute('data-s1-state')) render(); });
 document.addEventListener('s1:state', function (e) {
   state = e.detail.state; page = 1;
-  ['m-invite', 'm-name', 'm-roles', 'm-actions'].forEach(function (id) { document.getElementById(id).classList.add('hidden'); });
+  ['m-invite', 'm-name', 'm-roles', 'm-actions', 'm-correct'].forEach(function (id) { document.getElementById(id).classList.add('hidden'); });
   document.getElementById('f-search').value = state === 'empty' ? 'Kowalski' : '';
   if (state !== 'default') document.getElementById('f-scope').value = '';
   document.getElementById('f-status').value = '';

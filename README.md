@@ -21,4 +21,4 @@ Lightweight AI kit tuned for **flow + continuity**, not code quality:
 - `CLAUDE.md` / `AGENTS.md` — the rules the AI follows here.
 - `.claude/` — skills, commands (`/new-screen`, `/design-review`), and a `design-reviewer` agent.
 - `PROGRESS.md` / `DECISIONS.md` — keep current so the next session has context.
-- Visual reference: `../DESIGN-SPEC-v4.md` (shared across all three portals).
+- Visual reference: `../../project-docs/docs/design/DESIGN-SPEC-v4.md` (shared across all three portals).
