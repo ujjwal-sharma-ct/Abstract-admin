@@ -140,11 +140,20 @@
                 <i class="fa-solid fa-envelope-open-text text-white/40 w-4 text-center"></i>
                 <span>Notification templates</span>
             </a>
+            <a id="nav-notification-preferences" href="abstract.notifications.notification-preferences.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-bell text-white/40 w-4 text-center"></i>
+                <span>Notification preferences</span>
+            </a>
 
             <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">SYSTEM</p>
             <a id="nav-organisations" href="abstract.organisations.organisations.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
                 <i class="fa-solid fa-sitemap text-white/40 w-4 text-center"></i>
                 <span>Organisations</span>
+            </a>
+            <a id="nav-structure-changes" href="abstract.organisations.structure-changes.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-code-pull-request text-white/40 w-4 text-center"></i>
+                <span>Structure changes</span>
+                <span id="nav-sc-count" class="ml-auto hidden min-w-[20px] h-5 px-1.5 rounded-full bg-amber-400 text-navy-900 text-[11px] font-bold leading-5 text-center"></span>
             </a>
             <a id="nav-dsr" href="abstract.identity-access.data-subject-requests.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
                 <i class="fa-solid fa-user-lock text-white/40 w-4 text-center"></i>
@@ -1394,6 +1403,11 @@ document.addEventListener('keydown', function (e) {
 });
 </script>
 
+<script>
+/* Structure changes: the sidebar item carries the pending count on every page (DESIGN-SPEC §5; absent when zero) */
+var S2_PENDING_COUNT = 5;
+document.addEventListener('s1:ready', function () { var c = document.getElementById('nav-sc-count'); if (c && S2_PENDING_COUNT > 0) { c.textContent = S2_PENDING_COUNT; c.classList.remove('hidden'); c.classList.add('inline-block'); c.setAttribute('aria-label', S2_PENDING_COUNT + ' waiting'); } });
+</script>
 <script src="slice1-kit.js"></script>
 </body>
 </html>
