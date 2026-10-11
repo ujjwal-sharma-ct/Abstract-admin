@@ -96,7 +96,7 @@
 
                     <!-- Submit -->
                     <button id="login-submit" type="submit"
-                        data-s1-home onclick="window.location.href=(window.S1 &amp;&amp; S1.home) ? S1.home() : 'abstract.shell.dashboard.html'; return false;"
+                        data-s1-home onclick="return s1SignIn();"
                         class="w-full py-3.5 rounded-lg text-white font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200 hover:opacity-95 hover:shadow-lg active:scale-[0.99] focus:outline-none focus:ring-4 focus:ring-blue-100 mt-1"
                         style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);">
                         <i class="fa-solid fa-arrow-right-to-bracket text-xs"></i> Sign in
@@ -123,6 +123,20 @@
                 : '<i class="fa-regular fa-eye text-sm"></i>';
         });
     }
+</script>
+
+<script>
+/* After the password is accepted (TSD §3.1.13): a person with two-step verification on gets the second step before any
+   session exists; a person who must set it up and has not lands on the two-step page; everyone else lands in the portal.
+   The prototype follows what this viewer did on the two-step page; ?twofactor=enrolled|required|off shows each. */
+function s1SignIn() {
+  var q = new URLSearchParams(location.search).get('twofactor'), on = false;
+  try { on = window.localStorage.getItem('s1-2fa-admin') === 'on'; } catch (e) { /* private window */ }
+  if (q === 'required') location.href = 'abstract.identity-access.two-factor.html?state=required';
+  else if (q === 'enrolled' || (on && q !== 'off')) location.href = 'abstract.identity-access.two-factor-sign-in.html';
+  else location.href = (window.S1 && S1.home) ? S1.home() : 'abstract.shell.dashboard.html';
+  return false;
+}
 </script>
 
 <script src="slice1-kit.js"></script>

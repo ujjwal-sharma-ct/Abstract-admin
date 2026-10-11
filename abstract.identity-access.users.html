@@ -26,7 +26,7 @@
         }
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default loading empty error validation denied large">
+<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default loading empty error validation denied large resetconflict">
 
 <div id="app-root" class="flex w-full" style="height: 100vh;">
 
@@ -550,7 +550,7 @@ function withOrg(href) {
   }
 })();
 
-var ROLESETS = {"abstract":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions","organisation:view","organisation:administer_all","audit_log:view","audit_log:export","audit_log:view_before_after","system_config:view","system_config:create_edit","system_config:edit_security","notification_template:view","notification_template:create_edit","data_subject:view","data_subject:compile","data_subject:export","data_subject:erase","shift_pattern:view","shift_pattern:create_edit","shift_pattern:delete","bank_holiday:create_edit"]},{"id":"operations","name":"Operations","def":true,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view","audit_log:view","system_config:view","shift_pattern:view","shift_pattern:create_edit","shift_pattern:delete","bank_holiday:create_edit"]},{"id":"finance","name":"Finance","def":true,"status":"Active","grants":["user:view","role:view","organisation:view","audit_log:view","audit_log:export","audit_log:view_before_after","system_config:view"]},{"id":"compliance","name":"Compliance","def":false,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view","role:view_permissions","organisation:view","audit_log:view","audit_log:export","audit_log:view_before_after","data_subject:view","data_subject:compile","data_subject:export","data_subject:erase"]},{"id":"auditor","name":"External auditor","def":false,"status":"Inactive","grants":["audit_log:view","audit_log:export","audit_log:view_before_after"]},{"id":"temporary","name":"Temporary access","def":false,"status":"Active","grants":[]}],"client":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions"]},{"id":"hiring","name":"Hiring manager","def":true,"status":"Active","grants":["user:view","role:view"]},{"id":"finance","name":"Finance approver","def":true,"status":"Active","grants":["user:view"]},{"id":"seasonal","name":"Seasonal supervisors","def":false,"status":"Inactive","grants":["user:view"]}],"agency":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions"]},{"id":"recruiter","name":"Recruiter","def":true,"status":"Active","grants":["user:view","role:view"]},{"id":"payroll","name":"Payroll","def":true,"status":"Active","grants":["user:view"]}]};
+var ROLESETS = {"abstract":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:reset_two_factor","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions","organisation:view","organisation:administer_all","audit_log:view","audit_log:export","audit_log:view_before_after","system_config:view","system_config:create_edit","system_config:edit_security","notification_template:view","notification_template:create_edit","data_subject:view","data_subject:compile","data_subject:export","data_subject:erase","shift_pattern:view","shift_pattern:create_edit","shift_pattern:delete","bank_holiday:create_edit"]},{"id":"operations","name":"Operations","def":true,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view","audit_log:view","system_config:view","shift_pattern:view","shift_pattern:create_edit","shift_pattern:delete","bank_holiday:create_edit"]},{"id":"finance","name":"Finance","def":true,"status":"Active","grants":["user:view","role:view","organisation:view","audit_log:view","audit_log:export","audit_log:view_before_after","system_config:view"]},{"id":"compliance","name":"Compliance","def":false,"status":"Active","grants":["user:view","user:view_last_sign_in","role:view","role:view_permissions","organisation:view","audit_log:view","audit_log:export","audit_log:view_before_after","data_subject:view","data_subject:compile","data_subject:export","data_subject:erase"]},{"id":"auditor","name":"External auditor","def":false,"status":"Inactive","grants":["audit_log:view","audit_log:export","audit_log:view_before_after"]},{"id":"temporary","name":"Temporary access","def":false,"status":"Active","grants":[]}],"client":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions"]},{"id":"hiring","name":"Hiring manager","def":true,"status":"Active","grants":["user:view","role:view"]},{"id":"finance","name":"Finance approver","def":true,"status":"Active","grants":["user:view"]},{"id":"seasonal","name":"Seasonal supervisors","def":false,"status":"Inactive","grants":["user:view"]}],"agency":[{"id":"administrator","name":"Administrator","def":true,"status":"Active","grants":["user:view","user:create_edit","user:delete","user:resend_activation","user:view_last_sign_in","role:view","role:create_edit","role:delete","role:assign","role:view_permissions","role:configure_permissions"]},{"id":"recruiter","name":"Recruiter","def":true,"status":"Active","grants":["user:view","role:view"]},{"id":"payroll","name":"Payroll","def":true,"status":"Active","grants":["user:view"]}]};
 var USERSETS = {"abstract":[{"name":"Sarah Mitchell","email":"s.mitchell@abstractrecruitment.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 09:12"},{"name":"James Okafor","email":"j.okafor@abstractrecruitment.co.uk","roles":["operations","finance"],"status":"Active","last":"25 Sep 2026, 17:40"},{"name":"Hannah Clarke","email":"h.clarke@abstractrecruitment.co.uk","roles":["compliance"],"status":"Active","last":"24 Sep 2026, 11:02"},{"name":"David Chen","email":"d.chen@abstractrecruitment.co.uk","roles":["operations"],"status":"Active","last":"26 Sep 2026, 08:31"},{"name":"Tom Rees","email":"t.rees@abstractrecruitment.co.uk","roles":["operations"],"status":"Invited","last":""},{"name":"Amara Okoye","email":"a.okoye@abstractrecruitment.co.uk","roles":[],"status":"Invited","last":""},{"name":"Liam Foster","email":"l.foster@abstractrecruitment.co.uk","roles":["finance"],"status":"Active","last":"19 Sep 2026, 15:26"},{"name":"Priya Shah","email":"p.shah@abstractrecruitment.co.uk","roles":["finance"],"status":"Inactive","last":"14 Aug 2026, 09:05"}],"acme":[{"name":"Rachel Green","email":"rachel.green@acmelogistics.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 08:02"},{"name":"Mark Davies","email":"mark.davies@acmelogistics.co.uk","roles":["hiring"],"status":"Active","last":"25 Sep 2026, 14:18"},{"name":"Priya Natarajan","email":"priya.natarajan@acmelogistics.co.uk","roles":["finance"],"status":"Active","last":"23 Sep 2026, 10:47"},{"name":"Olivia Brown","email":"olivia.brown@acmelogistics.co.uk","roles":["hiring"],"status":"Invited","last":""},{"name":"Ben Taylor","email":"ben.taylor@acmelogistics.co.uk","roles":["hiring","seasonal"],"status":"Inactive","last":"02 Aug 2026, 16:20"}],"techforce":[{"name":"Daniel Wright","email":"daniel.wright@techforce-recruitment.co.uk","roles":["administrator"],"status":"Active","last":"26 Sep 2026, 07:55"},{"name":"Sophie Turner","email":"sophie.turner@techforce-recruitment.co.uk","roles":["recruiter"],"status":"Active","last":"25 Sep 2026, 12:09"},{"name":"Aisha Khan","email":"aisha.khan@techforce-recruitment.co.uk","roles":["payroll"],"status":"Active","last":"22 Sep 2026, 09:30"},{"name":"Ryan Hughes","email":"ryan.hughes@techforce-recruitment.co.uk","roles":["recruiter"],"status":"Invited","last":""}]};
 var Q = new URLSearchParams(location.search);
 
@@ -755,6 +755,19 @@ var USERS = ORG_SLUG ? (USERSETS[ORG_SLUG] || USERSETS_EXTRA[ORG_SLUG] || generi
 USERS = JSON.parse(JSON.stringify(USERS));
 var SCOPES = {"rachel.green@acmelogistics.co.uk": [], "mark.davies@acmelogistics.co.uk": ["bhx"], "priya.natarajan@acmelogistics.co.uk": [], "olivia.brown@acmelogistics.co.uk": ["lei", "nth"], "ben.taylor@acmelogistics.co.uk": ["bhx-n"], "daniel.wright@techforce-recruitment.co.uk": [], "sophie.turner@techforce-recruitment.co.uk": ["tf-cov"], "aisha.khan@techforce-recruitment.co.uk": [], "ryan.hughes@techforce-recruitment.co.uk": ["tf-north"], "marcus.lee@harbourretail.co.uk": [], "jo.patel@harbourretail.co.uk": ["hb-soton"], "fiona@summitstaffing.co.uk": []};
 USERS.forEach(function (u) { u.scope = SCOPES[u.email] || u.scope || []; });
+
+/* ---------- Two-step verification (slice 1 brief A12; TSD §3.1.4, 1.9 TV-9) ----------
+   Every row shows User.twoFactorEnrolled. The reset is Abstract's alone: user:reset_two_factor is in the Abstract
+   catalogue only, the action shows only on a user who has it on, and it works inside the administering context. */
+var TWO_STEP_ON = { 's.mitchell@abstractrecruitment.co.uk': 1, 'j.okafor@abstractrecruitment.co.uk': 1, 'd.chen@abstractrecruitment.co.uk': 1, 'p.shah@abstractrecruitment.co.uk': 1, 'rachel.green@acmelogistics.co.uk': 1, 'priya.natarajan@acmelogistics.co.uk': 1, 'ben.taylor@acmelogistics.co.uk': 1, 'daniel.wright@techforce-recruitment.co.uk': 1, 'aisha.khan@techforce-recruitment.co.uk': 1 };
+USERS.forEach(function (u, i) { u.twoFactor = u.status !== 'Invited' && (!!TWO_STEP_ON[u.email] || (!!ORG_SLUG && !USERSETS[ORG_SLUG] && i === 0)); });
+var CAN_RESET_TWO_STEP = true;   // the signed-in Abstract user holds user:reset_two_factor; without it the action is absent
+function twoStepLine(u, card) {
+  if (u.status === 'Invited') return '';
+  return u.twoFactor
+    ? '<span class="' + (card ? 'mt-2' : 'mt-1.5') + ' flex items-center gap-1 text-[11px] font-semibold text-emerald-700 whitespace-nowrap"><i class="fa-solid fa-shield-halved text-[10px]" aria-hidden="true"></i>Two-step on</span>'
+    : '<span class="' + (card ? 'mt-2' : 'mt-1.5') + ' block text-[11px] text-slate-500 whitespace-nowrap">Two-step off</span>';
+}
 var state = 'default', page = 1, PAGE = 25;
 
 function role(id) { for (var i = 0; i < ROLES.length; i++) if (ROLES[i].id === id) return ROLES[i]; return null; }
@@ -776,7 +789,7 @@ function largeUsers(p) {
   for (var i = 0; i < PAGE; i++) {
     var k = (p - 1) * PAGE + i, nm = (k % 11 === 3) ? LONG[k % LONG.length] : first[k % 25] + ' ' + last[(k * 7) % 25];
     var s = st[k % 6];
-    out.push({ name: nm, email: nm.toLowerCase().replace(/[^a-z]+/g, '.') + '@' + (ORG_SLUG ? 'example.co.uk' : 'abstractrecruitment.co.uk'), roles: [ROLES[1 + k % (ROLES.length - 1)].id].concat(k % 4 === 0 ? [ROLES[1].id] : []).filter(function (v, j, a) { return a.indexOf(v) === j; }), status: s, last: s === 'Invited' ? '' : ((k % 27) + 1) + ' Sep 2026, ' + (8 + k % 9) + ':' + ('0' + (k * 13) % 60).slice(-2) });
+    out.push({ twoFactor: s !== 'Invited' && k % 3 !== 1, name: nm, email: nm.toLowerCase().replace(/[^a-z]+/g, '.') + '@' + (ORG_SLUG ? 'example.co.uk' : 'abstractrecruitment.co.uk'), roles: [ROLES[1 + k % (ROLES.length - 1)].id].concat(k % 4 === 0 ? [ROLES[1].id] : []).filter(function (v, j, a) { return a.indexOf(v) === j; }), status: s, last: s === 'Invited' ? '' : ((k % 27) + 1) + ' Sep 2026, ' + (8 + k % 9) + ':' + ('0' + (k * 13) % 60).slice(-2) });
   }
   return out;
 }
@@ -792,6 +805,7 @@ function actionsFor(u) {
   if (u.status === 'Active' && !S1.isSlice1Mode()) a.push(['email', 'Change email', 'fa-at']);
   if (u.status !== 'Inactive') a.push(['roles', 'Set roles', 'fa-user-shield']);
   if (u.status !== 'Inactive' && ORG_SLUG && !S1.isSlice1Mode()) a.push(['scope', 'Set scope', 'fa-sitemap']);
+  if (CAN_RESET_TWO_STEP && u.twoFactor) a.push(['reset2fa', 'Reset two-step verification', 'fa-shield-halved']);
   if (u.status === 'Inactive') a.push(['reactivate', 'Reactivate', 'fa-rotate-left']);
   else a.push(['deactivate', 'Deactivate', 'fa-user-slash']);
   return a;
@@ -843,7 +857,7 @@ function render() {
       '<td class="hidden xl:table-cell px-4 py-3 max-w-[220px]"><span class="block text-sm text-slate-600 truncate" title="' + esc(u.email) + '">' + esc(u.email) + '</span></td>' +
       '<td class="px-4 py-3"><div class="flex flex-wrap gap-1">' + roleChips(u) + '</div></td>' +
       (ORG_SLUG ? '<td class="px-4 py-3" data-s1-later>' + scopeCell(ORG_SLUG, u.scope || []) + '</td>' : '') +
-      '<td class="px-4 py-3">' + badge(u.status) + '</td>' +
+      '<td class="px-4 py-3">' + badge(u.status) + twoStepLine(u) + '</td>' +
       '<td class="px-4 py-3 text-sm text-slate-600 whitespace-nowrap tabular-nums">' + (u.last || '<span class="text-slate-400" aria-label="Never signed in">—</span>') + '</td>' +
       '<td class="px-4 py-3 text-right"><div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">' +
         actionsFor(u).map(function (a) { return '<button type="button" data-act="' + a[0] + '" data-i="' + i + '" title="' + a[1] + '" aria-label="' + a[1] + ' — ' + esc(u.name) + '" class="w-9 h-9 rounded-lg flex items-center justify-center ' + (a[0] === 'deactivate' ? 'text-red-600 hover:bg-red-50' : 'text-slate-500 hover:text-blue-700 hover:bg-blue-50') + ' focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid ' + a[2] + ' text-sm" aria-hidden="true"></i></button>'; }).join('') +
@@ -855,6 +869,7 @@ function render() {
       '<p class="text-xs text-slate-500 truncate mt-0.5">' + esc(u.email) + '</p>' + pendingEmailHtml(u) +
       '<div class="flex flex-wrap gap-1 mt-2">' + roleChips(u) + '</div>' +
       (ORG_SLUG ? '<div class="mt-2" data-s1-later>' + scopeCell(ORG_SLUG, u.scope || [], true) + '</div>' : '') +
+      twoStepLine(u, true) +
       '<div class="flex items-center justify-between mt-3"><p class="text-xs text-slate-500">Last sign-in: <span class="text-slate-700">' + (u.last || 'never') + '</span></p>' +
       '<button type="button" data-sheet="' + i + '" aria-label="Actions for ' + esc(u.name) + '" class="w-9 h-9 rounded-lg bg-slate-50 border border-slate-200 text-slate-600 flex items-center justify-center focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-ellipsis" aria-hidden="true"></i></button></div>' +
       '</div></div></li>';
@@ -897,6 +912,15 @@ function act(a, u) {
   }
   if (a === 'reactivate') S1.confirm({ title: 'Reactivate ' + u.name + '?', body: 'They can sign in again with their existing password and get back the roles they had.', cta: 'Reactivate user', icon: 'fa-rotate-left',
     onConfirm: function () { u.status = 'Active'; render(); S1.toast(esc(u.name) + ' is active again.', 'success'); } });
+  if (a === 'reset2fa') S1.confirm({ tone: 'warning', icon: 'fa-shield-halved', title: 'Reset two-step verification for ' + u.name + '?',
+    body: 'All of their sessions end now, on every device. Their authenticator app entry and backup codes stop working, and they set two-step verification up again the next time they sign in.',
+    cta: 'Reset two-step verification', busy: 'Resetting…',
+    onConfirm: function () {
+      var already = state === 'resetconflict';   // 409 USER_TWO_FACTOR_NOT_ENABLED: someone else reset it first
+      u.twoFactor = false; render();
+      if (already) S1.toast('Two-step verification was already off for ' + esc(u.name) + '. Someone reset it a moment ago, so nothing changed. The list is up to date.', 'info', { ms: 7000 });
+      else S1.toast('Two-step verification is reset for ' + esc(u.name) + '. Their sessions have ended.', 'success');
+    } });
 }
 function fieldErr(id, msg) {
   var i = document.getElementById(id), e = document.getElementById(id + '-err');
