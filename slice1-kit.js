@@ -34,8 +34,8 @@ window.S1_CONFIG = {
     'abstract.notifications.notification-preferences.html', 'abstract.identity-access.confirm-email.html',
     'abstract.design.slice-2-index.html'
   ],
-  // slice 2 screens reached from a page, not from the sidebar (TSD §3.3.8: the wizards start from the Organisations list)
-  slice2NavHide: ['abstract.onboarding.onboard-client.html', 'abstract.onboarding.onboard-agency.html'],
+  // the onboarding wizards start from the Organisations list and are in no sidebar (DESIGN-SPEC §5, ruled 2026-10-11), so nothing is left to hide
+  slice2NavHide: [],
   notifications: [
     { severity: 'info', title: 'Your audit-log export is ready', body: 'audit-log-2026-09-01-to-2026-09-26.csv — 4,812 rows. The download link lasts 7 days.', when: '12 min ago', href: 'abstract.audit.audit-log.html', read: false },
     { severity: 'info', title: 'The personal-data package you requested is ready', body: 'Subject access request for Priya Natarajan (Acme Logistics). Download it from Data subject requests.', when: '1 h ago', href: 'abstract.identity-access.data-subject-requests.html', read: false },
