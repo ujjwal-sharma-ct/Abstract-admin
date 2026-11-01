@@ -26,7 +26,7 @@
         }
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default">
+<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default loading empty error denied large">
 
 <div id="app-root" class="flex w-full" style="height: 100vh;">
 
@@ -48,11 +48,11 @@
             <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
                 <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
                 <span>Vacancy List</span>
+            </a><a id="nav-bookings" href="abstract.bookings.bookings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-calendar-check text-white/40 w-4 text-center"></i>
+                <span>Bookings</span>
             </a>
-            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
-                <span>Create Vacancy Wizard</span>
-            </a>
+            
 
             <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
             <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
@@ -187,6 +187,8 @@
                 <p class="text-sm text-slate-600 mt-2 leading-relaxed max-w-2xl">This is where you set up who can use Abstract VMS and how it behaves: people, roles and permissions for Abstract and every client and agency, the system's settings, and the messages it sends. Pick a place to start.</p>
             </section>
 
+            <section class="mt-8" data-s2-later aria-labelledby="g-work"><h2 id="g-work" class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Vacancies and bookings</h2><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div id="s3-active" class="md:row-span-3"></div><a href="abstract.demand.vacancy-list.html" class="group bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-start gap-4 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><span class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-blue-700" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-list-check" aria-hidden="true"></i></span><span class="min-w-0"><span class="block text-sm font-bold text-slate-900 group-hover:text-blue-700">Vacancy list</span><span class="block text-sm text-slate-600 mt-0.5 leading-relaxed">Every client’s vacancies, and the positions on each.</span></span></a><a href="abstract.candidates.worker-pool.html" class="group bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-start gap-4 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><span class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-blue-700" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-users-gear" aria-hidden="true"></i></span><span class="min-w-0"><span class="block text-sm font-bold text-slate-900 group-hover:text-blue-700">Worker pool</span><span class="block text-sm text-slate-600 mt-0.5 leading-relaxed">Abstract’s own workers, ready to fill a position.</span></span></a><a href="abstract.bookings.bookings.html" class="group bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-start gap-4 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><span class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-blue-700" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-calendar-check" aria-hidden="true"></i></span><span class="min-w-0"><span class="block text-sm font-bold text-slate-900 group-hover:text-blue-700">Bookings</span><span class="block text-sm text-slate-600 mt-0.5 leading-relaxed">Every booking across clients.</span></span></a></div></section>
+
             <section class="mt-8" aria-labelledby="g-peop">
                 <h2 id="g-peop" class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">People and access</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -317,6 +319,8 @@
 var S2_PENDING_COUNT = 5;
 document.addEventListener('s1:ready', function () { var c = document.getElementById('nav-sc-count'); if (c && S2_PENDING_COUNT > 0) { c.textContent = S2_PENDING_COUNT; c.classList.remove('hidden'); c.classList.add('inline-block'); c.setAttribute('aria-label', S2_PENDING_COUNT + ' waiting'); } });
 </script>
+<script src="slice3-proto.js"></script>
+<script>document.addEventListener('s1:state',function(e){S3.activeBookingsCard(document.getElementById('s3-active'),e.detail.state);});</script>
 <script src="slice1-kit.js"></script>
 </body>
 </html>

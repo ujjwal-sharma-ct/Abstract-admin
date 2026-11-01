@@ -47,11 +47,11 @@
             <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
                 <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
                 <span>Vacancy List</span>
+            </a><a id="nav-bookings" href="abstract.bookings.bookings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-calendar-check text-white/40 w-4 text-center"></i>
+                <span>Bookings</span>
             </a>
-            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
-                <span>Create Vacancy Wizard</span>
-            </a>
+            
 
             <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
             <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
@@ -208,7 +208,7 @@
                     <input type="text" placeholder="Free-text search (entity ref, summary, IP)..." class="bg-transparent text-xs text-slate-700 placeholder-slate-400 outline-none w-full"/>
                 </div>
                 <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"><i class="fa-regular fa-user text-slate-400 text-xs"></i><select class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option>All users</option><option>Sarah Mitchell</option><option>James Okafor</option><option>Priya Shah</option><option>David Chen</option><option>Amara Okoye</option><option>System</option></select></div>
-                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"><i class="fa-solid fa-cube text-slate-400 text-xs"></i><select class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option>All entity types</option><option>User</option><option>Role</option><option>Organisation</option><option>System setting</option><option>Shift pattern</option><option>Bank-holiday calendar</option><option>Notification template</option><option>Data subject request</option><option data-s1-later>Vacancy</option><option data-s1-later>Position</option><option data-s1-later>Booking</option><option data-s1-later>Proposal</option><option data-s1-later>Timesheet</option><option data-s1-later>Invoice</option><option data-s1-later>Self-Bill</option><option data-s1-later>Rate Card</option><option data-s1-later>Candidate</option></select></div>
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"><i class="fa-solid fa-cube text-slate-400 text-xs"></i><select class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option>All entity types</option><option data-s2-later>vacancies</option><option data-s2-later>positions</option><option data-s2-later>bookings</option><option data-s2-later>candidates</option><option data-s2-later>candidate_licences</option><option data-s2-later>compliance_items</option><option>User</option><option>Role</option><option>Organisation</option><option>System setting</option><option>Shift pattern</option><option>Bank-holiday calendar</option><option>Notification template</option><option>Data subject request</option><option data-s1-later>Vacancy</option><option data-s1-later>Position</option><option data-s1-later>Booking</option><option data-s1-later>Proposal</option><option data-s1-later>Timesheet</option><option data-s1-later>Invoice</option><option data-s1-later>Self-Bill</option><option data-s1-later>Rate Card</option><option data-s1-later>Candidate</option></select></div>
                 <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"><i class="fa-solid fa-bolt text-slate-400 text-xs"></i><select class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option>All actions</option><option>Created</option><option>Updated</option><option>Deleted</option><option>Removed</option><option>Restored</option><option>Activated</option><option>Deactivated</option><option>Role changed</option><option>Transferred</option></select></div>
                 <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2" title="Date range"><i class="fa-regular fa-calendar text-slate-400 text-xs"></i><span class="text-xs font-medium text-slate-600">01 Sep 2026 &ndash; 26 Sep 2026</span><i class="fa-solid fa-chevron-down text-slate-400 text-xs"></i></div>
             </div>
@@ -230,6 +230,30 @@
                         </thead>
                         <tbody class="divide-y divide-slate-100">
                             <!-- Slice 1 rows: changes only -->
+                            <tr class="hover:bg-slate-50/60" data-s2-later>
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">26 Sep 10:31:04</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold">SM</div><div><p class="text-slate-800 font-medium leading-tight">Sarah Mitchell</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">vacancies</span><span class="font-semibold text-slate-800">VAC-1042</span></td>
+                                <td class="px-4 py-3 text-slate-600">Position count changed 3 → 4</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
+                                <td class="px-4 py-3 text-right"><button type="button" data-diff="s3a" aria-expanded="false" aria-controls="s3a" class="text-xs font-semibold text-blue-600 hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">View</button></td>
+                            </tr>
+                            <tr id="s3a" class="bg-slate-50/60 hidden" data-s2-later>
+                                <td colspan="7" class="px-5 py-3"><div class="rounded-xl border border-slate-200 bg-white p-4"><p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Before / After &middot; VAC-1042</p><div class="grid grid-cols-2 gap-4 text-sm"><div><p class="text-xs text-slate-500 mb-1">positionCount</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">3</p></div><div><p class="text-xs text-slate-500 mb-1">positionCount</p><p class="text-emerald-700 bg-emerald-50 rounded px-2 py-1 inline-block">4</p></div></div></div></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50/60" data-s2-later>
+                                <td class="px-5 py-3 text-slate-500 whitespace-nowrap">26 Sep 10:22:47</td>
+                                <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold">SM</div><div><p class="text-slate-800 font-medium leading-tight">Sarah Mitchell</p></div></div></td>
+                                <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">bookings</span><span class="font-semibold text-slate-800">BK-2207</span></td>
+                                <td class="px-4 py-3 text-slate-600">Booking cancelled: the worker accepted a permanent role elsewhere</td>
+                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
+                                <td class="px-4 py-3 text-right"><button type="button" data-diff="s3b" aria-expanded="false" aria-controls="s3b" class="text-xs font-semibold text-blue-600 hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">View</button></td>
+                            </tr>
+                            <tr id="s3b" class="bg-slate-50/60 hidden" data-s2-later>
+                                <td colspan="7" class="px-5 py-3"><div class="rounded-xl border border-slate-200 bg-white p-4"><p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Before / After &middot; BK-2207</p><div class="grid grid-cols-2 gap-4 text-sm"><div><p class="text-xs text-slate-500 mb-1">status</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">Active</p></div><div><p class="text-xs text-slate-500 mb-1">status</p><p class="text-emerald-700 bg-emerald-50 rounded px-2 py-1 inline-block">Cancelled</p></div></div></div></td>
+                            </tr>
                             <tr class="hover:bg-slate-50/60">
                                 <td class="px-5 py-3 text-slate-500 whitespace-nowrap">26 Sep 10:14:52</td>
                                 <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold">SM</div><div><p class="text-slate-800 font-medium leading-tight">Sarah Mitchell</p><p class="text-xs text-slate-400 leading-tight">Abstract</p></div></div></td>

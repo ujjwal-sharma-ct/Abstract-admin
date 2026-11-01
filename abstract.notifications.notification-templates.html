@@ -47,11 +47,11 @@
             <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
                 <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
                 <span>Vacancy List</span>
+            </a><a id="nav-bookings" href="abstract.bookings.bookings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-calendar-check text-white/40 w-4 text-center"></i>
+                <span>Bookings</span>
             </a>
-            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
-                <span>Create Vacancy Wizard</span>
-            </a>
+            
 
             <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
             <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
@@ -369,6 +369,22 @@ var SAMPLES = { userName: 'Sarah Mitchell', organisationName: 'Acme Logistics', 
   availableUntil: '3 Oct 2026', subjectName: 'Priya Natarajan' };
 var BTN = { activationUrl: 'Activate my account', resetUrl: 'Set a new password', downloadUrl: 'Download' };
 var ORDER = ['user.activation', 'user.password_reset', 'audit.export_ready', 'dsar.package_ready'];
+
+var S3ON=(function(){try{var m=localStorage.getItem('s1-mode');return m!=='on'&&m!=='s2';}catch(e){return true;}})();
+if (S3ON) {
+  Object.assign(TPL, {
+    'vacancy.published': { name: 'Vacancy published', channel: 'Email and in-app', vars: ['recipientName', 'vacancyReference', 'jobTitle', 'clientName', 'orgNodeName', 'positionCount', 'startDate', 'vacancyRoute'],
+      versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'New vacancy from {{clientName}}: {{vacancyReference}}', body: 'Hello {{recipientName}},\n\n{{clientName}} has published {{vacancyReference}}, {{jobTitle}}, at {{orgNodeName}}: {{positionCount}} positions from {{startDate}}.\n\n{{vacancyRoute}}' } ] },
+    'booking.created': { name: 'Booking created', channel: 'Email and in-app', vars: ['recipientName', 'bookingReference', 'vacancyReference', 'jobTitle', 'candidateName', 'orgNodeName', 'startDate', 'endDate', 'bookingRoute'],
+      versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: '{{candidateName}} is booked on {{vacancyReference}}', body: 'Hello {{recipientName}},\n\n{{candidateName}} is booked for {{jobTitle}} at {{orgNodeName}}, {{startDate}} to {{endDate}}. The booking reference is {{bookingReference}}.\n\n{{bookingRoute}}' } ] },
+    'booking.cancelled': { name: 'Booking cancelled', channel: 'Email and in-app', vars: ['recipientName', 'bookingReference', 'vacancyReference', 'candidateName', 'orgNodeName', 'reason', 'positionNumber', 'vacancyRoute'],
+      versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'Booking {{bookingReference}} was cancelled', body: 'Hello {{recipientName}},\n\nThe booking of {{candidateName}} at {{orgNodeName}} was cancelled: {{reason}}\n\nPosition {{positionNumber}} on {{vacancyReference}} has changed.\n\n{{vacancyRoute}}' } ] },
+    'vacancy.cancelled': { name: 'Vacancy cancelled', channel: 'Email and in-app', vars: ['recipientName', 'vacancyReference', 'jobTitle', 'orgNodeName', 'reason', 'vacancyRoute'],
+      versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'Vacancy {{vacancyReference}} was cancelled', body: 'Hello {{recipientName}},\n\nAbstract cancelled {{vacancyReference}}, {{jobTitle}}, at {{orgNodeName}}: {{reason}}\n\n{{vacancyRoute}}' } ] }
+  });
+  Object.assign(SAMPLES, { recipientName: 'Rachel Green', vacancyReference: 'VAC-1042', jobTitle: 'Reach truck drivers', clientName: 'Acme Logistics', orgNodeName: 'Leeds Hub', positionCount: '4', startDate: '28 Sep 2026', endDate: '27 Nov 2026', bookingReference: 'BK-2201', candidateName: 'Marek Nowak', positionNumber: '2', reason: 'The worker accepted a permanent role elsewhere.', vacancyRoute: 'https://vms.example/client/vacancies/…', bookingRoute: 'https://vms.example/client/bookings/…' });
+  ORDER = ORDER.concat(['vacancy.published', 'booking.created', 'booking.cancelled', 'vacancy.cancelled']);
+}
 var cur = null, viewing = null;
 function latest(t) { return t.versions[t.versions.length - 1]; }
 function tokens(s) { var r = [], m, re = /\{\{\s*([^}]*?)\s*\}\}/g; while ((m = re.exec(s))) r.push(m[1]); return r; }

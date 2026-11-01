@@ -47,11 +47,11 @@
             <a id="nav-vacancy-list" href="abstract.demand.vacancy-list.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
                 <i class="fa-solid fa-list-check text-white/40 w-4 text-center"></i>
                 <span>Vacancy List</span>
+            </a><a id="nav-bookings" href="abstract.bookings.bookings.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
+                <i class="fa-solid fa-calendar-check text-white/40 w-4 text-center"></i>
+                <span>Bookings</span>
             </a>
-            <a id="nav-create-vacancy" href="abstract.demand.create-vacancy.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
-                <i class="fa-solid fa-wand-magic-sparkles text-white/40 w-4 text-center"></i>
-                <span>Create Vacancy Wizard</span>
-            </a>
+            
 
             <p class="text-white/30 text-xs font-semibold uppercase tracking-widest px-3 mb-2 mt-4">FULFILMENT</p>
             <a id="nav-worker-pool" href="abstract.candidates.worker-pool.html" class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-white/60 hover:text-white hover:bg-white/8 text-sm transition-all duration-150">
@@ -386,6 +386,13 @@ var PEOPLE = [
     history: [ { action: 'Erase / anonymise', by: 'Sarah Mitchell', when: '20 Sep 2026, 16:12', status: 'refused' } ] },
   { id: 'ar', name: 'Aisha Rahman', email: 'aisha.rahman@nexustalent.example', org: 'Nexus Talent', party: 'Agency', status: 'Invited', since: '22 Sep 2026', history: [] }
 ];
+var S3ON=(function(){try{var m=localStorage.getItem('s1-mode');return m!=='on'&&m!=='s2';}catch(e){return true;}})();
+if (S3ON) PEOPLE.push(
+  { id: 'c-mo', name: 'Marek Nowak', email: 'marek.nowak@example.com', org: 'Abstract', party: 'Candidate', status: 'Active', since: '2 Mar 2026', history: [] },
+  { id: 'c-er', name: 'Ewa Rybak', email: null, org: 'Abstract', party: 'Candidate', status: 'Active', since: '2 Mar 2026', history: [] },
+  { id: 'c-jd', name: 'Joao Dias', email: 'joao.dias@example.com', org: 'Abstract', party: 'Candidate', status: 'Active', since: '2 Mar 2026',
+    retention: 'A legal hold stands on this candidate: Employment tribunal claim, keep until it concludes. Lift the hold on the worker’s profile, then submit the erasure again.', history: [] }
+);
 var sel = null, matches = [];
 var SB = { Active: 'bg-emerald-50 text-emerald-700 border-emerald-200', Inactive: 'bg-slate-100 text-slate-500 border-slate-200', Invited: 'bg-amber-50 text-amber-700 border-amber-200' };
 var JB = { queued: 'bg-slate-100 text-slate-700 border-slate-200', running: 'bg-blue-50 text-blue-700 border-blue-200', completed: 'bg-emerald-50 text-emerald-700 border-emerald-200', failed: 'bg-red-50 text-red-700 border-red-200' };
@@ -395,11 +402,11 @@ function initials(n) { return n.split(' ').map(function (x) { return x[0]; }).jo
 function slug(n) { return n.toLowerCase().replace(/[^a-z]+/g, '-'); }
 function search(qs) {
   qs = (qs || '').trim().toLowerCase();
-  matches = qs ? PEOPLE.filter(function (p) { return p.name.toLowerCase().indexOf(qs) >= 0 || p.email.toLowerCase().indexOf(qs) >= 0; }) : [];
+  matches = qs ? PEOPLE.filter(function (p) { return p.name.toLowerCase().indexOf(qs) >= 0 || (p.email || '').toLowerCase().indexOf(qs) >= 0; }) : [];
   document.getElementById('results').innerHTML = matches.map(function (p) {
     return '<li><button type="button" data-p="' + p.id + '" class="w-full text-left px-5 py-3 flex items-center gap-3 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600' + (sel && sel.id === p.id ? ' bg-blue-50/60' : '') + '"' + (sel && sel.id === p.id ? ' aria-current="true"' : '') + '>' +
       '<span class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs font-bold flex-shrink-0">' + initials(p.name) + '</span>' +
-      '<span class="min-w-0 flex-1"><span class="block text-sm font-semibold text-slate-900 truncate">' + S1.esc(p.name) + '</span><span class="block text-xs text-slate-500 truncate">' + S1.esc(p.email) + '</span><span class="block text-xs text-slate-500 truncate">' + S1.esc(p.org) + ' · ' + p.party + '</span></span>' +
+      '<span class="min-w-0 flex-1"><span class="block text-sm font-semibold text-slate-900 truncate">' + S1.esc(p.name) + '</span><span class="block text-xs text-slate-500 truncate">' + S1.esc(p.email || 'No email') + '</span><span class="block text-xs text-slate-500 truncate">' + S1.esc(p.org) + ' · ' + p.party + '</span></span>' +
       badge(SB[p.status], p.status) + '</button></li>';
   }).join('');
   document.getElementById('results').querySelectorAll('[data-p]').forEach(function (b) { b.onclick = function () { pick(b.dataset.p); }; });
@@ -417,8 +424,8 @@ function pick(id) {
   document.getElementById('p-name').textContent = sel.name; document.getElementById('h-name').textContent = sel.name;
   document.getElementById('port-name').textContent = sel.name;
   document.getElementById('p-status').innerHTML = badge(SB[sel.status], sel.status);
-  document.getElementById('p-email').textContent = sel.email;
-  document.getElementById('p-org').textContent = sel.org + ' · ' + sel.party + ' · User since ' + sel.since;
+  document.getElementById('p-email').textContent = sel.email || 'No email';
+  document.getElementById('p-org').textContent = sel.org + ' · ' + sel.party + (sel.party === 'Candidate' ? ' · On record since ' : ' · User since ') + sel.since;
   document.getElementById('refused').classList.add('hidden');
   document.getElementById('chip-sar').innerHTML = ''; document.getElementById('chip-port').innerHTML = '';
   renderHistory(); search(document.getElementById('q').value);
@@ -523,6 +530,7 @@ document.addEventListener('s1:ready', function () {
 var S2_PENDING_COUNT = 5;
 document.addEventListener('s1:ready', function () { var c = document.getElementById('nav-sc-count'); if (c && S2_PENDING_COUNT > 0) { c.textContent = S2_PENDING_COUNT; c.classList.remove('hidden'); c.classList.add('inline-block'); c.setAttribute('aria-label', S2_PENDING_COUNT + ' waiting'); } });
 </script>
+<script>document.addEventListener('s1:ready',function(){var q=new URLSearchParams(location.search).get('q');if(q){document.getElementById('q').value=q;search(q);}});</script>
 <script src="slice1-kit.js"></script>
 </body>
 </html>
