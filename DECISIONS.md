@@ -90,3 +90,30 @@ agency/client screens look different from the new kernel-styled ones until they 
 **Decision:** (1) Sample roles carry the TSD's seed names (§3.3.4) plus one custom role per party, with one set of ids across Users, User detail and the matrix. (2) Abstract's view of a party's roles and keys is a copy of that party's own matrix; no matrix was redrawn onto the TSD's key list. (3) Every page of this portal shows the Abstract user as signed in, the two pages that showed an agency user included. (4) A static slice 2 part carries `data-s1-later`; a part drawn by script asks the mode when it draws and is redrawn on the kit's `s1:mode` event, because the kit hides marked elements only at the moment the mode is applied. (5) *Correct email* is its own action and dialog for an `Invited` user, separate from slice 2's *Change email* for an `Active` user: a correction takes effect at once and sends a new activation link, a change waits for the person to confirm it. (6) A part that exists only inside the administering context is hidden again after every mode change, since the kit's slice mark would otherwise show it outside the context.
 
 **Consequences:** The prototype's key lists still differ from the TSD's twelve slice 1 keys per party; that is a contract gap for a later pass, recorded in `PROGRESS.md`.
+
+## 2026-11-08 — Slice 4: Payroll in the sidebar, Pending pricing as a tab, one grid in two portals (pending Ujjwal's review)
+
+**Context:** Slice 4 TSD §3.3.11 adds *Payroll* (behind `pay_statement:view`) to the FINANCE group and makes
+*Pending pricing* a tab of *Timesheets* with its count. The rulings of 2026-11-08 make bulk fills preview-then-confirm.
+
+**Decision:** *Payroll* sits after *Timesheets* (icon `fa-money-check-dollar`) on every Abstract sidebar. *Timesheets*
+carries three tabs: the oversight list, *Week grid* and *Pending pricing (n)*. The week grid, the day dialog, the fill
+preview and the booking-week are one implementation in `slice4-proto.js`, rendered by both portals, as slice 3 did for
+the vacancy form. Taken on the recommended option while Ujjwal was away; logged in `../SLICE-4-DECISIONS-FOR-REVIEW.md`.
+
+**Consequences:** The design spec's §5 owes an amendment for *Payroll*. A change to the grid is made once, in the
+`slice4-proto.js` source, and both portals' copies are regenerated.
+
+## 2026-11-08 — Slice 4: a future Holiday, and the slice 4 rows on earlier pages (ruled by Ujjwal Sharma)
+
+**Context:** The overnight pass left three questions. Ujjwal ruled them on the morning of 2026-11-08.
+
+**Decision:** (1) A covered day keeps the place's required checks. (2) *Fill week* leaves a future day blank. (3) A
+future day may be `Not Booked` or `Holiday`; `Worked`, `Sick Leave` and `No-show` wait until the day — a departure
+from TSD Q4 ("no `Worked` or absence day after today"). (4) The slice 4 changes to earlier pages are drawn: the
+permission matrix rows (§3.3.6), the timesheet templates (§3.1.6, Abstract) and the preference rows, with
+`timesheet.pricing_pending` critical, ticked and locked. Drawn by script, they ask the mode and redraw on `s1:mode`
+(as 2026-10-11 item 4), so slices 1 to 3 read as delivered.
+
+**Consequences:** The TSD owes the future-Holiday change (§1, §3.3.1 rule 3, the `TIMESHEET_DAY_IN_FUTURE` row, 4.1
+TV-4). The rule lives once, in `FUTURE_OK` in the `slice4-proto.js` source.
