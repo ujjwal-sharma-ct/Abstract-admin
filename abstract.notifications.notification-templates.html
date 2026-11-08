@@ -385,7 +385,7 @@ if (S3ON) {
   Object.assign(SAMPLES, { recipientName: 'Rachel Green', vacancyReference: 'VAC-1042', jobTitle: 'Reach truck drivers', clientName: 'Acme Logistics', orgNodeName: 'Leeds Hub', positionCount: '4', startDate: '28 Sep 2026', endDate: '27 Nov 2026', bookingReference: 'BK-2201', candidateName: 'Marek Nowak', positionNumber: '2', reason: 'The worker accepted a permanent role elsewhere.', vacancyRoute: 'https://vms.example/client/vacancies/…', bookingRoute: 'https://vms.example/client/bookings/…' });
   ORDER = ORDER.concat(['vacancy.published', 'booking.created', 'booking.cancelled', 'vacancy.cancelled']);
 }
-/* Slice 4 (TSD §3.1.6): the five timesheet templates, email and in-app, none to an agency and no rate, cost or hours
+/* Slice 4 (TSD §3.1.6): the six timesheet templates, email and in-app, none to an agency and no rate, cost or hours
    figure in any variable. Shown from Slices 1 to 4 on, read at load like slice 3's. */
 var S4ON=(function(){try{var m=localStorage.getItem('s1-mode');return m!=='on'&&m!=='s2'&&m!=='s3';}catch(e){return true;}})();
 if (S4ON) {
@@ -398,11 +398,15 @@ if (S4ON) {
       versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: '{{clientName}} submitted {{candidateName}}\'s timesheet', body: 'Hello {{recipientName}},\n\n{{clientName}} submitted the timesheet for {{candidateName}} ({{bookingReference}}), week of {{weekStart}}. It is waiting for your approval.\n\n{{timesheetRoute}}' } ] },
     'timesheet.returned': { name: 'Timesheet returned', channel: 'Email and in-app', vars: ['recipientName', 'bookingReference', 'candidateName', 'weekStart', 'reason', 'timesheetRoute'],
       versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'The timesheet for {{candidateName}} was returned', body: 'Hello {{recipientName}},\n\nThe timesheet for {{candidateName}} ({{bookingReference}}), week of {{weekStart}}, is back in draft: {{reason}}\n\nCorrect it and submit it again.\n\n{{timesheetRoute}}' } ] },
-    'timesheet.pricing_pending': { name: 'Day waiting to be priced', critical: true, channel: 'Email and in-app', vars: ['recipientName', 'bookingReference', 'candidateName', 'clientName', 'date', 'jobRoleTitle', 'shiftName', 'queueRoute', 'timesheetRoute'],
-      versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'A day for {{candidateName}} is waiting to be priced', body: 'Hello {{recipientName}},\n\nNo rate covers {{candidateName}}\'s {{date}} as {{jobRoleTitle}} on {{shiftName}} at {{clientName}} ({{bookingReference}}), so the day waits to be priced by hand. The week can\'t be submitted until it is priced.\n\n{{queueRoute}}' } ] }
+    /* The hold's notice is two event types, one per receiving party, so each party's wording is its own template
+       (ruled 2026-11-08, Ujjwal Sharma; design review R1 D2). Both critical: no one can turn them off. */
+    'timesheet.pricing_pending': { name: 'Day waiting to be priced', critical: true, channel: 'Email and in-app', vars: ['recipientName', 'bookingReference', 'candidateName', 'clientName', 'date', 'jobRoleTitle', 'shiftName', 'queueRoute'],
+      versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'Price {{candidateName}}\'s {{date}} by hand', body: 'Hello {{recipientName}},\n\nNo rate covers {{candidateName}}\'s {{date}} as {{jobRoleTitle}} on {{shiftName}} at {{clientName}} ({{bookingReference}}). Please price the day by hand: the week is held, so it can\'t be submitted or approved until it is priced.\n\n{{queueRoute}}' } ] },
+    'timesheet.pricing_pending_client': { name: 'Day being priced by Abstract', critical: true, channel: 'Email and in-app', vars: ['recipientName', 'bookingReference', 'candidateName', 'clientName', 'date', 'jobRoleTitle', 'shiftName', 'timesheetRoute'],
+      versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'Abstract is pricing {{candidateName}}\'s {{date}}', body: 'Hello {{recipientName}},\n\n{{candidateName}}\'s {{date}} as {{jobRoleTitle}} on {{shiftName}} ({{bookingReference}}) has no agreed rate yet, so Abstract is pricing it by hand. You don\'t need to do anything; the week can be submitted once the day is priced.\n\n{{timesheetRoute}}' } ] }
   });
   Object.assign(SAMPLES, { recipientName: 'Rachel Green', clientName: 'Acme Logistics', weekStart: '5 Oct 2026', deadline: '13 Oct 2026, 12:00', draftCount: '3', overdueCount: '2', bookingReference: 'BK-2202', candidateName: 'Tasha Williams', date: 'Thu 8 Oct 2026', jobRoleTitle: 'Forklift Driver (Reach)', shiftName: 'Night', reason: 'Friday\'s hours are an hour short of the gate log.', timesheetsRoute: 'https://vms.example/client/timesheets?week=…', timesheetRoute: 'https://vms.example/client/timesheets/…', queueRoute: 'https://vms.example/abstract/timesheets/pending-pricing' });
-  ORDER = ORDER.concat(['timesheet.reminder', 'timesheet.overdue', 'timesheet.submitted', 'timesheet.returned', 'timesheet.pricing_pending']);
+  ORDER = ORDER.concat(['timesheet.reminder', 'timesheet.overdue', 'timesheet.submitted', 'timesheet.returned', 'timesheet.pricing_pending', 'timesheet.pricing_pending_client']);
 }
 var cur = null, viewing = null;
 function latest(t) { return t.versions[t.versions.length - 1]; }

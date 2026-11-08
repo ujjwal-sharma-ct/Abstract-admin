@@ -19,7 +19,7 @@
             brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554' } } } } };
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s4-page data-s1-states="default loading empty error denied large">
+<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s4-page data-s1-states="default loading empty error validation denied large nobreakdown">
 <div id="app-root" class="flex w-full" style="height: 100vh;">
     <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
         <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
@@ -78,32 +78,38 @@ var C=S3.C,ui=S3.ui,esc=S3.esc,app=document.getElementById('app'),st='default',p
 var all0=S4.statements({current:false}),latest=all0.length?all0.map(function(s){return s.weekStart;}).sort().reverse()[0]:'';
 var f={week:S3.param('week')||latest,client:'',q:'',source:'',superseded:S3.param('current')==='false'};
 function synth(){var b=S4.statements()[0],out=[];for(var i=0;i<480;i++){var c=Object.assign({},b);c.candidateName=['Amara Okoye','Ben Carter','Chloe Price','Dawid Lis','Elif Kaya','Femi Bello'][i%6]+' '+(i+1);c.bookingReference='BK-'+(3000+i);c.clientName=['Acme Logistics','Northgate Foods','Harbour Retail Group'][i%3];c.synthetic=true;out.push(c);}return out;}
+function rangeErr(){if(f.from&&!/^\d{4}-\d{2}-\d{2}$/.test(f.from))return ['y-from','Enter the first week as a date, for example 05/10/2026.'];if(f.to&&!/^\d{4}-\d{2}-\d{2}$/.test(f.to))return ['y-to','Enter the last week as a date, for example 05/10/2026.'];if(f.from&&f.to&&f.to<f.from)return ['y-to','The last week can’t be before the first week.'];return null;}
 function draw(){
+ var bd=st!=='nobreakdown',re=rangeErr();
  var list=st==='empty'?[]:st==='large'?synth():S4.statements({current:!f.superseded,weekStart:f.week||null,clientId:f.client||null,q:f.q||null});
  if(f.source==='Agency-sourced')list=[];
+ if(!re&&(f.from||f.to))list=list.filter(function(s){return (!f.from||s.weekStart>=f.from)&&(!f.to||s.weekStart<=f.to);});
  var pages=Math.ceil(list.length/PAGE)||1;if(pg>pages)pg=pages;var view=list.slice((pg-1)*PAGE,pg*PAGE);
  var weeks={};all0.forEach(function(s){weeks[s.weekStart]=1;});
  var href=function(s){return 'abstract.timesheets.pay-statement.html?id='+s.id;};
  var ver=function(s){return '<span class="tnum">v'+s.version+'</span> '+(s.supersededAt?S3.ui.marker('Superseded','default'):S3.ui.marker('Current','success'));};
  app.innerHTML='<p class="text-sm text-slate-600 mb-3">One statement per booking-week, written when the week is approved. A reopened week’s statement is superseded and the next approval writes a new version. Abstract-sourced workers.</p>'+
-  ui.filterBar('y-filters',ui.select('y-week','Week','fa-calendar',[['','All weeks']].concat(Object.keys(weeks).sort().reverse().map(function(w){return [w,'Week of '+S4.fmtWeek(w)];})),f.week)+ui.select('y-client','Client','fa-building',[['','All clients']].concat(Object.keys(S3.CLIENTS).map(function(k){return [k,S3.CLIENTS[k].name];})),f.client)+ui.search('y-q','Candidate or booking reference')+ui.select('y-source','Booking source','fa-building-shield',[['','All sources'],['Abstract-sourced','Abstract-sourced'],['Agency-sourced','Agency-sourced']],f.source)+'<label class="flex items-center gap-2 text-xs font-semibold text-slate-700 min-h-[38px]"><input type="checkbox" id="y-sup"'+(f.superseded?' checked':'')+'/> Include superseded versions</label>')+
+  ui.filterBar('y-filters',ui.select('y-week','Week','fa-calendar',[['','All weeks']].concat(Object.keys(weeks).sort().reverse().map(function(w){return [w,'Week of '+S4.fmtWeek(w)];})),f.week)+ui.select('y-client','Client','fa-building',[['','All clients']].concat(Object.keys(S3.CLIENTS).map(function(k){return [k,S3.CLIENTS[k].name];})),f.client)+ui.search('y-q','Candidate or booking reference')+ui.select('y-source','Booking source','fa-building-shield',[['','All sources'],['Abstract-sourced','Abstract-sourced'],['Agency-sourced','Agency-sourced']],f.source)+'<div class="flex items-start gap-2">'+[['y-from','From week','from'],['y-to','To week','to']].map(function(d){var bad=re&&re[0]===d[0];return '<div><label for="'+d[0]+'" class="block text-[11px] font-semibold text-slate-600 mb-0.5">'+d[1]+'</label><input id="'+d[0]+'" type="date" value="'+esc(f[d[2]]||'')+'" class="px-2 py-1.5 rounded-lg border '+(bad?'border-red-500':'border-slate-200')+' text-xs text-slate-700 min-h-[34px]"'+(bad?' aria-invalid="true" aria-describedby="'+d[0]+'-err"':'')+'/>'+(bad?'<p id="'+d[0]+'-err" class="text-xs font-medium text-red-700 mt-1 max-w-[220px]" role="alert">'+esc(re[1])+'</p>':'')+'</div>';}).join('')+'</div>'+'<label class="flex items-center gap-2 text-xs font-semibold text-slate-700 min-h-[38px]"><input type="checkbox" id="y-sup"'+(f.superseded?' checked':'')+'/> Include superseded versions</label>')+
+  (bd?'':'<div class="mb-3">'+ui.banner('info','You see each statement’s hours and versions. Worker pay needs the full rate breakdown.')+'</div>')+
+  (re?'<div class="mb-3">'+ui.banner('error','Check the week range: '+esc(re[1]))+'</div>':'')+
   (list.length?ui.list({caption:'Pay statements',rows:view,href:href,cols:[
    {label:'Candidate',cell:function(s){return '<a class="'+C.link+'" href="'+href(s)+'">'+esc(s.candidateName)+'</a>';}},
    {label:'Client',cell:function(s){return esc(s.clientName);}},
    {label:'Booking',nowrap:true,cell:function(s){return '<span class="tnum">'+esc(s.bookingReference)+'</span>';}},
    {label:'Week',nowrap:true,cell:function(s){return S4.fmtWeek(s.weekStart);}},
    {label:'Total hours',right:true,cell:function(s){return s.totalHours;}},
-   {label:'Gross pay',right:true,cell:function(s){return S3.money(s.workerGrossPay);}},
-   {label:'Version',nowrap:true,cell:ver}],
-   card:function(s){return ui.mobileCard({title:'<a class="'+C.link+'" href="'+href(s)+'">'+esc(s.candidateName)+'</a>',badge:ver(s),lines:[esc(s.clientName)+' · '+esc(s.bookingReference),'Week of '+S4.fmtWeek(s.weekStart),s.totalHours+' h · '+S3.money(s.workerGrossPay)+' gross']});}})+ui.pager(list.length,pg,pages,'pay statements')
+   bd?{label:'Gross pay',right:true,cell:function(s){return S3.money(s.workerGrossPay);}}:null,
+   {label:'Version',nowrap:true,cell:ver}].filter(Boolean),
+   card:function(s){return ui.mobileCard({title:'<a class="'+C.link+'" href="'+href(s)+'">'+esc(s.candidateName)+'</a>',badge:ver(s),lines:[esc(s.clientName)+' · '+esc(s.bookingReference),'Week of '+S4.fmtWeek(s.weekStart),s.totalHours+' h'+(bd?' · '+S3.money(s.workerGrossPay)+' gross':'')]});}})+ui.pager(list.length,pg,pages,'pay statements')
   :ui.empty('fa-file-lines','No pay statements for this week','Statements are written when a week is approved.'));
  ui.wireFilterToggle(app);ui.wireRows(app);
  [['y-week','week'],['y-client','client'],['y-source','source']].forEach(function(k){var e=document.getElementById(k[0]);e.onchange=function(){f[k[1]]=e.value;pg=1;draw();};});
  var sup=document.getElementById('y-sup');sup.onchange=function(){f.superseded=sup.checked;pg=1;draw();};
+ ['from','to'].forEach(function(k){var e=document.getElementById('y-'+k);e.onchange=function(){f[k]=e.value;pg=1;draw();};});
  var qi=document.getElementById('y-q');qi.value=f.q;qi.oninput=function(){f.q=qi.value;pg=1;var p=qi.selectionStart;draw();var n=document.getElementById('y-q');n.focus();n.setSelectionRange(p,p);};
  app.querySelectorAll('[data-pg]').forEach(function(b){b.onclick=function(){pg=Number(b.dataset.pg);draw();};});
 }
-S3.onState(function(s){st=s;if(['loading','error','denied'].indexOf(s)>=0){app.innerHTML='';return;}draw();});
+S3.onState(function(s){st=s;if(['loading','error','denied'].indexOf(s)>=0){app.innerHTML='';return;}if(s==='validation'){f.week='';f.from='2026-10-05';f.to='2026-09-28';}draw();});
 </script>
 <script src="slice1-kit.js"></script>
 </body>

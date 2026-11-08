@@ -19,7 +19,7 @@
             brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554' } } } } };
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s4-page data-s1-states="default loading empty error denied large noapprove">
+<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s4-page data-s1-states="default loading empty error validation denied large noapprove">
 <div id="app-root" class="flex w-full" style="height: 100vh;">
     <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
         <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
@@ -116,7 +116,7 @@ function draw(){
   {label:'Actions',sr:'Actions',right:true,cell:actions}],
   card:function(x){return ui.mobileCard({title:'<a class="'+C.link+'" href="'+href(x)+'">'+esc(x.candidateName)+'</a>',badge:u4.badge(x.status,true),lines:[esc(x.clientName)+' · '+esc(x.orgNodeName),'Week of '+S4.fmtWeek(x.weekStart)+' · '+x.workedHours+' h · '+x.absenceDays+' absence'+(x.absenceDays===1?'':'s'),u4.markers(x,true)].filter(Boolean),actions:actions(x)});}})+ui.pager(list.length,pg,pages,'timesheets')
   :(st==='empty'?ui.empty('fa-clock','No timesheets yet','A booking’s week appears here once its dates reach it.'):ui.empty('fa-filter','No timesheets match these filters','Clear a filter to see more.','<button type="button" id="o-clear" class="'+C.sec+'">Clear filters</button>'));
- app.innerHTML=S4.tabs('list',{noPricing:st==='noapprove'})+'<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">'+ui.tile('Waiting for approval',cnt(function(x){return x.status==='Submitted';}),'fa-paper-plane')+ui.tile('Overdue',cnt(function(x){return x.overdue;}),'fa-clock')+ui.tile('Held',cnt(function(x){return x.held;}),'fa-hourglass-half')+ui.tile('Compliance exceptions',cnt(function(x){return x.complianceExceptions;}),'fa-triangle-exclamation')+'</div>'+
+ app.innerHTML=S4.tabs('list')+'<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-4">'+ui.tile('Waiting for approval',cnt(function(x){return x.status==='Submitted';}),'fa-paper-plane')+ui.tile('Overdue',cnt(function(x){return x.overdue;}),'fa-clock')+ui.tile('Held',cnt(function(x){return x.held;}),'fa-hourglass-half')+ui.tile('Compliance exceptions',cnt(function(x){return x.complianceExceptions;}),'fa-triangle-exclamation')+'</div>'+
   (st==='noapprove'?'<div class="mb-4">'+ui.banner('info','You can view timesheets. Approving, returning and reopening need the approve permission.')+'</div>':'')+
   ui.filterBar('o-filters',filters)+table;
  ui.wireFilterToggle(app);ui.wireRows(app);
@@ -129,7 +129,10 @@ function draw(){
  app.querySelectorAll('[data-rt]').forEach(function(b){b.onclick=function(){S4.returnFlow(S4.timesheet(b.dataset.rt),draw);};});
  app.querySelectorAll('[data-ro]').forEach(function(b){b.onclick=function(){S4.reopenFlow(S4.timesheet(b.dataset.ro),draw);};});
 }
-S3.onState(function(s){st=s;if(['loading','error','denied'].indexOf(s)>=0)return;draw();});
+S3.onState(function(s){st=s;if(['loading','error','denied'].indexOf(s)>=0)return;draw();
+ // validation (design review R1 N4): a row action's reason refused, as the API's 422 answers it
+ if(s==='validation'){var sb=S4.timesheets().filter(function(x){return x.status==='Submitted';})[0],ap=S4.timesheets().filter(function(x){return x.status==='Approved'&&!x.invoicedAt;})[0];if(sb)S4.returnFlow(sb,draw,{validate:true});else if(ap)S4.reopenFlow(ap,draw,{validate:true,prefill:new Array(1002).join('x')});}
+});
 </script>
 <script src="slice1-kit.js"></script>
 </body>
