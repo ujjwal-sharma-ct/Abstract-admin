@@ -394,13 +394,13 @@ var USERSETS = {"abstract":[{"name":"Sarah Mitchell","email":"sarah.mitchell@abs
 var S4_GROUPS = {
   abstract: [
     { g: 'timesheet', label: 'Timesheets', items: [
-      ['timesheet:view', 'View timesheets', 'view', 'See every client\'s timesheets, the week grid and the pending-pricing queue.'],
+      ['timesheet:view', 'View timesheets', 'view', 'See every client\'s timesheets and the week grid. The pending-pricing queue needs Price days by hand.'],
       ['timesheet:create_edit', 'Enter and edit timesheet days', 'create', 'Enter days on a client\'s behalf, fill a week and mark days. A timesheet is never deleted.'],
       ['timesheet:submit', 'Submit timesheets', 'action', 'Submit a week on the client\'s behalf.'],
       ['timesheet:approve', 'Approve, return and reopen timesheets', 'action', 'Approving writes the worker\'s pay statement; reopening supersedes it.'],
       ['timesheet:change_role', 'Record a day worked in another role', 'action', 'The covered day is priced at that role\'s rates.'],
       ['timesheet:override_absence', 'Override absence pay and who bears it', 'action', 'Needs a reason, which the audit log keeps.'],
-      ['timesheet:price_manually', 'Price days by hand', 'action', 'For a day no rate covers. Needs a reason; the hold lifts when it is priced.']
+      ['timesheet:price_manually', 'Price days by hand', 'action', 'Open the pending-pricing queue and price a day no rate covers. Needs a reason; the hold lifts when it is priced.']
     ]},
     { g: 'pay_statement', label: 'Pay statements', items: [
       ['pay_statement:view', 'View pay statements', 'view', 'Open Payroll and each worker\'s statement versions. Statements are written by approval, so there is nothing to create, edit or delete.']

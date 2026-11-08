@@ -762,7 +762,7 @@
                                 <div><p class="text-sm font-semibold text-slate-700">Password policy</p><p class="text-xs text-slate-400">Min 12 chars, mixed case, 90-day expiry</p></div>
                                 <button class="text-xs font-semibold text-blue-600 hover:text-blue-700">Edit</button>
                             </div>
-                            <div class="px-4 py-3 rounded-xl border border-slate-200">
+                            <div id="sec-ip-allowlist" class="px-4 py-3 rounded-xl border border-slate-200">
                                 <div class="flex items-center justify-between mb-2">
                                     <div><p class="text-sm font-semibold text-slate-700">Admin IP allowlist</p><p class="text-xs text-slate-400">Restrict admin access by IP</p></div>
                                     <button class="text-xs font-semibold text-blue-600 hover:text-blue-700"><i class="fa-solid fa-plus text-[10px] mr-1"></i>Add</button>
@@ -1031,6 +1031,18 @@ document.addEventListener('keydown', function (e) {
 /* Structure changes: the sidebar item carries the pending count on every page (DESIGN-SPEC §5; absent when zero) */
 var S2_PENDING_COUNT = 5;
 document.addEventListener('s1:ready', function () { var c = document.getElementById('nav-sc-count'); if (c && S2_PENDING_COUNT > 0) { c.textContent = S2_PENDING_COUNT; c.classList.remove('hidden'); c.classList.add('inline-block'); c.setAttribute('aria-label', S2_PENDING_COUNT + ' waiting'); } });
+</script>
+<script>
+/* Slice 4: the admin IP allow-list is deferred indefinitely and no longer shown (TSD §3.1.7, 4.6 TV-7). From slice 4 mode
+   and in the full product the Security tab drops the row; slices 1 to 3 read as delivered. Asked on every mode change. */
+(function () {
+  function paint() {
+    var row = document.getElementById('sec-ip-allowlist'); if (!row) return;
+    var m = window.S1 && S1.mode ? S1.mode() : 'full';
+    if (m === 's1' || m === 's2' || m === 's3') row.style.removeProperty('display'); else row.style.setProperty('display', 'none', 'important');
+  }
+  document.addEventListener('s1:mode', paint); document.addEventListener('s1:ready', paint);
+})();
 </script>
 <script src="slice1-kit.js"></script>
 </body>

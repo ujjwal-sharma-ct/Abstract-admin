@@ -79,10 +79,10 @@ function synth(){var b=S4.pending()[0]||{timesheetId:'ts-132',bookingReference:'
 function draw(){
  var all=st==='empty'?[]:st==='large'?synth():S4.pending(),list=all.filter(function(r){return (!f.client||r.clientId===f.client)&&(!f.week||r.weekStart===f.week);}),pages=Math.ceil(list.length/PAGE)||1;if(pg>pages)pg=pages;var view=list.slice((pg-1)*PAGE,pg*PAGE),can=st!=='nobreakdown';
  var why=function(r){return r.pendingReason==='no_rate'?'No rate on the card':'Node removed';};
- var act=function(r){return can&&!r.synthetic?'<button type="button" class="'+C.sec+'" data-price="'+r.timesheetId+'|'+r.date+'">Price by hand</button>':(can?'<span class="text-xs text-slate-500">Sample row</span>':'');};
+ var act=function(r){return can&&!r.synthetic?'<button type="button" class="'+C.sec+'" data-price="'+r.timesheetId+'|'+r.date+'">Set a price</button>':(can?'<span class="text-xs text-slate-500">Sample row</span>':'');};
  var wk=function(r){return '<a class="'+C.link+'" href="abstract.timesheets.booking-week.html?id='+r.timesheetId+'">'+esc(r.bookingReference)+'</a>';};
  var weeks={};S4.pending().forEach(function(r){weeks[r.weekStart]=1;});
- app.innerHTML=S4.tabs('pending')+(st==='nobreakdown'?'<div class="mb-4">'+ui.banner('info','Pricing a day by hand sets its base pay, so it needs the full rate breakdown as well as the permission to price manually. You can see the queue.')+'</div>':'')+
+ app.innerHTML=S4.tabs('pending')+(st==='nobreakdown'?'<div class="mb-4">'+ui.banner('info','Setting a day’s price sets its base pay, so it needs the full rate breakdown as well as the permission to price manually. You can see the queue.')+'</div>':'')+
   '<p class="text-sm text-slate-600 mb-3">Days with no rate for the job role and Shift worked. Each holds its whole week: it can’t be submitted or approved until the day is priced. Soonest deadline first.</p>'+
   ui.filterBar('p-filters',ui.select('p-client','Client','fa-building',[['','All clients']].concat(Object.keys(S3.CLIENTS).map(function(k){return [k,S3.CLIENTS[k].name];})),f.client)+ui.select('p-week','Week','fa-calendar',[['','All weeks']].concat(Object.keys(weeks).sort().reverse().map(function(w){return [w,'Week of '+S4.fmtWeek(w)];})),f.week))+
   (list.length?ui.list({caption:'Days waiting for manual pricing',rows:view,cols:[
