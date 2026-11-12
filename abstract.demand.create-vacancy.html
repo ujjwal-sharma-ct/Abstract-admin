@@ -73,10 +73,111 @@
 <script src="slice3-proto.js"></script>
 <script>S3.mobileNav();</script>
 <script>
-var host=document.getElementById('app'),C=S3.C;
+var host=document.getElementById('app'),C=S3.C,esc=S3.esc;
 var id=S3.param('id'),edit=!!id&&!!S3.vacancy(id);
 var preset=S3.param('client')?{clientId:S3.param('client')}:null;
 document.getElementById('page-title').textContent=edit?'Edit vacancy':'New vacancy';
+// The look restored 2026-11-12 (Ujjwal Sharma's ruling): the original wizard's step rail, progress card, step header
+// cards, positions stepper, shift tiles and footer bar, dressed around slice 3's one-page VacancyForm (S3.vacancyForm),
+// which keeps every field, rule and message. The form is moved into the old layout, never redrawn, so its handlers stay.
+// Steps 3 to 6 and the other later-slice parts keep their place, marked data-s4-later and shown in full product only.
+var FOC=' focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
+var LATER=' data-s4-later';
+function gate(){var on=S1.mode()!=='full';host.querySelectorAll('[data-s4-later]').forEach(function(e){if(on)e.style.setProperty('display','none','important');else e.style.removeProperty('display');});}
+function look(name){return /night/i.test(name)?'fa-moon':/after|late/i.test(name)?'fa-cloud-sun':'fa-sun';}
+function val(i){var e=document.getElementById(i);return e?e.value:'';}
+var STEPS=[[1,'Role details','fa-warehouse','The job title, client, place in the structure, dates, positions and Shift',0],[2,'Pay & bill rate','fa-sterling-sign','The charge, pay and margin come from the job role’s rate card',0],[3,'Margin & markup','fa-percent','Abstract’s margin target and the agency markup cap',1],[4,'Compliance','fa-shield-halved','Documents, safety checks and right-to-work rules',1],[5,'Publishing rules','fa-share-nodes','Which agencies receive this vacancy, and when',1],[6,'Internal status','fa-flag','Priority, tags and workflow flags',1]];
+function stepHead(x){return '<div id="cv-step-'+x[0]+'" class="'+C.card+' px-5 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-3 scroll-mt-4"'+(x[4]?LATER:'')+'><div class="flex items-center gap-3 min-w-0"><div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="'+C.priStyle+'" aria-hidden="true"><i class="fa-solid '+x[2]+' text-white text-sm"></i></div><div class="min-w-0"><h2 class="text-sm font-bold text-slate-900">Step '+x[0]+': '+x[1]+'</h2><p class="text-xs text-slate-600">'+x[3]+'</p></div></div><span class="text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full tnum" data-of="'+x[0]+'"></span></div>';}
+function card(h,extra){return '<div class="'+C.card+' px-5 sm:px-6 py-5"'+LATER+'>'+h+'</div>';}
+function tiles(opts,on){return '<div class="flex flex-wrap gap-2">'+opts.map(function(o,i){return '<span class="flex-1 min-w-[96px] inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg border text-xs '+(i===on?'text-white font-semibold border-transparent" style="'+C.priStyle:'border-slate-200 bg-slate-50 text-slate-600 font-medium')+'"><i class="fa-solid '+o[1]+'" aria-hidden="true"></i>'+o[0]+'</span>';}).join('')+'</div>';}
+function rowL(i,l,v,c){return '<li class="flex items-center justify-between gap-3 px-4 py-2.5"><span class="text-xs text-slate-700 flex items-center gap-2"><i class="fa-solid '+i+' text-slate-500 text-xs" aria-hidden="true"></i>'+l+'</span><span class="text-xs font-semibold '+(c||'text-slate-700')+'">'+v+'</span></li>';}
+function lbl(t){return '<p class="text-xs font-semibold text-slate-700 mb-1.5">'+t+'</p>';}
+function laterSteps(){
+ var s3=stepHead(STEPS[2])+card('<div class="grid grid-cols-3 gap-3 mb-5 p-4 rounded-xl border border-blue-100" style="background:linear-gradient(90deg,#eff6ff,#faf5ff)"><div class="text-center"><p class="text-xs text-slate-600 mb-1">Charge rate</p><p class="text-sm font-bold text-slate-800">From the rate card</p></div><div class="text-center border-x border-blue-100"><p class="text-xs text-slate-600 mb-1">Pay rate</p><p class="text-sm font-bold text-slate-800">From the rate card</p></div><div class="text-center"><p class="text-xs text-slate-600 mb-1">Gross margin</p><p class="text-sm font-bold text-emerald-700">Shown once saved</p></div></div><ul class="rounded-xl border border-slate-200 divide-y divide-slate-100">'+rowL('fa-bullseye','Abstract margin target','15 %','tnum')+rowL('fa-arrow-down-wide-short','Minimum acceptable margin','10 %','tnum')+rowL('fa-percent','Agency markup cap','12 %','tnum')+rowL('fa-receipt','Fee type','Margin on the charge rate')+'</ul>');
+ var s4=stepHead(STEPS[3])+card('<p class="text-xs font-bold text-slate-700 mb-3">Required documents and checks</p><ul class="rounded-xl border border-slate-200 divide-y divide-slate-100 mb-4">'+[['fa-passport','Right to work (UK)','Required'],['fa-hand-holding-heart','Manual handling certificate','Required'],['fa-id-card','FLT licence (reach or counterbalance)','If applicable'],['fa-helmet-safety','Health and safety induction','Required'],['fa-file-lines','References (two)','Optional'],['fa-shield-halved','DBS check (standard)','Optional']].map(function(r){return rowL(r[0],r[1],r[2],r[2]==='Required'?'text-blue-700':'text-slate-600');}).join('')+'</ul><div class="flex items-start gap-3 px-4 py-3 rounded-xl border border-slate-200 bg-slate-50"><i class="fa-solid fa-scale-balanced text-slate-500 text-xs mt-0.5" aria-hidden="true"></i><div><p class="text-xs font-semibold text-slate-700">Agency Workers Regulations</p><p class="text-xs text-slate-600 mt-0.5">The standard 12-week qualifying period applies.</p></div></div>');
+ var s5=stepHead(STEPS[4])+card('<div class="flex items-start gap-3 px-4 py-3 rounded-xl border border-blue-100 bg-blue-50 mb-4"><i class="fa-solid fa-circle-info text-blue-600 text-xs mt-0.5" aria-hidden="true"></i><div><p class="text-xs font-semibold text-blue-900">Releasing to agencies is optional at creation</p><p class="text-xs text-blue-900 mt-0.5">A vacancy starts with Abstract only. You can release it to one, several or all approved agencies later.</p></div></div>'+lbl('Release to approved agencies')+'<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">'+[['TechForce Agency','General industrial'],['Nexus Talent','Driving and warehouse'],['PeopleBridge','Multi-sector'],['Apex Staffing','Warehouse and picking']].map(function(a){return '<div class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 bg-slate-50"><span class="w-4 h-4 rounded border border-slate-300 bg-white flex-shrink-0" aria-hidden="true"></span><span class="min-w-0"><span class="block text-xs font-semibold text-slate-700">'+a[0]+'</span><span class="block text-xs text-slate-500">'+a[1]+'</span></span></div>';}).join('')+'</div>');
+ var s6=stepHead(STEPS[5])+card(lbl('Priority')+tiles([['Low','fa-arrow-down'],['Normal','fa-minus'],['High','fa-arrow-up'],['Urgent','fa-bolt']],1)+'<div class="mt-4">'+lbl('Workflow flags')+'<ul class="flex flex-col gap-2">'+['Tell the account manager when a worker is put forward','Ask for margin approval before publishing','Close by itself if unfilled after the close date'].map(function(t,i){return '<li class="flex items-center gap-2 text-xs text-slate-700"><i class="fa-'+(i===0?'solid fa-square-check text-blue-600':'regular fa-square text-slate-500')+' text-sm" aria-hidden="true"></i>'+t+'</li>';}).join('')+'</ul></div>');
+ return s3+s4+s5+s6;
+}
+function contacts(){return card('<h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2"><i class="fa-solid fa-users text-blue-600 text-xs" aria-hidden="true"></i>Contacts and approvals</h3><div class="grid grid-cols-1 md:grid-cols-3 gap-5"><div>'+lbl('Site or hiring manager')+'<p class="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm text-slate-800">James Thornton</p></div><div>'+lbl('Account manager')+'<p class="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm text-slate-800">'+esc(S3.me)+'</p></div><div>'+lbl('Approval')+'<p class="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-xs font-semibold text-amber-800"><span class="w-1.5 h-1.5 rounded-full bg-amber-500" aria-hidden="true"></span>Sign-off required</p></div></div>');}
+function done(){
+ var tree=document.querySelector('#vf-tree [aria-selected="true"]'),n=+val('vf-count');
+ var f={client:edit||!!val('vf-client'),title:!!val('vf-title').trim(),role:!!val('vf-role'),place:!!tree,count:edit||(n>=1&&n<=500),shift:!!val('vf-shift'),start:!!val('vf-start'),end:!!val('vf-end')};
+ var k=Object.keys(f),got=k.filter(function(x){return f[x];}).length;
+ return {f:f,got:got,all:k.length,s1:got===k.length,s2:f.role&&f.place&&f.shift};
+}
+function refresh(){
+ var d=done(),full=S1.mode()==='full',of=full?6:2,pct=Math.round(d.got/d.all*100),ok=[d.s1,d.s2,false,false,false,false];
+ host.querySelectorAll('[data-of]').forEach(function(e){e.textContent='Step '+e.dataset.of+' of '+of;});
+ var p=document.getElementById('cv-pct');if(p){p.textContent=pct+'%';document.getElementById('cv-bar').style.width=pct+'%';document.getElementById('cv-bar-wrap').setAttribute('aria-valuenow',pct);}
+ host.querySelectorAll('[data-chk]').forEach(function(e){var y=ok[+e.dataset.chk-1];e.querySelector('i').className=(y?'fa-solid fa-circle-check text-blue-600':'fa-regular fa-circle text-slate-400')+' text-xs w-3';e.querySelector('span').className='text-xs '+(y?'text-slate-700 font-medium':'text-slate-600');});
+ host.querySelectorAll('[data-rail-ok]').forEach(function(e){e.style.display=ok[+e.dataset.railOk-1]?'':'none';});
+ var mp=document.getElementById('cv-mpct');if(mp){mp.textContent=pct+'%';host.querySelectorAll('[data-pip]').forEach(function(e){var y=ok[+e.dataset.pip-1];e.className='flex-1 h-1.5 rounded-full '+(y?'':'bg-slate-200');e.style.background=y?'linear-gradient(90deg,#1D4ED8,#5B2E91)':'';});}
+ var ft=document.getElementById('cv-foot-txt');if(ft)ft.textContent=d.got+' of '+d.all+' required fields done';
+}
+function shiftTiles(){
+ var sel=document.getElementById('vf-shift');if(!sel)return;
+ var lab=document.querySelector('label[for="vf-shift"]');if(lab)lab.id='vf-shift-l';
+ sel.classList.add('sr-only');sel.tabIndex=-1;sel.setAttribute('aria-hidden','true');
+ var box=document.createElement('div');box.id='vf-shift-tiles';box.setAttribute('role','radiogroup');box.setAttribute('aria-labelledby','vf-shift-l');sel.insertAdjacentElement('afterend',box);
+ function paint(){
+  var opts=[].slice.call(sel.options).filter(function(o){return o.value;}),bad=sel.getAttribute('aria-invalid')==='true';
+  if(!opts.length){box.className='';box.innerHTML='<p class="text-sm text-slate-500 border border-dashed border-slate-300 rounded-lg px-3 py-2.5">'+esc(sel.options[0]?sel.options[0].text:'Choose a client first')+'</p>';return;}
+  box.className='grid gap-2 rounded-lg '+(opts.length>=3?'grid-cols-3':'grid-cols-2')+(bad?' ring-2 ring-red-400 ring-offset-2':'');
+  var any=opts.some(function(o){return o.value===sel.value;});
+  box.innerHTML=opts.map(function(o,i){var on=o.value===sel.value,def=/default/.test(o.text),name=o.text.replace(/ \(.*\)$/,'');return '<button type="button" role="radio" aria-checked="'+on+'" data-sv="'+esc(o.value)+'" tabindex="'+(on||(!any&&i===0)?0:-1)+'" class="flex flex-col items-center justify-center gap-0.5 px-2 py-2 rounded-lg border text-xs min-h-[48px] transition-colors '+(on?'text-white font-semibold border-transparent':'border-slate-200 bg-slate-50 text-slate-700 font-medium hover:border-blue-300 hover:text-blue-700')+FOC+'"'+(on?' style="'+C.priStyle+'"':'')+'><span class="flex items-center gap-1.5"><i class="fa-solid '+look(name)+'" aria-hidden="true"></i>'+esc(name)+'</span>'+(def?'<span class="text-[11px] '+(on?'text-blue-100':'text-slate-500')+'">Client default</span>':'')+'</button>';}).join('');
+ }
+ function pick(v){sel.value=v;sel.dispatchEvent(new Event('change',{bubbles:true}));paint();var b=box.querySelector('[aria-checked="true"]');if(b)b.focus();}
+ box.addEventListener('click',function(e){var b=e.target.closest('[data-sv]');if(b)pick(b.dataset.sv);});
+ box.addEventListener('keydown',function(e){var bs=[].slice.call(box.querySelectorAll('[data-sv]')),i=bs.indexOf(document.activeElement);if(i<0)return;var j=e.key==='ArrowRight'||e.key==='ArrowDown'?i+1:e.key==='ArrowLeft'||e.key==='ArrowUp'?i-1:null;if(j===null)return;e.preventDefault();j=(j+bs.length)%bs.length;pick(bs[j].dataset.sv);});
+ sel.addEventListener('change',paint);
+ sel.addEventListener('focus',function(){var t=box.querySelector('[aria-checked="true"]')||box.querySelector('button');if(t)t.focus();});
+ new MutationObserver(paint).observe(sel,{childList:true,attributes:true,attributeFilter:['aria-invalid']});
+ paint();
+}
+function stepper(){
+ var cnt=document.getElementById('vf-count');if(!cnt)return;
+ cnt.classList.remove('w-full');cnt.classList.add('w-20','text-center','font-semibold','tnum');
+ var row=document.createElement('div');row.className='flex items-center gap-2';cnt.parentNode.insertBefore(row,cnt);
+ var B='w-10 h-10 flex items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-700 text-sm font-bold hover:bg-slate-100 hover:border-blue-300 transition-colors'+FOC;
+ row.insertAdjacentHTML('beforeend','<button type="button" data-inc="-1" class="'+B+'" aria-label="One position fewer">−</button>');row.appendChild(cnt);
+ row.insertAdjacentHTML('beforeend','<button type="button" data-inc="1" class="'+B+'" aria-label="One position more">+</button><span class="text-xs text-slate-600">seats to fill</span>');
+ row.querySelectorAll('[data-inc]').forEach(function(b){b.onclick=function(){cnt.value=Math.min(500,Math.max(1,(Math.round(+cnt.value)||0)+(+b.dataset.inc)));cnt.dispatchEvent(new Event('input',{bubbles:true}));};});
+}
+function dress(){
+ var root=host.firstElementChild,banner=document.getElementById('vf-banner'),s1=host.querySelector('[aria-labelledby="vf-1"]'),s2=host.querySelector('[aria-labelledby="vf-2"]'),s3=host.querySelector('[aria-labelledby="vf-3"]'),foot=root.lastElementChild;
+ var v=edit?S3.vacancy(id):null,full=STEPS;
+ var rail='<div id="wizard-steps-panel" class="hidden xl:flex flex-col w-60 flex-shrink-0 gap-4 xl:sticky xl:top-0 self-start"><nav id="wizard-steps-nav" class="'+C.card+' p-4" aria-label="Form steps"><p class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4 px-1">Steps</p><div class="flex flex-col gap-1">'+
+  full.map(function(x){var first=x[0]===1;return '<button type="button" data-go="'+x[0]+'"'+(x[4]?LATER:'')+(first?' aria-current="step"':'')+' class="flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all '+(first?'text-white font-semibold':'text-slate-700 hover:text-slate-900 hover:bg-slate-50')+FOC+'"'+(first?' style="background:linear-gradient(135deg,rgba(29,78,216,.9),rgba(91,46,145,.8))"':'')+'><span class="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold '+(first?'bg-white text-blue-700':'bg-slate-100 text-slate-600')+'">'+x[0]+'</span><span class="text-xs">'+x[1]+'</span><i data-rail-ok="'+x[0]+'" class="fa-solid fa-circle-check ml-auto text-xs '+(first?'text-blue-200':'text-blue-600')+'" style="display:none" aria-hidden="true"></i></button>';}).join('')+'</div></nav>'+
+  '<div id="wizard-progress-card" class="'+C.card+' p-4"><p class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3 px-1">Progress</p><div class="flex flex-col gap-2 mb-3"><div class="flex justify-between items-center"><span class="text-xs text-slate-600">Required fields</span><span id="cv-pct" class="text-xs font-bold text-blue-700 tnum">0%</span></div><div id="cv-bar-wrap" class="w-full h-2 bg-slate-100 rounded-full overflow-hidden" role="progressbar" aria-label="Required fields done" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div id="cv-bar" class="h-full rounded-full transition-all duration-500" style="width:0%;background:linear-gradient(90deg,#1D4ED8,#5B2E91)"></div></div></div><ul class="flex flex-col gap-1.5">'+full.map(function(x){return '<li class="flex items-center gap-2" data-chk="'+x[0]+'"'+(x[4]?LATER:'')+'><i class="fa-regular fa-circle text-slate-400 text-xs w-3" aria-hidden="true"></i><span class="text-xs text-slate-600">'+x[1]+'</span></li>';}).join('')+'</ul></div></div>';
+ var mob='<div id="step-progress-bar-mobile" class="xl:hidden '+C.card+' px-5 py-4"><div class="flex items-center justify-between mb-3"><span class="text-xs font-semibold text-slate-700">Progress</span><span class="text-xs text-blue-700 font-bold tnum" id="cv-mpct">0%</span></div><div class="flex gap-1.5">'+full.map(function(x){return '<div data-pip="'+x[0]+'" class="flex-1 h-1.5 rounded-full bg-slate-200"'+(x[4]?LATER:'')+'></div>';}).join('')+'</div></div>';
+ var crumbs=S3.ui.crumbs(edit?[['Vacancy List','abstract.demand.vacancy-list.html'],[v.reference,'abstract.demand.vacancy-detail.html?id='+v.id],['Edit']]:[['Vacancy List','abstract.demand.vacancy-list.html'],['New vacancy']]);
+ var L=document.createElement('div');L.className='max-w-[1200px] mx-auto';
+ L.innerHTML=crumbs+'<div class="flex flex-col xl:flex-row gap-6">'+rail+'<div id="cv-main" class="flex-1 min-w-0 flex flex-col gap-4">'+mob+'<i data-slot="banner"></i>'+stepHead(STEPS[0])+'<i data-slot="s1"></i><i data-slot="s2"></i>'+contacts()+stepHead(STEPS[1])+'<i data-slot="s3"></i>'+laterSteps()+'<div id="wizard-footer" class="'+C.card+' px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-3"><div class="flex flex-wrap items-center gap-2" data-fl></div><p id="cv-foot-txt" class="text-xs text-slate-600 font-medium hidden sm:block tnum" aria-live="polite"></p><div class="flex flex-wrap items-center gap-2" data-fr></div></div></div></div>';
+ [['banner',banner],['s1',s1],['s2',s2],['s3',s3]].forEach(function(p){L.querySelector('[data-slot="'+p[0]+'"]').replaceWith(p[1]);});
+ // the form's own sections, restyled in the old card language
+ [[s1,'fa-clipboard-list'],[s2,'fa-align-left'],[s3,'fa-sterling-sign']].forEach(function(p){p[0].className=C.card+' px-5 sm:px-6 py-5';var h=p[0].querySelector('h2');h.className='text-sm font-bold text-slate-800 mb-4 flex items-center gap-2';h.insertAdjacentHTML('afterbegin','<i class="fa-solid '+p[1]+' text-blue-600 text-xs" aria-hidden="true"></i>');});
+ var h2=s2.querySelector('h2'),bar=document.createElement('div');bar.className='flex flex-wrap items-center justify-between gap-2 mb-4';h2.parentNode.insertBefore(bar,h2);bar.appendChild(h2);h2.classList.remove('mb-4');
+ bar.insertAdjacentHTML('beforeend','<div class="flex items-center gap-2"'+LATER+'><button type="button" class="flex items-center gap-1.5 px-2.5 py-1 min-h-[32px] rounded-md bg-purple-50 border border-purple-100 text-xs text-purple-700 font-medium hover:bg-purple-100'+FOC+'" onclick="S1.toast(\'Writing help arrives in a later slice.\',\'info\')"><i class="fa-solid fa-wand-magic-sparkles text-xs" aria-hidden="true"></i>Writing help</button><button type="button" class="flex items-center gap-1.5 px-2.5 py-1 min-h-[32px] rounded-md bg-slate-50 border border-slate-200 text-xs text-slate-700 font-medium hover:border-blue-300 hover:text-blue-700'+FOC+'" onclick="S1.toast(\'Uploading a brief arrives in a later slice.\',\'info\')"><i class="fa-solid fa-upload text-xs" aria-hidden="true"></i>Upload brief</button></div>');
+ s2.insertAdjacentHTML('beforeend','<div class="mt-4"'+LATER+'>'+lbl('Required skills')+'<div class="flex flex-wrap gap-2 p-3 border border-slate-200 rounded-xl bg-slate-50">'+['Manual handling','Health and safety','Scanner operation'].map(function(t){return '<span class="px-2.5 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-medium">'+t+'</span>';}).join('')+'</div></div>');
+ s3.insertAdjacentHTML('beforeend','<div class="mt-4 flex items-start gap-3 px-4 py-3 rounded-xl border border-slate-200 bg-slate-50"'+LATER+'><i class="fa-solid fa-lock text-slate-500 text-xs mt-0.5" aria-hidden="true"></i><div><p class="text-xs font-semibold text-slate-700">Agencies see the pay rate only</p><p class="text-xs text-slate-600 mt-0.5">The charge rate and Abstract’s margin are never shown to an agency.</p></div></div>');
+ var grid=s1.querySelector('.grid');
+ grid.insertAdjacentHTML('beforeend','<div'+LATER+'>'+lbl('Engagement type')+tiles([['Temporary','fa-file-contract'],['Permanent','fa-user-tie'],['Temp to perm','fa-arrows-rotate']],0)+'</div><div'+LATER+'>'+lbl('Department or cost centre')+'<p class="px-3 py-2.5 rounded-lg border border-slate-200 bg-slate-50 text-sm text-slate-800">Inbound, goods receiving</p></div>');
+ if(edit&&v)grid.insertAdjacentHTML('afterbegin','<div class="sm:col-span-2 flex items-center gap-2"><span class="text-xs font-semibold text-slate-700">Reference</span><span class="text-xs font-mono font-semibold text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-md tnum">'+esc(v.reference)+'</span></div>');
+ else grid.insertAdjacentHTML('afterbegin','<p class="sm:col-span-2 text-xs text-slate-600 flex items-center gap-2"><i class="fa-solid fa-hashtag text-slate-500" aria-hidden="true"></i>The vacancy reference is given when you save.</p>');
+ // the footer: the form's own buttons, moved into the old wizard bar
+ var fl=L.querySelector('[data-fl]'),fr=L.querySelector('[data-fr]'),cancel=foot.querySelector('a'),draft=document.getElementById('vf-draft'),pub=document.getElementById('vf-publish'),save=document.getElementById('vf-save');
+ cancel.className='inline-flex items-center gap-2 px-4 py-2.5 min-h-[40px] rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-700 font-medium hover:border-red-200 hover:text-red-700 transition-colors'+FOC;cancel.insertAdjacentHTML('afterbegin','<i class="fa-solid fa-xmark text-xs" aria-hidden="true"></i>');
+ if(draft){draft.className='inline-flex items-center gap-2 px-4 py-2.5 min-h-[40px] rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-700 font-medium hover:border-amber-300 hover:text-amber-800 transition-colors'+FOC;draft.insertAdjacentHTML('afterbegin','<i class="fa-regular fa-floppy-disk text-xs" aria-hidden="true"></i>');fl.appendChild(draft);}
+ [pub,save].forEach(function(b){if(!b)return;b.className='inline-flex items-center gap-2 px-5 py-2.5 min-h-[40px] rounded-xl text-white text-sm font-semibold hover:opacity-90 transition-opacity'+FOC;b.insertAdjacentHTML('afterbegin','<i class="fa-solid '+(b===pub?'fa-paper-plane':'fa-floppy-disk')+' text-xs" aria-hidden="true"></i>');});
+ if(draft){fr.appendChild(cancel);fr.appendChild(pub);}else{fl.appendChild(cancel);fr.appendChild(save);}
+ host.replaceChild(L,root);
+ stepper();shiftTiles();
+ L.querySelectorAll('[data-go]').forEach(function(b){b.onclick=function(){L.querySelectorAll('[data-go]').forEach(function(x){var on=x===b,n=x.querySelector('span');x.toggleAttribute('aria-current',on);if(on)x.setAttribute('aria-current','step');x.className='flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all '+(on?'text-white font-semibold':'text-slate-700 hover:text-slate-900 hover:bg-slate-50')+FOC;x.style.background=on?'linear-gradient(135deg,rgba(29,78,216,.9),rgba(91,46,145,.8))':'';n.className='w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold '+(on?'bg-white text-blue-700':'bg-slate-100 text-slate-600');x.querySelector('[data-rail-ok]').classList.toggle('text-blue-200',on);x.querySelector('[data-rail-ok]').classList.toggle('text-blue-600',!on);});var t=document.getElementById('cv-step-'+b.dataset.go);if(t)t.scrollIntoView({behavior:'smooth',block:'start'});};});
+ ['input','change','click'].forEach(function(k){L.addEventListener(k,function(){setTimeout(refresh,0);});});
+ L.addEventListener('focusout',function(){setTimeout(refresh,160);});
+ gate();refresh();
+}
 S3.onState(function(s){
  if(['loading','error','denied'].indexOf(s)>=0)return;
  var p={portal:'abstract',mode:edit?'edit':'create',vacancyId:id,preset:preset,large:s==='large',noRoles:s==='empty',suspendOnSave:s==='suspended',nobreakdown:s==='nobreakdown'};
@@ -84,10 +185,12 @@ S3.onState(function(s){
  if(s==='norate')p.preset={clientId:'acme',jobTitle:'Packers for the Christmas peak',jobRoleId:'jr-pp',orgNodeId:'lds',startDate:'2026-11-23',endDate:'2026-12-23',positionCount:2};
  if(s==='suspended'||s==='large'||s==='empty')p.preset=Object.assign({clientId:'acme'},p.preset||{});
  S3.vacancyForm(host,p);
+ dress();
  if(s==='validation'){p.showErrors={};}
  if(s==='validation'){var b=document.getElementById(edit?'vf-save':'vf-draft');if(b)b.click();}
- if(s==='norate'){document.getElementById('vf-publish').click();setTimeout(function(){var ok=document.querySelector('.s1-scrim [data-ok]');if(ok)ok.click();},60);}
+ if(s==='norate'&&document.getElementById('vf-publish')){document.getElementById('vf-publish').click();setTimeout(function(){var ok=document.querySelector('.s1-scrim [data-ok]');if(ok)ok.click();},60);}
 });
+document.addEventListener('s1:mode',function(){gate();refresh();});
 </script>
 <script src="slice1-kit.js"></script>
 </body>
