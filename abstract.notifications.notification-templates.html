@@ -26,7 +26,7 @@
         }
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default loading error validation denied">
+<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default loading error validation denied empty large nodeliveryview">
 
 <div id="app-root" class="flex w-full" style="height: 100vh;">
 
@@ -183,6 +183,15 @@
 
             <!-- ===== LIST ===== -->
             <div id="view-list" data-s1-hide="loading error denied">
+                <!-- Templates / Delivery failures (TSD 1 §3.3.11 route table; §5.10 TV-11). The failures tab is absent
+                     without notification_delivery:view (state nodeliveryview). -->
+                <div role="tablist" aria-label="Notification template sections" id="nt-tabs" class="flex items-center gap-6 border-b border-slate-200 mb-5 overflow-x-auto">
+                    <button type="button" role="tab" id="tab-templates" aria-selected="true" aria-controls="panel-templates" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 -mb-px text-sm font-semibold whitespace-nowrap rounded-t focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Templates</button>
+                    <button type="button" role="tab" id="tab-failures" aria-selected="false" aria-controls="panel-failures" tabindex="-1" class="inline-flex items-center gap-2 px-1 pb-3 border-b-2 -mb-px text-sm font-semibold whitespace-nowrap rounded-t focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1">Delivery failures <span id="df-count" class="text-xs font-semibold px-1.5 py-0.5 rounded-full bg-red-50 text-red-700 tabular-nums"></span></button>
+                </div>
+                <div id="panel-templates" role="tabpanel" aria-labelledby="tab-templates">
+                <!-- a ?t= that names no template (or one this mode doesn't list) -->
+                <div id="tpl-notfound" class="hidden rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 mb-5 flex items-start gap-3 text-sm text-amber-900" role="alert"><i class="fa-solid fa-circle-question mt-0.5" aria-hidden="true"></i><div><p class="font-semibold">We couldn't find that template.</p><p class="mt-0.5">The link may be out of date. Pick the template from Notification templates.</p></div></div>
                 <p class="text-sm text-slate-600 mb-5 max-w-3xl">The emails and in-app messages this system sends. You can change their wording; the set of templates is fixed. Every save creates a new version, and each message keeps the wording it was sent with.</p>
                 <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
                     <div class="hidden md:block overflow-x-auto">
@@ -196,6 +205,47 @@
                     </div>
                     <ul id="list-cards" class="md:hidden divide-y divide-slate-100"></ul>
                 </section>
+                </div>
+
+                <!-- Delivery failures: email rows in a failed, bounced or suppressed state, newest first -->
+                <div id="panel-failures" role="tabpanel" aria-labelledby="tab-failures" class="hidden">
+                    <p class="text-sm text-slate-600 mb-5 max-w-3xl">Emails this system could not deliver: sending failed after every retry, the recipient's mail server returned the message, or the address is on the suppression list.</p>
+                    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                        <form id="df-filters" aria-label="Filter delivery failures" class="flex flex-wrap items-end gap-3 px-4 sm:px-5 py-4 border-b border-slate-100" novalidate>
+                            <div class="w-full sm:w-auto">
+                                <label for="df-state" class="block text-xs font-semibold text-slate-700 mb-1.5">State</label>
+                                <select id="df-state" class="w-full sm:w-44 px-3 py-2 min-h-[38px] bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-600/20"><option value="">All</option><option value="failed">Failed</option><option value="bounced">Bounced</option><option value="suppressed">Suppressed</option></select>
+                            </div>
+                            <div class="flex-1 min-w-[140px] sm:flex-none">
+                                <label for="df-from" class="block text-xs font-semibold text-slate-700 mb-1.5">From date</label>
+                                <input id="df-from" type="date" class="w-full sm:w-44 px-3 py-2 min-h-[38px] bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-600/20" aria-describedby="df-date-err"/>
+                            </div>
+                            <div class="flex-1 min-w-[140px] sm:flex-none">
+                                <label for="df-to" class="block text-xs font-semibold text-slate-700 mb-1.5">To date</label>
+                                <input id="df-to" type="date" class="w-full sm:w-44 px-3 py-2 min-h-[38px] bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-700 focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-600/20" aria-describedby="df-date-err"/>
+                            </div>
+                            <button type="button" id="df-clear" class="inline-flex items-center justify-center gap-2 px-3 py-2 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-xmark" aria-hidden="true"></i> Clear filters</button>
+                            <p id="df-date-err" class="hidden w-full text-xs font-medium text-red-600" role="alert"><i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i>The To date is before the From date.</p>
+                        </form>
+                        <div id="df-table" class="hidden md:block overflow-x-auto">
+                            <table class="w-full text-sm">
+                                <caption class="sr-only">Delivery failures</caption>
+                                <thead class="bg-slate-50"><tr class="text-left">
+                                    <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider pl-5">Recipient</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Template</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">State</th>
+                                    <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Attempts</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Last error</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider pr-5">When</th>
+                                </tr></thead>
+                                <tbody id="df-body" class="divide-y divide-slate-100"></tbody>
+                            </table>
+                        </div>
+                        <ul id="df-cards" class="md:hidden divide-y divide-slate-100"></ul>
+                        <div id="df-empty" class="hidden px-6 py-14 text-center">
+                            <div class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center mx-auto mb-4"><i class="fa-solid fa-check text-xl" aria-hidden="true"></i></div>
+                            <h2 class="text-base font-bold text-slate-900">No failed deliveries</h2>
+                            <p id="df-empty-t" class="text-sm text-slate-600 mt-1 max-w-md mx-auto">Every email this system sent was accepted for delivery.</p>
+                        </div>
+                        <div id="df-foot" class="flex flex-wrap items-center justify-between gap-3 px-4 sm:px-5 py-3 border-t border-slate-200 bg-slate-50"></div>
+                    </section>
+                </div>
             </div>
 
             <!-- ===== EDITOR ===== -->
@@ -370,8 +420,22 @@ var SAMPLES = { userName: 'Sarah Mitchell', organisationName: 'Acme Logistics', 
 var BTN = { activationUrl: 'Activate my account', resetUrl: 'Set a new password', downloadUrl: 'Download' };
 var ORDER = ['user.activation', 'user.password_reset', 'audit.export_ready', 'dsar.package_ready'];
 
-var S3ON=(function(){try{var m=localStorage.getItem('s1-mode');return m!=='on'&&m!=='s2';}catch(e){return true;}})();
-if (S3ON) {
+/* Slice 2 (brief Part C; TSD 2 §3.1.6 NT-009, NT-010): the two structure-change templates, email and in-app.
+   Each carries its own sample values, so a later slice's `reason` or `recipientName` never fills its preview. */
+Object.assign(TPL, {
+  'structure_change.pending': { slice: 2, name: 'Structure change pending', channel: 'Email and in-app', vars: ['recipientName', 'organisationName', 'changeSummary', 'requestedByName', 'requestRoute'],
+    samples: { recipientName: 'Sarah Mitchell', organisationName: 'Acme Logistics', changeSummary: 'Add Leeds Hub under North region', requestedByName: 'Rachel Green', requestRoute: 'https://vms.example/abstract/structure-changes/…' },
+    versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: '{{organisationName}} asks to change its structure', body: 'Hello {{recipientName}},\n\n{{requestedByName}} at {{organisationName}} asked for a change to the organisation\'s structure: {{changeSummary}}.\n\nThe change waits for your approval before it applies.\n\n{{requestRoute}}' } ] },
+  'structure_change.decided': { slice: 2, name: 'Structure change decided', channel: 'Email and in-app', vars: ['recipientName', 'organisationName', 'changeSummary', 'decision', 'reason', 'structureRoute'],
+    samples: { recipientName: 'Rachel Green', organisationName: 'Acme Logistics', changeSummary: 'Add Leeds Hub under North region', decision: 'Rejected', reason: 'Leeds Hub is already set up under Yorkshire. Add the new site there.', structureRoute: 'https://vms.example/client/settings/business-units' },
+    versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'Your structure change was {{decision}}', body: 'Hello {{recipientName}},\n\nAbstract has decided your change to {{organisationName}}\'s structure: {{changeSummary}}.\n\nDecision: {{decision}}. {{reason}}\n\n{{structureRoute}}' } ] }
+});
+BTN.requestRoute = 'Review the request'; BTN.structureRoute = 'Open your structure';
+
+/* Slices 3 and 4 are always defined; which templates show is decided from S1.mode() when the list is drawn and
+   again on every s1:mode, so a direct ?s1=1 / ?s2=1 visit never lists them (the kit sets the mode before s1:ready). */
+var SAMPLES_BASE = Object.assign({}, SAMPLES), SAMPLES_S3 = {}, SAMPLES_S4 = {};
+(function () {
   Object.assign(TPL, {
     'vacancy.published': { name: 'Vacancy published', channel: 'Email and in-app', vars: ['recipientName', 'vacancyReference', 'jobTitle', 'clientName', 'orgNodeName', 'positionCount', 'startDate', 'vacancyRoute'],
       versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'New vacancy from {{clientName}}: {{vacancyReference}}', body: 'Hello {{recipientName}},\n\n{{clientName}} has published {{vacancyReference}}, {{jobTitle}}, at {{orgNodeName}}: {{positionCount}} positions from {{startDate}}.\n\n{{vacancyRoute}}' } ] },
@@ -382,13 +446,12 @@ if (S3ON) {
     'vacancy.cancelled': { name: 'Vacancy cancelled', channel: 'Email and in-app', vars: ['recipientName', 'vacancyReference', 'jobTitle', 'orgNodeName', 'reason', 'vacancyRoute'],
       versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'Vacancy {{vacancyReference}} was cancelled', body: 'Hello {{recipientName}},\n\nAbstract cancelled {{vacancyReference}}, {{jobTitle}}, at {{orgNodeName}}: {{reason}}\n\n{{vacancyRoute}}' } ] }
   });
-  Object.assign(SAMPLES, { recipientName: 'Rachel Green', vacancyReference: 'VAC-1042', jobTitle: 'Reach truck drivers', clientName: 'Acme Logistics', orgNodeName: 'Leeds Hub', positionCount: '4', startDate: '28 Sep 2026', endDate: '27 Nov 2026', bookingReference: 'BK-2201', candidateName: 'Marek Nowak', positionNumber: '2', reason: 'The worker accepted a permanent role elsewhere.', vacancyRoute: 'https://vms.example/client/vacancies/…', bookingRoute: 'https://vms.example/client/bookings/…' });
-  ORDER = ORDER.concat(['vacancy.published', 'booking.created', 'booking.cancelled', 'vacancy.cancelled']);
-}
+  Object.assign(SAMPLES_S3, { recipientName: 'Rachel Green', vacancyReference: 'VAC-1042', jobTitle: 'Reach truck drivers', clientName: 'Acme Logistics', orgNodeName: 'Leeds Hub', positionCount: '4', startDate: '28 Sep 2026', endDate: '27 Nov 2026', bookingReference: 'BK-2201', candidateName: 'Marek Nowak', positionNumber: '2', reason: 'The worker accepted a permanent role elsewhere.', vacancyRoute: 'https://vms.example/client/vacancies/…', bookingRoute: 'https://vms.example/client/bookings/…' });
+  ['vacancy.published', 'booking.created', 'booking.cancelled', 'vacancy.cancelled'].forEach(function (k) { TPL[k].slice = 3; });
+})();
 /* Slice 4 (TSD §3.1.6): the six timesheet templates, email and in-app, none to an agency and no rate, cost or hours
-   figure in any variable. Shown from Slices 1 to 4 on, read at load like slice 3's. */
-var S4ON=(function(){try{var m=localStorage.getItem('s1-mode');return m!=='on'&&m!=='s2'&&m!=='s3';}catch(e){return true;}})();
-if (S4ON) {
+   figure in any variable. Shown from Slices 1 to 4 on. */
+(function () {
   Object.assign(TPL, {
     'timesheet.reminder': { name: 'Timesheets due soon', channel: 'Email and in-app', vars: ['recipientName', 'weekStart', 'draftCount', 'deadline', 'timesheetsRoute'],
       versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'Timesheets for the week of {{weekStart}} are due by {{deadline}}', body: 'Hello {{recipientName}},\n\n{{draftCount}} timesheets for the week of {{weekStart}} are still in draft. Please finish and submit them by {{deadline}}.\n\n{{timesheetsRoute}}' } ] },
@@ -405,10 +468,29 @@ if (S4ON) {
     'timesheet.pricing_pending_client': { name: 'Day being priced by Abstract', critical: true, channel: 'Email and in-app', vars: ['recipientName', 'bookingReference', 'candidateName', 'clientName', 'date', 'jobRoleTitle', 'shiftName', 'timesheetRoute'],
       versions: [ { v: 1, by: 'System (seeded)', at: '1 Feb 2026', subject: 'Abstract is pricing {{candidateName}}\'s {{date}}', body: 'Hello {{recipientName}},\n\n{{candidateName}}\'s {{date}} as {{jobRoleTitle}} on {{shiftName}} ({{bookingReference}}) has no agreed rate yet, so Abstract is pricing it by hand. You don\'t need to do anything; the week can be submitted once the day is priced.\n\n{{timesheetRoute}}' } ] }
   });
-  Object.assign(SAMPLES, { recipientName: 'Rachel Green', clientName: 'Acme Logistics', weekStart: '5 Oct 2026', deadline: '13 Oct 2026, 12:00', draftCount: '3', overdueCount: '2', bookingReference: 'BK-2202', candidateName: 'Tasha Williams', date: 'Thu 8 Oct 2026', jobRoleTitle: 'Forklift Driver (Reach)', shiftName: 'Night', reason: 'Friday\'s hours are an hour short of the gate log.', timesheetsRoute: 'https://vms.example/client/timesheets?week=…', timesheetRoute: 'https://vms.example/client/timesheets/…', queueRoute: 'https://vms.example/abstract/timesheets/pending-pricing' });
-  ORDER = ORDER.concat(['timesheet.reminder', 'timesheet.overdue', 'timesheet.submitted', 'timesheet.returned', 'timesheet.pricing_pending', 'timesheet.pricing_pending_client']);
+  Object.assign(SAMPLES_S4, { recipientName: 'Rachel Green', clientName: 'Acme Logistics', weekStart: '5 Oct 2026', deadline: '13 Oct 2026, 12:00', draftCount: '3', overdueCount: '2', bookingReference: 'BK-2202', candidateName: 'Tasha Williams', date: 'Thu 8 Oct 2026', jobRoleTitle: 'Forklift Driver (Reach)', shiftName: 'Night', reason: 'Friday\'s hours are an hour short of the gate log.', timesheetsRoute: 'https://vms.example/client/timesheets?week=…', timesheetRoute: 'https://vms.example/client/timesheets/…', queueRoute: 'https://vms.example/abstract/timesheets/pending-pricing' });
+  ['timesheet.reminder', 'timesheet.overdue', 'timesheet.submitted', 'timesheet.returned', 'timesheet.pricing_pending', 'timesheet.pricing_pending_client'].forEach(function (k) { TPL[k].slice = 4; });
+})();
+var ALL_ORDER = ORDER.concat(['structure_change.pending', 'structure_change.decided',
+  'vacancy.published', 'booking.created', 'booking.cancelled', 'vacancy.cancelled',
+  'timesheet.reminder', 'timesheet.overdue', 'timesheet.submitted', 'timesheet.returned', 'timesheet.pricing_pending', 'timesheet.pricing_pending_client']);
+function modeLevel() { var m = window.S1 && S1.mode ? S1.mode() : 'full'; return m === 's1' ? 1 : m === 's2' ? 2 : m === 's3' ? 3 : m === 's4' ? 4 : 5; }
+function shown(k) { return !!TPL[k] && (TPL[k].slice || 1) <= modeLevel(); }
+function applyTemplateMode() {
+  var lv = modeLevel();
+  ORDER = ALL_ORDER.filter(shown);
+  SAMPLES = Object.assign({}, SAMPLES_BASE, lv >= 3 ? SAMPLES_S3 : {}, lv >= 4 ? SAMPLES_S4 : {});
 }
+function sampleOf(n) { var t = TPL[cur]; return t && t.samples && n in t.samples ? t.samples[n] : SAMPLES[n]; }
 var cur = null, viewing = null;
+/* secret variables: a single-use link, never rendered in an in-app notification (TSD 1 §3.3.7) */
+var SINGLE_USE = { activationUrl: true, resetUrl: true };
+/* leave guard: unsaved wording in the editor */
+function edDirty() { if (!cur) return false; var l = latest(TPL[cur]); return document.getElementById('f-subject').value !== l.subject || document.getElementById('f-body').value !== l.body; }
+function guardLeave(go) {
+  if (!edDirty() || document.body.getAttribute('data-s1-state') === 'validation') return go();
+  S1.confirm({ tone: 'warning', icon: 'fa-triangle-exclamation', title: 'Leave without saving?', body: 'Your changes to this template haven\'t been saved. If you leave now, they are lost.', cancel: 'Stay on this page', cta: 'Leave without saving', delay: 0, onConfirm: go });
+}
 function latest(t) { return t.versions[t.versions.length - 1]; }
 function tokens(s) { var r = [], m, re = /\{\{\s*([^}]*?)\s*\}\}/g; while ((m = re.exec(s))) r.push(m[1]); return r; }
 function unknown() { var t = TPL[cur]; var all = tokens(document.getElementById('f-subject').value).concat(tokens(document.getElementById('f-body').value));
@@ -418,11 +500,12 @@ function renderList() {
   var rows = '', cards = '';
   ORDER.forEach(function (k) {
     var t = TPL[k], l = latest(t), def = t.versions.length === 1;
+    var crit = t.critical ? ' <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-red-50 text-red-700 border border-red-200 ml-1" title="Critical: no one can turn it off"><i class="fa-solid fa-circle-exclamation text-[10px]" aria-hidden="true"></i>Critical</span>' : '';
     var mk = def ? ' <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-slate-100 text-slate-700 border border-slate-200 ml-1">Default</span>' : '';
     var href = 'abstract.notifications.notification-templates.html?t=' + k;
-    rows += '<tr class="hover:bg-slate-50/60"><td class="px-4 pl-5 py-3.5"><a href="' + href + '" data-open="' + k + '" class="font-semibold text-slate-900 hover:text-blue-700 hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">' + t.name + '</a>' + mk + '<span class="block font-mono text-xs text-slate-400 mt-0.5">' + k + '</span></td>' +
+    rows += '<tr class="hover:bg-slate-50/60"><td class="px-4 pl-5 py-3.5"><a href="' + href + '" data-open="' + k + '" class="font-semibold text-slate-900 hover:text-blue-700 hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">' + t.name + '</a>' + mk + crit + '<span class="block font-mono text-xs text-slate-400 mt-0.5">' + k + '</span></td>' +
       '<td class="px-4 py-3.5 text-slate-600"><i class="fa-solid ' + (t.channel === 'Email' ? 'fa-envelope' : 'fa-bell') + ' text-slate-400 mr-1.5" aria-hidden="true"></i>' + t.channel + '</td>' +
-      '<td class="px-4 py-3.5 text-slate-600 max-w-[280px] truncate" title="' + S1.esc(l.subject) + '">' + S1.esc(l.subject) + '</td><td class="px-4 py-3.5 font-semibold tabular-nums text-slate-800">v' + l.v + '</td><td class="px-4 pr-5 py-3.5 text-slate-500 whitespace-nowrap">' + (def ? '—' : l.at.split(',')[0]) + '</td></tr>';
+      '<td class="px-4 py-3.5 text-slate-600 max-w-[280px] truncate" title="' + S1.esc(l.subject) + '">' + S1.esc(l.subject) + '</td><td class="px-4 py-3.5 font-semibold tabular-nums text-slate-800">v' + l.v + '</td><td class="px-4 pr-5 py-3.5 text-slate-500' + (def ? '' : ' whitespace-nowrap') + '">' + (def ? 'Not changed since it was set up' : l.at.split(',')[0]) + '</td></tr>';
     cards += '<li><a href="' + href + '" data-open="' + k + '" class="block px-5 py-4 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600"><div class="flex items-center justify-between gap-2"><span class="font-semibold text-slate-900">' + t.name + '</span><span class="text-xs font-semibold text-slate-600">v' + l.v + '</span></div><p class="text-sm text-slate-600 mt-1 truncate">' + S1.esc(l.subject) + '</p><p class="text-xs text-slate-500 mt-1">' + t.channel + (def ? ' · Default' : ' · updated ' + l.at.split(',')[0]) + '</p></a></li>';
   });
   document.getElementById('list-body').innerHTML = rows; document.getElementById('list-cards').innerHTML = cards;
@@ -433,7 +516,7 @@ function renderPreviewFrom(subject, body) {
   function fill(s, html) {
     return S1.esc(s).replace(/\{\{\s*([^}]*?)\s*\}\}/g, function (m0, n) {
       if (t.vars.indexOf(n) < 0) return '<mark class="bg-red-100 text-red-800 rounded px-0.5">{{' + S1.esc(n) + '}}</mark>';
-      return '<span class="bg-blue-50 rounded">' + S1.esc(SAMPLES[n] || '') + '</span>';
+      return '<span class="bg-blue-50 rounded">' + S1.esc(sampleOf(n) || '') + '</span>';
     });
   }
   document.getElementById('prev-subject').innerHTML = fill(subject);
@@ -492,6 +575,7 @@ function setErr(msgHtml) {
 }
 function openEditor(k, push) {
   cur = k; viewing = null; var t = TPL[k], l = latest(t);
+  document.getElementById('tpl-notfound').classList.add('hidden');
   document.getElementById('view-list').classList.add('hidden');
   document.getElementById('view-edit').classList.remove('hidden');
   document.getElementById('bc-leaf').textContent = t.name;
@@ -505,10 +589,10 @@ function openEditor(k, push) {
   document.title = t.name + ' — notification template · Abstract VMS';
   document.getElementById('f-subject').value = l.subject;
   document.getElementById('f-body').value = l.body;
-  document.getElementById('chips').innerHTML = t.vars.map(function (v) { return '<button type="button" data-ins="' + v + '" class="inline-flex items-center gap-1 px-2.5 py-1.5 min-h-[36px] rounded-lg bg-blue-50 border border-blue-200 text-xs font-mono font-semibold text-blue-800 hover:bg-blue-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" aria-label="Insert ' + v + '"><i class="fa-solid fa-plus text-[9px]" aria-hidden="true"></i>' + v + '</button>'; }).join('');
+  document.getElementById('chips').innerHTML = t.vars.map(function (v) { return '<button type="button" data-ins="' + v + '" class="inline-flex items-center gap-1 px-2.5 py-1.5 min-h-[36px] rounded-lg bg-blue-50 border border-blue-200 text-xs font-mono font-semibold text-blue-800 hover:bg-blue-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" aria-label="Insert ' + v + '"><i class="fa-solid fa-plus text-[9px]" aria-hidden="true"></i>' + v + (SINGLE_USE[v] ? ' <span class="font-sans font-semibold text-[10px] text-amber-800 bg-amber-50 border border-amber-200 rounded px-1 ml-0.5">Single-use link</span>' : '') + '</button>'; }).join('');
   document.querySelectorAll('[data-ins]').forEach(function (b) { b.onmousedown = function (e) { e.preventDefault(); }; b.onclick = function () { insert('{{' + b.dataset.ins + '}}'); }; });
-  document.getElementById('samples').innerHTML = t.vars.map(function (v) { return '<label class="grid grid-cols-[130px_1fr] items-center gap-2"><span class="font-mono text-xs text-slate-600 truncate">' + v + '</span><input data-sample="' + v + '" value="' + S1.esc(SAMPLES[v] || '') + '" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:bg-white focus:border-blue-400"/></label>'; }).join('');
-  document.querySelectorAll('[data-sample]').forEach(function (i) { i.oninput = function () { SAMPLES[i.dataset.sample] = i.value; renderPreview(); }; });
+  document.getElementById('samples').innerHTML = t.vars.map(function (v) { return '<label class="grid grid-cols-[130px_1fr] items-center gap-2"><span class="font-mono text-xs text-slate-600 truncate">' + v + '</span><input data-sample="' + v + '" value="' + S1.esc(sampleOf(v) || '') + '" class="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:bg-white focus:border-blue-400"/></label>'; }).join('');
+  document.querySelectorAll('[data-sample]').forEach(function (i) { i.oninput = function () { var n = i.dataset.sample; if (t.samples && n in t.samples) t.samples[n] = i.value; else SAMPLES[n] = i.value; renderPreview(); }; });
   document.getElementById('prev-hist').classList.add('hidden'); document.getElementById('prev-tag').textContent = 'Your draft';
   setErr(null); subjErr(null);
   highlight(); renderPreview(); renderHistory(); showPane('edit');
@@ -556,20 +640,114 @@ function save() {
       if (document.body.getAttribute('data-s1-state') === 'validation') S1.setState('default');
     } });
 }
+/* ===== Delivery failures (TSD 1 §3.1.8, §3.3.6, §5.10 TV-11) ===== */
+var DF_STATE = { failed: { label: 'Failed', help: 'Every retry was used up', cls: 'bg-red-50 text-red-700 border-red-200', icon: 'fa-circle-xmark' },
+  bounced: { label: 'Bounced', help: 'The mail provider reported a bounce or a complaint', cls: 'bg-amber-50 text-amber-800 border-amber-200', icon: 'fa-reply' },
+  suppressed: { label: 'Suppressed', help: 'Not sent: the address is on the suppression list', cls: 'bg-slate-100 text-slate-700 border-slate-200', icon: 'fa-ban' } };
+var DF_ROWS = [
+  { to: 'j.okafor@northfield-care.co.uk', t: 'user.activation', st: 'bounced', n: 1, err: 'Hard bounce: 550 5.1.1 mailbox does not exist', d: '2026-09-26', at: '26 Sep 2026, 09:14' },
+  { to: 'j.okafor@northfield-care.co.uk', t: 'user.password_reset', st: 'suppressed', n: 0, err: null, d: '2026-09-26', at: '26 Sep 2026, 10:02' },
+  { to: 'ops@brightstaff.co.uk', t: 'user.activation', st: 'failed', n: 5, err: 'Connection timed out after 30 s (provider unreachable)', d: '2026-09-25', at: '25 Sep 2026, 17:41' },
+  { to: 'm.ahmed@acme-logistics.co.uk', t: 'user.password_reset', st: 'bounced', n: 1, err: 'Complaint: the recipient marked the message as spam', d: '2026-09-24', at: '24 Sep 2026, 08:30' },
+  { to: 'tom.baker@leedsfm.example', t: 'user.activation', st: 'failed', n: 5, err: '421 4.7.0 Try again later (greylisted)', d: '2026-09-22', at: '22 Sep 2026, 13:05' },
+  { to: 'h.patel@primeworkforce.co.uk', t: 'user.activation', st: 'suppressed', n: 0, err: null, d: '2026-09-19', at: '19 Sep 2026, 11:48' },
+  { to: 'reception@yorkdepot.example', t: 'user.password_reset', st: 'bounced', n: 1, err: 'Hard bounce: 552 5.2.2 mailbox full', d: '2026-09-15', at: '15 Sep 2026, 16:20' }
+];
+var DF_TOTAL_LARGE = 1240, DF_PAGE = 20, dfPage = 1, dfTab = 'templates';
+function dfRows() {
+  var st = document.body.getAttribute('data-s1-state');
+  if (st === 'empty') return [];
+  if (st !== 'large') return DF_ROWS;
+  var out = [];
+  for (var i = 0; i < DF_PAGE; i++) { var r = DF_ROWS[i % DF_ROWS.length]; out.push(Object.assign({}, r, { to: r.to.replace('@', '+' + (i + 1) + '@') })); }
+  return out;
+}
+function dfFiltered() {
+  var f = document.getElementById('df-state').value, from = document.getElementById('df-from').value, to = document.getElementById('df-to').value;
+  return dfRows().filter(function (r) { return (!f || r.st === f) && (!from || r.d >= from) && (!to || r.d <= to); });
+}
+function dfChip(k) { var s = DF_STATE[k]; return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap border ' + s.cls + '" title="' + s.help + '"><i class="fa-solid ' + s.icon + ' text-[10px]" aria-hidden="true"></i>' + s.label + '</span>'; }
+function dfAttempts(n) { return n === 1 ? '1 attempt' : n + ' attempts'; }
+function renderFailures() {
+  var from = document.getElementById('df-from').value, to = document.getElementById('df-to').value, bad = from && to && to < from;
+  var err = document.getElementById('df-date-err');
+  err.classList.toggle('hidden', !bad);
+  ['df-from', 'df-to'].forEach(function (id) { var i = document.getElementById(id); i.classList.toggle('border-red-500', !!bad); if (bad) i.setAttribute('aria-invalid', 'true'); else i.removeAttribute('aria-invalid'); });
+  var large = document.body.getAttribute('data-s1-state') === 'large', filtered = !!(document.getElementById('df-state').value || from || to);
+  var rows = bad ? [] : dfFiltered();
+  var body = '', cards = '';
+  rows.forEach(function (r) {
+    var tn = TPL[r.t] ? TPL[r.t].name : r.t, e = r.err ? S1.esc(r.err) : '<span class="text-slate-500">No error recorded</span>';
+    body += '<tr class="hover:bg-slate-50/60 align-top"><td class="px-4 pl-5 py-3.5 font-medium text-slate-900 [overflow-wrap:anywhere]">' + S1.esc(r.to) + '</td><td class="px-4 py-3.5 text-slate-700">' + S1.esc(tn) + '<span class="block font-mono text-xs text-slate-500 mt-0.5">' + r.t + '</span></td>' +
+      '<td class="px-4 py-3.5">' + dfChip(r.st) + '</td><td class="px-4 py-3.5 text-right font-semibold text-slate-800 tabular-nums whitespace-nowrap">' + r.n + '</td><td class="px-4 py-3.5 text-slate-600 max-w-[280px]">' + e + '</td><td class="px-4 pr-5 py-3.5 text-slate-600 whitespace-nowrap tabular-nums">' + r.at + '</td></tr>';
+    cards += '<li class="px-5 py-4"><div class="flex items-start justify-between gap-3"><span class="font-semibold text-slate-900 [overflow-wrap:anywhere] min-w-0">' + S1.esc(r.to) + '</span>' + dfChip(r.st) + '</div><p class="text-sm text-slate-700 mt-1">' + S1.esc(tn) + '</p><p class="text-sm text-slate-600 mt-1">' + e + '</p><p class="text-xs text-slate-500 mt-1 tabular-nums">' + dfAttempts(r.n) + ' · ' + r.at + '</p></li>';
+  });
+  document.getElementById('df-body').innerHTML = body; document.getElementById('df-cards').innerHTML = cards;
+  var none = !rows.length;
+  document.getElementById('df-table').classList.toggle('md:block', !none);
+  document.getElementById('df-cards').classList.toggle('hidden', none);
+  document.getElementById('df-empty').classList.toggle('hidden', !none || bad);
+  document.getElementById('df-empty-t').textContent = filtered && dfRows().length ? 'Nothing failed with this state in this period. Change or clear the filters.' : 'Every email this system sent was accepted for delivery.';
+  var total = large && !filtered ? DF_TOTAL_LARGE : rows.length, pages = Math.max(1, Math.ceil(total / DF_PAGE));
+  if (dfPage > pages) dfPage = pages;
+  var a = total ? (dfPage - 1) * DF_PAGE + 1 : 0, b = Math.min(total, dfPage * DF_PAGE);
+  var btn = 'inline-flex items-center justify-center w-9 h-9 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600';
+  document.getElementById('df-foot').innerHTML = none ? '' : '<span class="text-xs text-slate-500 tabular-nums">Showing ' + a.toLocaleString('en-GB') + '–' + b.toLocaleString('en-GB') + ' of ' + total.toLocaleString('en-GB') + ' delivery failures</span>' +
+    '<nav aria-label="Delivery failures pages" class="flex items-center gap-2"><button type="button" id="df-prev" class="' + btn + '" aria-label="Previous page"' + (dfPage <= 1 ? ' disabled' : '') + '><i class="fa-solid fa-chevron-left text-xs" aria-hidden="true"></i></button><span class="text-xs font-semibold text-slate-700 tabular-nums">Page ' + dfPage + ' of ' + pages + '</span><button type="button" id="df-next" class="' + btn + '" aria-label="Next page"' + (dfPage >= pages ? ' disabled' : '') + '><i class="fa-solid fa-chevron-right text-xs" aria-hidden="true"></i></button></nav>';
+  document.getElementById('df-foot').classList.toggle('hidden', none);
+  var p = document.getElementById('df-prev'), n = document.getElementById('df-next');
+  if (p) p.onclick = function () { dfPage--; renderFailures(); };
+  if (n) n.onclick = function () { dfPage++; renderFailures(); };
+  var c = document.getElementById('df-count'), cnt = large ? DF_TOTAL_LARGE : dfRows().length;
+  c.textContent = cnt ? cnt.toLocaleString('en-GB') : ''; c.classList.toggle('hidden', !cnt);
+  c.setAttribute('aria-label', cnt + ' delivery failures');
+}
+function dfAllowed() { return document.body.getAttribute('data-s1-state') !== 'nodeliveryview'; }
+function setTab(which, focus) {
+  if (which === 'failures' && !dfAllowed()) which = 'templates';
+  dfTab = which;
+  var on = 'border-blue-700 text-blue-700', off = 'border-transparent text-slate-600 hover:text-slate-900';
+  [['templates', 'tab-templates', 'panel-templates'], ['failures', 'tab-failures', 'panel-failures']].forEach(function (x) {
+    var t = document.getElementById(x[1]), sel = x[0] === which;
+    t.setAttribute('aria-selected', String(sel)); t.tabIndex = sel ? 0 : -1;
+    t.className = t.className.replace(/ ?border-blue-700 text-blue-700| ?border-transparent text-slate-600 hover:text-slate-900/g, '') + ' ' + (sel ? on : off);
+    document.getElementById(x[2]).classList.toggle('hidden', !sel);
+    if (sel && focus) t.focus();
+  });
+  document.getElementById('tab-failures').classList.toggle('hidden', !dfAllowed());
+  if (which === 'failures') renderFailures();
+}
+function syncTabUrl() { try { var u = new URL(location.href); if (dfTab === 'failures') u.searchParams.set('tab', 'failures'); else u.searchParams.delete('tab'); u.searchParams.delete('t'); history.replaceState({}, '', u.pathname + u.search); } catch (e) {} }
+
+var READY = false;
+document.addEventListener('s1:mode', function () {
+  applyTemplateMode();
+  if (!READY) return;
+  if (cur && !shown(cur)) openList(false); else if (!cur) renderList();
+});
 document.addEventListener('s1:state', function (e) {
   if (e.detail.state === 'validation') {
+    applyTemplateMode();
     openEditor('user.activation', false);
     var ta = document.getElementById('f-body');
     ta.value = ta.value.replace('Hello {{userName}},', 'Hello {{userName}},\n\nYour sign-in is {{userEmail}}.');
     highlight(); renderPreview(); save();
   } else if (e.detail.state === 'default' && cur) { setErr(null); }
+  if (!READY) return;
+  var st = e.detail.state;
+  if (st === 'empty' || st === 'large') { if (cur) openList(false); dfPage = 1; document.getElementById('df-filters').reset(); setTab('failures'); syncTabUrl(); }
+  else if (st === 'nodeliveryview') setTab('templates');
+  else if (st !== 'validation') setTab(dfTab);
+  renderFailures();
 });
 document.addEventListener('s1:ready', function () {
+  applyTemplateMode(); READY = true;
   var q = new URLSearchParams(location.search);
-  if (document.body.getAttribute('data-s1-state') !== 'validation') { if (TPL[q.get('t')]) openEditor(q.get('t'), false); else openList(false); }
+  if (document.body.getAttribute('data-s1-state') !== 'validation') { if (shown(q.get('t'))) openEditor(q.get('t'), false); else { openList(false); if (q.get('t')) document.getElementById('tpl-notfound').classList.remove('hidden'); } }
   else renderList();
-  document.getElementById('back-list').onclick = function (e) { e.preventDefault(); openList(true); };
-  window.addEventListener('popstate', function () { var k = new URLSearchParams(location.search).get('t'); if (TPL[k]) openEditor(k, false); else openList(false); });
+  document.getElementById('back-list').onclick = function (e) { e.preventDefault(); guardLeave(function () { openList(true); }); };
+  window.addEventListener('beforeunload', function (e) { if (edDirty()) { e.preventDefault(); e.returnValue = ''; } });
+  window.addEventListener('popstate', function () { var k = new URLSearchParams(location.search).get('t'); if (shown(k)) openEditor(k, false); else openList(false); });
   var ta = document.getElementById('f-body');
   ta.addEventListener('input', function () { highlight(); if (viewing) backToDraft(); else renderPreview(); });
   ta.addEventListener('scroll', function () { document.getElementById('body-hl').scrollTop = ta.scrollTop; });
@@ -579,6 +757,24 @@ document.addEventListener('s1:ready', function () {
   document.getElementById('tab-edit').onclick = function () { showPane('edit'); };
   document.getElementById('tab-prev').onclick = function () { showPane('prev'); };
   window.addEventListener('resize', function () { if (window.innerWidth >= 768) { document.getElementById('pane-edit').classList.remove('hidden'); document.getElementById('pane-prev').classList.add('hidden'); } });
+  /* Templates / Delivery failures tabs: click, arrow keys, ?tab=failures */
+  document.getElementById('tab-templates').onclick = function () { setTab('templates'); syncTabUrl(); };
+  document.getElementById('tab-failures').onclick = function () { setTab('failures'); syncTabUrl(); };
+  document.getElementById('nt-tabs').addEventListener('keydown', function (e) {
+    if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' && e.key !== 'Home' && e.key !== 'End') return;
+    e.preventDefault(); var nx = dfTab === 'templates' && dfAllowed() ? 'failures' : 'templates';
+    if (e.key === 'Home') nx = 'templates'; if (e.key === 'End' && dfAllowed()) nx = 'failures';
+    setTab(nx, true); syncTabUrl();
+  });
+  ['df-state', 'df-from', 'df-to'].forEach(function (id) { document.getElementById(id).addEventListener('change', function () { dfPage = 1; renderFailures(); }); });
+  document.getElementById('df-clear').onclick = function () { document.getElementById('df-filters').reset(); dfPage = 1; renderFailures(); };
+  var st0 = document.body.getAttribute('data-s1-state');
+  setTab(q.get('tab') === 'failures' || st0 === 'empty' || st0 === 'large' ? 'failures' : 'templates');
+  renderFailures();
+  /* readable switcher labels for this page's own state */
+  var sw = document.querySelector('.s1-sw [data-state="nodeliveryview"]'); if (sw) sw.textContent = 'Without the delivery-failures key';
+  var sw2 = document.querySelector('.s1-sw [data-state="empty"]'); if (sw2) sw2.textContent = 'Delivery failures · empty';
+  var sw3 = document.querySelector('.s1-sw [data-state="large"]'); if (sw3) sw3.textContent = 'Delivery failures · large';
 });
 
 </script>

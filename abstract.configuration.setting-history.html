@@ -165,7 +165,7 @@
             <div class="flex items-center gap-3 sm:gap-4 min-w-0">
                 <button id="mobile-menu-btn" class="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-bars text-slate-600 text-sm"></i></button>
                 <div class="min-w-0">
-                    <h1 id="page-h1" class="text-lg font-bold text-slate-900 truncate">Idle timeout</h1>
+                    <h1 id="page-h1" class="text-lg font-bold text-slate-900 truncate">Sign out after idle (minutes)</h1>
                     <p id="page-sub" class="text-xs text-slate-500 hidden sm:block truncate">System configuration · Security · setting history</p>
                 </div>
             </div>
@@ -186,7 +186,7 @@
                 <i class="fa-solid fa-chevron-right text-[9px] text-slate-400" aria-hidden="true"></i>
                 <a id="bc-group" href="abstract.configuration.system-settings.html#security" class="hover:text-blue-700 hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">Security</a>
                 <i class="fa-solid fa-chevron-right text-[9px] text-slate-400" aria-hidden="true"></i>
-                <span id="bc-leaf" class="font-semibold text-slate-700" aria-current="page">Idle timeout</span>
+                <span id="bc-leaf" class="font-semibold text-slate-700" aria-current="page">Sign out after idle (minutes)</span>
             </nav>
 
             <!-- key not found -->
@@ -201,9 +201,9 @@
                 <!-- title row -->
                 <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 flex flex-col md:flex-row md:items-start gap-4">
                     <div class="flex-1 min-w-0">
-                        <h2 id="k-label" class="text-xl font-bold text-slate-900">Idle timeout</h2>
+                        <h2 id="k-label" class="text-xl font-bold text-slate-900">Sign out after idle (minutes)</h2>
                         <p class="mt-1 flex flex-wrap items-center gap-2 text-xs text-slate-500">
-                            <code id="k-key" class="font-mono text-slate-700 bg-slate-100 border border-slate-200 rounded px-1.5 py-0.5 break-all">security.idle_timeout_minutes</code>
+                            <code id="k-key" class="font-mono text-slate-700 bg-slate-100 border border-slate-200 rounded px-1.5 py-0.5 break-all">security.session_idle_timeout_minutes</code>
                             <span aria-hidden="true">·</span><span id="k-group">Security</span>
                             <span aria-hidden="true">·</span><span id="k-type">integer</span>
                         </p>
@@ -233,6 +233,7 @@
                         </div>
                         <p id="next-v" class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 tabular-nums"></p>
                         <p id="next-m" class="text-xs text-slate-500 mt-1"></p>
+                        <button type="button" id="next-withdraw" class="hidden mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg border border-slate-200 bg-white text-xs font-semibold text-red-700 hover:bg-red-50 hover:border-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><i class="fa-solid fa-calendar-xmark" aria-hidden="true"></i> Withdraw</button>
                     </section>
                 </div>
 
@@ -253,7 +254,8 @@
                                 <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Effective to</th>
                                 <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
                                 <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Changed by</th>
-                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider pr-5">When</th>
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">When</th>
+                                <th scope="col" class="px-4 py-3 pr-5"><span class="sr-only">Actions</span></th>
                             </tr></thead>
                             <tbody id="hist-body" class="divide-y divide-slate-100"></tbody>
                         </table>
@@ -301,7 +303,7 @@
 <div data-s1-modal id="sched-modal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="sched-modal-t">
   <div class="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg max-h-[92vh] overflow-y-auto">
     <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-      <h2 id="sched-modal-t" class="text-base font-bold text-slate-900"><span id="sched-title">Schedule a change — Idle timeout</span></h2>
+      <h2 id="sched-modal-t" class="text-base font-bold text-slate-900"><span id="sched-title">Schedule a change — Sign out after idle (minutes)</span></h2>
       <button type="button" onclick="S1.closeModal('sched-modal')" aria-label="Close" class="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
     </div>
     <div class="px-6 py-5">
@@ -373,7 +375,7 @@ function iso(x) { return x.getFullYear() + '-' + ('0' + (x.getMonth() + 1)).slic
 function fmt(x) { return ('0' + x.getDate()).slice(-2) + ' ' + MON[x.getMonth()] + ' ' + x.getFullYear(); }
 function num(x) { return ('0' + x.getDate()).slice(-2) + '/' + ('0' + (x.getMonth() + 1)).slice(-2) + '/' + x.getFullYear(); }
 var KEYS = {
-  'security.idle_timeout_minutes': { group: 'Security', tab: 'security', label: 'Idle timeout', type: 'integer', unit: 'minutes', min: 5, max: 240,
+  'security.session_idle_timeout_minutes': { group: 'Security', tab: 'security', label: 'Sign out after idle (minutes)', type: 'integer', unit: 'minutes', min: 5, max: 240,
     hint: 'Whole minutes between 5 and 240.', desc: 'Signs a person out after this many minutes without activity, in every portal. They are warned two minutes before.',
     versions: [ { v: '20', from: '2026-11-01', by: 'Sarah Mitchell', at: '22 Sep 2026, 10:14' }, { v: '30', from: '2026-07-01', by: 'Sarah Mitchell', at: '24 Jun 2026, 09:02' },
                 { v: '45', from: '2026-04-01', by: 'Priya Shah', at: '27 Mar 2026, 16:40' }, { v: '30', from: '2026-02-01', by: 'System', at: 'Seeded' } ] },
@@ -404,7 +406,7 @@ var KEYS = {
     desc: 'Language, date and number formats: English (United Kingdom), 26/09/2026, 1,234.56.', versions: [ { v: 'en-GB', from: '2026-01-01', by: 'System', at: 'Seeded' } ] }
 };
 var q = new URLSearchParams(location.search);
-var keyName = q.get('key') || 'security.idle_timeout_minutes';
+var keyName = q.get('key') || 'security.session_idle_timeout_minutes';
 var K = KEYS[keyName];
 var large = false;
 
@@ -420,6 +422,10 @@ function render() {
   document.getElementById('next-v').className = next ? 'mt-3 text-3xl font-extrabold tracking-tight text-slate-900 tabular-nums' : 'mt-3 text-base font-semibold text-slate-500';
   document.getElementById('next-m').textContent = next ? 'From ' + fmt(d(next.from)) + ' · scheduled by ' + next.by : 'Schedule a change to set a new value from a future date.';
   document.getElementById('next-badge').style.display = next ? '' : 'none';
+  /* A scheduled version can be withdrawn (TSD 1 §5.10 UI states, System Configuration key) */
+  var nw = document.getElementById('next-withdraw');
+  nw.classList.toggle('hidden', !(next && canEdit()));
+  if (next) { nw.setAttribute('aria-label', 'Withdraw the change from ' + fmt(d(next.from))); nw.onclick = function () { withdraw(next); }; }
   if (K.fixed) document.getElementById('next-m').textContent = 'Fixed for now. Held as configuration so it can change later.';
   var body = '', cards = '';
   vs.forEach(function (x, i) {
@@ -429,16 +435,29 @@ function render() {
            : '<span class="text-slate-400" aria-hidden="true">—</span><span class="sr-only">Earlier version</span>';
     var who = x.by === 'System' ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-slate-100 text-slate-700 border border-slate-200"><i class="fa-solid fa-robot text-[10px]" aria-hidden="true"></i>System</span>' : S1.esc(x.by);
     var muted = (x !== cur && x.from <= t) ? ' text-slate-500' : ' text-slate-900';
-    body += '<tr class="hover:bg-slate-50/60"><td class="px-4 pl-5 py-3 text-right font-semibold tabular-nums whitespace-nowrap' + muted + '">' + S1.esc(show(x.v)) + '</td><td class="px-4 py-3 text-slate-700 whitespace-nowrap">' + fmt(d(x.from)) + '</td><td class="px-4 py-3 text-slate-500 whitespace-nowrap">' + (to ? fmt(to) : '—') + '</td><td class="px-4 py-3">' + st + '</td><td class="px-4 py-3 text-slate-700">' + who + '</td><td class="px-4 pr-5 py-3 text-slate-500 whitespace-nowrap">' + S1.esc(x.at) + '</td></tr>';
-    cards += '<li class="px-5 py-4"><div class="flex items-center justify-between gap-3"><span class="text-base font-bold tabular-nums' + muted + '">' + S1.esc(show(x.v)) + '</span>' + st + '</div><p class="text-sm text-slate-600 mt-1">' + fmt(d(x.from)) + ' – ' + (to ? fmt(to) : 'onwards') + '</p><p class="text-xs text-slate-500 mt-1">' + (x.by === 'System' ? 'System' : S1.esc(x.by)) + ' · ' + S1.esc(x.at) + '</p></li>';
+    body += '<tr class="hover:bg-slate-50/60"><td class="px-4 pl-5 py-3 text-right font-semibold tabular-nums whitespace-nowrap' + muted + '">' + S1.esc(show(x.v)) + '</td><td class="px-4 py-3 text-slate-700 whitespace-nowrap">' + fmt(d(x.from)) + '</td><td class="px-4 py-3 text-slate-500 whitespace-nowrap">' + (to ? fmt(to) : '—') + '</td><td class="px-4 py-3">' + st + '</td><td class="px-4 py-3 text-slate-700">' + who + '</td><td class="px-4 py-3 text-slate-500 whitespace-nowrap">' + S1.esc(x.at) + '</td><td class="px-4 pr-5 py-2 text-right">' + wbtn(x, t) + '</td></tr>';
+    cards += '<li class="px-5 py-4"><div class="flex items-center justify-between gap-3"><span class="text-base font-bold tabular-nums' + muted + '">' + S1.esc(show(x.v)) + '</span>' + st + '</div><p class="text-sm text-slate-600 mt-1">' + fmt(d(x.from)) + ' – ' + (to ? fmt(to) : 'onwards') + '</p><p class="text-xs text-slate-500 mt-1">' + (x.by === 'System' ? 'System' : S1.esc(x.by)) + ' · ' + S1.esc(x.at) + '</p>' + (x.from > t && canEdit() ? '<div class="mt-2">' + wbtn(x, t) + '</div>' : '') + '</li>';
   });
   document.getElementById('hist-body').innerHTML = body;
   document.getElementById('hist-cards').innerHTML = cards;
+  document.querySelectorAll('[data-withdraw]').forEach(function (b) { b.onclick = function () { withdraw(K.versions.filter(function (x) { return x.from === b.dataset.withdraw; })[0]); }; });
   document.getElementById('hist-count').textContent = vs.length + (vs.length === 1 ? ' version' : ' versions');
   var sc = document.getElementById('hist-scroll');
   sc.style.maxHeight = large ? '480px' : ''; sc.style.overflowY = large ? 'auto' : '';
 }
 
+function canEdit() { return !K.fixed && q.get('readonly') !== '1'; }
+function wbtn(x, t) {
+  if (!(x.from > t && canEdit()) || K.versions.indexOf(x) < 0) return '';
+  return '<button type="button" data-withdraw="' + x.from + '" class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg border border-slate-200 bg-white text-xs font-semibold text-red-700 hover:bg-red-50 hover:border-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" aria-label="Withdraw the change from ' + fmt(d(x.from)) + '"><i class="fa-solid fa-calendar-xmark" aria-hidden="true"></i> Withdraw</button>';
+}
+function withdraw(x) {
+  if (!x) return;
+  S1.confirm({ tone: 'danger', icon: 'fa-calendar-xmark', title: 'Withdraw the change from ' + fmt(d(x.from)) + '?',
+    body: K.label + ' won\'t become ' + show(x.v) + ' on that date. Only a Future version can be withdrawn. The value in force stays as it is. This is audited.',
+    cta: 'Withdraw change', busy: 'Withdrawing…',
+    onConfirm: function () { K.versions.splice(K.versions.indexOf(x), 1); render(); S1.toast('Scheduled change withdrawn. ' + S1.esc(K.label) + ' stays ' + S1.esc(show(sorted().filter(function (v) { return v.from <= iso(TODAY); })[0].v)) + '.', 'success'); } });
+}
 function fieldErr(id, msg) {
   var e = document.getElementById(id + '-err'), i = document.getElementById(id);
   if (msg) { e.querySelector('span').textContent = msg; e.classList.remove('hidden'); i.classList.add('border-red-500'); i.setAttribute('aria-invalid', 'true'); }

@@ -19,7 +19,7 @@
             brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554' } } } } };
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s3-page data-s1-states="default loading error validation denied duplicate">
+<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s3-page data-s1-states="default loading error validation denied duplicate large conflict partial anonymised">
 <div id="app-root" class="flex w-full" style="height: 100vh;">
     <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
         <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
@@ -70,41 +70,174 @@
         </main>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/libphonenumber-js@1.13.15/bundle/libphonenumber-max.js"></script>
 <script src="slice3-proto.js"></script>
 <script>S3.mobileNav();</script>
 <script>
-var C=S3.C,ui=S3.ui,esc=S3.esc,app=document.getElementById('app'),id=S3.param('id'),st='default',lic=[],comp;
+// PhoneInput and TelephoneText as this prototype draws them (kernel components.md §2; conventions §4.9; TSD slice 3 §5.10;
+// XR-020, XR-021). Page-local: slice3-proto.js has no telephone component. The check, the grouping and the formats are
+// libphonenumber-js's own (the frontend's library, same version), never patterns written here. The flags are
+// country-flag-icons' 3:2 SVGs, never emoji. The country is the one the user picked, never read from the number.
+var PH=(function(){
+ var L=window.libphonenumber,esc=S3.esc,C=S3.C,FOC=' focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
+ var CC={};'AC247 AD376 AE971 AF93 AG1 AI1 AL355 AM374 AO244 AR54 AS1 AT43 AU61 AW297 AX358 AZ994 BA387 BB1 BD880 BE32 BF226 BG359 BH973 BI257 BJ229 BL590 BM1 BN673 BO591 BQ599 BR55 BS1 BT975 BW267 BY375 BZ501 CA1 CC61 CD243 CF236 CG242 CH41 CI225 CK682 CL56 CM237 CN86 CO57 CR506 CU53 CV238 CW599 CX61 CY357 CZ420 DE49 DJ253 DK45 DM1 DO1 DZ213 EC593 EE372 EG20 EH212 ER291 ES34 ET251 FI358 FJ679 FK500 FM691 FO298 FR33 GA241 GB44 GD1 GE995 GF594 GG44 GH233 GI350 GL299 GM220 GN224 GP590 GQ240 GR30 GT502 GU1 GW245 GY592 HK852 HN504 HR385 HT509 HU36 ID62 IE353 IL972 IM44 IN91 IO246 IQ964 IR98 IS354 IT39 JE44 JM1 JO962 JP81 KE254 KG996 KH855 KI686 KM269 KN1 KP850 KR82 KW965 KY1 KZ7 LA856 LB961 LC1 LI423 LK94 LR231 LS266 LT370 LU352 LV371 LY218 MA212 MC377 MD373 ME382 MF590 MG261 MH692 MK389 ML223 MM95 MN976 MO853 MP1 MQ596 MR222 MS1 MT356 MU230 MV960 MW265 MX52 MY60 MZ258 NA264 NC687 NE227 NF672 NG234 NI505 NL31 NO47 NP977 NR674 NU683 NZ64 OM968 PA507 PE51 PF689 PG675 PH63 PK92 PL48 PM508 PR1 PS970 PT351 PW680 PY595 QA974 RE262 RO40 RS381 RU7 RW250 SA966 SB677 SC248 SD249 SE46 SG65 SH290 SI386 SJ47 SK421 SL232 SM378 SN221 SO252 SR597 SS211 ST239 SV503 SX1 SY963 SZ268 TA290 TC1 TD235 TG228 TH66 TJ992 TK690 TL670 TM993 TN216 TO676 TR90 TT1 TV688 TW886 TZ255 UA380 UG256 US1 UY598 UZ998 VA39 VC1 VE58 VG1 VI1 VN84 VU678 WF681 WS685 XK383 YE967 YT262 ZA27 ZM260 ZW263'.split(' ').forEach(function(s){CC[s.slice(0,2)]=s.slice(2);});
+ var PIN=['GB','JE','GG','IM','IE'],DEF='GB',DN=null;try{DN=new Intl.DisplayNames(['en-GB'],{type:'region'});}catch(e){}
+ function name(c){try{return(DN&&DN.of(c))||c;}catch(e){return c;}}
+ function isC(c){return typeof c==='string'&&/^[A-Z]{2}$/.test(c)&&!!CC[c];}
+ function code(c){return'+'+CC[c];}
+ var ROWS=Object.keys(CC).map(function(c){return{c:c,n:name(c),k:code(c)};}),PINNED=PIN.map(function(c){return ROWS.filter(function(r){return r.c===c;})[0];}),REST=ROWS.filter(function(r){return PIN.indexOf(r.c)<0;}).sort(function(a,b){return a.n.localeCompare(b.n,'en-GB');});
+ function flag(c,label){return'<img src="https://cdn.jsdelivr.net/npm/country-flag-icons@1.6.20/3x2/'+c+'.svg" width="20" height="14" loading="lazy" class="inline-block w-5 h-[14px] rounded-[2px] ring-1 ring-slate-200 object-cover flex-shrink-0 bg-slate-100" alt="'+(label?esc(label):'')+'"/>';}
+ function parse(t,c){if(!L)return null;try{return L.parsePhoneNumberFromString(t,{defaultCountry:c,extract:false})||null;}catch(e){return null;}}
+ // the check (conventions §4.9 rule 3): null when valid for the picked country, else why not
+ function issue(v){var t=(v.telephone||'').trim();if(!t)return'required';if(!isC(v.telephoneCountry))return'country';var c=v.telephoneCountry;if(!L)return/^\+?[\d\s().-]{6,}$/.test(t)?null:'invalid';var p=parse(t,c);if(t.charAt(0)==='+'&&p&&p.countryCallingCode!==CC[c])return'otherCountry';if(!p||p.ext||!p.isValid())return'invalid';if(p.country!==c)return'otherCountry';return null;}
+ var MSG={required:'Enter a telephone number.',country:'Pick the number’s country.',otherCountry:'This number belongs to another country. Pick the number’s country.'};
+ function message(i,c){return i==='invalid'?'Enter a valid telephone number for '+(isC(c)?name(c):'this country')+'.':MSG[i];}
+ function e164(t,c){if(!isC(c))return t;var p=parse(t.trim(),c);return p&&!p.ext&&p.isValid()&&p.country===c?p.number:t;}
+ function fieldText(v){var t=v.telephone||'';if(t.charAt(0)!=='+'||!isC(v.telephoneCountry))return t;var p=parse(t,v.telephoneCountry);return p&&p.isValid()&&p.country===v.telephoneCountry?p.formatNational():t;}
+ function asTyped(t,c){if(!L||!isC(c))return t;try{return new L.AsYouType(c).input(t);}catch(e){return t;}}
+ function fmt(t,c){if(!isC(c))return null;var p=parse(t,c);return p&&p.isValid()?{display:p.formatInternational(),href:p.getURI()}:null;}
+ // a stored pair as a form opens it: an empty number takes the default country; a number held before K48 keeps null
+ function valueOf(t,c){t=t||'';if(!t.trim())return{telephone:'',telephoneCountry:c||DEF};return{telephone:t,telephoneCountry:c||null};}
+ // a record's pair as read: a record no page has written since K48 is converted as rule 7 converts it (parsed with GB)
+ function read(rec){if(!rec)return{telephone:'',telephoneCountry:null};if('telephoneCountry' in rec)return{telephone:rec.telephone||'',telephoneCountry:rec.telephoneCountry||null};var t=rec.telephone||'';if(!t.trim())return{telephone:'',telephoneCountry:null};var p=parse(t,'GB');return p&&p.isValid()&&p.country?{telephone:p.number,telephoneCountry:p.country}:{telephone:t,telephoneCountry:null};}
+ var BTN='flex shrink-0 items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-2.5 text-sm text-slate-700 hover:border-blue-300 min-h-[42px]'+FOC;
+ function btnInner(c){return isC(c)?flag(c)+'<span class="tnum">'+code(c)+'</span><i class="fa-solid fa-chevron-down text-[10px] text-slate-400" aria-hidden="true"></i>':'<span>Country</span><i class="fa-solid fa-chevron-down text-[10px] text-slate-400" aria-hidden="true"></i>';}
+ function btnName(c){return isC(c)?name(c)+' '+code(c):'Pick a country';}
+ // PhoneInput: o = {id, label, required, wide, value: {telephone, telephoneCountry}, hint}
+ function field(o){var v=o.value||valueOf('',null),c=v.telephoneCountry||'';return'<div'+(o.wide?' class="sm:col-span-2"':'')+' data-ph="'+o.id+'"><label for="'+o.id+'" class="'+C.label+'">'+esc(o.label)+(o.required?' <span class="text-red-700">*</span><span class="sr-only"> required</span>':'')+'</label><div class="relative flex gap-2" data-ph-row><button type="button" id="'+o.id+'-cc" class="'+BTN+'" aria-haspopup="dialog" aria-expanded="false" aria-label="'+esc(btnName(c))+'">'+btnInner(c)+'</button><input id="'+o.id+'" type="tel" inputmode="tel" autocomplete="tel" data-country="'+esc(c)+'"'+(o.required?' aria-required="true"':'')+' class="'+C.input+' min-w-0" value="'+esc(fieldText(v))+'"/></div>'+(o.hint?'<p class="text-xs text-slate-500 mt-1">'+esc(o.hint)+'</p>':'')+'<p id="'+o.id+'-err" class="text-xs font-medium text-red-700 mt-1" style="display:none" role="alert"></p></div>';}
+ function country(id){var i=document.getElementById(id);return i&&i.dataset.country||null;}
+ function value(id){var i=document.getElementById(id),c=country(id);return{telephone:e164(i.value,c),telephoneCountry:c};}
+ // the field's message for the form's check before it sends; an optional empty number passes
+ function check(id,required){var i=document.getElementById(id),c=country(id);if(!i.value.trim())return required?MSG.required:null;var x=issue({telephone:i.value,telephoneCountry:c});markCc(id,x==='country');return x?message(x,c):null;}
+ function markCc(id,bad){var b=document.getElementById(id+'-cc');if(b)C.err.split(' ').forEach(function(k){b.classList.toggle(k,!!bad);});}
+ // the request's pair: E.164 with its country; an optional number left empty sends both null
+ function forRequest(id){var v=value(id);return v.telephone.trim()?{telephone:v.telephone.trim(),telephoneCountry:v.telephoneCountry}:{telephone:null,telephoneCountry:null};}
+ function fold(s){return String(s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();}
+ function matches(r,q){q=fold(q.trim());if(!q)return true;var d=q.replace(/^\+/,'');if(/^\d+$/.test(d))return r.k.slice(1).indexOf(d)===0;return fold(r.n).indexOf(q)>=0||r.c.toLowerCase().indexOf(q)>=0;}
+ function open(id){
+  var btn=document.getElementById(id+'-cc'),inp=document.getElementById(id),row=btn.parentNode,sel=country(id),act=null;
+  close();btn.setAttribute('aria-expanded','true');
+  var back=document.createElement('div');back.className='fixed inset-0 bg-slate-900/40 sm:hidden z-[65]';back.setAttribute('aria-hidden','true');back.setAttribute('data-ph-back','');
+  var p=document.createElement('div');p.setAttribute('role','dialog');p.setAttribute('aria-label','Pick a country');p.setAttribute('data-ph-panel',id);
+  p.className='absolute top-full left-0 mt-1 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-xl border border-slate-200 shadow-lg p-2 z-40 max-sm:fixed max-sm:inset-x-0 max-sm:bottom-0 max-sm:top-auto max-sm:w-auto max-sm:max-w-none max-sm:rounded-b-none max-sm:p-4 max-sm:z-[66]';
+  p.innerHTML='<input type="search" role="combobox" aria-expanded="true" aria-autocomplete="list" aria-controls="'+id+'-lb" aria-label="Search countries" placeholder="Country, code or +44" class="'+C.input+'"/><ul id="'+id+'-lb" role="listbox" aria-label="Countries" class="mt-2 max-h-64 max-sm:max-h-[55vh] overflow-y-auto"></ul>';
+  row.appendChild(back);row.appendChild(p);
+  var q=p.querySelector('input'),lb=p.querySelector('ul');
+  function opt(r){return'<li role="option" id="'+id+'-o-'+r.c+'" data-c="'+r.c+'" aria-selected="'+(r.c===sel)+'" class="flex items-center gap-2 px-2 py-2 rounded-lg text-sm text-slate-700 cursor-pointer hover:bg-slate-50 aria-selected:font-semibold">'+flag(r.c)+'<span class="min-w-0 flex-1 truncate">'+esc(r.n)+'</span><span class="text-xs text-slate-500 tnum">'+r.k+'</span></li>';}
+  function list(){var a=PINNED.filter(function(r){return matches(r,q.value);}),b=REST.filter(function(r){return matches(r,q.value);});
+   lb.innerHTML=(a.length?'<li role="presentation"><ul role="group" aria-label="Common countries">'+a.map(opt).join('')+'</ul></li>':'')+(b.length?'<li role="presentation"><ul role="group" aria-label="All countries" class="'+(a.length?'mt-1 border-t border-slate-200 pt-1':'')+'">'+b.map(opt).join('')+'</ul></li>':'')+(a.length||b.length?'':'<li role="presentation" class="px-2 py-3 text-sm text-slate-600">No country matches.</li>');
+   var o=lb.querySelectorAll('[role=option]');setAct(o.length?(lb.querySelector('[aria-selected=true]')||o[0]):null,true);}
+  function setAct(el,quiet){if(act)act.classList.remove('bg-blue-50');act=el;if(el){el.classList.add('bg-blue-50');q.setAttribute('aria-activedescendant',el.id);if(!quiet||el.getAttribute('aria-selected')==='true')el.scrollIntoView({block:'nearest'});}else q.removeAttribute('aria-activedescendant');}
+  function pick(c){inp.dataset.country=c;btn.innerHTML=btnInner(c);btn.setAttribute('aria-label',btnName(c));ui.setErr(id,null);markCc(id,false);close();inp.focus();}
+  q.oninput=list;
+  q.onkeydown=function(e){var o=[].slice.call(lb.querySelectorAll('[role=option]')),i=o.indexOf(act);
+   if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(o.length)setAct(o[Math.max(0,Math.min(o.length-1,i+(e.key==='ArrowDown'?1:-1)))]);}
+   else if(e.key==='Home'||e.key==='End'){if(o.length){e.preventDefault();setAct(o[e.key==='Home'?0:o.length-1]);}}
+   else if(e.key==='Enter'){e.preventDefault();if(act)pick(act.dataset.c);}
+   else if(e.key==='Escape'){e.preventDefault();e.stopPropagation();close();btn.focus();}
+   else if(e.key==='Tab')close();};
+  lb.onmousedown=function(e){e.preventDefault();};
+  lb.onclick=function(e){var o=e.target.closest('[role=option]');if(o)pick(o.dataset.c);};
+  back.onclick=function(){close();btn.focus();};
+  list();q.focus();
+ }
+ function close(){document.querySelectorAll('[data-ph-panel],[data-ph-back]').forEach(function(n){var b=n.getAttribute('data-ph-panel');if(b){var x=document.getElementById(b+'-cc');if(x)x.setAttribute('aria-expanded','false');}n.remove();});}
+ document.addEventListener('mousedown',function(e){if(!e.target.closest('[data-ph-panel]')&&!e.target.closest('[data-ph] button'))close();});
+ // wires every PhoneInput drawn since the last call
+ function wire(root){(root||document).querySelectorAll('[data-ph]').forEach(function(w){if(w.dataset.phWired)return;w.dataset.phWired='1';var id=w.dataset.ph,btn=document.getElementById(id+'-cc'),inp=document.getElementById(id);
+  btn.onclick=function(){if(btn.getAttribute('aria-expanded')==='true'){close();return;}open(id);};
+  inp.addEventListener('input',function(e){var c=country(id),at=inp.selectionStart==null||inp.selectionStart===inp.value.length;if(at&&e.inputType&&e.inputType.indexOf('insert')===0)inp.value=asTyped(inp.value,c);ui.setErr(id,null);markCc(id,false);});
+  inp.addEventListener('blur',function(){if(!inp.value.trim()){ui.setErr(id,null);markCc(id,false);return;}var c=country(id),x=issue({telephone:inp.value,telephoneCountry:c});ui.setErr(id,x?message(x,c):null);markCc(id,x==='country');});
+ });}
+ var ui=S3.ui;
+ // TelephoneText: the flag and the international format, a tel: link; the text as entered with Check this number when
+ // the country is null or the number doesn't parse for it; no number, the dash
+ function text(t,c,o){o=o||{};if(!t)return'<span class="font-normal text-slate-500">—</span>';var f=fmt(t,c);
+  if(!f||!isC(c))return'<span class="inline-flex flex-wrap items-center gap-1.5"><span>'+esc(t)+'</span><span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border whitespace-nowrap bg-amber-50 text-amber-700 border-amber-200"><i class="fa-solid fa-triangle-exclamation text-[10px]" aria-hidden="true"></i>Check this number</span></span>';
+  return'<span class="inline-flex items-center gap-1.5">'+flag(c,name(c))+(o.link===false?'<span class="whitespace-nowrap tnum">'+esc(f.display)+'</span>':'<a class="'+C.link+' whitespace-nowrap tnum" href="'+esc(f.href)+'">'+esc(f.display)+'</a>')+'</span>';}
+ // Prototype seed: the seeded records as K48's one-off conversion (rule 7) leaves them. The shared seed holds Ofcom's
+ // drama numbers (07700 900xxx), which the library rightly refuses, so converted values stand in here; Aisha Lewis keeps
+ // hers unconverted (country null) to show Check this number.
+ var SEED={'c-mo':['+447400123101','GB','+447400123201','GB'],'c-tw':['+447797123102','JE','+447797123202','JE'],'c-sa':['+447400123103','GB','+447400123203','GB'],'c-lk':['+447400123104','GB'],'c-ra':['+447400123105','GB','+353851234567','IE'],'c-er':['+447400123106','GB'],'c-gh':['+447400123107','GB','+447400123207','GB'],'c-mo2':['+447400123108','GB','+447400123208','GB'],'c-jd':['+447400123109','GB','+447400123209','GB'],'c-al':[null,null],'c-ax':[null,null]};
+ function seed(){var ch=0;Object.keys(SEED).forEach(function(id){var r=S3.rawCandidate(id),s=SEED[id];if(!r||('telephoneCountry' in r))return;if(s[0])r.telephone=s[0];r.telephoneCountry=s[1];if(r.nextOfKin&&!('telephoneCountry' in r.nextOfKin)){if(s[2])r.nextOfKin.telephone=s[2];r.nextOfKin.telephoneCountry=s[3]||null;}ch=1;});if(ch)S3.saveCandidates();}
+ return{field:field,wire:wire,value:value,check:check,forRequest:forRequest,text:text,read:read,valueOf:valueOf,name:name,close:close,seed:seed};
+})();
+</script>
+<script>
+var C=S3.C,ui=S3.ui,esc=S3.esc,app=document.getElementById('app'),id=S3.param('id'),st='default',lic=[],comp,docs=[],docPage=1,photo=null,cur=null;
 var names={right_to_work:'Right to work',dbs_check:'DBS check',references:'References',hs_training:'H&S training'},WORDS=['Compliant','Pending','Expired','Not Applicable'];
+var FOC=' focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
+PH.seed();
+function ficon(n){return /\.pdf$/i.test(n)?'fa-file-pdf':/\.docx?$/i.test(n)?'fa-file-word':/\.(png|jpe?g)$/i.test(n)?'fa-file-image':'fa-file';}
+// the large state: a record with many documents, paged past 20 (TSD 5.6 UI states, Record form)
+function manyDocs(){var o=[],k=['Training certificate','Reference letter','Induction record','Payslip','Site pass'];for(var i=0;i<45;i++)o.push({name:k[i%5]+' '+(45-i)+'.pdf',size:(120+i*7)+' KB',by:'Sarah Mitchell',at:'2026-'+('0'+(10-Math.floor(i/5))).slice(-2)+'-'+('0'+(28-i%5*5)).slice(-2)+'T09:00:00'});return o;}
 function draw(){
- var c=id?S3.candidate(id):null;document.getElementById('page-title').textContent=c?'Edit '+c.fullName:'Add worker to pool';
+ var cid=st==='anonymised'?'c-ax':id||(st==='large'||st==='conflict'||st==='partial'?'c-mo':null),c=cid?S3.candidate(cid):null;cur=c;document.getElementById('page-title').textContent=c?'Edit '+c.fullName:'Add worker to pool';
+ // an anonymised record is refused, never drawn as an empty form (TSD 5.6 TV-7)
+ if(c&&c.anonymised){document.getElementById('page-title').textContent='Edit worker';app.innerHTML='<div class="max-w-3xl mx-auto flex flex-col gap-4">'+ui.crumbs([['Worker Pool','abstract.candidates.worker-pool.html'],[c.fullName,'abstract.candidates.worker-profile.html?id='+c.id],['Edit']])+ui.banner('error','This record has been anonymised, so it can’t be edited. <a class="'+C.link+'" href="abstract.candidates.worker-profile.html?id='+c.id+'">Back to the record</a>')+'</div>';return;}
  lic=c?c.licences.map(function(l){return Object.assign({},l);}):[];comp=c?JSON.parse(JSON.stringify(c.items)):{right_to_work:{status:'Pending'},dbs_check:{status:'Pending'},references:{status:'Pending'},hs_training:{status:'Pending'}};
+ docs=st==='large'?manyDocs():(c?c.documents.slice():[]);docPage=1;photo=null;
  var a=(c&&c.address)||{},k=(c&&c.nextOfKin)||{},card=function(t,h){return'<section class="'+C.card+' p-5"><h2 class="text-sm font-bold text-slate-900 mb-4">'+t+'</h2>'+h+'</section>';},g='grid grid-cols-1 sm:grid-cols-2 gap-4';
+ var tel=PH.read(c),ktel=PH.read(c&&c.nextOfKin);
  app.innerHTML='<div class="max-w-3xl mx-auto flex flex-col gap-4">'+ui.crumbs([['Worker Pool','abstract.candidates.worker-pool.html']].concat(c?[[c.fullName,'abstract.candidates.worker-profile.html?id='+c.id],['Edit']]:[['Add worker to pool']]))+'<div id="w-banner" class="flex flex-col gap-2"></div>'+
- card('Identity','<div class="'+g+'">'+ui.field({id:'w-name',label:'Full name',required:true,wide:true,value:c&&c.fullName})+ui.field({id:'w-dob',label:'Date of birth',type:'date',required:true,value:c&&c.dateOfBirth})+ui.field({id:'w-tel',label:'Telephone',type:'tel',required:true,value:c&&c.telephone})+ui.field({id:'w-email',label:'Email',type:'email',value:c&&c.email})+ui.field({id:'w-ni',label:'NI number',value:c&&c.nationalInsuranceNumber,placeholder:'QQ123456C'})+ui.field({id:'w-role',label:'Usual job role',type:'select',value:c&&c.jobRoleId,options:[['','None']].concat(Object.keys(S3.JOB_ROLES).map(function(r){return[r,S3.JOB_ROLES[r]];})),wide:true})+'<div class="sm:col-span-2"><p class="'+C.label+'">Photo</p><div id="w-photo"></div></div></div>')+
+ card('Identity','<div class="'+g+'">'+ui.field({id:'w-name',label:'Full name',required:true,wide:true,value:c&&c.fullName})+ui.field({id:'w-dob',label:'Date of birth',type:'date',required:true,value:c&&c.dateOfBirth})+PH.field({id:'w-tel',label:'Telephone',required:true,value:PH.valueOf(tel.telephone,tel.telephoneCountry)})+ui.field({id:'w-email',label:'Email',type:'email',value:c&&c.email})+ui.field({id:'w-ni',label:'NI number',value:c&&c.nationalInsuranceNumber,placeholder:'AB123456C'})+ui.field({id:'w-role',label:'Usual job role',type:'select',value:c&&c.jobRoleId,options:[['','None']].concat(Object.keys(S3.JOB_ROLES).map(function(r){return[r,S3.JOB_ROLES[r]];})),wide:true})+'<div class="sm:col-span-2"><p class="'+C.label+'">Photo (PNG or JPEG)</p><div id="w-photo-now"></div><div id="w-photo"></div></div></div>')+
  card('Address','<div class="'+g+'">'+ui.field({id:'w-a1',label:'Line 1',wide:true,value:a.line1})+ui.field({id:'w-a2',label:'Line 2',wide:true,value:a.line2})+ui.field({id:'w-town',label:'Town',value:a.town})+ui.field({id:'w-post',label:'Postcode',value:a.postcode})+ui.field({id:'w-cty',label:'Country',value:a.country||'GB'})+'</div>')+
- card('Next of kin','<div class="'+g+'">'+ui.field({id:'w-kn',label:'Name',value:k.name})+ui.field({id:'w-kr',label:'Relationship',value:k.relationship})+ui.field({id:'w-kt',label:'Telephone',type:'tel',value:k.telephone})+'</div>')+
+ card('Next of kin','<div class="'+g+'">'+ui.field({id:'w-kn',label:'Name',value:k.name})+ui.field({id:'w-kr',label:'Relationship',value:k.relationship})+PH.field({id:'w-kt',label:'Telephone',value:PH.valueOf(ktel.telephone,ktel.telephoneCountry)})+'</div>')+
  card('Compliance items','<div class="flex flex-col gap-3">'+Object.keys(comp).map(function(t){return'<div class="grid grid-cols-1 sm:grid-cols-[1fr_180px_170px] gap-3 sm:items-end border-b border-slate-100 pb-3 last:border-0 last:pb-0"><p class="text-sm font-semibold text-slate-800">'+names[t]+'</p>'+ui.field({id:'i-s-'+t,label:'Status',type:'select',value:comp[t].status,options:WORDS.map(function(w){return[w,w];})})+ui.field({id:'i-e-'+t,label:'Expiry',type:'date',value:comp[t].expiryDate})+'</div>';}).join('')+'</div><p class="text-xs text-slate-500 mt-3">A status is recorded here, not checked. Evidence is uploaded on the worker’s profile.</p>')+
  card('Licences and certifications','<div id="w-lic"></div><button type="button" id="w-lic-add" class="'+C.sec+' mt-3"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add licence</button>')+
+ card('Documents','<div id="w-docs"></div><div id="w-doc-up" class="mt-3"></div><p class="text-xs text-slate-500 mt-2">A file added here is saved with the record.</p>')+
  card('Availability','<div class="'+g+'">'+ui.field({id:'w-from',label:'Unavailable from',type:'date',value:c&&c.unavailableFrom})+ui.field({id:'w-until',label:'Until',type:'date',value:c&&c.unavailableUntil})+ui.field({id:'w-note',label:'Note',wide:true,value:c&&c.unavailabilityNote})+'</div><p class="text-xs text-slate-500 mt-3">Leave these empty if the worker is available. On Assignment comes from their bookings and isn’t set here.</p>')+
  '<div class="flex justify-end gap-2"><a class="'+C.sec+'" href="'+(c?'abstract.candidates.worker-profile.html?id='+c.id:'abstract.candidates.worker-pool.html')+'">Cancel</a><button type="button" id="w-save" class="'+C.pri+'" style="'+C.priStyle+'">'+(c?'Save changes':'Add to pool')+'</button></div></div>';
- S3.fileUpload(document.getElementById('w-photo'),{accept:'.png,.jpg,.jpeg',label:'Drop a photo here or choose one',hint:'PNG or JPEG',onFile:function(n){S1.toast('Photo uploaded: '+esc(n),'success');}});
- drawLic();
- document.getElementById('w-lic-add').onclick=function(){S3.dialog({title:'Add licence',cta:'Add licence',fields:[{id:'l-t',label:'Type',required:true},{id:'l-b',label:'Issuing body'},{id:'l-e',label:'Expiry',type:'date'}],onOk:function(x,api){if(x['l-e']&&x['l-e']<S3.TODAY&&!api.warned){api.warned=true;api.banner('warning','That expiry is in the past, so this licence will show as expired. Select Add licence again to keep it.');return false;}lic.push({id:'n'+Date.now(),licenceType:x['l-t'],issuingBody:x['l-b']||null,expiryDate:x['l-e']||null,expired:!!x['l-e']&&x['l-e']<S3.TODAY,removedAt:null});drawLic();}});};
+ PH.wire(app);
+ var ph=document.getElementById('w-photo');
+ S3.fileUpload(ph,{accept:'.png,.jpg,.jpeg',label:'Drop a photo here or choose one',hint:'PNG or JPEG',onFile:function(){}}); // the photo is sent with the one Save (TSD §9 R-37)
+ ph.querySelector('input[type=file]').addEventListener('change',function(){var f=this.files&&this.files[0];if(f&&f.size<=20971520&&/^image\/(png|jpeg)$/.test(f.type))shrink(f,function(url){photo={name:f.name,size:f.size>1048576?(f.size/1048576).toFixed(1)+' MB':Math.max(1,Math.round(f.size/1024))+' KB',url:url};drawPhoto();});});
+ drawPhoto();drawLic();drawDocs();
+ S3.fileUpload(document.getElementById('w-doc-up'),{onFile:function(n,s){docs.unshift({name:n,size:s,by:S3.me,at:S3.now(),pending:true});docPage=1;drawDocs();S1.toast('Document added. It’s saved with the record.','success');}});
+ document.getElementById('w-lic-add').onclick=function(){licDialog(null);};
  document.getElementById('w-save').onclick=function(){save(c);};
 }
-function drawLic(){var b=document.getElementById('w-lic');b.innerHTML=lic.length?'<ul class="divide-y divide-slate-100">'+lic.map(function(l,i){return'<li class="py-2 flex items-center justify-between gap-3"><span><span class="block text-sm text-slate-800">'+esc(l.licenceType)+'</span><span class="block text-xs text-slate-500">'+esc(l.issuingBody||'No issuing body')+' · expires '+S3.fmtDate(l.expiryDate)+' '+(l.expired?ui.marker('expired','danger'):'')+'</span></span><button type="button" class="'+C.ghost+'" data-rm="'+i+'">Remove</button></li>';}).join('')+'</ul>':'<p class="text-sm text-slate-600">No licences recorded.</p>';b.querySelectorAll('[data-rm]').forEach(function(x){x.onclick=function(){lic.splice(+x.dataset.rm,1);drawLic();};});}
+// the photo as the record will show it: a square JPEG, small enough for the prototype's store
+function shrink(file,cb){var r=new FileReader();r.onload=function(){var im=new Image();im.onload=function(){var s=Math.min(im.width,im.height),cv=document.createElement('canvas');cv.width=cv.height=192;cv.getContext('2d').drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,192,192);cb(cv.toDataURL('image/jpeg',0.85));};im.src=r.result;};r.readAsDataURL(file);}
+function drawPhoto(){var b=document.getElementById('w-photo-now'),src=photo?photo.url:cur&&cur.photo;if(!src){b.innerHTML='';return;}
+ b.innerHTML='<div class="flex items-center gap-3 mb-3"><img src="'+esc(src)+'" alt="'+(photo?'New photo':'Current photo')+'" class="w-14 h-14 rounded-xl object-cover border border-slate-200 flex-shrink-0"/><p class="text-xs text-slate-500">'+(photo?'New photo: '+esc(photo.name)+'. It replaces the current one when you save.':'A photo is on the record. Choose a file to replace it.')+'</p></div>';}
+function drawLic(){var b=document.getElementById('w-lic');b.innerHTML=lic.length?'<ul class="divide-y divide-slate-100">'+lic.map(function(l,i){return'<li class="py-2 flex items-center justify-between gap-3"><span class="min-w-0"><span class="block text-sm text-slate-800">'+esc(l.licenceType)+'</span><span class="block text-xs text-slate-500">'+esc(l.issuingBody||'No issuing body')+' · expires <span class="tnum">'+S3.fmtDate(l.expiryDate)+'</span> '+(l.expired?ui.marker('expired','danger'):'')+'</span></span><span class="flex items-center gap-1 flex-shrink-0"><button type="button" class="'+C.ghost+'" data-ed="'+i+'">Edit<span class="sr-only"> the licence '+esc(l.licenceType)+'</span></button><button type="button" class="'+C.ghost+'" data-rm="'+i+'">Remove<span class="sr-only"> the licence '+esc(l.licenceType)+'</span></button></span></li>';}).join('')+'</ul>':'<p class="text-sm text-slate-600">No licences recorded.</p>';
+ b.querySelectorAll('[data-rm]').forEach(function(x){x.onclick=function(){lic.splice(+x.dataset.rm,1);drawLic();};});
+ b.querySelectorAll('[data-ed]').forEach(function(x){x.onclick=function(){licDialog(+x.dataset.ed);};});}
+// Add licence, or edit one already recorded (PATCH /candidates/:id/licences/:licenceId); a past expiry is warned once
+function licDialog(i){var l=i==null?null:lic[i],cta=l?'Save licence':'Add licence';
+ S3.dialog({title:l?'Edit licence':'Add licence',cta:cta,fields:[{id:'l-t',label:'Type',required:true,requiredMessage:'Enter the licence type.',value:l&&l.licenceType},{id:'l-b',label:'Issuing body',value:l&&l.issuingBody},{id:'l-e',label:'Expiry',type:'date',value:l&&l.expiryDate}],onOk:function(x,api){
+  var past=!!x['l-e']&&x['l-e']<S3.TODAY;if(past&&(!l||x['l-e']!==(l.expiryDate||''))&&!api.warned){api.warned=true;api.banner('warning','That expiry is in the past, so this licence will show as expired. Select '+cta+' again to keep it.');return false;}
+  var v={licenceType:x['l-t'],issuingBody:x['l-b']||null,expiryDate:x['l-e']||null,expired:past};
+  if(l)Object.assign(l,v,{changed:true});else lic.push(Object.assign({id:'n'+Date.now(),removedAt:null},v));
+  drawLic();if(l){S1.toast('Licence changed. It’s saved with the record.','success');setTimeout(function(){var e=document.querySelector('[data-ed="'+i+'"]');if(e)e.focus();},0);}}});}
+function drawDocs(){var b=document.getElementById('w-docs'),P=20,pages=Math.max(1,Math.ceil(docs.length/P));if(docPage>pages)docPage=pages;var view=docs.slice((docPage-1)*P,docPage*P);
+ b.innerHTML=docs.length?'<ul class="divide-y divide-slate-100 border border-slate-200 rounded-xl" aria-label="Documents">'+view.map(function(d){return'<li class="flex items-center gap-3 px-4 py-3"><span class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center flex-shrink-0" aria-hidden="true"><i class="fa-regular '+ficon(d.name)+' text-slate-500"></i></span><span class="flex-1 min-w-0"><span class="block text-sm font-semibold text-slate-800 truncate">'+esc(d.name)+'</span><span class="block text-xs text-slate-500"><span class="tnum">'+esc(d.size)+'</span> · '+(d.pending?'added, saved with the record':'uploaded <span class="tnum">'+S3.fmtDate(d.at)+'</span>')+'</span></span>'+(d.pending?'':'<button type="button" class="'+C.ghost+'" onclick="S1.toast(\'Downloading.\',\'success\')"><i class="fa-solid fa-download" aria-hidden="true"></i> Download<span class="sr-only"> '+esc(d.name)+'</span></button>')+'</li>';}).join('')+'</ul>'+(docs.length>P?ui.pager(docs.length,docPage,pages,'documents').replace(/class="w-9 h-9 rounded-lg/g,'class="'+FOC.trim()+' w-9 h-9 rounded-lg'):''):'<p class="text-sm text-slate-600">No documents yet.</p>';
+ b.querySelectorAll('[data-pg]').forEach(function(x){x.onclick=function(){docPage=+x.dataset.pg;drawDocs();var n=b.querySelector('[data-pg]:not([disabled])');if(n)n.focus();};});}
 function save(c,force){
- var g=function(i){return document.getElementById(i).value.trim();},e={},ni=g('w-ni').replace(/\s/g,'').toUpperCase();
- if(!g('w-name'))e['w-name']='Enter the worker’s full name.';if(!g('w-dob'))e['w-dob']='Enter a date of birth.';else if(g('w-dob')>=S3.TODAY)e['w-dob']='A date of birth must be in the past.';if(!g('w-tel'))e['w-tel']='Enter a telephone number.';if(ni&&!/^[A-CEGHJ-PR-TW-Z]{2}\d{6}[A-D]$/.test(ni))e['w-ni']='Enter an NI number in the form QQ123456C.';
- if(!ui.showErrs(e,['w-name','w-dob','w-tel','w-ni']))return;
+ var g=function(i){return document.getElementById(i).value.trim();},e={},ni=g('w-ni').replace(/\s/g,'').toUpperCase(),te=PH.check('w-tel',true),ke=PH.check('w-kt',false);
+ if(!g('w-name'))e['w-name']='Enter the worker’s full name.';if(!g('w-dob'))e['w-dob']='Enter a date of birth.';else if(g('w-dob')>=S3.TODAY)e['w-dob']='A date of birth must be in the past.';if(te)e['w-tel']=te;if(ni&&!/^[A-CEGHJ-PR-TW-Z]{2}\d{6}[A-D]$/.test(ni))e['w-ni']='Enter an NI number in the form AB123456C.';if(ke)e['w-kt']=ke;
+ // the address and the next of kin are each whole or absent; the availability window runs forwards
+ var ad=['w-a1','w-town','w-post'];if((g('w-a2')||ad.some(g))&&!ad.every(g))e[ad.filter(function(i){return !g(i);})[0]]='An address needs line 1, the town and the postcode.';
+ var kn=['w-kn','w-kr','w-kt'];if(kn.some(g)&&!kn.every(g)){var km=kn.filter(function(i){return !g(i);})[0];if(!e[km])e[km]='Next of kin needs a name, the relationship and a telephone number.';}
+ if(g('w-from')&&g('w-until')&&g('w-until')<g('w-from'))e['w-until']='The end of the window can’t be before its start.';
+ if(!ui.showErrs(e,['w-name','w-dob','w-tel','w-ni','w-a1','w-town','w-post','w-kn','w-kr','w-kt','w-until']))return;
+ if(st==='conflict'){document.getElementById('w-banner').innerHTML=ui.banner('warning','Someone else changed this record while you had it open, so your change wasn’t saved. <button type="button" class="'+C.link+'" onclick="S1.setState(\'default\')">Reload the record</button> and try again.');document.getElementById('main').scrollTop=0;return;}
  var dup=S3.candidates().filter(function(x){return x.fullName.toLowerCase()===g('w-name').toLowerCase()&&x.dateOfBirth===g('w-dob')&&(!c||x.id!==c.id);})[0];
- if(dup&&!force){document.getElementById('w-banner').innerHTML=ui.banner('warning','A worker with this name and date of birth is already in the pool: <a class="'+C.link+'" href="abstract.candidates.worker-profile.html?id='+dup.id+'">'+esc(dup.fullName)+'</a>. <button type="button" id="w-force" class="'+C.link+'">Add anyway</button>');document.getElementById('w-force').onclick=function(){save(c,true);};document.getElementById('main').scrollTop=0;return;}
+ if(dup&&!force){document.getElementById('w-banner').innerHTML=ui.banner('warning','A worker with this name and date of birth is already in the pool: <a class="'+C.link+'" href="abstract.candidates.worker-profile.html?id='+dup.id+'">'+esc(dup.fullName)+'</a>. <button type="button" id="w-force" class="'+C.link+'">Save anyway</button>');document.getElementById('w-force').onclick=function(){save(c,true);};document.getElementById('main').scrollTop=0;return;}
  var items={};Object.keys(comp).forEach(function(t){items[t]={status:g('i-s-'+t),expiryDate:g('i-e-'+t)||null,doc:comp[t].doc||null};});
- var p={fullName:g('w-name'),dateOfBirth:g('w-dob'),telephone:g('w-tel'),email:g('w-email')||null,nationalInsuranceNumber:ni||null,jobRoleId:g('w-role')||null,address:g('w-a1')?{line1:g('w-a1'),line2:g('w-a2')||null,town:g('w-town'),postcode:g('w-post'),country:g('w-cty')}:null,nextOfKin:g('w-kn')?{name:g('w-kn'),relationship:g('w-kr'),telephone:g('w-kt')}:null,items:items,licences:lic,unavailableFrom:g('w-from')||null,unavailableUntil:g('w-until')||null,unavailabilityNote:g('w-note')||null};
- var nid;if(c){S3.act.updateCandidate(c.id,p);nid=c.id;}else nid=S3.act.createCandidate(p).id;
+ var tel=PH.forRequest('w-tel'),kt=PH.forRequest('w-kt');
+ var p={fullName:g('w-name'),dateOfBirth:g('w-dob'),telephone:tel.telephone,telephoneCountry:tel.telephoneCountry,email:g('w-email')||null,nationalInsuranceNumber:ni||null,jobRoleId:g('w-role')||null,address:g('w-a1')?{line1:g('w-a1'),line2:g('w-a2')||null,town:g('w-town'),postcode:g('w-post'),country:g('w-cty')}:null,nextOfKin:g('w-kn')?{name:g('w-kn'),relationship:g('w-kr'),telephone:kt.telephone,telephoneCountry:kt.telephoneCountry}:null,items:items,licences:lic.map(function(l){var o=Object.assign({},l);delete o.changed;return o;}),unavailableFrom:g('w-from')||null,unavailableUntil:g('w-until')||null,unavailabilityNote:g('w-note')||null};
+ // after the record: the photo (a candidate_photo document) and the documents, with its id (TSD §9 R-37)
+ var after={telephoneCountry:tel.telephoneCountry};
+ if(st!=='large')after.documents=docs.map(function(d){return{name:d.name,size:d.size,by:d.by,at:d.at};});
+ if(photo){after.photo=photo.url;after.photoName=photo.name;(after.documents||(after.documents=(c?c.documents.slice():[]))).unshift({name:photo.name,size:photo.size,by:S3.me,at:S3.now()});}
+ var nid;if(c){S3.act.updateCandidate(c.id,Object.assign(p,after));nid=c.id;}else{nid=S3.act.createCandidate(p).id;S3.act.updateCandidate(nid,after);}
+ // R-37: the record first, then the rest; a part refused leaves the record saved and says what wasn't
+ if(st==='partial'){document.getElementById('w-banner').innerHTML=ui.banner('warning','The worker was saved, but not everything on this form was: the photo couldn’t be stored. <a class="'+C.link+'" href="abstract.candidates.worker-profile.html?id='+nid+'">Finish on their profile.</a>');document.getElementById('main').scrollTop=0;return;}
  S1.toast(c?'Saved.':'Added to the worker pool.','success');setTimeout(function(){location.href='abstract.candidates.worker-profile.html?id='+nid;},500);
 }
-S3.onState(function(s){st=s;if(['loading','error','denied'].indexOf(s)>=0)return;draw();if(s==='validation'){document.getElementById('w-ni').value='12345';document.getElementById('w-dob').value='2030-01-01';save(null);}if(s==='duplicate'){document.getElementById('w-name').value='Marek Nowak';document.getElementById('w-dob').value='1988-04-12';document.getElementById('w-tel').value='07700 900101';save(null);}});
+S3.onState(function(s){st=s;PH.close();if(['loading','error','denied'].indexOf(s)>=0)return;draw();if(s==='validation'){document.getElementById('w-ni').value='12345';document.getElementById('w-dob').value='2030-01-01';document.getElementById('w-kn').value='Devon Williams';document.getElementById('w-kt').value='+1 416 555 0100';save(null);}if(s==='conflict'||s==='partial')save(cur);if(s==='duplicate'){document.getElementById('w-name').value='Marek Nowak';document.getElementById('w-dob').value='1988-04-12';document.getElementById('w-tel').value='07400 123101';save(null);}});
 </script>
 <script src="slice1-kit.js"></script>
 </body>

@@ -26,7 +26,7 @@
         }
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default loading no-match running failed erasure-refused error denied">
+<body class="font-inter bg-slate-100 overflow-hidden" data-s1-page data-s1-states="default loading no-match validation search-error running failed erasure-refused erased already-erased error denied">
 
 <div id="app-root" class="flex w-full" style="height: 100vh;">
 
@@ -201,6 +201,14 @@
                     </form>
                     <p id="res-count" class="px-5 pb-2 text-xs text-slate-500" role="status"></p>
                     <ul id="results" class="divide-y divide-slate-100 border-t border-slate-100"></ul>
+                    <!-- The search itself failed (built: "We couldn't search for people.") -->
+                    <div id="search-error" class="hidden px-6 py-10 text-center border-t border-slate-100" role="alert">
+                        <div class="w-12 h-12 rounded-full bg-red-50 text-red-600 mx-auto flex items-center justify-center mb-3"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i></div>
+                        <p class="text-sm font-bold text-slate-900">We couldn't search for people.</p>
+                        <p class="text-sm text-slate-600 mt-1">Nothing has been changed. Try again, and if it keeps happening, quote the reference to Abstract support.</p>
+                        <p class="text-xs text-slate-500 mt-1">Reference <span class="font-mono">req_4e19a7c2d0</span></p>
+                        <button type="button" id="search-retry" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 mt-4"><i class="fa-solid fa-rotate-right text-xs" aria-hidden="true"></i> Try again</button>
+                    </div>
                     <div id="nomatch" class="hidden px-6 py-10 text-center border-t border-slate-100">
                         <div class="w-12 h-12 rounded-full bg-slate-100 text-slate-400 mx-auto flex items-center justify-center mb-3"><i class="fa-solid fa-user-slash" aria-hidden="true"></i></div>
                         <p class="text-sm font-bold text-slate-900">No one matches "<span id="nomatch-q"></span>"</p>
@@ -228,10 +236,32 @@
 
                         <div id="refused" class="hidden rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 flex items-start gap-3 text-sm text-amber-900" role="alert">
                             <i class="fa-solid fa-hand mt-0.5" aria-hidden="true"></i>
-                            <div><p class="font-semibold">Erasure refused — a retention obligation applies.</p><p id="refused-reason" class="mt-1"></p><p class="mt-1 text-amber-800">You can still compile or export their data. The refusal is recorded in the history below.</p></div>
+                            <div><p id="refused-t" class="font-semibold">Erasure refused — a retention obligation applies.</p><p id="refused-reason" class="mt-1"></p><p class="mt-1 text-amber-800">You can still compile or export their data. The refusal is recorded in the history below.</p></div>
                         </div>
 
-                        <section aria-labelledby="actions-t">
+                        <!-- Opened on a person already erased: nothing left to do (built "erasedNote") -->
+                        <div id="erased-note" class="hidden rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 flex items-start gap-3 text-sm text-blue-800" role="status">
+                            <i class="fa-solid fa-circle-info mt-0.5" aria-hidden="true"></i><p>This person's personal data has been erased. There is nothing left to compile, export or erase; their earlier requests stay in the history below.</p>
+                        </div>
+                        <!-- 409 DATA_SUBJECT_ALREADY_ERASED: someone erased them in the meantime -->
+                        <div id="already-erased" class="hidden rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 flex items-start gap-3 text-sm text-amber-900" role="alert">
+                            <i class="fa-solid fa-circle-exclamation mt-0.5" aria-hidden="true"></i>
+                            <div><p class="font-semibold">This person's personal data has already been erased.</p><p class="mt-1">Nothing was requested. Search again to see the record as it is now.</p></div>
+                        </div>
+                        <!-- What an erasure did (TSD 1 §5.10 TV-8): the fields anonymised, and what was kept and why -->
+                        <section id="erase-result" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6" aria-labelledby="erase-result-t">
+                            <div class="flex items-start gap-3">
+                                <span class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center flex-shrink-0"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span>
+                                <div class="min-w-0"><h2 id="erase-result-t" class="text-sm font-bold text-slate-900">Personal data erased</h2>
+                                <p class="text-sm text-slate-600 mt-0.5 leading-relaxed">Erased on <span id="er-when" class="tabular-nums"></span>. The erasure is in the audit log with your reason, without their personal data.</p></div>
+                            </div>
+                            <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div><h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Anonymised</h3><ul id="er-fields" class="flex flex-wrap gap-1.5"></ul></div>
+                                <div><h3 class="text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">Kept, and why</h3><ul id="er-kept" class="flex flex-col gap-2"></ul></div>
+                            </div>
+                        </section>
+
+                        <section id="actions" aria-labelledby="actions-t">
                             <h2 id="actions-t" class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Actions</h2>
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex flex-col">
@@ -384,53 +414,89 @@ var PEOPLE = [
   { id: 'dh', name: 'Daniel Hughes', email: 'daniel.hughes@northgatefoods.example', org: 'Northgate Foods', party: 'Client', status: 'Inactive', since: '9 Feb 2026',
     retention: 'Abstract has placed a legal hold on records this person is named in, pending a dispute (set by James Okafor on 12 Aug 2026). Their personal data must be kept until the hold is lifted.',
     history: [ { action: 'Erase / anonymise', by: 'Sarah Mitchell', when: '20 Sep 2026, 16:12', status: 'refused' } ] },
-  { id: 'ar', name: 'Aisha Rahman', email: 'aisha.rahman@nexustalent.example', org: 'Nexus Talent', party: 'Agency', status: 'Invited', since: '22 Sep 2026', history: [] }
+  { id: 'ar', name: 'Aisha Rahman', email: 'aisha.rahman@nexustalent.example', org: 'Nexus Talent', party: 'Agency', status: 'Invited', since: '22 Sep 2026', history: [] },
+  // already erased: the record keeps the anonymised token as its name (erased-<hash>), and shows Erased
+  { id: 'eu', name: 'erased-91c4be27d0aa', email: null, org: 'Northgate Foods', party: 'Client', status: 'Inactive', since: '4 Jan 2026', erased: true,
+    history: [ { action: 'Erase / anonymise', by: 'Sarah Mitchell', when: '2 Sep 2026, 11:20', status: 'erased', reason: 'Erasure request received by email on 1 Sep 2026, ref DSR-104' } ] }
 ];
-var S3ON=(function(){try{var m=localStorage.getItem('s1-mode');return m!=='on'&&m!=='s2';}catch(e){return true;}})();
-if (S3ON) PEOPLE.push(
+/* Slice 3 candidates are searchable from Slices 1 to 3 on, and absent in Slice 1 only and Slices 1 + 2. Decided from
+   S1.mode() once the kit has applied ?s1=1 / ?s2=1, and again whenever the mode changes (kit's s1:mode event, which also
+   fires at load) — never from storage read before the kit runs (s1-s2 audit L4). */
+var CANDIDATES = [
   { id: 'c-mo', name: 'Marek Nowak', email: 'marek.nowak@example.com', org: 'Abstract', party: 'Candidate', status: 'Active', since: '2 Mar 2026', history: [] },
   { id: 'c-er', name: 'Ewa Rybak', email: null, org: 'Abstract', party: 'Candidate', status: 'Active', since: '2 Mar 2026', history: [] },
   { id: 'c-jd', name: 'Joao Dias', email: 'joao.dias@example.com', org: 'Abstract', party: 'Candidate', status: 'Active', since: '2 Mar 2026',
-    retention: 'A legal hold stands on this candidate: Employment tribunal claim, keep until it concludes. Lift the hold on the worker’s profile, then submit the erasure again.', history: [] }
-);
+    hold: 'Employment tribunal claim, keep until it concludes', history: [] },
+  { id: 'c-xe', name: 'erased-5b07d3e9a1f2', email: null, org: 'Abstract', party: 'Candidate', status: 'Active', since: '14 Mar 2026', erased: true,
+    history: [ { action: 'Erase / anonymise', by: 'Sarah Mitchell', when: '18 Sep 2026, 15:02', status: 'erased', reason: 'Erasure request received by post on 16 Sep 2026, ref DSR-117' } ] }
+];
+function s3On() { var m = window.S1 && S1.mode ? S1.mode() : 'full'; return m !== 's1' && m !== 's2'; }
+function syncCandidates() {
+  var on = s3On();
+  PEOPLE = PEOPLE.filter(function (p) { return p.party !== 'Candidate'; });
+  if (on) PEOPLE = PEOPLE.concat(CANDIDATES);
+  if (sel && sel.party === 'Candidate' && !on) pick(null);
+  var q = document.getElementById('q'); if (q && q.value) search(q.value);
+}
+document.addEventListener('s1:mode', syncCandidates);
 var sel = null, matches = [];
 var SB = { Active: 'bg-emerald-50 text-emerald-700 border-emerald-200', Inactive: 'bg-slate-100 text-slate-500 border-slate-200', Invited: 'bg-amber-50 text-amber-700 border-amber-200' };
 var JB = { queued: 'bg-slate-100 text-slate-700 border-slate-200', running: 'bg-blue-50 text-blue-700 border-blue-200', completed: 'bg-emerald-50 text-emerald-700 border-emerald-200', failed: 'bg-red-50 text-red-700 border-red-200' };
 var JI = { queued: 'fa-clock', running: 'fa-spinner fa-spin', completed: 'fa-check', failed: 'fa-xmark' };
 function badge(cls, txt, icon) { return '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap border ' + cls + '">' + (icon ? '<i class="fa-solid ' + icon + ' text-[10px]" aria-hidden="true"></i>' : '') + txt + '</span>'; }
+var ERASED_BADGE = '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap border bg-slate-100 text-slate-700 border-slate-200"><i class="fa-solid fa-eraser text-[10px]" aria-hidden="true"></i>Erased</span>';
+function personBadge(p) { return p.erased ? ERASED_BADGE : p.party === 'Candidate' ? '' : badge(SB[p.status], p.status); }
 function initials(n) { return n.split(' ').map(function (x) { return x[0]; }).join('').slice(0, 2); }
 function slug(n) { return n.toLowerCase().replace(/[^a-z]+/g, '-'); }
 function search(qs) {
   qs = (qs || '').trim().toLowerCase();
-  matches = qs ? PEOPLE.filter(function (p) { return p.name.toLowerCase().indexOf(qs) >= 0 || (p.email || '').toLowerCase().indexOf(qs) >= 0; }) : [];
+  var short = qs.length > 0 && qs.length < 2;   // a search needs at least 2 characters (TSD 1 §5.10 UI states)
+  matches = qs && !short ? PEOPLE.filter(function (p) { return p.name.toLowerCase().indexOf(qs) >= 0 || (p.email || '').toLowerCase().indexOf(qs) >= 0; }) : [];
   document.getElementById('results').innerHTML = matches.map(function (p) {
     return '<li><button type="button" data-p="' + p.id + '" class="w-full text-left px-5 py-3 flex items-center gap-3 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-blue-600' + (sel && sel.id === p.id ? ' bg-blue-50/60' : '') + '"' + (sel && sel.id === p.id ? ' aria-current="true"' : '') + '>' +
       '<span class="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-xs font-bold flex-shrink-0">' + initials(p.name) + '</span>' +
       '<span class="min-w-0 flex-1"><span class="block text-sm font-semibold text-slate-900 truncate">' + S1.esc(p.name) + '</span><span class="block text-xs text-slate-500 truncate">' + S1.esc(p.email || 'No email') + '</span><span class="block text-xs text-slate-500 truncate">' + S1.esc(p.org) + ' · ' + p.party + '</span></span>' +
-      badge(SB[p.status], p.status) + '</button></li>';
+      personBadge(p) + '</button></li>';
   }).join('');
   document.getElementById('results').querySelectorAll('[data-p]').forEach(function (b) { b.onclick = function () { pick(b.dataset.p); }; });
-  var nm = qs && !matches.length;
+  document.getElementById('search-error').classList.add('hidden');
+  var nm = qs && !short && !matches.length;
   document.getElementById('nomatch').classList.toggle('hidden', !nm);
   document.getElementById('nomatch-q').textContent = qs;
-  document.getElementById('res-count').textContent = !qs ? 'Enter a name or email to search.' : matches.length ? matches.length + (matches.length === 1 ? ' person' : ' people') + ' found' : '';
+  document.getElementById('res-count').textContent = !qs ? 'Enter a name or email to search.' : short ? 'Enter at least 2 characters to search.' : matches.length ? matches.length + (matches.length === 1 ? ' person' : ' people') + ' found' : '';
 }
+var outcome = null;   // { id, kind: 'erased' | 'already', result }: what happened to a person on this page
 function pick(id) {
   sel = PEOPLE.filter(function (p) { return p.id === id; })[0];
   document.getElementById('no-person').classList.toggle('hidden', !!sel);
   document.getElementById('person').classList.toggle('hidden', !sel);
   if (!sel) return;
-  document.getElementById('p-avatar').textContent = initials(sel.name);
-  document.getElementById('p-name').textContent = sel.name; document.getElementById('h-name').textContent = sel.name;
+  var oc = outcome && outcome.id === sel.id ? outcome : null;
+  var withheld = !!oc, erased = !!sel.erased || withheld;   // just erased (or found erased) here: the name in hand is not shown
+  document.getElementById('p-avatar').innerHTML = erased ? '<i class="fa-solid fa-user-slash" aria-hidden="true"></i>' : initials(sel.name);
+  document.getElementById('p-name').textContent = withheld ? 'Erased person' : sel.name;
+  document.getElementById('h-t').innerHTML = withheld ? 'Request history for this person' : 'Request history for <span id="h-name"></span>';
+  if (!withheld) document.getElementById('h-name').textContent = sel.name;
   document.getElementById('port-name').textContent = sel.name;
-  document.getElementById('p-status').innerHTML = badge(SB[sel.status], sel.status);
+  document.getElementById('p-status').innerHTML = erased ? ERASED_BADGE : personBadge(sel);
   document.getElementById('p-email').textContent = sel.email || 'No email';
+  document.getElementById('p-email').classList.toggle('hidden', withheld);
   document.getElementById('p-org').textContent = sel.org + ' · ' + sel.party + (sel.party === 'Candidate' ? ' · On record since ' : ' · User since ') + sel.since;
   document.getElementById('refused').classList.add('hidden');
+  document.getElementById('erased-note').classList.toggle('hidden', !(sel.erased && !oc));
+  document.getElementById('already-erased').classList.toggle('hidden', !(oc && oc.kind === 'already'));
+  document.getElementById('erase-result').classList.toggle('hidden', !(oc && oc.kind === 'erased'));
+  if (oc && oc.kind === 'erased') {
+    document.getElementById('er-when').textContent = oc.result.when;
+    document.getElementById('er-fields').innerHTML = oc.result.fields.map(function (f) { return '<li class="rounded-md border border-slate-200 bg-slate-50 px-2 py-1 font-mono text-xs text-slate-700">' + S1.esc(f) + '</li>'; }).join('');
+    document.getElementById('er-kept').innerHTML = oc.result.kept.map(function (k) { return '<li class="flex flex-wrap items-center gap-2 text-sm"><span class="rounded-md border border-slate-200 bg-slate-50 px-2 py-1 font-mono text-xs text-slate-700">' + S1.esc(k[0]) + '</span><span class="text-slate-600">' + S1.esc(k[1]) + '</span></li>'; }).join('');
+  }
+  document.getElementById('actions').classList.toggle('hidden', erased);   // every action is absent once the person is erased
   document.getElementById('chip-sar').innerHTML = ''; document.getElementById('chip-port').innerHTML = '';
   renderHistory(); search(document.getElementById('q').value);
 }
 function statusCell(h) {
+  if (h.status === 'refused' && h.hold) return '<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-800"><i class="fa-solid fa-hand" aria-hidden="true"></i>Refused — legal hold</span>';
   if (h.status === 'refused') return '<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-800"><i class="fa-solid fa-hand" aria-hidden="true"></i>Refused — retention obligation</span>';
   if (h.status === 'erased') return '<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-700"><i class="fa-solid fa-eraser" aria-hidden="true"></i>Erased</span>';
   var s = badge(JB[h.status], h.status, JI[h.status]);
@@ -439,7 +505,9 @@ function statusCell(h) {
   return s;
 }
 function renderHistory() {
-  var hs = sel.history;
+  if (!sel) return;   // a job's timer can land after the state has cleared the selection
+  // DR-S13: a user's retention refusal is full-product view only, so its history rows drop out in the slice modes
+  var hs = sel.history.filter(function (h) { return !(h.status === 'refused' && !h.hold && S1.mode() !== 'full'); });
   document.getElementById('h-empty').classList.toggle('hidden', !!hs.length);
   document.getElementById('h-body').innerHTML = hs.map(function (h) {
     return '<tr class="align-top"><td class="px-4 pl-5 py-3 font-medium text-slate-800">' + S1.esc(h.action) + (h.reason ? '<span class="block text-xs text-slate-500 font-normal mt-0.5">Reason: ' + S1.esc(h.reason) + '</span>' : '') + '</td><td class="px-4 py-3 text-slate-600">' + S1.esc(h.by) + '</td><td class="px-4 py-3 text-slate-500 whitespace-nowrap">' + h.when + '</td><td class="px-4 pr-5 py-3">' + statusCell(h) + '</td></tr>';
@@ -477,21 +545,66 @@ function doSar(fail) {
 }
 var portFail = false;
 function doPort(fail) { portFail = !!fail; S1.openModal('port-modal'); }
-function doErase() {
-  if (sel.retention) { showRefused(); return; }
+function doErase(sample) {
+  if (sel.retention && S1.mode() === 'full') { showRefused(); return; }   // DR-S13: full-product view only
+  var cand = sel.party === 'Candidate';
   S1.confirm({ tone: 'danger', title: 'Erase ' + sel.name + '\'s personal data?', icon: 'fa-eraser',
-    bodyHtml: 'Their name, email address and other personal details are removed or replaced with anonymous values across every record. Their account is deactivated. <strong style="color:#b91c1c">This can\'t be undone.</strong> The erasure itself is audited, without their personal data.',
+    bodyHtml: 'Their name, email address and other personal details are removed or replaced with anonymous values across every record.' + (cand ? '' : ' Their account is deactivated.') + ' <strong style="color:#b91c1c">This can\'t be undone.</strong> The erasure itself is audited, without their personal data.',
     reason: true, reasonLabel: 'Reason (required)', reasonPlaceholder: 'For example: erasure request received by email on 24 Sep 2026, ref DSR-118',
     cta: 'Erase personal data', busy: 'Erasing…', delay: 900,
     onConfirm: function (reason) {
+      if (cand && sel.hold) { showHold(); return; }                                         // 409 CANDIDATE_LEGAL_HOLD, after the confirm
+      if (document.body.getAttribute('data-s1-state') === 'already-erased') { outcome = { id: sel.id, kind: 'already' }; pick(sel.id); return; }   // 409 DATA_SUBJECT_ALREADY_ERASED
       sel.history.unshift({ action: 'Erase / anonymise', by: 'Sarah Mitchell', when: nowStr(), status: 'erased', reason: reason });
-      var old = sel.name; sel.name = 'Anonymised user ' + sel.id.toUpperCase() + '-7731'; sel.email = 'anonymised'; sel.status = 'Inactive';
+      var old = sel.name, when = nowStr();
+      var fields = cand
+        ? ['candidates.full_name', 'candidates.email', 'candidates.phone', 'candidates.date_of_birth', 'candidates.ni_number', 'candidates.address', 'candidate_licences.licence_number', 'documents.fileName'].concat(S1.mode() === 's3' ? [] : ['timesheet_entries.absence_comment'])
+        : ['users.name', 'users.email', 'sessions.ip_address', 'sessions.user_agent', 'notifications.recipient'];
+      var kept = [['audit_log', 'audit retention (SYS-009)'], ['audit_log_safety', 'audit retention (SYS-009)']].concat(cand ? [['bookings', 'assignment history (BK-011)']].concat(S1.mode() === 's3' ? [] : [['timesheet_entries', 'invoicing and payroll (TS-008, TS-099)'], ['pay_statements', 'payroll (TS-099)']]) : []);
+      // the record keeps the anonymised token as its name (erased-<hash>)
+      sel.name = 'erased-' + (sel.id.replace(/[^a-z]/g, '') + '7f3a2c91b04e').slice(0, 12); sel.email = null; sel.erased = true;
+      if (!cand) sel.status = 'Inactive';
+      outcome = { id: sel.id, kind: 'erased', result: { when: when, fields: fields, kept: kept } };
       pick(sel.id); document.getElementById('q').value = ''; search('');
-      S1.toast(S1.esc(old) + '\'s personal data has been erased. The record now shows as ' + S1.esc(sel.name) + '.', 'success', { ms: 6000 });
+      S1.toast(S1.esc(old) + '\'s personal data has been erased.', 'success', { ms: 6000 });
     } });
+  var check = reasonRule();
+  if (sample && check) { var r = document.getElementById('s1-dlg-reason'); r.value = sample; document.getElementById('s1-dlg-reason-hint').dataset.touched = '1'; check(true); }
+}
+/* Erasure reason: 10 to 500 characters (TSD 1 §5.10 UI states). The kit's dialog only asks for some text, so the page adds
+   the hint, a running count and the two messages, and keeps the button off until the length is right. */
+function reasonRule() {
+  var r = document.getElementById('s1-dlg-reason'); if (!r) return;
+  var ok = r.closest('.s1-dialog').querySelector('[data-ok]');
+  var hint = document.createElement('p'); hint.id = 's1-dlg-reason-hint';
+  hint.style.cssText = 'display:flex;justify-content:space-between;gap:12px;font-size:12px;line-height:1.5;margin:6px 0 0;color:#64748b';
+  hint.innerHTML = '<span data-msg>10 to 500 characters. The reason is kept with the audit entry.</span><span data-n style="font-variant-numeric:tabular-nums;white-space:nowrap">0 / 500</span>';
+  r.parentNode.appendChild(hint); r.setAttribute('aria-describedby', 's1-dlg-reason-hint');
+  function check(touched) {
+    var n = r.value.trim().length, bad = n > 500 || (touched && n < 10);
+    hint.querySelector('[data-n]').textContent = n + ' / 500';
+    hint.querySelector('[data-msg]').textContent = n > 500 ? 'Keep the reason to 500 characters or fewer.' : (touched && n < 10) ? 'Enter a reason of at least 10 characters.' : '10 to 500 characters. The reason is kept with the audit entry.';
+    hint.style.color = bad ? '#b91c1c' : '#64748b';
+    r.style.borderColor = bad ? '#dc2626' : ''; r.setAttribute('aria-invalid', bad ? 'true' : 'false');
+    ok.disabled = n < 10 || n > 500;
+  }
+  r.addEventListener('input', function () { check(r.value.trim().length >= 10 || hint.dataset.touched === '1'); });
+  r.addEventListener('blur', function () { if (r.value.trim()) { hint.dataset.touched = '1'; check(true); } });
+  return check;
+}
+/* A candidate under a legal hold: the erasure is refused once confirmed (409 CANDIDATE_LEGAL_HOLD; TSD 3 §3.1.4) */
+function showHold() {
+  var r = document.getElementById('refused');
+  document.getElementById('refused-t').textContent = 'The personal data wasn\'t erased.';
+  document.getElementById('refused-reason').textContent = 'This candidate is under a legal hold: ' + sel.hold + '. Lift the hold on their profile, then request the erasure again.';
+  r.classList.remove('hidden');
+  sel.history.unshift({ action: 'Erase / anonymise', by: 'Sarah Mitchell', when: nowStr(), status: 'refused', hold: true });
+  renderHistory(); r.scrollIntoView({ block: 'nearest' });
+  S1.toast('The personal data wasn\'t erased. This candidate is under a legal hold.', 'error');
 }
 function showRefused() {
   var r = document.getElementById('refused');
+  document.getElementById('refused-t').textContent = 'Erasure refused — a retention obligation applies.';
   document.getElementById('refused-reason').textContent = sel.retention;
   r.classList.remove('hidden');
   if (!sel.history.length || sel.history[0].when !== nowStr()) sel.history.unshift({ action: 'Erase / anonymise', by: 'Sarah Mitchell', when: nowStr(), status: 'refused' });
@@ -500,14 +613,21 @@ function showRefused() {
 }
 document.addEventListener('s1:state', function (e) {
   var st = e.detail.state, q = document.getElementById('q');
+  document.querySelectorAll('.s1-scrim').forEach(function (d) { d.remove(); });   // a dialog left open from the previous state
+  outcome = null; document.getElementById('search-error').classList.add('hidden');
   if (st === 'default') { q.value = 'priya'; pick('pn'); }
+  else if (st === 'search-error') { q.value = 'priya'; pick(null); search(''); document.getElementById('res-count').textContent = ''; document.getElementById('search-error').classList.remove('hidden'); }
+  else if (st === 'erased') { if (s3On()) { q.value = 'erased'; pick('c-xe'); } else { q.value = 'erased'; pick('eu'); } search(q.value); }
+  else if (st === 'already-erased') { q.value = 'priya'; pick('pn'); outcome = { id: 'pn', kind: 'already' }; pick('pn'); }
+  else if (st === 'validation') { // one character in the search; the erasure reason too short
+    q.value = 'priya'; pick('pn'); q.value = 'p'; search('p'); doErase('Asked'); }
   else if (st === 'no-match') { q.value = 'jonathon'; sel = null; pick(null); search('jonathon'); }
   else if (st === 'running') { // held in the running state for review; a real click moves on to completed
     q.value = 'priya'; pick('pn');
     sel.history.unshift({ action: 'Compile personal data', by: 'Sarah Mitchell', when: nowStr(), status: 'running' }); renderHistory();
     document.getElementById('chip-sar').innerHTML = S1.jobChip('running') + '<span class="text-xs text-slate-500 ml-1">Started ' + nowStr().split(', ')[1] + '</span>'; }
   else if (st === 'failed') { q.value = 'priya'; pick('pn'); runTracked('chip-port', 'Export machine-readable (CSV)', 'portability-priya-natarajan.zip', true); }
-  else if (st === 'erasure-refused') { q.value = 'hughes'; pick('dh'); showRefused(); }
+  else if (st === 'erasure-refused') { q.value = 'hughes'; pick('dh'); if (S1.mode() === 'full') showRefused(); }
 });
 document.addEventListener('s1:ready', function () {
   if (!sel && document.body.getAttribute('data-s1-state') === 'default') pick('pn');
@@ -515,7 +635,8 @@ document.addEventListener('s1:ready', function () {
   document.getElementById('q').addEventListener('input', function () { search(this.value); });
   document.getElementById('act-sar').onclick = function (e) { doSar(e.shiftKey); };
   document.getElementById('act-port').onclick = function (e) { doPort(e.shiftKey); };
-  document.getElementById('act-erase').onclick = doErase;
+  document.getElementById('act-erase').onclick = function () { doErase(); };
+  document.getElementById('search-retry').onclick = function () { S1.setState('default'); };
   document.getElementById('port-go').onclick = function () {
     var fmt = document.querySelector('input[name="fmt"]:checked').value;
     S1.closeModal('port-modal');

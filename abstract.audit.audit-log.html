@@ -26,7 +26,7 @@
         }
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden" data-s1-states="default export-failed">
+<body class="font-inter bg-slate-100 overflow-hidden" data-s1-states="default loading empty validation denied noexport large export-failed">
 
 <div id="app-root" class="flex w-full" style="height: 100vh;">
 
@@ -171,7 +171,7 @@
             </div>
             <div class="flex items-center gap-3">
                 <span id="export-job" class="hidden sm:inline-flex items-center" aria-live="polite"></span>
-                <button id="export-btn" type="button" title="Exports the filtered results as CSV. Prototype: Shift-click to see a failed export." aria-label="Export CSV" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg px-3 py-2 min-h-[36px] text-xs font-semibold whitespace-nowrap transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><i class="fa-solid fa-file-csv text-xs"></i><span class="hidden md:inline"> Export CSV</span></button>
+                <button id="export-btn" data-s1-hide="denied noexport" type="button" title="Exports the filtered results as CSV. Prototype: Shift-click to see a failed export." aria-label="Export CSV" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg px-3 py-2 min-h-[36px] text-xs font-semibold whitespace-nowrap transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><i class="fa-solid fa-file-csv text-xs"></i><span class="hidden md:inline"> Export CSV</span></button>
                 <div class="hidden sm:flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 w-48 xl:w-56">
                     <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs"></i>
                     <input type="text" placeholder="Search changes..." class="bg-transparent text-xs text-slate-700 placeholder-slate-400 outline-none w-full"/>
@@ -187,34 +187,67 @@
         <main class="flex-1 overflow-y-auto px-6 xl:px-8 py-6 bg-slate-100">
 
             <!-- Stat cards -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6" data-s1-hide="denied">
                 <div class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm">
                     <div class="flex items-start justify-between mb-3"><div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: rgba(29,78,216,0.1);"><i class="fa-solid fa-wave-square text-blue-600"></i></div></div>
-                    <p class="text-3xl font-bold text-slate-900 mb-1">1,284</p>
+                    <p id="stat-today" class="text-3xl font-bold text-slate-900 mb-1 tabular-nums">1,284</p>
                     <p class="text-sm text-slate-500 font-medium">Changes today</p>
                 </div>
             </div>
 
             <!-- Info banner -->
-            <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 mb-6 flex items-start gap-3">
+            <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 mb-6 flex items-start gap-3" data-s1-hide="denied">
                 <i class="fa-solid fa-shield-halved text-blue-500 mt-0.5"></i>
                 <p class="text-sm text-blue-800">Every change &mdash; create, update, delete, activate, deactivate, role change &mdash; is recorded with who made it, when, and the before/after values <span class="font-semibold">(XR-006, AB-007)</span>. Page views and downloads are not recorded.</p>
             </div>
 
             <!-- Filter bar -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-6 flex flex-wrap items-center gap-3">
+            <form id="al-filters" novalidate class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 mb-6 flex flex-wrap items-center gap-3" data-s1-hide="denied" aria-label="Filter the audit log">
                 <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 flex-1 min-w-[180px]">
                     <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs"></i>
-                    <input type="text" placeholder="Free-text search (entity ref, summary, IP)..." class="bg-transparent text-xs text-slate-700 placeholder-slate-400 outline-none w-full"/>
+                    <input type="text" placeholder="Search by entity reference or summary" aria-label="Search changes" class="bg-transparent text-xs text-slate-700 placeholder-slate-400 outline-none w-full"/>
                 </div>
-                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"><i class="fa-regular fa-user text-slate-400 text-xs"></i><select class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option>All users</option><option>Sarah Mitchell</option><option>James Okafor</option><option>Priya Shah</option><option>David Chen</option><option>Amara Okoye</option><option>System</option></select></div>
-                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"><i class="fa-solid fa-cube text-slate-400 text-xs"></i><select class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option>All entity types</option><option data-s2-later>vacancies</option><option data-s2-later>positions</option><option data-s2-later>bookings</option><option data-s2-later>candidates</option><option data-s2-later>candidate_licences</option><option data-s2-later>compliance_items</option><option>User</option><option>Role</option><option>Organisation</option><option>System setting</option><option>Shift pattern</option><option>Bank-holiday calendar</option><option>Notification template</option><option>Data subject request</option><option data-s1-later>Vacancy</option><option data-s1-later>Position</option><option data-s1-later>Booking</option><option data-s1-later>Proposal</option><option data-s1-later>Timesheet</option><option data-s1-later>Invoice</option><option data-s1-later>Self-Bill</option><option data-s1-later>Rate Card</option><option data-s1-later>Candidate</option></select></div>
-                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"><i class="fa-solid fa-bolt text-slate-400 text-xs"></i><select class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option>All actions</option><option>Created</option><option>Updated</option><option>Deleted</option><option>Removed</option><option>Restored</option><option>Activated</option><option>Deactivated</option><option>Role changed</option><option>Transferred</option></select></div>
-                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2" title="Date range"><i class="fa-regular fa-calendar text-slate-400 text-xs"></i><span class="text-xs font-medium text-slate-600">01 Sep 2026 &ndash; 26 Sep 2026</span><i class="fa-solid fa-chevron-down text-slate-400 text-xs"></i></div>
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"><i class="fa-regular fa-user text-slate-400 text-xs" aria-hidden="true"></i><select aria-label="User" class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option>All users</option><option>Sarah Mitchell</option><option>James Okafor</option><option>Priya Shah</option><option>David Chen</option><option>Amara Okoye</option><option>System</option></select></div>
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"><i class="fa-solid fa-cube text-slate-400 text-xs" aria-hidden="true"></i><select aria-label="Entity type" class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option>All entity types</option><option>User</option><option>Role</option><option>Organisation</option><option>System setting</option><option>Shift pattern</option><option>Bank-holiday calendar</option><option>Notification template</option><option>Data subject request</option><option data-s1-later>Organisation-structure node</option><option data-s1-later>Structure change request</option><option data-s1-later>Approved-supplier link</option><option data-s1-later>Job role</option><option data-s1-later>Rate card</option><option data-s1-later>Rate version</option><option data-s1-later>Organisation configuration setting</option><option data-s1-later>Shift</option><option data-s2-later>Vacancy</option><option data-s2-later>Position</option><option data-s2-later>Booking</option><option data-s2-later>Candidate</option><option data-s2-later>Candidate licence</option><option data-s2-later>Compliance item</option><option data-s4-later>Proposal</option><option data-s3-later>Timesheet</option><option data-s4-later>Invoice</option><option data-s4-later>Self-Bill</option></select></div>
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2"><i class="fa-solid fa-bolt text-slate-400 text-xs" aria-hidden="true"></i><select aria-label="Action" class="bg-transparent text-xs font-medium text-slate-600 outline-none"><option>All actions</option><option>Created</option><option>Updated</option><option>Deleted</option><option>Removed</option><option>Restored</option><option>Activated</option><option>Deactivated</option><option>Role changed</option><option>Transferred</option></select></div>
+                <div id="al-dates" class="flex flex-wrap items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5" role="group" aria-label="Date range"><i class="fa-regular fa-calendar text-slate-500 text-xs" aria-hidden="true"></i><label for="al-from" class="text-xs font-semibold text-slate-600">From</label><input id="al-from" type="date" aria-describedby="al-date-msg" class="bg-transparent text-xs font-medium text-slate-700 outline-none tabular-nums rounded focus-visible:ring-2 focus-visible:ring-blue-600"/><label for="al-to" class="text-xs font-semibold text-slate-600">to</label><input id="al-to" type="date" aria-describedby="al-date-msg" class="bg-transparent text-xs font-medium text-slate-700 outline-none tabular-nums rounded focus-visible:ring-2 focus-visible:ring-blue-600"/></div>
+                <button type="button" id="al-clear" class="text-xs font-semibold text-blue-700 hover:text-blue-800 hover:underline rounded px-1 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">Clear filters</button>
+                <!-- R-55: with no dates set the table shows the last 30 days; the window is at most 366 days -->
+                <p id="al-date-msg" class="w-full text-xs text-slate-500" role="status">No dates set: showing the last 30 days, <span class="tabular-nums">27 Aug 2026 – 26 Sep 2026</span>.</p>
+            </form>
+
+            <!-- STATE: loading -->
+            <div data-s1-show="loading" style="display:none" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" aria-busy="true" aria-label="Loading the audit log">
+                <div class="divide-y divide-slate-100">
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-28 rounded bg-slate-200 animate-pulse"></div><div class="h-4 w-32 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div></div>
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-28 rounded bg-slate-200 animate-pulse"></div><div class="h-4 w-32 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div></div>
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-28 rounded bg-slate-200 animate-pulse"></div><div class="h-4 w-32 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div></div>
+                    <div class="flex items-center gap-4 px-5 py-4"><div class="h-4 w-28 rounded bg-slate-200 animate-pulse"></div><div class="h-4 w-32 rounded bg-slate-200 animate-pulse"></div><div class="h-6 w-20 rounded-full bg-slate-200 animate-pulse"></div><div class="h-4 flex-1 rounded bg-slate-200 animate-pulse"></div></div>
+                </div>
+                <p class="sr-only">Loading…</p>
             </div>
 
+            <!-- STATE: empty (filtered) -->
+            <div id="al-empty" data-s1-show="empty" style="display:none" class="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-14 text-center">
+                <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 mx-auto flex items-center justify-center mb-4"><i class="fa-solid fa-magnifying-glass text-xl" aria-hidden="true"></i></div>
+                <h2 class="text-base font-bold text-slate-900">No changes match these filters</h2>
+                <p class="text-sm text-slate-600 mt-1 max-w-md mx-auto">Widen the date range or clear a filter to see more of the trail.</p>
+                <button type="button" onclick="document.getElementById('al-clear').click()" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 mt-5"><i class="fa-solid fa-xmark text-xs" aria-hidden="true"></i> Clear filters</button>
+            </div>
+
+            <!-- STATE: permission denied (403 inside the portal frame; absent without audit_log:view) -->
+            <section data-s1-show="denied" style="display:none" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto mt-4" aria-labelledby="al-denied-t">
+                <div class="w-14 h-14 rounded-full bg-slate-100 text-slate-500 mx-auto flex items-center justify-center mb-4"><i class="fa-solid fa-lock text-xl" aria-hidden="true"></i></div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-slate-500">Error 403 · No permission</p>
+                <h2 id="al-denied-t" class="text-xl font-bold text-slate-900 mt-1">You don't have access to this page.</h2>
+                <p class="text-sm text-slate-600 mt-2 leading-relaxed">Ask your administrator if you need it.</p>
+                <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
+                    <a href="abstract.shell.dashboard.html" data-s1-home class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-house text-xs" aria-hidden="true"></i> Back to dashboard</a>
+                </div>
+            </section>
+
             <!-- Main table -->
-            <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div id="al-table" class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" data-s1-hide="loading empty denied">
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm min-w-[1000px]">
                         <thead>
@@ -224,7 +257,8 @@
                                 <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Action</th>
                                 <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Entity</th>
                                 <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Summary</th>
-                                <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">IP Address</th>
+                                <!-- IP address: not in the contract (slice 1 TSD §3.1.7 columns), so full product only -->
+                                <th data-s4-later class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">IP Address</th>
                                 <th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider"></th>
                             </tr>
                         </thead>
@@ -236,7 +270,7 @@
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
                                 <td class="px-4 py-3"><span class="text-slate-500 text-xs block">vacancies</span><span class="font-semibold text-slate-800">VAC-1042</span></td>
                                 <td class="px-4 py-3 text-slate-600">Position count changed 3 → 4</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
                                 <td class="px-4 py-3 text-right"><button type="button" data-diff="s3a" aria-expanded="false" aria-controls="s3a" class="text-xs font-semibold text-blue-600 hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">View</button></td>
                             </tr>
                             <tr id="s3a" class="bg-slate-50/60 hidden" data-s2-later>
@@ -248,7 +282,7 @@
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
                                 <td class="px-4 py-3"><span class="text-slate-500 text-xs block">bookings</span><span class="font-semibold text-slate-800">BK-2207</span></td>
                                 <td class="px-4 py-3 text-slate-600">Booking cancelled: the worker accepted a permanent role elsewhere</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
                                 <td class="px-4 py-3 text-right"><button type="button" data-diff="s3b" aria-expanded="false" aria-controls="s3b" class="text-xs font-semibold text-blue-600 hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">View</button></td>
                             </tr>
                             <tr id="s3b" class="bg-slate-50/60 hidden" data-s2-later>
@@ -258,15 +292,15 @@
                                 <td class="px-5 py-3 text-slate-500 whitespace-nowrap">26 Sep 10:14:52</td>
                                 <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[10px] font-bold">SM</div><div><p class="text-slate-800 font-medium leading-tight">Sarah Mitchell</p><p class="text-xs text-slate-400 leading-tight">Abstract</p></div></div></td>
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
-                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">System setting</span><span class="font-semibold text-slate-800">security.idle_timeout_minutes</span></td>
-                                <td class="px-4 py-3 text-slate-600">Scheduled a change to Idle timeout from 01 Nov 2026</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">System setting</span><span class="font-semibold text-slate-800">security.session_idle_timeout_minutes</span></td>
+                                <td class="px-4 py-3 text-slate-600">Scheduled a change to Sign out after idle (minutes) from 01 Nov 2026</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
                                 <td class="px-4 py-3 text-right"><button type="button" data-diff="d1" aria-expanded="true" aria-controls="d1" class="text-xs font-semibold text-blue-600 hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><i class="fa-solid fa-code-compare mr-1"></i>Diff</button></td>
                             </tr>
                             <tr id="d1" class="bg-slate-50/60">
                                 <td colspan="7" class="px-5 py-3">
                                     <div class="rounded-xl border border-slate-200 bg-white p-4">
-                                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Before / After &middot; security.idle_timeout_minutes</p>
+                                        <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Before / After &middot; security.session_idle_timeout_minutes</p>
                                         <div class="grid grid-cols-2 gap-4 text-sm"><div><p class="text-xs text-slate-400 mb-1">value</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">30</p></div><div><p class="text-xs text-slate-400 mb-1">&nbsp;</p><p class="text-emerald-600 bg-emerald-50 rounded px-2 py-1 inline-block">20</p></div><div><p class="text-xs text-slate-400 mb-1">effective_from</p><p class="line-through text-red-600 bg-red-50 rounded px-2 py-1 inline-block">01 Jul 2026</p></div><div><p class="text-xs text-slate-400 mb-1">&nbsp;</p><p class="text-emerald-600 bg-emerald-50 rounded px-2 py-1 inline-block">01 Nov 2026</p></div></div>
                                     </div>
                                 </td>
@@ -277,7 +311,7 @@
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-blue-50 text-blue-700 border border-blue-200">Role changed</span></td>
                                 <td class="px-4 py-3"><span class="text-slate-500 text-xs block">User</span><span class="font-semibold text-slate-800">Tom Brennan</span></td>
                                 <td class="px-4 py-3 text-slate-600">Set roles while administering TechForce Recruitment</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.31</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.31</td>
                                 <td class="px-4 py-3 text-right"><button type="button" data-diff="d2" aria-expanded="false" aria-controls="d2" class="text-xs font-semibold text-blue-600 hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><i class="fa-solid fa-code-compare mr-1"></i>Diff</button></td>
                             </tr>
                             <tr id="d2" class="bg-slate-50/60 hidden">
@@ -294,7 +328,7 @@
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-blue-50 text-blue-700 border border-blue-200">Created</span></td>
                                 <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Data subject request</span><span class="font-semibold text-slate-800">Priya Natarajan</span></td>
                                 <td class="px-4 py-3 text-slate-600">Compiled personal data (subject access request)</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.31</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.31</td>
                                 <td class="px-4 py-3 text-right"></td>
                             </tr>
                             <tr class="hover:bg-slate-50/60">
@@ -303,7 +337,7 @@
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
                                 <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Role</span><span class="font-semibold text-slate-800">Client administrator &middot; Acme Logistics</span></td>
                                 <td class="px-4 py-3 text-slate-600">Changed 2 permissions while administering Acme Logistics</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
                                 <td class="px-4 py-3 text-right"><button type="button" data-diff="d3" aria-expanded="false" aria-controls="d3" class="text-xs font-semibold text-blue-600 hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><i class="fa-solid fa-code-compare mr-1"></i>Diff</button></td>
                             </tr>
                             <tr id="d3" class="bg-slate-50/60 hidden">
@@ -320,7 +354,7 @@
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-blue-50 text-blue-700 border border-blue-200">Created</span></td>
                                 <td class="px-4 py-3"><span class="text-slate-500 text-xs block">User</span><span class="font-semibold text-slate-800">Aisha Rahman</span></td>
                                 <td class="px-4 py-3 text-slate-600">Invited aisha.rahman@nexustalent.example to Nexus Talent</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.19</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.19</td>
                                 <td class="px-4 py-3 text-right"></td>
                             </tr>
                             <tr class="hover:bg-slate-50/60">
@@ -329,7 +363,7 @@
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-slate-100 text-slate-700 border border-slate-200">Deactivated</span></td>
                                 <td class="px-4 py-3"><span class="text-slate-500 text-xs block">User</span><span class="font-semibold text-slate-800">Daniel Hughes</span></td>
                                 <td class="px-4 py-3 text-slate-600">Deactivated a Northgate Foods user</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
                                 <td class="px-4 py-3 text-right"><button type="button" data-diff="d4" aria-expanded="false" aria-controls="d4" class="text-xs font-semibold text-blue-600 hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><i class="fa-solid fa-code-compare mr-1"></i>Diff</button></td>
                             </tr>
                             <tr id="d4" class="bg-slate-50/60 hidden">
@@ -346,7 +380,7 @@
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
                                 <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Notification template</span><span class="font-semibold text-slate-800">user.activation</span></td>
                                 <td class="px-4 py-3 text-slate-600">Saved version 2 of Account activation</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
                                 <td class="px-4 py-3 text-right"></td>
                             </tr>
                             <tr class="hover:bg-slate-50/60">
@@ -355,27 +389,27 @@
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-emerald-50 text-emerald-700 border border-emerald-200">Activated</span></td>
                                 <td class="px-4 py-3"><span class="text-slate-500 text-xs block">User</span><span class="font-semibold text-slate-800">Tom Brennan</span></td>
                                 <td class="px-4 py-3 text-slate-600">Activated their account by setting a password</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">81.2.69.160</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">81.2.69.160</td>
                                 <td class="px-4 py-3 text-right"></td>
                             </tr>
                             <!-- Row: Release (Create) -->
-                            <tr class="hover:bg-slate-50/60" data-s1-later>
+                            <tr class="hover:bg-slate-50/60" data-s4-later>
                                 <td class="px-5 py-3 text-slate-500 whitespace-nowrap">10 Jul 14:32:07</td>
                                 <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center text-[10px] font-bold text-blue-600">SM</div><div><p class="text-slate-800 font-medium leading-tight">Sarah Mitchell</p><p class="text-xs text-slate-400 leading-tight">Abstract</p></div></div></td>
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">Created</span></td>
                                 <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Vacancy</span><span class="font-semibold text-slate-800">VAC-1043</span></td>
                                 <td class="px-4 py-3 text-slate-600">Released vacancy VAC-1043 to 2 agencies (Wave 1)</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.8</td>
                                 <td class="px-4 py-3"></td>
                             </tr>
                             <!-- Row: Fill Position (Update) - expandable -->
-                            <tr class="hover:bg-slate-50/60" data-s1-later>
+                            <tr class="hover:bg-slate-50/60" data-s4-later>
                                 <td class="px-5 py-3 text-slate-500 whitespace-nowrap">10 Jul 13:58:41</td>
                                 <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-purple-100 flex items-center justify-center text-[10px] font-bold text-purple-600">DC</div><div><p class="text-slate-800 font-medium leading-tight">David Chen</p><p class="text-xs text-slate-400 leading-tight">Operations</p></div></div></td>
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
                                 <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Position</span><span class="font-semibold text-slate-800">POS-2211</span></td>
                                 <td class="px-4 py-3 text-slate-600">Filled position 1 of 3 from worker pool</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.31</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.31</td>
                                 <td class="px-4 py-3 text-right"><button class="text-xs font-semibold text-blue-600 hover:text-blue-700"><i class="fa-solid fa-code-compare mr-1"></i>Diff</button></td>
                             </tr>
                             <tr class="bg-slate-50/60" data-s1-later>
@@ -394,13 +428,13 @@
                                 </td>
                             </tr>
                             <!-- Row: Post-AWR rate (Update) - expandable -->
-                            <tr class="hover:bg-slate-50/60" data-s1-later>
+                            <tr class="hover:bg-slate-50/60" data-s4-later>
                                 <td class="px-5 py-3 text-slate-500 whitespace-nowrap">10 Jul 12:10:55</td>
                                 <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-[10px] font-bold text-emerald-600">AO</div><div><p class="text-slate-800 font-medium leading-tight">Amara Okoye</p><p class="text-xs text-slate-400 leading-tight">Finance</p></div></div></td>
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
                                 <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Booking</span><span class="font-semibold text-slate-800">BK-0912</span></td>
                                 <td class="px-4 py-3 text-slate-600">Applied Post-AWR rate to J. Kowalski</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.19</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.19</td>
                                 <td class="px-4 py-3 text-right"><button class="text-xs font-semibold text-blue-600 hover:text-blue-700"><i class="fa-solid fa-code-compare mr-1"></i>Diff</button></td>
                             </tr>
                             <tr class="bg-slate-50/60" data-s1-later>
@@ -421,26 +455,26 @@
                                 <td class="px-5 py-3 text-slate-500 whitespace-nowrap">10 Jul 09:20:02</td>
                                 <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-[10px] font-bold text-emerald-600">AO</div><div><p class="text-slate-800 font-medium leading-tight">Amara Okoye</p><p class="text-xs text-slate-400 leading-tight">Finance</p></div></div></td>
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">Updated</span></td>
-                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Rate Card</span><span class="font-semibold text-slate-800">RC-Warehouse-Op</span></td>
+                                <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Rate card</span><span class="font-semibold text-slate-800">RC-Warehouse-Op</span></td>
                                 <td class="px-4 py-3 text-slate-600">Scheduled future-dated rate change (eff. 01 Aug 2026)</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.19</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">10.14.22.19</td>
                                 <td class="px-4 py-3"></td>
                             </tr>
                                                         <!-- Row: Invoice generated (System) -->
-                            <tr class="hover:bg-slate-50/60" data-s1-later>
+                            <tr class="hover:bg-slate-50/60" data-s4-later>
                                 <td class="px-5 py-3 text-slate-500 whitespace-nowrap">10 Jul 06:00:11</td>
                                 <td class="px-4 py-3"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center"><i class="fa-solid fa-robot text-slate-400 text-[10px]"></i></div><div><p class="text-slate-800 font-medium leading-tight">System</p><p class="text-xs text-slate-400 leading-tight">Scheduler</p></div></div></td>
                                 <td class="px-4 py-3"><span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">Created</span></td>
                                 <td class="px-4 py-3"><span class="text-slate-500 text-xs block">Invoice</span><span class="font-semibold text-slate-800">INV-2026-0891</span></td>
                                 <td class="px-4 py-3 text-slate-600">Generated client invoice for Week 27 &middot; Coventry DC</td>
-                                <td class="px-4 py-3 text-slate-400 font-mono text-xs">127.0.0.1</td>
+                                <td data-s4-later class="px-4 py-3 text-slate-400 font-mono text-xs">127.0.0.1</td>
                                 <td class="px-4 py-3"></td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="px-5 py-3 border-t border-slate-100 flex items-center justify-between">
-                    <span class="text-xs text-slate-500">Showing 1&ndash;10 of 1,284 changes</span>
+                    <span id="al-count" class="text-xs text-slate-500 tabular-nums">Showing 1&ndash;10 of 1,284 changes</span>
                     <div class="flex items-center gap-1">
                         <button class="w-8 h-8 rounded-lg border border-slate-200 text-slate-400 hover:bg-slate-50"><i class="fa-solid fa-chevron-left text-xs"></i></button>
                         <button class="w-8 h-8 rounded-lg bg-blue-600 text-white text-xs font-semibold">1</button>
@@ -558,8 +592,55 @@ function runAuditExport(fail) {
   S1.runJob(chip, { label: 'audit-log export', file: 'audit-log-2026-09-01-to-2026-09-26.csv', doneTitle: 'Your audit-log export is ready',
     doneBody: 'audit-log-2026-09-01-to-2026-09-26.csv — 1,284 rows. The download link lasts 7 days.', fail: !!fail });
 }
-document.getElementById('export-btn').addEventListener('click', function (e) { runAuditExport(e.shiftKey); });
-document.addEventListener('s1:state', function (e) { if (e.detail.state === 'export-failed') runAuditExport(true); });
+document.getElementById('export-btn').addEventListener('click', function (e) {
+  if (!dateOk()) { S1.toast('Fix the date range before exporting.', 'error'); document.getElementById('al-from').focus(); return; }
+  /* large: an export over 1,000,000 rows is refused with the reason (TSD 1 §5.10 UI states *Audit Log*) */
+  if (document.body.getAttribute('data-s1-state') === 'large') {
+    S1.confirm({ tone: 'warning', icon: 'fa-file-circle-xmark', title: 'This export is too big', body: 'These filters match more than 1,000,000 changes, and an export is limited to 1,000,000 rows. Narrow the date range or add a filter, then export again. Nothing was exported.', cancel: 'Close' });
+    return;
+  }
+  runAuditExport(e.shiftKey);
+});
+/* Date range (R-55): no dates means the last 30 days ending now; "to" before "from" and a range over 366 days are refused */
+var AL_TODAY = new Date(2026, 8, 26), AL_MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function alFmt(x) { return ('0' + x.getDate()).slice(-2) + ' ' + AL_MON[x.getMonth()] + ' ' + x.getFullYear(); }
+function alParse(v) { if (!v) return null; var p = v.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+function dateOk() {
+  var f = alParse(document.getElementById('al-from').value), t = alParse(document.getElementById('al-to').value), msg = document.getElementById('al-date-msg'), box = document.getElementById('al-dates'), err = null;
+  var to = t || AL_TODAY, from = f || new Date(to.getTime() - 30 * 864e5);
+  if (f && t && t < f) err = 'The "to" date is before the "from" date. Choose a "to" date on or after ' + alFmt(f) + '.';
+  else if ((to - from) / 864e5 > 366) err = 'Choose a range of 366 days or less. This one is ' + Math.round((to - from) / 864e5) + ' days.';
+  box.classList.toggle('border-red-500', !!err); box.classList.toggle('border-slate-200', !err);
+  ['al-from', 'al-to'].forEach(function (id) { var i = document.getElementById(id); if (err) i.setAttribute('aria-invalid', 'true'); else i.removeAttribute('aria-invalid'); });
+  msg.className = err ? 'w-full text-xs font-medium text-red-600' : 'w-full text-xs text-slate-500';
+  msg.innerHTML = err ? '<i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i>' + err
+    : (!f && !t ? 'No dates set: showing the last 30 days, <span class="tabular-nums">' + alFmt(from) + ' – ' + alFmt(to) + '</span>.' : 'Showing <span class="tabular-nums">' + alFmt(from) + ' – ' + alFmt(to) + '</span>.');
+  var tb = document.getElementById('al-table'), hiddenByState = ['loading', 'empty', 'denied'].indexOf(document.body.getAttribute('data-s1-state')) >= 0;
+  if (err || hiddenByState) tb.style.setProperty('display', 'none', 'important'); else tb.style.removeProperty('display');
+  return !err;
+}
+['al-from', 'al-to'].forEach(function (id) { document.getElementById(id).addEventListener('change', dateOk); });
+document.getElementById('al-clear').addEventListener('click', function () {
+  document.getElementById('al-filters').reset(); dateOk();
+  var st = document.body.getAttribute('data-s1-state'); if (st === 'empty' || st === 'validation') S1.setState('default');
+});
+function alCount(large) {
+  document.getElementById('al-count').textContent = large ? 'Showing 1–10 of 100,000+ changes' : 'Showing 1–10 of 1,284 changes';
+  document.getElementById('stat-today').textContent = large ? '100,000+' : '1,284';
+}
+document.addEventListener('s1:state', function (e) {
+  var st = e.detail.state;
+  if (st === 'export-failed') runAuditExport(true);
+  alCount(st === 'large');
+  if (st === 'validation') { document.getElementById('al-from').value = '2026-09-20'; document.getElementById('al-to').value = '2026-09-01'; }
+  else if (st === 'empty') { document.getElementById('al-from').value = '2026-01-01'; document.getElementById('al-to').value = '2026-01-07'; }
+  else if (st === 'default') { document.getElementById('al-filters').reset(); }
+  dateOk();
+});
+document.addEventListener('s1:ready', function () {
+  var sw = document.querySelector('.s1-sw [data-state="noexport"]'); if (sw) sw.textContent = 'Without the export key';
+  var sw2 = document.querySelector('.s1-sw [data-state="export-failed"]'); if (sw2) sw2.textContent = 'Export failed';
+});
 </script>
 
 <script>

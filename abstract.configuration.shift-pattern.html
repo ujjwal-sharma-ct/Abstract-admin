@@ -203,6 +203,7 @@
                                 <p class="text-sm text-slate-600 mt-1">A named working week. Vacancies and bookings reference it instead of re-entering hours.</p>
                             </div>
                             <div class="flex gap-2 flex-shrink-0">
+                                <button type="button" id="btn-rename" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-pen text-xs" aria-hidden="true"></i> Rename</button>
                                 <button type="button" id="btn-deactivate" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-red-200 text-red-700 text-sm font-semibold hover:bg-red-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-ban text-xs" aria-hidden="true"></i> Deactivate</button>
                                 <button type="button" id="btn-reactivate" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 hidden"><i class="fa-solid fa-rotate-left text-xs" aria-hidden="true"></i> Reactivate</button>
                             </div>
@@ -213,8 +214,9 @@
                                 <dd id="p-days" class="mt-2 flex gap-1"></dd>
                             </div>
                             <div class="rounded-xl bg-slate-50 border border-slate-200 p-4">
-                                <dt class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Hours per working day</dt>
-                                <dd id="p-hours" class="mt-2 text-2xl font-extrabold tracking-tight text-slate-900 tabular-nums">7.50</dd>
+                                <dt class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Shift times · hours a week</dt>
+                                <dd id="p-hours" class="mt-2 text-2xl font-extrabold tracking-tight text-slate-900 tabular-nums">37.50</dd>
+                                <dd id="p-times" class="mt-2 flex flex-col gap-1 text-xs text-slate-600"></dd>
                             </div>
                             <div class="rounded-xl bg-slate-50 border border-slate-200 p-4">
                                 <dt class="text-xs font-semibold text-slate-500 uppercase tracking-wider">In force</dt>
@@ -250,15 +252,16 @@
                                 <p id="f-days-hint" class="text-xs text-slate-500 mt-1.5">Choose at least one working day.</p>
                                 <p id="f-days-err" class="hidden text-xs font-medium text-red-600 mt-1.5"><i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i><span></span></p>
                             </fieldset>
-                            <div>
-                                <label for="f-hours" class="block text-xs font-semibold text-slate-700 mb-1.5">Hours per working day</label>
-                                <div class="flex items-center gap-2">
-                                    <input id="f-hours" type="text" inputmode="decimal" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-600/20 max-w-[140px] text-right tabular-nums" aria-describedby="f-hours-hint f-hours-err"/>
-                                    <span class="text-sm text-slate-500">hours</span>
-                                </div>
-                                <p id="f-hours-hint" class="text-xs text-slate-500 mt-1.5">Quarter-hour steps between 0.25 and 24.00, for example 7.50.</p>
-                                <p id="f-hours-err" class="hidden text-xs font-medium text-red-600 mt-1.5"><i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i><span></span></p>
-                            </div>
+                            <!-- Per-day windows (TSD 1 §3.3 ShiftPatternDay, R-53): hours are derived from the times, never typed;
+                                 an end before the start ends next day and counts on its start weekday; no break field (R-59) -->
+                            <fieldset id="f-times" aria-describedby="f-times-hint f-times-err">
+                                <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5"><legend class="block text-xs font-semibold text-slate-700">Times for each working day</legend><button type="button" id="f-apply-all" class="hidden text-xs font-semibold text-blue-700 hover:text-blue-800 hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600">Apply to all days</button></div>
+                                <ul id="f-time-rows" class="flex flex-col gap-2"></ul>
+                                <p id="f-times-none" class="text-sm text-slate-500">Choose the working days above to set their times.</p>
+                                <p id="f-times-hint" class="text-xs text-slate-500 mt-1.5">Quarter hours, on the 24-hour clock; the end differs from the start. An end before the start ends the next day.</p>
+                                <p id="f-times-total" class="text-sm font-semibold text-slate-900 mt-2 tabular-nums"></p>
+                                <p id="f-times-err" class="hidden text-xs font-medium text-red-600 mt-1.5"><i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i><span></span></p>
+                            </fieldset>
                             <div>
                                 <label for="f-date" class="block text-xs font-semibold text-slate-700 mb-1.5">Effective from</label>
                                 <div class="relative max-w-[220px]">
@@ -285,7 +288,7 @@
                             <table class="w-full text-sm">
                                 <thead class="bg-slate-50"><tr class="text-left">
                                     <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider pl-5">Effective from</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Effective to</th>
-                                    <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Working days</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Hours/day</th>
+                                    <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Working days</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Times</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Hours/week</th>
                                     <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Created by</th><th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider pr-5">Status</th>
                                 </tr></thead>
                                 <tbody id="hist-body" class="divide-y divide-slate-100"></tbody>
@@ -381,12 +384,23 @@ function fmt(x) { return ('0' + x.getDate()).slice(-2) + ' ' + MON[x.getMonth()]
 function numd(x) { return ('0' + x.getDate()).slice(-2) + '/' + ('0' + (x.getMonth() + 1)).slice(-2) + '/' + x.getFullYear(); }
 var P = {
   'mon-fri-days': { name: 'Mon–Fri Days', status: 'Active', versions: [
-      { from: '2026-10-01', days: [0,1,2,3,4], hours: 7.5, by: 'Sarah Mitchell', at: '18 Sep 2026' },
-      { from: '2026-04-01', days: [0,1,2,3,4], hours: 8, by: 'Priya Shah', at: '20 Mar 2026' } ] },
-  'mon-fri-lates': { name: 'Mon–Fri Lates', status: 'Active', versions: [ { from: '2026-04-01', days: [0,1,2,3,4], hours: 8, by: 'Priya Shah', at: '20 Mar 2026' } ] },
-  'nights-mon-thu': { name: 'Nights Mon–Thu', status: 'Active', versions: [ { from: '2026-04-01', days: [0,1,2,3], hours: 10, by: 'James Okafor', at: '24 Mar 2026' } ] },
-  'weekend-cover': { name: 'Weekend Cover', status: 'Inactive', versions: [ { from: '2026-06-12', days: [5,6], hours: 12, by: 'James Okafor', at: '5 Jun 2026' } ] }
+      { from: '2026-10-01', days: [0,1,2,3,4], win: wk([0,1,2,3,4], '08:00', '15:30'), by: 'Sarah Mitchell', at: '18 Sep 2026' },
+      { from: '2026-04-01', days: [0,1,2,3,4], win: wk([0,1,2,3,4], '08:00', '16:00'), by: 'Priya Shah', at: '20 Mar 2026' } ] },
+  'mon-fri-lates': { name: 'Mon–Fri Lates', status: 'Active', versions: [ { from: '2026-04-01', days: [0,1,2,3,4], win: wk([0,1,2,3,4], '14:00', '22:00'), by: 'Priya Shah', at: '20 Mar 2026' } ] },
+  'nights-mon-thu': { name: 'Nights Mon–Thu', status: 'Active', versions: [ { from: '2026-04-01', days: [0,1,2,3], win: wk([0,1,2,3], '20:00', '06:00'), by: 'James Okafor', at: '24 Mar 2026' } ] },
+  'weekend-cover': { name: 'Weekend Cover', status: 'Inactive', versions: [ { from: '2026-06-12', days: [5,6], win: wk([5,6], '07:00', '19:00'), by: 'James Okafor', at: '5 Jun 2026' } ] }
 };
+function wk(days, a, b) { var o = {}; days.forEach(function (i) { o[i] = [a, b]; }); return o; }
+function mins(t) { var m = /^(\d{2}):(\d{2})$/.exec(t || ''); return m ? +m[1] * 60 + +m[2] : null; }
+function dur(w) { return ((mins(w[1]) - mins(w[0]) + 1440) % 1440) / 60; }
+function nextDay(w) { return mins(w[1]) < mins(w[0]); }
+function weekHours(v) { return v.days.reduce(function (n, i) { return n + dur(v.win[i]); }, 0); }
+var NEXT_DAY = '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold whitespace-nowrap bg-indigo-50 text-indigo-700 border border-indigo-200"><i class="fa-solid fa-moon text-[9px]" aria-hidden="true"></i>ends next day</span>';
+function winTxt(w) { return '<span class="tabular-nums">' + w[0] + '–' + w[1] + '</span>' + (nextDay(w) ? ' ' + NEXT_DAY : ''); }
+function winSummary(v) {
+  var f = v.win[v.days[0]], same = v.days.every(function (i) { return v.win[i][0] === f[0] && v.win[i][1] === f[1]; });
+  return same ? winTxt(f) : '<span class="text-slate-600">Times vary by day</span>';
+}
 var q = new URLSearchParams(location.search);
 var create = q.get('mode') === 'create';
 var id = q.get('id') || 'mon-fri-days';
@@ -418,9 +432,10 @@ function render() {
   document.title = R.name + ' — shift pattern · Abstract VMS';
   document.getElementById('p-status').innerHTML = statusBadge(R.status);
   document.getElementById('p-days').innerHTML = slots(c.days);
-  document.getElementById('p-hours').textContent = c.hours.toFixed(2);
+  document.getElementById('p-hours').textContent = weekHours(c).toFixed(2);
+  document.getElementById('p-times').innerHTML = c.days.map(function (i) { return '<span class="flex flex-wrap items-center gap-x-1.5 gap-y-0.5"><span class="font-semibold text-slate-700 w-8">' + DN[i].slice(0, 3) + '</span>' + winTxt(c.win[i]) + '<span class="text-slate-500 tabular-nums">· ' + dur(c.win[i]).toFixed(2) + ' h</span></span>'; }).join('');
   document.getElementById('p-from').textContent = 'From ' + fmt(d(c.from));
-  document.getElementById('p-future').innerHTML = f ? '<span title="Changes: ' + (f.hours !== c.hours ? 'hours ' + c.hours.toFixed(2) + ' → ' + f.hours.toFixed(2) : 'working days') + '" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-clock text-[10px]" aria-hidden="true"></i>New version from ' + fmt(d(f.from)) + '</span>' : '';
+  document.getElementById('p-future').innerHTML = f ? '<span title="Changes: ' + (weekHours(f) !== weekHours(c) ? 'hours a week ' + weekHours(c).toFixed(2) + ' → ' + weekHours(f).toFixed(2) : 'times or working days') + '" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-clock text-[10px]" aria-hidden="true"></i>New version from ' + fmt(d(f.from)) + '</span>' : '';
   var inactive = R.status === 'Inactive';
   document.getElementById('btn-deactivate').classList.toggle('hidden', inactive);
   document.getElementById('btn-reactivate').classList.toggle('hidden', !inactive);
@@ -431,8 +446,8 @@ function render() {
     var st = v === c ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-check text-[10px]" aria-hidden="true"></i>In force</span>'
       : v.from > iso(TODAY) ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-clock text-[10px]" aria-hidden="true"></i>Future</span>'
       : '<span class="text-slate-400" aria-hidden="true">—</span><span class="sr-only">Earlier version</span>';
-    body += '<tr><td class="px-4 pl-5 py-3 whitespace-nowrap text-slate-800">' + fmt(d(v.from)) + '</td><td class="px-4 py-3 whitespace-nowrap text-slate-500">' + (to ? fmt(to) : '—') + '</td><td class="px-4 py-3"><div class="flex gap-1">' + slots(v.days) + '</div></td><td class="px-4 py-3 text-right font-semibold tabular-nums">' + v.hours.toFixed(2) + '</td><td class="px-4 py-3 text-slate-600 whitespace-nowrap">' + S1.esc(v.by) + '<span class="block text-xs text-slate-400">' + v.at + '</span></td><td class="px-4 pr-5 py-3">' + st + '</td></tr>';
-    cards += '<li class="px-5 py-4"><div class="flex items-center justify-between gap-2"><span class="text-sm font-semibold text-slate-800">' + fmt(d(v.from)) + ' – ' + (to ? fmt(to) : 'onwards') + '</span>' + st + '</div><div class="flex gap-1 mt-2">' + slots(v.days) + '</div><p class="text-xs text-slate-500 mt-2">' + v.hours.toFixed(2) + ' hours/day · ' + S1.esc(v.by) + ', ' + v.at + '</p></li>';
+    body += '<tr><td class="px-4 pl-5 py-3 whitespace-nowrap text-slate-800">' + fmt(d(v.from)) + '</td><td class="px-4 py-3 whitespace-nowrap text-slate-500">' + (to ? fmt(to) : '—') + '</td><td class="px-4 py-3"><div class="flex gap-1">' + slots(v.days) + '</div></td><td class="px-4 py-3 text-slate-700 whitespace-nowrap">' + winSummary(v) + '</td><td class="px-4 py-3 text-right font-semibold tabular-nums">' + weekHours(v).toFixed(2) + '</td><td class="px-4 py-3 text-slate-600 whitespace-nowrap">' + S1.esc(v.by) + '<span class="block text-xs text-slate-400">' + v.at + '</span></td><td class="px-4 pr-5 py-3">' + st + '</td></tr>';
+    cards += '<li class="px-5 py-4"><div class="flex items-center justify-between gap-2"><span class="text-sm font-semibold text-slate-800">' + fmt(d(v.from)) + ' – ' + (to ? fmt(to) : 'onwards') + '</span>' + st + '</div><div class="flex gap-1 mt-2">' + slots(v.days) + '</div><p class="text-xs text-slate-700 mt-2">' + winSummary(v) + '</p><p class="text-xs text-slate-500 mt-1">' + weekHours(v).toFixed(2) + ' hours a week · ' + S1.esc(v.by) + ', ' + v.at + '</p></li>';
   });
   document.getElementById('hist-body').innerHTML = body;
   document.getElementById('hist-cards').innerHTML = cards;
@@ -442,12 +457,13 @@ function fill() {
   var c = create ? null : (future() || current());
   document.getElementById('f-name').value = c ? R.name : '';
   document.querySelectorAll('#f-days input').forEach(function (x) { x.checked = c ? c.days.indexOf(+x.value) >= 0 : false; });
-  document.getElementById('f-hours').value = c ? c.hours.toFixed(2) : '';
+  TIMES = {}; if (c) c.days.forEach(function (i) { TIMES[i] = c.win[i].slice(); });
+  renderTimes();
   document.getElementById('f-date').value = '';
   var b = boundary();
   document.getElementById('f-date-hint').textContent = create ? 'Today (' + numd(TODAY) + ') or later.'
     : 'On or after ' + fmt(b) + ' — the latest version takes effect on ' + fmt(d(sorted()[0].from)) + '.';
-  ['f-name','f-days','f-hours','f-date'].forEach(function (k) { err(k, null); });
+  ['f-name','f-days','f-times','f-date'].forEach(function (k) { err(k, null); });
   document.getElementById('sp-summary').classList.add('hidden');
 }
 function err(k, msg) {
@@ -459,14 +475,21 @@ function parseDate(s) { var m = /^\s*(\d{1,2})\/(\d{1,2})\/(\d{4})\s*$/.exec(s |
 function validate() {
   var ok = true, name = document.getElementById('f-name').value.trim();
   var days = [].slice.call(document.querySelectorAll('#f-days input:checked')).map(function (x) { return +x.value; });
-  var h = document.getElementById('f-hours').value.trim(), dt = parseDate(document.getElementById('f-date').value);
+  var dt = parseDate(document.getElementById('f-date').value), bad = [];
   if (!name) { err('f-name', 'Enter a name.'); ok = false; }
   else if (Object.keys(P).some(function (k) { return (create || k !== id) && P[k].name.toLowerCase() === name.toLowerCase(); })) { err('f-name', 'Another pattern is already called "' + name + '". Choose a different name.'); ok = false; }
   else err('f-name', null);
   if (!days.length) { err('f-days', 'Choose at least one working day.'); ok = false; } else err('f-days', null);
-  if (!h) { err('f-hours', 'Enter the hours per working day.'); ok = false; }
-  else if (!/^\d+(\.\d{1,2})?$/.test(h) || +h <= 0 || +h > 24 || Math.round(+h * 4) !== +h * 4) { err('f-hours', 'Enter hours in quarter-hour steps between 0.25 and 24.00, for example 7.50 or 7.75.'); ok = false; }
-  else err('f-hours', null);
+  var tmsg = null;
+  days.forEach(function (i) {
+    var w = TIMES[i] || ['', ''], a = mins(w[0]), b = mins(w[1]), m = null;
+    if (a == null || b == null) m = 'Enter a start and an end time for ' + DN[i] + '.';
+    else if (a % 15 || b % 15) m = DN[i] + ': choose a time on a 15-minute step, for example 08:15.';
+    else if (a === b) m = DN[i] + ': choose an end that differs from the start.';
+    if (m) { bad.push(i); if (!tmsg) tmsg = m; }
+  });
+  markTimes(bad);
+  if (tmsg) { err('f-times', tmsg); ok = false; } else err('f-times', null);
   var b = boundary();
   if (!document.getElementById('f-date').value.trim()) { err('f-date', 'Enter the date this version takes effect.'); ok = false; }
   else if (!dt) { err('f-date', 'Enter a date as DD/MM/YYYY, for example ' + numd(b) + '.'); ok = false; }
@@ -474,13 +497,31 @@ function validate() {
   else if (dt < b) { err('f-date', 'Choose ' + fmt(b) + ' or later. A version already takes effect on ' + fmt(d(sorted()[0].from)) + '.'); ok = false; }
   else err('f-date', null);
   document.getElementById('sp-summary').classList.toggle('hidden', ok);
-  return ok ? { name: name, days: days, hours: +h, from: iso(dt) } : null;
+  var win = {}; days.forEach(function (i) { win[i] = TIMES[i].slice(); });
+  return ok ? { name: name, days: days, win: win, from: iso(dt) } : null;
 }
+var TIMES = {};
+function renderTimes() {
+  var days = [].slice.call(document.querySelectorAll('#f-days input:checked')).map(function (x) { return +x.value; });
+  var inp = 'px-3 py-2 min-h-[38px] bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 tabular-nums focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-600/20';
+  document.getElementById('f-time-rows').innerHTML = days.map(function (i) {
+    var w = TIMES[i] || (TIMES[i] = ['', '']), ok = mins(w[0]) != null && mins(w[1]) != null && w[0] !== w[1];
+    return '<li class="flex flex-wrap items-center gap-2" data-day="' + i + '"><span class="w-24 text-sm font-semibold text-slate-700">' + DN[i] + '</span>' +
+      '<input type="time" step="900" data-t="0" value="' + w[0] + '" aria-label="' + DN[i] + ' start" class="' + inp + ' w-[8.75rem]"/><span class="text-sm text-slate-500">to</span>' +
+      '<input type="time" step="900" data-t="1" value="' + w[1] + '" aria-label="' + DN[i] + ' end" class="' + inp + ' w-[8.75rem]"/>' +
+      '<span class="text-xs text-slate-600 tabular-nums" data-dur>' + (ok ? dur(w).toFixed(2) + ' h' : '') + '</span>' + (ok && nextDay(w) ? NEXT_DAY : '') + '</li>';
+  }).join('');
+  document.getElementById('f-times-none').classList.toggle('hidden', !!days.length);
+  var tot = days.reduce(function (n, i) { var w = TIMES[i]; return n + (mins(w[0]) != null && mins(w[1]) != null && w[0] !== w[1] ? dur(w) : 0); }, 0);
+  document.getElementById('f-times-total').textContent = days.length ? 'Hours a week: ' + tot.toFixed(2) : '';
+  document.getElementById('f-apply-all').classList.toggle('hidden', days.length < 2);
+}
+function markTimes(bad) { document.querySelectorAll('#f-time-rows li').forEach(function (li) { var b = bad.indexOf(+li.dataset.day) >= 0; li.querySelectorAll('input').forEach(function (x) { x.classList.toggle('border-red-500', b); if (b) x.setAttribute('aria-invalid', 'true'); else x.removeAttribute('aria-invalid'); }); }); }
 function setupMode() {
   if (create) {
     document.getElementById('summary').remove(); document.getElementById('history').remove();
     document.getElementById('form-t').textContent = 'Create shift pattern';
-    document.getElementById('form-sub').textContent = 'Name the working week and its hours. Changes later add versions; nothing is overwritten.';
+    document.getElementById('form-sub').textContent = 'Name the working week and its times. Changes later add versions; nothing is overwritten.';
     document.getElementById('sp-save-l').textContent = 'Create shift pattern';
     document.getElementById('bc-leaf').textContent = 'Create shift pattern';
     document.getElementById('page-h1').textContent = 'Create shift pattern';
@@ -490,11 +531,20 @@ function setupMode() {
 document.addEventListener('s1:state', function (e) {
   if (e.detail.state === 'validation') {
     fill(); document.querySelectorAll('#f-days input').forEach(function (x) { x.checked = false; });
-    document.getElementById('f-hours').value = '7.6'; document.getElementById('f-date').value = '01/09/2026'; validate();
+    document.querySelector('#f-days input[value="0"]').checked = true; document.querySelector('#f-days input[value="1"]').checked = true;
+    TIMES = { 0: ['08:00', '08:00'], 1: ['08:10', '16:00'] }; renderTimes();
+    document.getElementById('f-date').value = '01/09/2026'; validate();
   } else if (e.detail.state === 'default') fill();
 });
 document.addEventListener('s1:ready', function () {
   setupMode(); render(); if (document.body.getAttribute('data-s1-state') !== 'validation') fill();
+  document.getElementById('f-days').addEventListener('change', renderTimes);
+  document.getElementById('f-apply-all').onclick = function () { var days = [].slice.call(document.querySelectorAll('#f-days input:checked')).map(function (x) { return +x.value; }); if (!days.length) return; var w = (TIMES[days[0]] || ['', '']).slice(); days.forEach(function (i) { TIMES[i] = w.slice(); }); renderTimes(); S1.toast(DN[days[0]] + '\'s times applied to every working day.', 'info'); };
+  document.getElementById('f-time-rows').addEventListener('change', function (e) {
+    var li = e.target.closest('li'); if (!li || !e.target.dataset.t) return;
+    TIMES[+li.dataset.day][+e.target.dataset.t] = e.target.value; renderTimes();
+    var f = document.querySelector('#f-time-rows li[data-day="' + li.dataset.day + '"] input[data-t="' + e.target.dataset.t + '"]'); if (f) f.focus();
+  });
   document.getElementById('sp-form').addEventListener('submit', function (e) {
     e.preventDefault();
     var r = validate(); if (!r) { var f = document.querySelector('#sp-form [aria-invalid="true"]'); if (f) (f.querySelector('input') || f).focus(); return; }
@@ -503,7 +553,7 @@ document.addEventListener('s1:ready', function () {
       setTimeout(function () { location.href = 'abstract.configuration.system-settings.html#shifts'; }, 1400);
       return;
     }
-    R.name = r.name; R.versions.push({ from: r.from, days: r.days, hours: r.hours, by: 'Sarah Mitchell', at: fmt(TODAY) });
+    R.name = r.name; R.versions.push({ from: r.from, days: r.days, win: r.win, by: 'Sarah Mitchell', at: fmt(TODAY) });
     render(); fill();
     S1.toast('New version saved. ' + S1.esc(R.name) + ' changes from ' + fmt(d(r.from)) + '; earlier dates keep the old hours.', 'success');
     if (document.body.getAttribute('data-s1-state') === 'validation') S1.setState('default');
@@ -527,6 +577,34 @@ document.addEventListener('s1:ready', function () {
 /* Structure changes: the sidebar item carries the pending count on every page (DESIGN-SPEC §5; absent when zero) */
 var S2_PENDING_COUNT = 5;
 document.addEventListener('s1:ready', function () { var c = document.getElementById('nav-sc-count'); if (c && S2_PENDING_COUNT > 0) { c.textContent = S2_PENDING_COUNT; c.classList.remove('hidden'); c.classList.add('inline-block'); c.setAttribute('aria-label', S2_PENDING_COUNT + ' waiting'); } });
+</script>
+<div data-s1-modal id="rn-modal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="rn-t">
+  <div class="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 w-full max-w-md">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+      <h2 id="rn-t" class="text-base font-bold text-slate-900">Rename shift pattern</h2>
+      <button type="button" onclick="S1.closeModal('rn-modal')" aria-label="Close" class="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    <form id="rn-form" novalidate class="px-6 py-5 flex flex-col gap-3">
+      <label for="rn-name" class="block text-xs font-semibold text-slate-700">Name</label>
+      <input id="rn-name" type="text" maxlength="60" aria-describedby="rn-name-err" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-600/20"/>
+      <p id="rn-name-err" class="hidden text-xs font-medium text-red-600" role="alert"></p>
+      <p class="text-xs text-slate-500 leading-relaxed">A rename takes effect at once and is not a version: the pattern's days and history stay as they are.</p>
+    </form>
+    <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-col-reverse sm:flex-row justify-end gap-3 rounded-b-2xl"><button type="button" onclick="S1.closeModal('rn-modal')" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">Cancel</button><button type="submit" form="rn-form" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg text-white text-sm font-semibold hover:opacity-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);"><i class="fa-solid fa-check text-xs" aria-hidden="true"></i> Save name</button></div>
+  </div>
+</div>
+<script>
+/* Rename (built: shiftPatterns.rename): at once, not a version */
+document.addEventListener('s1:ready', function () {
+  var b = document.getElementById('btn-rename'); if (!b) return;
+  b.onclick = function () { document.getElementById('rn-name').value = R.name; var e = document.getElementById('rn-name-err'); e.classList.add('hidden'); S1.openModal('rn-modal'); };
+  document.getElementById('rn-form').addEventListener('submit', function (ev) {
+    ev.preventDefault(); var n = document.getElementById('rn-name').value.trim(), e = document.getElementById('rn-name-err'), m = null;
+    if (!n) m = 'Enter a name.'; else if (Object.keys(P).some(function (k) { return k !== id && P[k].name.toLowerCase() === n.toLowerCase(); })) m = 'Another pattern is already called "' + n + '". Choose a different name.';
+    e.textContent = m || ''; e.classList.toggle('hidden', !m); if (m) { document.getElementById('rn-name').focus(); return; }
+    R.name = n; S1.closeModal('rn-modal'); render(); fill(); S1.toast('Shift pattern renamed to "' + S1.esc(n) + '".', 'success');
+  });
+});
 </script>
 <script src="slice1-kit.js"></script>
 </body>

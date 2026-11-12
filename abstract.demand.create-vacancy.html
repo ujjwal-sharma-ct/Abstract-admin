@@ -19,7 +19,7 @@
             brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554' } } } } };
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s3-page data-s1-states="default loading empty error validation denied large norate suspended">
+<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s3-page data-s1-states="default loading empty error validation denied large conflict nobreakdown norate suspended">
 <div id="app-root" class="flex w-full" style="height: 100vh;">
     <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
         <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
@@ -86,14 +86,14 @@ var LATER=' data-s4-later';
 function gate(){var on=S1.mode()!=='full';host.querySelectorAll('[data-s4-later]').forEach(function(e){if(on)e.style.setProperty('display','none','important');else e.style.removeProperty('display');});}
 function look(name){return /night/i.test(name)?'fa-moon':/after|late/i.test(name)?'fa-cloud-sun':'fa-sun';}
 function val(i){var e=document.getElementById(i);return e?e.value:'';}
-var STEPS=[[1,'Role details','fa-warehouse','The job title, client, place in the structure, dates, positions and Shift',0],[2,'Pay & bill rate','fa-sterling-sign','The charge, pay and margin come from the job role’s rate card',0],[3,'Margin & markup','fa-percent','Abstract’s margin target and the agency markup cap',1],[4,'Compliance','fa-shield-halved','Documents, safety checks and right-to-work rules',1],[5,'Publishing rules','fa-share-nodes','Which agencies receive this vacancy, and when',1],[6,'Internal status','fa-flag','Priority, tags and workflow flags',1]];
+var STEPS=[[1,'Role details','fa-warehouse','The job title, client, place in the structure, dates, positions and Shift',0],[2,'Charge and pay','fa-sterling-sign','The rates come from the job role’s rate card; nothing is entered here',0],[3,'Margin & markup','fa-percent','Abstract’s margin target and the agency markup cap',1],[4,'Compliance','fa-shield-halved','Documents, safety checks and right-to-work rules',1],[5,'Publishing rules','fa-share-nodes','Which agencies receive this vacancy, and when',1],[6,'Internal status','fa-flag','Priority, tags and workflow flags',1]];
 function stepHead(x){return '<div id="cv-step-'+x[0]+'" class="'+C.card+' px-5 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-3 scroll-mt-4"'+(x[4]?LATER:'')+'><div class="flex items-center gap-3 min-w-0"><div class="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0" style="'+C.priStyle+'" aria-hidden="true"><i class="fa-solid '+x[2]+' text-white text-sm"></i></div><div class="min-w-0"><h2 class="text-sm font-bold text-slate-900">Step '+x[0]+': '+x[1]+'</h2><p class="text-xs text-slate-600">'+x[3]+'</p></div></div><span class="text-xs font-semibold text-blue-700 bg-blue-50 border border-blue-100 px-3 py-1 rounded-full tnum" data-of="'+x[0]+'"></span></div>';}
 function card(h,extra){return '<div class="'+C.card+' px-5 sm:px-6 py-5"'+LATER+'>'+h+'</div>';}
 function tiles(opts,on){return '<div class="flex flex-wrap gap-2">'+opts.map(function(o,i){return '<span class="flex-1 min-w-[96px] inline-flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg border text-xs '+(i===on?'text-white font-semibold border-transparent" style="'+C.priStyle:'border-slate-200 bg-slate-50 text-slate-600 font-medium')+'"><i class="fa-solid '+o[1]+'" aria-hidden="true"></i>'+o[0]+'</span>';}).join('')+'</div>';}
 function rowL(i,l,v,c){return '<li class="flex items-center justify-between gap-3 px-4 py-2.5"><span class="text-xs text-slate-700 flex items-center gap-2"><i class="fa-solid '+i+' text-slate-500 text-xs" aria-hidden="true"></i>'+l+'</span><span class="text-xs font-semibold '+(c||'text-slate-700')+'">'+v+'</span></li>';}
 function lbl(t){return '<p class="text-xs font-semibold text-slate-700 mb-1.5">'+t+'</p>';}
 function laterSteps(){
- var s3=stepHead(STEPS[2])+card('<div class="grid grid-cols-3 gap-3 mb-5 p-4 rounded-xl border border-blue-100" style="background:linear-gradient(90deg,#eff6ff,#faf5ff)"><div class="text-center"><p class="text-xs text-slate-600 mb-1">Charge rate</p><p class="text-sm font-bold text-slate-800">From the rate card</p></div><div class="text-center border-x border-blue-100"><p class="text-xs text-slate-600 mb-1">Pay rate</p><p class="text-sm font-bold text-slate-800">From the rate card</p></div><div class="text-center"><p class="text-xs text-slate-600 mb-1">Gross margin</p><p class="text-sm font-bold text-emerald-700">Shown once saved</p></div></div><ul class="rounded-xl border border-slate-200 divide-y divide-slate-100">'+rowL('fa-bullseye','Abstract margin target','15 %','tnum')+rowL('fa-arrow-down-wide-short','Minimum acceptable margin','10 %','tnum')+rowL('fa-percent','Agency markup cap','12 %','tnum')+rowL('fa-receipt','Fee type','Margin on the charge rate')+'</ul>');
+ var s3=stepHead(STEPS[2])+card('<div class="grid grid-cols-3 gap-3 mb-5 p-4 rounded-xl border border-blue-100" style="background:linear-gradient(90deg,#eff6ff,#faf5ff)"><div class="text-center"><p class="text-xs text-slate-600 mb-1">Charge rate</p><p class="text-sm font-bold text-slate-800">From the rate card</p></div><div class="text-center border-x border-blue-100"><p class="text-xs text-slate-600 mb-1">Agency pay rate</p><p class="text-sm font-bold text-slate-800">From the rate card</p></div><div class="text-center"><p class="text-xs text-slate-600 mb-1">Margin</p><p class="text-sm font-bold text-emerald-700">Shown once saved</p></div></div><ul class="rounded-xl border border-slate-200 divide-y divide-slate-100">'+rowL('fa-bullseye','Abstract margin target','15 %','tnum')+rowL('fa-arrow-down-wide-short','Minimum acceptable margin','10 %','tnum')+rowL('fa-percent','Agency markup cap','12 %','tnum')+rowL('fa-receipt','Fee type','Margin on the charge rate')+'</ul>');
  var s4=stepHead(STEPS[3])+card('<p class="text-xs font-bold text-slate-700 mb-3">Required documents and checks</p><ul class="rounded-xl border border-slate-200 divide-y divide-slate-100 mb-4">'+[['fa-passport','Right to work (UK)','Required'],['fa-hand-holding-heart','Manual handling certificate','Required'],['fa-id-card','FLT licence (reach or counterbalance)','If applicable'],['fa-helmet-safety','Health and safety induction','Required'],['fa-file-lines','References (two)','Optional'],['fa-shield-halved','DBS check (standard)','Optional']].map(function(r){return rowL(r[0],r[1],r[2],r[2]==='Required'?'text-blue-700':'text-slate-600');}).join('')+'</ul><div class="flex items-start gap-3 px-4 py-3 rounded-xl border border-slate-200 bg-slate-50"><i class="fa-solid fa-scale-balanced text-slate-500 text-xs mt-0.5" aria-hidden="true"></i><div><p class="text-xs font-semibold text-slate-700">Agency Workers Regulations</p><p class="text-xs text-slate-600 mt-0.5">The standard 12-week qualifying period applies.</p></div></div>');
  var s5=stepHead(STEPS[4])+card('<div class="flex items-start gap-3 px-4 py-3 rounded-xl border border-blue-100 bg-blue-50 mb-4"><i class="fa-solid fa-circle-info text-blue-600 text-xs mt-0.5" aria-hidden="true"></i><div><p class="text-xs font-semibold text-blue-900">Releasing to agencies is optional at creation</p><p class="text-xs text-blue-900 mt-0.5">A vacancy starts with Abstract only. You can release it to one, several or all approved agencies later.</p></div></div>'+lbl('Release to approved agencies')+'<div class="grid grid-cols-1 sm:grid-cols-2 gap-2">'+[['TechForce Agency','General industrial'],['Nexus Talent','Driving and warehouse'],['PeopleBridge','Multi-sector'],['Apex Staffing','Warehouse and picking']].map(function(a){return '<div class="flex items-center gap-2.5 p-2.5 rounded-xl border border-slate-200 bg-slate-50"><span class="w-4 h-4 rounded border border-slate-300 bg-white flex-shrink-0" aria-hidden="true"></span><span class="min-w-0"><span class="block text-xs font-semibold text-slate-700">'+a[0]+'</span><span class="block text-xs text-slate-500">'+a[1]+'</span></span></div>';}).join('')+'</div>');
  var s6=stepHead(STEPS[5])+card(lbl('Priority')+tiles([['Low','fa-arrow-down'],['Normal','fa-minus'],['High','fa-arrow-up'],['Urgent','fa-bolt']],1)+'<div class="mt-4">'+lbl('Workflow flags')+'<ul class="flex flex-col gap-2">'+['Tell the account manager when a worker is put forward','Ask for margin approval before publishing','Close by itself if unfilled after the close date'].map(function(t,i){return '<li class="flex items-center gap-2 text-xs text-slate-700"><i class="fa-'+(i===0?'solid fa-square-check text-blue-600':'regular fa-square text-slate-500')+' text-sm" aria-hidden="true"></i>'+t+'</li>';}).join('')+'</ul></div>');
@@ -117,19 +117,34 @@ function refresh(){
 }
 function shiftTiles(){
  var sel=document.getElementById('vf-shift');if(!sel)return;
- var lab=document.querySelector('label[for="vf-shift"]');if(lab)lab.id='vf-shift-l';
- sel.classList.add('sr-only');sel.tabIndex=-1;sel.setAttribute('aria-hidden','true');
- var box=document.createElement('div');box.id='vf-shift-tiles';box.setAttribute('role','radiogroup');box.setAttribute('aria-labelledby','vf-shift-l');sel.insertAdjacentElement('afterend',box);
+ var lab=document.querySelector('label[for="vf-shift"]');if(lab){lab.id='vf-shift-l';lab.removeAttribute('for');}
+ var hint=sel.parentNode.querySelector('p.text-slate-500');if(hint)hint.id='vf-shift-hint';
+ sel.classList.remove('w-full');sel.classList.add('sr-only');sel.tabIndex=-1;sel.setAttribute('aria-hidden','true');
+ var box=document.createElement('div');box.id='vf-shift-tiles';box.setAttribute('role','radiogroup');box.setAttribute('aria-labelledby','vf-shift-l');box.setAttribute('aria-required','true');box.setAttribute('aria-describedby',(hint?'vf-shift-hint ':'')+'vf-shift-err');sel.insertAdjacentElement('afterend',box);
  function paint(){
-  var opts=[].slice.call(sel.options).filter(function(o){return o.value;}),bad=sel.getAttribute('aria-invalid')==='true';
-  if(!opts.length){box.className='';box.innerHTML='<p class="text-sm text-slate-500 border border-dashed border-slate-300 rounded-lg px-3 py-2.5">'+esc(sel.options[0]?sel.options[0].text:'Choose a client first')+'</p>';return;}
+  var had=box.contains(document.activeElement),sg0=document.getElementById('vf-shift-sug');if(sg0)sg0.style.display='none';
+  var opts=[].slice.call(sel.options).filter(function(o){return o.value;}),bad=sel.getAttribute('aria-invalid')==='true',chosen=!!(document.getElementById('vf-client')||{}).value||edit;
+  if(bad)box.setAttribute('aria-invalid','true');else box.removeAttribute('aria-invalid');
+  if(!opts.length){
+   box.className='';box.removeAttribute('role');
+   // a client with no Shift (TSD 5.5 UI states, Vacancy form): the inline note linking to Configuration
+   box.innerHTML=chosen&&sel.options[0]&&sel.options[0].value===''&&!/client first/i.test(sel.options[0].text)?S3.ui.banner('info','This client has no active Shift yet. <a class="'+C.link+'" href="abstract.configuration.organisation-configuration.html">Add one in Configuration</a>.'):'<p class="text-sm text-slate-500 border border-dashed border-slate-300 rounded-lg px-3 py-2.5">'+esc(sel.options[0]?sel.options[0].text:'Choose a client first')+'</p>';
+   return;
+  }
+  box.setAttribute('role','radiogroup');
   box.className='grid gap-2 rounded-lg '+(opts.length>=3?'grid-cols-3':'grid-cols-2')+(bad?' ring-2 ring-red-400 ring-offset-2':'');
   var any=opts.some(function(o){return o.value===sel.value;});
-  box.innerHTML=opts.map(function(o,i){var on=o.value===sel.value,def=/default/.test(o.text),name=o.text.replace(/ \(.*\)$/,'');return '<button type="button" role="radio" aria-checked="'+on+'" data-sv="'+esc(o.value)+'" tabindex="'+(on||(!any&&i===0)?0:-1)+'" class="flex flex-col items-center justify-center gap-0.5 px-2 py-2 rounded-lg border text-xs min-h-[48px] transition-colors '+(on?'text-white font-semibold border-transparent':'border-slate-200 bg-slate-50 text-slate-700 font-medium hover:border-blue-300 hover:text-blue-700')+FOC+'"'+(on?' style="'+C.priStyle+'"':'')+'><span class="flex items-center gap-1.5"><i class="fa-solid '+look(name)+'" aria-hidden="true"></i>'+esc(name)+'</span>'+(def?'<span class="text-[11px] '+(on?'text-blue-100':'text-slate-500')+'">Client default</span>':'')+'</button>';}).join('');
+  box.innerHTML=opts.map(function(o,i){var on=o.value===sel.value,def=/default/.test(o.text),name=o.text.replace(/ \(.*\)$/,'');return '<button type="button" role="radio" aria-checked="'+on+'" data-sv="'+esc(o.value)+'" tabindex="'+(on||(!any&&i===0)?0:-1)+'"'+(def?' aria-description="The client’s default"':'')+' class="flex flex-col items-center justify-center gap-0.5 px-2 py-2 rounded-lg border text-xs min-h-[48px] transition-colors '+(on?'text-white font-semibold border-transparent':'border-slate-200 bg-slate-50 text-slate-700 font-medium hover:border-blue-300 hover:text-blue-700')+FOC+'"'+(on?' style="'+C.priStyle+'"':'')+'><span class="flex items-center gap-1.5"><i class="fa-solid '+look(name)+'" aria-hidden="true"></i>'+esc(name)+'</span>'+(def?'<span class="text-[11px] '+(on?'text-blue-100':'text-slate-500')+'" aria-hidden="true">Client default</span>':'')+'</button>';}).join('');
+  var dop=opts.filter(function(o){return /default/.test(o.text);})[0],sg=document.getElementById('vf-shift-sug');
+  if(!sg){sg=document.createElement('p');sg.id='vf-shift-sug';sg.className='text-xs text-slate-600 mt-1';box.insertAdjacentElement('afterend',sg);}
+  sg.textContent=dop&&dop.value===sel.value?dop.text.replace(/ \(.*\)$/,'')+' is this client’s default Shift. Change it if this vacancy runs on another.':'';sg.style.display=sg.textContent?'':'none';
+  if(had){var t=box.querySelector('[tabindex="0"]');if(t)t.focus();}
  }
  function pick(v){sel.value=v;sel.dispatchEvent(new Event('change',{bubbles:true}));paint();var b=box.querySelector('[aria-checked="true"]');if(b)b.focus();}
  box.addEventListener('click',function(e){var b=e.target.closest('[data-sv]');if(b)pick(b.dataset.sv);});
- box.addEventListener('keydown',function(e){var bs=[].slice.call(box.querySelectorAll('[data-sv]')),i=bs.indexOf(document.activeElement);if(i<0)return;var j=e.key==='ArrowRight'||e.key==='ArrowDown'?i+1:e.key==='ArrowLeft'||e.key==='ArrowUp'?i-1:null;if(j===null)return;e.preventDefault();j=(j+bs.length)%bs.length;pick(bs[j].dataset.sv);});
+ box.addEventListener('keydown',function(e){var bs=[].slice.call(box.querySelectorAll('[data-sv]')),i=bs.indexOf(document.activeElement);if(i<0)return;if(e.key===' '||e.key==='Enter'){e.preventDefault();pick(bs[i].dataset.sv);return;}var j=e.key==='ArrowRight'||e.key==='ArrowDown'?i+1:e.key==='ArrowLeft'||e.key==='ArrowUp'?i-1:e.key==='Home'?0:e.key==='End'?bs.length-1:null;if(j===null)return;e.preventDefault();j=(j+bs.length)%bs.length;pick(bs[j].dataset.sv);});
+ // the label and the form's error focus land on the select; hand them to the checked tile
+ if(lab)lab.addEventListener('click',function(){var t=box.querySelector('[tabindex="0"]');if(t)t.focus();});
  sel.addEventListener('change',paint);
  sel.addEventListener('focus',function(){var t=box.querySelector('[aria-checked="true"]')||box.querySelector('button');if(t)t.focus();});
  new MutationObserver(paint).observe(sel,{childList:true,attributes:true,attributeFilter:['aria-invalid']});
@@ -170,7 +185,7 @@ function dress(){
  cancel.className='inline-flex items-center gap-2 px-4 py-2.5 min-h-[40px] rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-700 font-medium hover:border-red-200 hover:text-red-700 transition-colors'+FOC;cancel.insertAdjacentHTML('afterbegin','<i class="fa-solid fa-xmark text-xs" aria-hidden="true"></i>');
  if(draft){draft.className='inline-flex items-center gap-2 px-4 py-2.5 min-h-[40px] rounded-xl border border-slate-200 bg-slate-50 text-sm text-slate-700 font-medium hover:border-amber-300 hover:text-amber-800 transition-colors'+FOC;draft.insertAdjacentHTML('afterbegin','<i class="fa-regular fa-floppy-disk text-xs" aria-hidden="true"></i>');fl.appendChild(draft);}
  [pub,save].forEach(function(b){if(!b)return;b.className='inline-flex items-center gap-2 px-5 py-2.5 min-h-[40px] rounded-xl text-white text-sm font-semibold hover:opacity-90 transition-opacity'+FOC;b.insertAdjacentHTML('afterbegin','<i class="fa-solid '+(b===pub?'fa-paper-plane':'fa-floppy-disk')+' text-xs" aria-hidden="true"></i>');});
- if(draft){fr.appendChild(cancel);fr.appendChild(pub);}else{fl.appendChild(cancel);fr.appendChild(save);}
+ if(draft){fr.appendChild(cancel);fr.appendChild(pub);}else{fl.appendChild(cancel);if(save)fr.appendChild(save);if(pub)fr.appendChild(pub);}
  host.replaceChild(L,root);
  stepper();shiftTiles();
  L.querySelectorAll('[data-go]').forEach(function(b){b.onclick=function(){L.querySelectorAll('[data-go]').forEach(function(x){var on=x===b,n=x.querySelector('span');x.toggleAttribute('aria-current',on);if(on)x.setAttribute('aria-current','step');x.className='flex items-center gap-3 px-3 py-2.5 rounded-xl text-left transition-all '+(on?'text-white font-semibold':'text-slate-700 hover:text-slate-900 hover:bg-slate-50')+FOC;x.style.background=on?'linear-gradient(135deg,rgba(29,78,216,.9),rgba(91,46,145,.8))':'';n.className='w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold '+(on?'bg-white text-blue-700':'bg-slate-100 text-slate-600');x.querySelector('[data-rail-ok]').classList.toggle('text-blue-200',on);x.querySelector('[data-rail-ok]').classList.toggle('text-blue-600',!on);});var t=document.getElementById('cv-step-'+b.dataset.go);if(t)t.scrollIntoView({behavior:'smooth',block:'start'});};});
@@ -178,9 +193,11 @@ function dress(){
  L.addEventListener('focusout',function(){setTimeout(refresh,160);});
  gate();refresh();
 }
+var ACME_SHIFTS=S3.SHIFTS.acme;
 S3.onState(function(s){
  if(['loading','error','denied'].indexOf(s)>=0)return;
- var p={portal:'abstract',mode:edit?'edit':'create',vacancyId:id,preset:preset,large:s==='large',noRoles:s==='empty',suspendOnSave:s==='suspended',nobreakdown:s==='nobreakdown'};
+ S3.SHIFTS.acme=s==='empty'?[]:ACME_SHIFTS;
+ var p={portal:'abstract',mode:edit?'edit':'create',vacancyId:id,preset:preset,large:s==='large',noRoles:s==='empty',suspendOnSave:s==='suspended',conflictOnSave:s==='conflict',nobreakdown:s==='nobreakdown'};
  if(s==='validation')p.preset=Object.assign({},preset||{},{clientId:'acme',jobTitle:'',startDate:'2026-11-20',endDate:'2026-11-01',closeDate:'2026-12-01',positionCount:0});
  if(s==='norate')p.preset={clientId:'acme',jobTitle:'Packers for the Christmas peak',jobRoleId:'jr-pp',orgNodeId:'lds',startDate:'2026-11-23',endDate:'2026-12-23',positionCount:2};
  if(s==='suspended'||s==='large'||s==='empty')p.preset=Object.assign({clientId:'acme'},p.preset||{});
@@ -188,6 +205,8 @@ S3.onState(function(s){
  dress();
  if(s==='validation'){p.showErrors={};}
  if(s==='validation'){var b=document.getElementById(edit?'vf-save':'vf-draft');if(b)b.click();}
+ // the 412: someone else changed the vacancy under the form (frontend demand.refusal.conflict*)
+ if(s==='conflict'){var cb=document.getElementById('vf-banner');if(cb)cb.innerHTML=S3.refusalHtml({code:'CONFLICT',message:'It was changed while you had it open. The page now shows the latest version; check it and try again.'});}
  if(s==='norate'&&document.getElementById('vf-publish')){document.getElementById('vf-publish').click();setTimeout(function(){var ok=document.querySelector('.s1-scrim [data-ok]');if(ok)ok.click();},60);}
 });
 document.addEventListener('s1:mode',function(){gate();refresh();});

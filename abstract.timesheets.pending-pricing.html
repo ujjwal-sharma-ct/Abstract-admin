@@ -79,7 +79,7 @@ function synth(){var b=S4.pending()[0]||{timesheetId:'ts-132',bookingReference:'
 function draw(){
  var all=st==='empty'?[]:st==='large'?synth():S4.pending(),list=all.filter(function(r){return (!f.client||r.clientId===f.client)&&(!f.week||r.weekStart===f.week);}),pages=Math.ceil(list.length/PAGE)||1;if(pg>pages)pg=pages;var view=list.slice((pg-1)*PAGE,pg*PAGE),can=st!=='nobreakdown';
  var why=function(r){return r.pendingReason==='no_rate'?'No rate on the card':'Node removed';};
- var act=function(r){return can&&!r.synthetic?'<button type="button" class="'+C.sec+'" data-price="'+r.timesheetId+'|'+r.date+'">Set a price</button>':(can?'<span class="text-xs text-slate-500">Sample row</span>':'');};
+ var act=function(r){return can&&!r.synthetic?'<button type="button" class="'+C.sec+'" data-price="'+r.timesheetId+'|'+r.date+'" aria-label="'+esc('Set a price for '+S4.fmtDay(r.date)+', '+r.candidateName)+'">Set a price</button>':(can?'<span class="text-xs text-slate-500">Sample row</span>':'');};
  var wk=function(r){return '<a class="'+C.link+'" href="abstract.timesheets.booking-week.html?id='+r.timesheetId+'">'+esc(r.bookingReference)+'</a>';};
  var weeks={};S4.pending().forEach(function(r){weeks[r.weekStart]=1;});
  app.innerHTML=S4.tabs('pending')+(st==='nobreakdown'?'<div class="mb-4">'+ui.banner('info','Setting a day’s price sets its base pay, so it needs the full rate breakdown as well as the permission to price manually. You can see the queue.')+'</div>':'')+
@@ -87,18 +87,19 @@ function draw(){
   ui.filterBar('p-filters',ui.select('p-client','Client','fa-building',[['','All clients']].concat(Object.keys(S3.CLIENTS).map(function(k){return [k,S3.CLIENTS[k].name];})),f.client)+ui.select('p-week','Week','fa-calendar',[['','All weeks']].concat(Object.keys(weeks).sort().reverse().map(function(w){return [w,'Week of '+S4.fmtWeek(w)];})),f.week))+
   (list.length?ui.list({caption:'Days waiting for manual pricing',rows:view,cols:[
    {label:'Day',nowrap:true,cell:function(r){return '<span class="font-semibold text-slate-900">'+S4.fmtDay(r.date)+'</span>';}},
-   {label:'Candidate',cell:function(r){return esc(r.candidateName)+'<span class="block text-xs text-slate-500">'+wk(r)+'</span>';}},
+   {label:'Candidate and booking',cell:function(r){return esc(r.candidateName)+'<span class="block text-xs text-slate-500">'+wk(r)+'</span>';}},
    {label:'Client',cell:function(r){return esc(r.clientName);}},
    {label:'Job role × Shift',cell:function(r){return esc(r.effectiveJobRoleTitle)+'<span class="block text-xs text-slate-500">'+esc(r.shiftName)+' Shift</span>';}},
    {label:'Why',cell:function(r){return S3.ui.marker(why(r),'warning');}},
-   {label:'Week',cell:function(r){return '<div class="flex flex-wrap gap-1">'+S4.ui.badge(r.status,true)+(r.overdue?S4.ui.badge('Overdue',true):'')+'</div>';}},
+   {label:'Week’s status',cell:function(r){return '<div class="flex flex-wrap gap-1">'+S4.ui.badge(r.status,true)+(r.overdue?S4.ui.badge('Overdue',true):'')+'</div>';}},
    {label:'Deadline',nowrap:true,cell:function(r){return S4.fmtDeadline(r.submissionDeadline);}},
    {label:'Action',sr:'Action',right:true,cell:act}],
    card:function(r){return ui.mobileCard({title:'<span class="text-sm font-semibold text-slate-900">'+S4.fmtDay(r.date)+' · '+esc(r.candidateName)+'</span>',badge:S3.ui.marker(why(r),'warning'),lines:[wk(r)+' · '+esc(r.clientName),esc(r.effectiveJobRoleTitle)+', '+esc(r.shiftName)+' Shift','Deadline '+S4.fmtDeadline(r.submissionDeadline)],actions:act(r)});}})+ui.pager(list.length,pg,pages,'days waiting')
-  :ui.empty('fa-circle-check','Nothing is waiting to be priced','A day with no rate on the card appears here, and holds its week until it is priced.'));
+  :(all.length?ui.empty('fa-filter','No days match these filters','Clear a filter to see more.','<button type="button" id="p-clear" class="'+C.sec+'">Clear filters</button>'):ui.empty('fa-circle-check','Nothing is waiting to be priced','A day with no rate on the card appears here, and holds its week until it is priced.')));
  ui.wireFilterToggle(app);
  ['client','week'].forEach(function(k){var e=document.getElementById('p-'+k);e.onchange=function(){f[k]=e.value;pg=1;draw();};});
  app.querySelectorAll('[data-pg]').forEach(function(b){b.onclick=function(){pg=Number(b.dataset.pg);draw();};});
+ var pc=document.getElementById('p-clear');if(pc)pc.onclick=function(){f={client:'',week:''};pg=1;draw();var c=document.getElementById('p-client');if(c)c.focus();};
  app.querySelectorAll('[data-price]').forEach(function(b){b.onclick=function(){var k=b.dataset.price.split('|'),r=S4.pending().filter(function(x){return x.timesheetId===k[0]&&x.date===k[1];})[0];S4.manualPriceDialog(r,draw,{validate:st==='validation',conflict:st==='conflict'});};});
 }
 S3.onState(function(s){st=s;if(['loading','error','denied'].indexOf(s)>=0){app.innerHTML='';return;}draw();if((s==='validation'||s==='conflict')&&S4.pending()[0]){var r=S4.pending()[0];S4.manualPriceDialog(r,draw,{validate:s==='validation',conflict:s==='conflict'});if(s==='conflict')setTimeout(function(){var d=document.querySelector('.s1-scrim');d.querySelector('#m-c').value='24.00';d.querySelector('#m-b').value='15.80';d.querySelector('#m-r').value='The Night line for Forklift Driver (Reach) ended on 30 Sep; priced at the September card while Acme renews it.';d.querySelector('#m-c').dispatchEvent(new Event('input'));d.querySelector('[data-ok]').click();},60);}});

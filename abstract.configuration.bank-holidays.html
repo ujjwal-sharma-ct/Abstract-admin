@@ -189,7 +189,7 @@
 
             <div class="rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 mb-5 flex items-start gap-3 text-sm text-blue-800" role="note">
                 <i class="fa-solid fa-circle-info mt-0.5" aria-hidden="true"></i>
-                <p>Each region has its own calendar. Saving replaces the whole calendar for that region and year, and the change is audited. Corrections apply to calculations from now on.</p>
+                <p>Each region has its own calendar. A change replaces the whole calendar for that region and year from the date you choose, and the change is audited. Until that date, the list in force stays as it is.</p>
             </div>
 
             <!-- region tabs + year -->
@@ -243,6 +243,55 @@
                 </div>
             </div>
 
+            <!-- List in force, next change and version history (TSD 1 §5.10 TV-4; UI states *Bank holidays*) -->
+            <div id="bh-versions" data-s1-hide="loading error denied" class="flex flex-col gap-5 mb-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5" aria-labelledby="bh-cur-t">
+                        <div class="flex items-center justify-between gap-2">
+                            <h3 id="bh-cur-t" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">List in force</h3>
+                            <span id="bh-cur-badge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-check text-[10px]" aria-hidden="true"></i>In force</span>
+                        </div>
+                        <p id="bh-cur-v" class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 tabular-nums"></p>
+                        <p id="bh-cur-m" class="text-xs text-slate-500 mt-1"></p>
+                    </section>
+                    <section class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5" aria-labelledby="bh-next-t">
+                        <div class="flex items-center justify-between gap-2">
+                            <h3 id="bh-next-t" class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Next change</h3>
+                            <span id="bh-next-badge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-clock text-[10px]" aria-hidden="true"></i>Future</span>
+                        </div>
+                        <p id="bh-next-v" class="mt-3 text-3xl font-extrabold tracking-tight text-slate-900 tabular-nums"></p>
+                        <p id="bh-next-m" class="text-xs text-slate-500 mt-1"></p>
+                        <button type="button" id="bh-next-withdraw" class="hidden mt-3 inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg border border-slate-200 bg-white text-xs font-semibold text-red-700 hover:bg-red-50 hover:border-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600"><i class="fa-solid fa-calendar-xmark" aria-hidden="true"></i> Withdraw</button>
+                    </section>
+                </div>
+                <section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" aria-labelledby="bh-hist-t">
+                    <div class="px-5 py-4 border-b border-slate-100 flex items-center justify-between gap-3">
+                        <div>
+                            <h3 id="bh-hist-t" class="text-sm font-bold text-slate-900">Version history</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Every change is a new version of the whole list from a date. Past versions can't be edited.</p>
+                        </div>
+                        <span id="bh-hist-count" class="text-xs text-slate-500 whitespace-nowrap tabular-nums"></span>
+                    </div>
+                    <div class="hidden md:block overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <caption class="sr-only" id="bh-hist-cap"></caption>
+                            <thead class="bg-slate-50"><tr class="text-left">
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider pl-5">Dates</th>
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Effective from</th>
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Effective to</th>
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">Changed by</th>
+                                <th scope="col" class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">When</th>
+                                <th scope="col" class="px-4 py-3 pr-5"><span class="sr-only">Actions</span></th>
+                            </tr></thead>
+                            <tbody id="bh-hist-body" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                    <ul id="bh-hist-cards" class="md:hidden divide-y divide-slate-100"></ul>
+                    <p id="bh-hist-empty" class="hidden px-5 py-6 text-sm text-slate-600"></p>
+                </section>
+            </div>
+
             <!-- STATE: error (ErrorState) -->
             <section data-s1-show="error" class="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 sm:p-12 text-center max-w-xl mx-auto mt-4" role="alert">
                 <div class="w-14 h-14 rounded-full bg-red-50 text-red-600 mx-auto flex items-center justify-center mb-4"><i class="fa-solid fa-triangle-exclamation text-xl" aria-hidden="true"></i></div>
@@ -272,7 +321,7 @@
                     </div>
                     <div class="flex gap-3">
                         <button type="button" id="discard" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 flex-1 sm:flex-none">Discard</button>
-                        <button type="button" id="save" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg text-white text-sm font-semibold hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 flex-1 sm:flex-none" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);"><i class="fa-solid fa-check text-xs" aria-hidden="true"></i> Save calendar</button>
+                        <button type="button" id="save" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg text-white text-sm font-semibold hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 flex-1 sm:flex-none" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);"><i class="fa-solid fa-calendar-plus text-xs" aria-hidden="true"></i> Schedule a change</button>
                     </div>
                 </div>
             </div>
@@ -310,6 +359,37 @@
 })();
 
 </script>
+<div data-s1-modal id="bh-sched-modal" class="hidden fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4" style="background:rgba(15,26,62,.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)" role="dialog" aria-modal="true" aria-labelledby="bh-sched-t">
+  <div class="bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl border border-slate-200 w-full max-w-lg max-h-[92vh] overflow-y-auto">
+    <div class="flex items-center justify-between px-6 py-4 border-b border-slate-200">
+      <h2 id="bh-sched-t" class="text-base font-bold text-slate-900">Schedule a change — England &amp; Wales 2027</h2>
+      <button type="button" onclick="S1.closeModal('bh-sched-modal')" aria-label="Close" class="w-9 h-9 flex items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+    </div>
+    <div class="px-6 py-5">
+      <form id="bh-sched-form" novalidate class="flex flex-col gap-5">
+        <div id="bh-sched-summary" class="hidden rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 flex gap-3" role="alert">
+          <i class="fa-solid fa-circle-exclamation mt-0.5" aria-hidden="true"></i><p>This change wasn't scheduled. Fix the highlighted field.</p>
+        </div>
+        <div>
+          <p class="text-xs font-semibold text-slate-700 mb-1.5">New calendar</p>
+          <p id="bh-sched-count" class="text-sm font-semibold text-slate-900 tabular-nums"></p>
+          <ul id="bh-sched-diff" class="mt-2 flex flex-col gap-1 text-sm"></ul>
+        </div>
+        <div>
+          <label for="bh-from" class="block text-xs font-semibold text-slate-700 mb-1.5">Effective from</label>
+          <div class="relative max-w-[220px]">
+            <input id="bh-from" type="text" inputmode="numeric" placeholder="DD/MM/YYYY" autocomplete="off" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 tabular-nums focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-2 focus:ring-blue-600/20 pr-9" aria-describedby="bh-from-hint bh-from-err"/>
+            <i class="fa-regular fa-calendar absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none" aria-hidden="true"></i>
+          </div>
+          <p id="bh-from-hint" class="text-xs text-slate-500 mt-1.5">Today (26/09/2026) or later. Past periods have already been used.</p>
+          <p id="bh-from-err" class="hidden text-xs font-medium text-red-600 mt-1.5"><i class="fa-solid fa-circle-exclamation mr-1" aria-hidden="true"></i><span></span></p>
+        </div>
+        <p class="text-xs text-slate-500 leading-relaxed">The change is audited as you. Until its date, the list in force stays as it is.</p>
+      </form></div>
+    <div class="px-6 py-4 border-t border-slate-200 bg-slate-50 flex flex-col-reverse sm:flex-row justify-end gap-3 rounded-b-2xl"><button type="button" onclick="S1.closeModal('bh-sched-modal')" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-semibold hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2">Cancel</button>
+      <button type="submit" form="bh-sched-form" id="bh-sched-save" title="Shift-click to demo a failed save" class="inline-flex items-center justify-center gap-2 px-4 py-2.5 min-h-[38px] rounded-lg text-white text-sm font-semibold hover:opacity-95 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);"><i class="fa-solid fa-calendar-check text-xs" aria-hidden="true"></i> Schedule change</button></div>
+  </div>
+</div>
 <script>
 
 var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -322,6 +402,21 @@ var DATA = {
   'northern-ireland|2026': [['01/01/2026','New Year\'s Day'],['17/03/2026','St Patrick\'s Day'],['03/04/2026','Good Friday'],['06/04/2026','Easter Monday'],['04/05/2026','Early May bank holiday'],['25/05/2026','Spring bank holiday'],['13/07/2026','Battle of the Boyne (substitute day)'],['31/08/2026','Summer bank holiday'],['25/12/2026','Christmas Day'],['28/12/2026','Boxing Day (substitute day)']],
   'northern-ireland|2027': [['01/01/2027','New Year\'s Day'],['17/03/2027','St Patrick\'s Day'],['26/03/2027','Good Friday'],['29/03/2027','Easter Monday'],['03/05/2027','Early May bank holiday'],['31/05/2027','Spring bank holiday'],['12/07/2027','Battle of the Boyne'],['30/08/2027','Summer bank holiday'],['27/12/2027','Christmas Day (substitute day)'],['28/12/2027','Boxing Day (substitute day)']]
 };
+/* Each region and year is effective-dated (TSD 1 §5.10 TV-4): a change is a new version of the whole list from a
+   date, today or later. Seeded versions read "System" (R-58); a version with no dates can be saved (R-57). */
+var TODAY = new Date(2026, 8, 26);
+function isoD(x) { return x.getFullYear() + '-' + ('0' + (x.getMonth() + 1)).slice(-2) + '-' + ('0' + x.getDate()).slice(-2); }
+function fmtD(x) { return ('0' + x.getDate()).slice(-2) + ' ' + MON[x.getMonth()] + ' ' + x.getFullYear(); }
+function ofIso(s) { var p = s.split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+var VERS = {};
+Object.keys(DATA).forEach(function (k) { VERS[k] = [{ from: '2026-02-01', by: 'System', at: 'Seeded', dates: DATA[k].slice() }]; });
+/* a past correction on E&W 2026, and a scheduled change on E&W 2027 that can be withdrawn */
+VERS['england-wales|2026'][0].dates = VERS['england-wales|2026'][0].dates.map(function (r) { return r[0] === '28/12/2026' ? ['28/12/2026', 'Boxing Day'] : r; });
+VERS['england-wales|2026'].push({ from: '2026-03-16', by: 'Priya Shah', at: '12 Mar 2026, 14:22', dates: DATA['england-wales|2026'].slice() });
+VERS['england-wales|2027'].push({ from: '2026-11-02', by: 'Sarah Mitchell', at: '21 Sep 2026, 09:40', dates: DATA['england-wales|2027'].concat([['07/06/2027', 'Extra bank holiday']]).sort(function (a, b) { return key(a[0]) - key(b[0]); }) });
+function versionsOf() { return (VERS[region + '|' + year] || []).slice().sort(function (a, b) { return a.from < b.from ? 1 : -1; }); }
+function inForce() { var t = isoD(TODAY); return versionsOf().filter(function (v) { return v.from <= t; })[0] || null; }
+function nextUp() { var t = isoD(TODAY), f = versionsOf().filter(function (v) { return v.from > t; }); return f[f.length - 1] || null; }
 var q = new URLSearchParams(location.search);
 var region = RN[q.get('region')] ? q.get('region') : 'england-wales';
 var year = ['2026','2027','2028'].indexOf(q.get('year')) >= 0 ? q.get('year') : '2027';
@@ -329,10 +424,11 @@ var rows = [], saved = [], uid = 0, prevState = null;
 function parse(s) { var m = /^\s*(\d{1,2})\/(\d{1,2})\/(\d{4})\s*$/.exec(s || ''); if (!m) return null; var x = new Date(+m[3], +m[2] - 1, +m[1]); return (x.getDate() === +m[1] && x.getMonth() === +m[2] - 1) ? x : null; }
 function key(s) { var x = parse(s); return x ? x.getTime() : Infinity; }
 function load() {
-  saved = (DATA[region + '|' + year] || []).map(function (r) { return { d: r[0], n: r[1] }; });
+  var cv = inForce();
+  saved = (cv ? cv.dates : []).map(function (r) { return { d: r[0], n: r[1] }; });
   rows = saved.map(function (r) { return { id: ++uid, d: r.d, n: r.n, touched: false }; });
   document.getElementById('bh-failed').classList.add('hidden');
-  paintTabs(); render();
+  paintTabs(); render(); renderVersions();
   try { history.replaceState(null, '', '?region=' + region + '&year=' + year); } catch (e) {}
 }
 function changes() {
@@ -393,6 +489,74 @@ function guard(go) {
   if (!changes()) return go();
   S1.confirm({ tone: 'warning', icon: 'fa-triangle-exclamation', title: 'Leave without saving?', body: 'You have unsaved changes to ' + RN[region] + ' ' + year + '. If you switch now, they\'re discarded.', cta: 'Discard changes', cancel: 'Keep editing', delay: 0, onConfirm: go });
 }
+function countTxt(n) { return n === 0 ? 'No dates' : n === 1 ? '1 date' : n + ' dates'; }
+function wdBtn(v) {
+  return '<button type="button" data-bh-withdraw="' + v.from + '" class="inline-flex items-center gap-1.5 px-3 py-1.5 min-h-[36px] rounded-lg border border-slate-200 bg-white text-xs font-semibold text-red-700 hover:bg-red-50 hover:border-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" aria-label="Withdraw the change from ' + fmtD(ofIso(v.from)) + '"><i class="fa-solid fa-calendar-xmark" aria-hidden="true"></i> Withdraw</button>';
+}
+function renderVersions() {
+  var vs = versionsOf(), cv = inForce(), nx = nextUp(), t = isoD(TODAY), name = RN[region] + ' ' + year;
+  document.getElementById('bh-cur-v').textContent = cv ? countTxt(cv.dates.length) : 'None';
+  document.getElementById('bh-cur-v').className = cv ? 'mt-3 text-3xl font-extrabold tracking-tight text-slate-900 tabular-nums' : 'mt-3 text-base font-semibold text-slate-500';
+  document.getElementById('bh-cur-badge').style.display = cv ? '' : 'none';
+  document.getElementById('bh-cur-m').textContent = cv ? (cv.by === 'System' ? 'Since ' + fmtD(ofIso(cv.from)) + ' · seeded by the system' : 'Since ' + fmtD(ofIso(cv.from)) + ' · set by ' + cv.by + ' on ' + cv.at) : 'No list is in force for ' + name + '.';
+  document.getElementById('bh-next-v').textContent = nx ? countTxt(nx.dates.length) : 'No change scheduled';
+  document.getElementById('bh-next-v').className = nx ? 'mt-3 text-3xl font-extrabold tracking-tight text-slate-900 tabular-nums' : 'mt-3 text-base font-semibold text-slate-500';
+  document.getElementById('bh-next-badge').style.display = nx ? '' : 'none';
+  document.getElementById('bh-next-m').textContent = nx ? 'From ' + fmtD(ofIso(nx.from)) + ' · scheduled by ' + nx.by + ' on ' + nx.at : 'Edit the dates above and schedule a change to replace the list from a date.';
+  var nw = document.getElementById('bh-next-withdraw'); nw.classList.toggle('hidden', !nx);
+  if (nx) { nw.setAttribute('aria-label', 'Withdraw the change from ' + fmtD(ofIso(nx.from))); nw.onclick = function () { withdrawV(nx); }; }
+  var body = '', cards = '';
+  vs.forEach(function (v, i) {
+    var to = i > 0 ? new Date(ofIso(vs[i - 1].from).getTime() - 864e5) : null, fut = v.from > t;
+    var st = v === cv ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-emerald-50 text-emerald-700 border border-emerald-200"><i class="fa-solid fa-check text-[10px]" aria-hidden="true"></i>In force</span>'
+      : fut ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-amber-50 text-amber-700 border border-amber-200"><i class="fa-solid fa-clock text-[10px]" aria-hidden="true"></i>Future</span>'
+      : '<span class="text-slate-500" aria-hidden="true">—</span><span class="sr-only">Earlier version</span>';
+    var who = v.by === 'System' ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-slate-100 text-slate-700 border border-slate-200"><i class="fa-solid fa-robot text-[10px]" aria-hidden="true"></i>System</span>' : S1.esc(v.by);
+    var did = 'bhv-' + v.from, list = '<ul id="' + did + '" class="hidden mt-2 text-xs text-slate-600 flex flex-col gap-0.5" aria-label="Dates of the version from ' + fmtD(ofIso(v.from)) + '">' + v.dates.map(function (r) { return '<li><span class="tabular-nums">' + r[0] + '</span> · ' + S1.esc(r[1]) + '</li>'; }).join('') + '</ul>';
+    var tog = v.dates.length ? '<button type="button" data-bh-dates="' + did + '" aria-expanded="false" aria-controls="' + did + '" class="font-semibold text-slate-900 hover:text-blue-700 hover:underline rounded tabular-nums focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" aria-label="Show the dates of the version from ' + fmtD(ofIso(v.from)) + '">' + countTxt(v.dates.length) + ' <i class="fa-solid fa-chevron-down text-[9px] ml-0.5" aria-hidden="true"></i></button>' : '<span class="font-semibold text-slate-900">No dates</span>';
+    body += '<tr class="align-top hover:bg-slate-50/60"><td class="px-4 pl-5 py-3">' + tog + list + '</td><td class="px-4 py-3 text-slate-700 whitespace-nowrap tabular-nums">' + fmtD(ofIso(v.from)) + '</td><td class="px-4 py-3 text-slate-500 whitespace-nowrap tabular-nums">' + (to ? fmtD(to) : '—') + '</td><td class="px-4 py-3">' + st + '</td><td class="px-4 py-3 text-slate-700">' + who + '</td><td class="px-4 py-3 text-slate-500 whitespace-nowrap tabular-nums">' + S1.esc(v.at) + '</td><td class="px-4 pr-5 py-2 text-right">' + (fut ? wdBtn(v) : '') + '</td></tr>';
+    cards += '<li class="px-5 py-4"><div class="flex items-center justify-between gap-3"><span class="text-base font-bold text-slate-900 tabular-nums">' + countTxt(v.dates.length) + '</span>' + st + '</div><p class="text-sm text-slate-600 mt-1 tabular-nums">' + fmtD(ofIso(v.from)) + ' – ' + (to ? fmtD(to) : 'onwards') + '</p><p class="text-xs text-slate-500 mt-1">' + (v.by === 'System' ? 'System' : S1.esc(v.by)) + ' · ' + S1.esc(v.at) + '</p>' + (fut ? '<div class="mt-2">' + wdBtn(v) + '</div>' : '') + '</li>';
+  });
+  document.getElementById('bh-hist-body').innerHTML = body;
+  document.getElementById('bh-hist-cards').innerHTML = cards;
+  document.getElementById('bh-hist-cap').textContent = 'Version history of ' + name;
+  document.getElementById('bh-hist-count').textContent = vs.length === 1 ? '1 version' : vs.length + ' versions';
+  var em = document.getElementById('bh-hist-empty'); em.classList.toggle('hidden', !!vs.length); em.textContent = 'No versions yet for ' + name + '.';
+  document.querySelectorAll('[data-bh-withdraw]').forEach(function (b) { b.onclick = function () { withdrawV(versionsOf().filter(function (v) { return v.from === b.dataset.bhWithdraw; })[0]); }; });
+  document.querySelectorAll('[data-bh-dates]').forEach(function (b) { b.onclick = function () { var l = document.getElementById(b.dataset.bhDates), open = l.classList.toggle('hidden'); b.setAttribute('aria-expanded', String(!open)); }; });
+}
+function withdrawV(v) {
+  if (!v) return;
+  S1.confirm({ tone: 'danger', icon: 'fa-calendar-xmark', title: 'Withdraw this change?',
+    body: 'The list scheduled from ' + fmtD(ofIso(v.from)) + ' for ' + RN[region] + ' ' + year + ' will not take effect. Only a change that is not yet in force can be withdrawn. The list in force stays as it is. This is audited.',
+    cta: 'Withdraw change', busy: 'Withdrawing…',
+    onConfirm: function () { var a = VERS[region + '|' + year]; a.splice(a.indexOf(v), 1); renderVersions(); S1.toast('The scheduled change was withdrawn.', 'success'); } });
+}
+function schedErr(msg) {
+  var e = document.getElementById('bh-from-err'), i = document.getElementById('bh-from');
+  if (msg) { e.querySelector('span').textContent = msg; e.classList.remove('hidden'); i.classList.add('border-red-500'); i.setAttribute('aria-invalid', 'true'); }
+  else { e.classList.add('hidden'); i.classList.remove('border-red-500'); i.removeAttribute('aria-invalid'); }
+  document.getElementById('bh-sched-summary').classList.toggle('hidden', !msg);
+}
+function openSched() {
+  var list = rows.filter(function (r) { return r.d; }), sv = saved.map(function (r) { return r.d + '|' + r.n; }), now = list.map(function (r) { return r.d + '|' + r.n.trim(); });
+  var diff = [];
+  list.forEach(function (r) { var old = saved.filter(function (x) { return x.d === r.d; })[0]; if (!old) diff.push(['Added', 'text-emerald-700', r.d + ' · ' + r.n.trim()]); else if (old.n !== r.n.trim()) diff.push(['Renamed', 'text-blue-700', r.d + ' · ' + r.n.trim() + ' (was ' + old.n + ')']); });
+  saved.forEach(function (x) { if (!list.some(function (r) { return r.d === x.d; })) diff.push(['Removed', 'text-red-700', x.d + ' · ' + x.n]); });
+  document.getElementById('bh-sched-t').textContent = 'Schedule a change — ' + RN[region] + ' ' + year;
+  document.getElementById('bh-sched-count').textContent = countTxt(list.length);
+  document.getElementById('bh-sched-diff').innerHTML = diff.length ? diff.map(function (x) { return '<li><span class="font-semibold ' + x[1] + '">' + x[0] + '</span> <span class="text-slate-700 tabular-nums">' + S1.esc(x[2]) + '</span></li>'; }).join('') : '<li class="text-slate-600">The same dates as the list it replaces.</li>';
+  document.getElementById('bh-from').value = ''; schedErr(null);
+  S1.openModal('bh-sched-modal');
+}
+function checkFrom() {
+  var raw = document.getElementById('bh-from').value, x = parse(raw);
+  if (!raw.trim()) return schedErr('Enter the date the change takes effect.'), null;
+  if (!x) return schedErr('Enter a date as DD/MM/YYYY, for example 01/11/2026.'), null;
+  if (x < TODAY) return schedErr('The date can\'t be earlier than today (' + fmtD(TODAY) + '). Past periods have already been used, so history can\'t be rewritten.'), null;
+  if ((VERS[region + '|' + year] || []).some(function (v) { return v.from === isoD(x); })) return schedErr('A version already takes effect on ' + fmtD(x) + '. Choose a different date.'), null;
+  schedErr(null); return x;
+}
 function sortRows() { rows.sort(function (a, b) { return key(a.d) - key(b.d); }); }
 document.addEventListener('s1:state', function (e) {
   if (e.detail.state === 'empty') { year = '2028'; load(); }
@@ -436,21 +600,32 @@ document.addEventListener('s1:ready', function () {
   document.getElementById('add-row').onclick = addRow;
   document.getElementById('add-first').onclick = addRow;
   document.getElementById('discard').onclick = function () { load(); S1.toast('Changes discarded.', 'info'); };
-  document.getElementById('save').onclick = function (ev) {
+  document.getElementById('save').onclick = function () {
     sortRows(); render(true);
     var errs = rowErrors(true), first = Object.keys(errs)[0];
     if (first) { var f = document.getElementById('d' + first); if (f) f.focus(); return; }
-    var b = document.getElementById('save'); b.disabled = true; b.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs"></i> Saving…';
+    openSched();
+  };
+  document.getElementById('bh-from').addEventListener('blur', function () { if (this.value.trim()) checkFrom(); });
+  var shiftDemo = false;
+  document.getElementById('bh-sched-save').addEventListener('click', function (ev) { shiftDemo = ev.shiftKey; });
+  document.getElementById('bh-sched-form').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var x = checkFrom(); if (!x) { document.getElementById('bh-from').focus(); return; }
+    var b = document.getElementById('bh-sched-save'); b.disabled = true; b.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-xs"></i> Scheduling…';
     setTimeout(function () {
-      b.disabled = false; b.innerHTML = '<i class="fa-solid fa-check text-xs"></i> Save calendar';
-      if (ev.shiftKey) { document.getElementById('bh-failed').classList.remove('hidden'); S1.toast('The calendar wasn\'t saved. Nothing changed — try again.', 'error'); return; }
-      DATA[region + '|' + year] = rows.filter(function (r) { return r.d; }).map(function (r) { return [r.d, r.n.trim()]; });
-      var n = DATA[region + '|' + year].length; load();
-      S1.toast('Calendar saved — ' + n + ' dates for ' + S1.esc(RN[region]) + ' ' + year + '.', 'success');
+      b.disabled = false; b.innerHTML = '<i class="fa-solid fa-calendar-check text-xs"></i> Schedule change';
+      S1.closeModal('bh-sched-modal');
+      if (shiftDemo) { shiftDemo = false; document.getElementById('bh-failed').classList.remove('hidden'); S1.toast('The calendar wasn\'t saved. Nothing changed — try again.', 'error'); return; }
+      var k = region + '|' + year, list = rows.filter(function (r) { return r.d; }).map(function (r) { return [r.d, r.n.trim()]; });
+      (VERS[k] = VERS[k] || []).push({ from: isoD(x), by: 'Sarah Mitchell', at: fmtD(TODAY) + ', ' + new Date().toTimeString().slice(0, 5), dates: list });
+      load();
+      var c = countTxt(list.length).toLowerCase();
+      if (isoD(x) === isoD(TODAY)) S1.toast('Calendar saved — ' + c + ' for ' + S1.esc(RN[region]) + ' ' + year + ', in force from today.', 'success');
+      else S1.toast('Change scheduled — ' + c + ' for ' + S1.esc(RN[region]) + ' ' + year + ' from ' + fmtD(x) + '.', 'success');
       if (document.body.getAttribute('data-s1-state') !== 'default') S1.setState('default');
     }, 700);
-  };
-  document.getElementById('save').title = 'Shift-click to demo a failed save';
+  });
 });
 
 </script>

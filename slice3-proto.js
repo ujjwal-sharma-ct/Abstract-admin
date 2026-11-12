@@ -19,7 +19,7 @@
   'use strict';
   var PORTAL = 'abstract';
   var TODAY = '2026-10-10';
-  var KEY = 's3-demo-v2';
+  var KEY = 's3-demo-v3';
 
   // ---------- reference data, read from slice 2's records ----------
   var CLIENTS = {
@@ -55,7 +55,7 @@
   var CLIENT_ROLES = { acme: ['jr-wo', 'jr-fd', 'jr-pp', 'jr-tl'], northgate: ['jr-pp', 'jr-wo'] , pennine: ['jr-wo']  };
   var SHIFTS = {
     acme: [{ id: 'sh-am', name: 'Morning', def: true }, { id: 'sh-pm', name: 'Afternoon' }, { id: 'sh-nt', name: 'Night' }],
-    northgate: [{ id: 'ng-d', name: 'Days', def: true }, { id: 'ng-l', name: 'Lates' }]
+    northgate: [{ id: 'ng-d', name: 'Days' }, { id: 'ng-l', name: 'Lates', def: true }]
     , pennine: [{ id: 'pn-d', name: 'Days', def: true }] 
   };
   // The standard line of the card in force. The client's copy carries the charge alone.
@@ -198,6 +198,11 @@
   S3.audit = function (type, id) { return db.audit.filter(function (a) { return a.type === type && a.id === id; }).sort(function (a, b) { return a.at < b.at ? 1 : -1; }); };
   function log(type, id, label, text) { db.audit.push({ type: type, id: id, at: now(), by: S3.me, label: label, text: text }); }
   function refuse(code, message, data) { var e = new Error(message); e.code = code; e.data = data || {}; throw e; }
+  // VACANCY_NO_EFFECTIVE_RATE: Abstract is told where to add the line (frontend demand.refusal.noEffectiveRate); the client copy keeps its own words
+  function noRate(role, c, node, shift, start) {
+    var when = S3.fmtDate(start > TODAY ? start : TODAY);
+    refuse('VACANCY_NO_EFFECTIVE_RATE', PORTAL === 'abstract' ? 'There is no rate for ' + JOB_ROLES[role] + ' at ' + S3.nodeName(c, node) + ' on the ' + S3.shiftName(c, shift) + ' Shift for ' + when + ', so the vacancy can’t be published. Add the line in Rate Cards, or choose another job role, place or Shift.' : 'This vacancy can’t be published: no rate card is in force for ' + JOB_ROLES[role] + ' at ' + S3.nodeName(c, node) + ' on the ' + S3.shiftName(c, shift) + ' Shift for ' + when + '.');
+  }
 
   // ---------- writes ----------
   function clientActive(c, what) {
@@ -207,7 +212,7 @@
     saveVacancy: function (f, id, publish) {
       var v = id ? rawV(id) : null, c = id ? v.clientId : f.clientId;
       clientActive(c, 'nothing can be saved on its vacancies');
-      if (publish && !resolveRate(f.jobRoleId, c, f.orgNodeId, f.shiftId)) refuse('VACANCY_NO_EFFECTIVE_RATE', 'This vacancy can’t be published: no rate card is in force for ' + JOB_ROLES[f.jobRoleId] + ' at ' + S3.nodeName(c, f.orgNodeId) + ' on the ' + S3.shiftName(c, f.shiftId) + ' Shift for ' + S3.fmtDate(f.startDate > TODAY ? f.startDate : TODAY) + '.');
+      if (publish && !resolveRate(f.jobRoleId, c, f.orgNodeId, f.shiftId)) noRate(f.jobRoleId, c, f.orgNodeId, f.shiftId, f.startDate);
       if (!v) {
         v = vac({ id: 'v' + (++db.seq.vac), clientId: c, createdBy: S3.me, createdAt: now(), positions: [] });
         v.reference = 'VAC-' + db.seq.vac;
@@ -222,13 +227,13 @@
     },
     publish: function (id) {
       var v = rawV(id); clientActive(v.clientId, 'this vacancy can’t be published');
-      if (!resolveRate(v.jobRoleId, v.clientId, v.orgNodeId, v.shiftId)) refuse('VACANCY_NO_EFFECTIVE_RATE', 'This vacancy can’t be published: no rate card is in force for ' + JOB_ROLES[v.jobRoleId] + ' at ' + S3.nodeName(v.clientId, v.orgNodeId) + ' on the ' + S3.shiftName(v.clientId, v.shiftId) + ' Shift for ' + S3.fmtDate(v.startDate > TODAY ? v.startDate : TODAY) + '.');
+      if (!resolveRate(v.jobRoleId, v.clientId, v.orgNodeId, v.shiftId)) noRate(v.jobRoleId, v.clientId, v.orgNodeId, v.shiftId, v.startDate);
       v.publishedAt = now(); v.publishedBy = S3.me; v.updatedAt = now();
       log('vacancy', id, 'Updated', 'Status: Draft → Open (Abstract Tier)'); save();
     },
     changeCount: function (id, n) {
       var v = rawV(id), d = dressV(v); clientActive(v.clientId, 'the position count can’t be changed');
-      if (n < d.filledCount) refuse('VACANCY_POSITION_COUNT_BELOW_FILLED', d.filledCount + (d.filledCount === 1 ? ' position is' : ' positions are') + ' filled, so the count can’t go below ' + d.filledCount + '. Cancel a booking first if you need fewer.', { filledCount: d.filledCount });
+      if (n < d.filledCount) refuse('VACANCY_POSITION_COUNT_BELOW_FILLED', 'The count can’t go below the ' + d.filledCount + ' filled positions. Nothing was changed.', { filledCount: d.filledCount });
       var before = d.positionCount, delta = n - before;
       if (delta > 0) { var top = v.positions.reduce(function (m, p) { return Math.max(m, p.n); }, 0); for (var i = 1; i <= delta; i++) v.positions.push(pos(top + i, 'Open')); }
       if (delta < 0) { var opens = v.positions.filter(function (p) { return p.status === 'Open'; }).sort(function (a, b) { return b.n - a.n; }); opens.slice(0, -delta).forEach(function (p) { p.status = 'Cancelled'; p.cancelledAt = now(); p.cancelledReason = 'count_reduced'; }); }
@@ -289,7 +294,7 @@
     _: null
   };
   
-  function bookingActive(b) { if (CLIENTS[b.clientId].status !== 'Active') refuse('BOOKING_CLIENT_NOT_ACTIVE', CLIENTS[b.clientId].name + ' is ' + CLIENTS[b.clientId].status + ', so this booking can’t be changed. It can still be cancelled.', { lifecycleStatus: CLIENTS[b.clientId].status }); }
+  function bookingActive(b) { if (CLIENTS[b.clientId].status !== 'Active') refuse('BOOKING_CLIENT_NOT_ACTIVE', 'This client is ' + CLIENTS[b.clientId].status + ', so its bookings take no extension, amendment or manual start or completion. A booking can still be cancelled.', { lifecycleStatus: CLIENTS[b.clientId].status }); }
 
   // ---------- the candidate record: Abstract's copy only ----------
   function item(status, expiry, doc) { return { status: status, expiryDate: expiry || null, doc: doc || null }; }
@@ -301,15 +306,15 @@
   var OK = function (e, d) { return item('Compliant', e, d); }, NA = item('Not Applicable'), PD = item('Pending');
   function seedCandidates() {
     return [
-      cand('c-mo', 'Marek Nowak', 'jr-fd', '1988-04-12', '07700 900101', 'marek.nowak@example.com', ADDR('14 Armley Road', 'Leeds', 'LS12 2AA'), 'QQ123456C', { name: 'Anna Nowak', relationship: 'Spouse', telephone: '07700 900201' }, allItems(OK('2029-04-30', 'Right to work share code.pdf'), OK('2027-02-01', 'DBS certificate.pdf'), OK(), OK('2027-06-30')), [{ id: 'l1', licenceType: 'Reach truck (RTITB)', issuingBody: 'RTITB', expiryDate: '2027-08-31', removedAt: null }], { documents: [{ name: 'Right to work share code.pdf', size: '220 KB', by: 'Sarah Mitchell', at: '2026-03-02T09:30:00' }, { name: 'DBS certificate.pdf', size: '310 KB', by: 'Sarah Mitchell', at: '2026-03-02T09:32:00' }] }),
-      cand('c-tw', 'Tasha Williams', 'jr-fd', '1993-11-02', '07700 900102', 'tasha.w@example.com', ADDR('3 Kirkstall Lane', 'Leeds', 'LS5 3AA'), 'QQ223344A', { name: 'Devon Williams', relationship: 'Brother', telephone: '07700 900202' }, allItems(OK('2030-01-31'), NA, OK(), OK('2027-03-31')), [{ id: 'l2', licenceType: 'Reach truck (RTITB)', issuingBody: 'RTITB', expiryDate: '2026-09-30', removedAt: null }]),
-      cand('c-sa', 'Samuel Adeyemi', 'jr-wo', '1990-07-21', '07700 900103', 'samuel.adeyemi@example.com', ADDR('58 Soho Road', 'Birmingham', 'B21 9BH'), 'QQ334455B', { name: 'Grace Adeyemi', relationship: 'Spouse', telephone: '07700 900203' }, allItems(OK('2031-05-31'), OK('2027-09-01'), OK(), OK('2027-05-31')), []),
+      cand('c-mo', 'Marek Nowak', 'jr-fd', '1988-04-12', '07700 900101', 'marek.nowak@example.com', ADDR('14 Armley Road', 'Leeds', 'LS12 2AA'), 'AB123456C', { name: 'Anna Nowak', relationship: 'Spouse', telephone: '07700 900201' }, allItems(OK('2029-04-30', 'Right to work share code.pdf'), OK('2027-02-01', 'DBS certificate.pdf'), OK(), OK('2027-06-30')), [{ id: 'l1', licenceType: 'Reach truck (RTITB)', issuingBody: 'RTITB', expiryDate: '2027-08-31', removedAt: null }], { documents: [{ name: 'Right to work share code.pdf', size: '220 KB', by: 'Sarah Mitchell', at: '2026-03-02T09:30:00' }, { name: 'DBS certificate.pdf', size: '310 KB', by: 'Sarah Mitchell', at: '2026-03-02T09:32:00' }] }),
+      cand('c-tw', 'Tasha Williams', 'jr-fd', '1993-11-02', '07700 900102', 'tasha.w@example.com', ADDR('3 Kirkstall Lane', 'Leeds', 'LS5 3AA'), 'CE223344A', { name: 'Devon Williams', relationship: 'Brother', telephone: '07700 900202' }, allItems(OK('2030-01-31'), NA, OK(), OK('2027-03-31')), [{ id: 'l2', licenceType: 'Reach truck (RTITB)', issuingBody: 'RTITB', expiryDate: '2026-09-30', removedAt: null }]),
+      cand('c-sa', 'Samuel Adeyemi', 'jr-wo', '1990-07-21', '07700 900103', 'samuel.adeyemi@example.com', ADDR('58 Soho Road', 'Birmingham', 'B21 9BH'), 'GH334455B', { name: 'Grace Adeyemi', relationship: 'Spouse', telephone: '07700 900203' }, allItems(OK('2031-05-31'), OK('2027-09-01'), OK(), OK('2027-05-31')), []),
       cand('c-lk', 'Lucy O’Brien', 'jr-wo', '1997-02-14', '07700 900104', 'lucy.obrien@example.com', ADDR('9 Aston Street', 'Birmingham', 'B4 7ET'), null, null, allItems(OK(), PD, OK(), PD), []),
-      cand('c-ra', 'Ravi Patel', 'jr-wo', '1985-09-09', '07700 900105', 'ravi.patel@example.com', ADDR('21 Barking Road', 'London', 'E6 1PW'), 'QQ445566C', { name: 'Meena Patel', relationship: 'Mother', telephone: '07700 900205' }, allItems(OK('2028-12-31'), NA, OK(), OK('2027-01-31')), [{ id: 'l3', licenceType: 'Counterbalance (ITSSAR)', issuingBody: 'ITSSAR', expiryDate: '2027-02-28', removedAt: null }]),
-      cand('c-er', 'Ewa Rybak', 'jr-wo', '1994-05-30', '07700 900106', null, ADDR('2 Holbeck Moor', 'Leeds', 'LS11 9QF'), 'QQ556677D', null, allItems(item('Expired', '2026-08-31'), OK(), OK(), OK('2027-04-30')), []),
-      cand('c-gh', 'George Hall', 'jr-wo', '1979-12-01', '07700 900107', 'george.hall@example.com', ADDR('77 Bristol Road', 'Birmingham', 'B5 7TU'), 'QQ667788A', { name: 'Sue Hall', relationship: 'Spouse', telephone: '07700 900207' }, allItems(OK(), OK(), OK(), OK('2027-02-28')), [], { unavailableFrom: '2026-10-05', unavailableUntil: '2026-10-23', unavailabilityNote: 'Annual leave' }),
-      cand('c-mo2', 'Nadia Hussain', 'jr-wo', '1991-03-17', '07700 900108', 'nadia.hussain@example.com', ADDR('40 Stratford Road', 'Birmingham', 'B11 1AN'), 'QQ778899B', { name: 'Imran Hussain', relationship: 'Husband', telephone: '07700 900208' }, allItems(OK('2029-11-30'), NA, OK(), OK('2027-07-31')), []),
-      cand('c-jd', 'Joao Dias', 'jr-wo', '1996-08-08', '07700 900109', 'joao.dias@example.com', ADDR('6 Digbeth', 'Birmingham', 'B5 6DR'), 'QQ889900C', { name: 'Rita Dias', relationship: 'Sister', telephone: '07700 900209' }, allItems(OK('2030-06-30'), OK('2027-10-01'), OK(), OK('2027-08-31')), [{ id: 'l4', licenceType: 'Counterbalance (ITSSAR)', issuingBody: 'ITSSAR', expiryDate: '2027-11-30', removedAt: null }], { legalHold: true, legalHoldReason: 'Employment tribunal claim, keep until it concludes.', legalHoldSetBy: 'James Okafor', legalHoldSetAt: '2026-09-14T10:00:00' }),
+      cand('c-ra', 'Ravi Patel', 'jr-wo', '1985-09-09', '07700 900105', 'ravi.patel@example.com', ADDR('21 Barking Road', 'London', 'E6 1PW'), 'JK445566C', { name: 'Meena Patel', relationship: 'Mother', telephone: '07700 900205' }, allItems(OK('2028-12-31'), NA, OK(), OK('2027-01-31')), [{ id: 'l3', licenceType: 'Counterbalance (ITSSAR)', issuingBody: 'ITSSAR', expiryDate: '2027-02-28', removedAt: null }]),
+      cand('c-er', 'Ewa Rybak', 'jr-wo', '1994-05-30', '07700 900106', null, ADDR('2 Holbeck Moor', 'Leeds', 'LS11 9QF'), 'LM556677D', null, allItems(item('Expired', '2026-08-31'), OK(), OK(), OK('2027-04-30')), []),
+      cand('c-gh', 'George Hall', 'jr-wo', '1979-12-01', '07700 900107', 'george.hall@example.com', ADDR('77 Bristol Road', 'Birmingham', 'B5 7TU'), 'NP667788A', { name: 'Sue Hall', relationship: 'Spouse', telephone: '07700 900207' }, allItems(OK(), OK(), OK(), OK('2027-02-28')), [], { unavailableFrom: '2026-10-05', unavailableUntil: '2026-10-23', unavailabilityNote: 'Annual leave' }),
+      cand('c-mo2', 'Nadia Hussain', 'jr-wo', '1991-03-17', '07700 900108', 'nadia.hussain@example.com', ADDR('40 Stratford Road', 'Birmingham', 'B11 1AN'), 'RS778899B', { name: 'Imran Hussain', relationship: 'Husband', telephone: '07700 900208' }, allItems(OK('2029-11-30'), NA, OK(), OK('2027-07-31')), []),
+      cand('c-jd', 'Joao Dias', 'jr-wo', '1996-08-08', '07700 900109', 'joao.dias@example.com', ADDR('6 Digbeth', 'Birmingham', 'B5 6DR'), 'TW889900C', { name: 'Rita Dias', relationship: 'Sister', telephone: '07700 900209' }, allItems(OK('2030-06-30'), OK('2027-10-01'), OK(), OK('2027-08-31')), [{ id: 'l4', licenceType: 'Counterbalance (ITSSAR)', issuingBody: 'ITSSAR', expiryDate: '2027-11-30', removedAt: null }], { legalHold: true, legalHoldReason: 'Employment tribunal claim, keep until it concludes.', legalHoldSetBy: 'James Okafor', legalHoldSetAt: '2026-09-14T10:00:00' }),
       cand('c-al', 'Aisha Lewis', 'jr-pp', '1999-01-25', '07700 900110', 'aisha.lewis@example.com', ADDR('12 Meanwood Road', 'Leeds', 'LS7 2AB'), null, null, allItems(PD, PD, PD, PD), []),
       cand('c-ax', 'XXXXXXXX', 'jr-wo', '', '', null, null, null, null, allItems(OK(), NA, OK(), OK()), [], { anonymisedAt: '2026-09-30T02:10:00' })
     ];
@@ -407,7 +412,7 @@
   ui.wireFilterToggle = function (root) { root.querySelectorAll('[data-filter-toggle]').forEach(function (b) { b.onclick = function () { var p = document.getElementById(b.getAttribute('aria-controls')), open = p.classList.contains('hidden'); p.classList.toggle('hidden', !open); p.classList.toggle('flex', open); p.classList.toggle('flex-col', open); p.classList.toggle('items-stretch', open); b.setAttribute('aria-expanded', String(open)); }; }); };
   ui.select = function (id, label, icon, opts, value) { return '<label class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px] focus-within:border-blue-300 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-600/20"><i class="fa-solid ' + icon + ' text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">' + esc(label) + '</span><select id="' + id + '" class="bg-transparent text-xs font-medium text-slate-700 outline-none w-full">' + opts.map(function (o) { return '<option value="' + esc(o[0]) + '"' + (o[0] === value ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select></label>'; };
   ui.search = function (id, placeholder) { return '<label class="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px] flex-1 min-w-[200px] focus-within:border-blue-300 focus-within:bg-white focus-within:ring-2 focus-within:ring-blue-600/20"><i class="fa-solid fa-magnifying-glass text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">' + esc(placeholder) + '</span><input id="' + id + '" type="search" placeholder="' + esc(placeholder) + '" class="bg-transparent text-sm text-slate-800 placeholder-slate-500 outline-none w-full"/></label>'; };
-  ui.dates = function (idFrom, idTo) { return '<label class="flex items-center gap-2 text-xs font-medium text-slate-600"><span>Start from</span><input id="' + idFrom + '" type="date" class="bg-slate-50 border border-slate-200 rounded-lg px-2 py-2 text-xs text-slate-700 min-h-[38px]"/></label><label class="flex items-center gap-2 text-xs font-medium text-slate-600"><span>to</span><input id="' + idTo + '" type="date" class="bg-slate-50 border border-slate-200 rounded-lg px-2 py-2 text-xs text-slate-700 min-h-[38px]"/></label>'; };
+  ui.dates = function (idFrom, idTo, lFrom, lTo) { return '<label class="flex items-center gap-2 text-xs font-medium text-slate-600"><span>' + esc(lFrom || 'Start from') + '</span><input id="' + idFrom + '" type="date" class="bg-slate-50 border border-slate-200 rounded-lg px-2 py-2 text-xs text-slate-700 min-h-[38px]"/></label><label class="flex items-center gap-2 text-xs font-medium text-slate-600"><span>' + esc(lTo || 'to') + '</span><input id="' + idTo + '" type="date" class="bg-slate-50 border border-slate-200 rounded-lg px-2 py-2 text-xs text-slate-700 min-h-[38px]"/></label>'; };
   ui.field = function (f) {
     var c = C.input, id = f.id, v = f.value == null ? '' : f.value, ctl;
     if (f.type === 'textarea') ctl = '<textarea id="' + id + '" rows="' + (f.rows || 3) + '" class="' + c + '" placeholder="' + esc(f.placeholder || '') + '">' + esc(v) + '</textarea>';
@@ -437,7 +442,7 @@
       var errs = o.validate ? o.validate(vals) : {};
       (o.fields || []).forEach(function (f) { if (f.required && !vals[f.id] && !errs[f.id]) errs[f.id] = f.requiredMessage || (f.label + ' is required.'); });
       if (!ui.showErrs(errs, ids)) return;
-      try { if (o.onOk(vals, api) !== false) close(); } catch (e) { if (e.code) api.banner('error', esc(e.message)); else throw e; }
+      try { if (o.onOk(vals, api) !== false) close(); } catch (e) { if (e.code) api.banner('error', (o.refusalTitle ? '<p class="font-semibold">' + esc(o.refusalTitle) + '</p>' : '') + esc(e.message)); else throw e; }
     };
     var first = scrim.querySelector('input,textarea,select') || scrim.querySelector('[data-ok]'); first.focus();
     return api;
@@ -484,7 +489,7 @@
     host.innerHTML = '<label for="' + id + '" class="' + C.label + '">' + esc(o.label) + (o.required ? ' <span class="text-red-700">*</span><span class="sr-only"> required</span>' : '') + '</label><div class="relative"><input id="' + id + '" role="combobox" aria-expanded="false" aria-autocomplete="list" aria-controls="' + id + '-list" autocomplete="off" class="' + C.input + ' pr-8" placeholder="' + esc(o.placeholder || 'Search') + '" value="' + esc(labelOf(value)) + '"' + (o.disabled ? ' disabled' : '') + '/><i class="fa-solid fa-chevron-down text-[10px] text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true"></i><ul id="' + id + '-list" role="listbox" aria-label="' + esc(o.label) + '" class="absolute z-30 mt-1 w-full max-h-56 overflow-y-auto bg-white border border-slate-200 rounded-lg shadow-2xl hidden"></ul></div><p id="' + id + '-err" class="text-xs font-medium text-red-700 mt-1" style="display:none" role="alert"></p>';
     var input = host.querySelector('input'), ul = host.querySelector('ul');
     function filtered(all) { var q = all ? '' : input.value.trim().toLowerCase(); return o.options().filter(function (x) { return x[1].toLowerCase().indexOf(q) >= 0; }); }
-    function draw(all) { var l = filtered(all); ul.innerHTML = l.map(function (x, i) { return '<li role="option" id="' + id + '-o' + i + '" data-v="' + esc(x[0]) + '" aria-selected="' + (x[0] === value) + '" class="px-3 py-2 text-sm cursor-pointer min-h-[36px] ' + (i === active ? 'bg-blue-50 text-blue-800' : 'text-slate-700 hover:bg-slate-50') + '">' + esc(x[1]) + '</li>'; }).join('') || '<li class="px-3 py-2 text-sm text-slate-500">No match</li>'; ul.classList.remove('hidden'); input.setAttribute('aria-expanded', 'true'); if (active >= 0) input.setAttribute('aria-activedescendant', id + '-o' + active); else input.removeAttribute('aria-activedescendant'); }
+    function draw(all) { var l = filtered(all); ul.innerHTML = l.map(function (x, i) { return '<li role="option" id="' + id + '-o' + i + '" data-v="' + esc(x[0]) + '" aria-selected="' + (x[0] === value) + '" class="px-3 py-2 text-sm cursor-pointer min-h-[36px] ' + (i === active ? 'bg-blue-50 text-blue-800' : 'text-slate-700 hover:bg-slate-50') + '">' + esc(x[1]) + (x[2] ? '<span class="block text-xs text-amber-800">' + esc(x[2]) + '</span>' : '') + '</li>'; }).join('') || '<li class="px-3 py-2 text-sm text-slate-500">' + esc(o.noMatch || 'No match') + '</li>'; ul.classList.remove('hidden'); input.setAttribute('aria-expanded', 'true'); if (active >= 0) input.setAttribute('aria-activedescendant', id + '-o' + active); else input.removeAttribute('aria-activedescendant'); }
     function hide() { ul.classList.add('hidden'); input.setAttribute('aria-expanded', 'false'); active = -1; }
     function pick(v) { value = v; input.value = labelOf(v); hide(); if (o.onChange) o.onChange(v); }
     input.addEventListener('focus', function () { draw(true); });
@@ -567,18 +572,20 @@
     var edit = p.mode === 'edit', v = edit ? S3.vacancy(p.vacancyId) : null, abs = p.portal === 'abstract';
     var detail = (abs ? 'abstract' : 'client') + '.demand.vacancy-detail.html', list = abs ? 'abstract.demand.vacancy-list.html' : 'client.demand.vacancies.html';
     var clientId = edit ? v.clientId : (abs ? (p.preset && p.preset.clientId) || null : S3.clientId);
-    var locked = edit && v.filledCount > 0;
+    var locked = edit && v.filledCount > 0, readOnly = edit && (v.status === 'Closed' || v.status === 'Cancelled');
+    // every job role is offered; one with no rate card for the client is marked (3.5 D-9) — a draft may name it, a publish is refused
+    var hasCard = function (r, c) { return LINES.some(function (l) { return l.role === r && l.client === c; }); };
     var d = edit ? v : Object.assign({ jobTitle: '', startDate: '', endDate: '', workingTimes: '', closeDate: '', description: '', requirements: '', positionCount: 1, jobRoleId: null, orgNodeId: null, shiftId: null }, p.preset || {});
     var cardCls = C.card + ' p-5';
     function shiftOptions(c) { return c ? [['', 'Choose a Shift']].concat(SHIFTS[c].map(function (s) { return [s.id, s.name + (s.def ? ' (the client’s default)' : '')]; })) : [['', 'Choose a client first']]; }
     host.innerHTML = '<div class="max-w-3xl mx-auto flex flex-col gap-4">' +
-      '<div id="vf-banner"></div>' +
+      '<div id="vf-banner">' + (readOnly ? ui.banner('info', 'This vacancy is ' + esc(v.status) + ', so it can no longer be edited.') : '') + '</div>' +
       '<section class="' + cardCls + '" aria-labelledby="vf-1"><h2 id="vf-1" class="text-sm font-bold text-slate-900 mb-4">The vacancy</h2><div class="grid grid-cols-1 sm:grid-cols-2 gap-4">' +
       (abs ? '<div id="vf-client-box" class="sm:col-span-2"></div>' : '') +
       ui.field({ id: 'vf-title', label: 'Job title', required: true, wide: true, value: d.jobTitle, hint: 'What the client calls this work.' }) +
       '<div id="vf-role-box" class="sm:col-span-2"></div>' +
-      '<div class="sm:col-span-2"><p class="' + C.label + '" id="vf-node-l">Where in the structure <span class="text-red-700">*</span><span class="sr-only"> required</span></p><div id="vf-tree"></div><p id="vf-node-err" class="text-xs font-medium text-red-700 mt-1" style="display:none" role="alert"></p></div>' +
-      (edit ? '' : ui.field({ id: 'vf-count', label: 'Positions', required: true, type: 'number', min: 1, max: 500, value: d.positionCount, hint: 'One seat per position, each filled by one person.' })) +
+      '<div class="sm:col-span-2"><p class="' + C.label + '" id="vf-node-l">Where in the structure <span class="text-red-700">*</span><span class="sr-only"> required</span></p>' + (locked ? '<p class="text-xs text-slate-500 mb-1">Fixed while a position is filled.</p>' : '') + '<div id="vf-tree"></div><p id="vf-node-err" class="text-xs font-medium text-red-700 mt-1" style="display:none" role="alert"></p></div>' +
+      ui.field({ id: 'vf-count', label: 'Positions', required: true, type: 'number', min: edit ? Math.max(1, v.filledCount) : 1, max: 500, value: d.positionCount, hint: edit && v.filledCount ? 'One seat per position, each filled by one person. It can’t go below the ' + v.filledCount + ' filled.' : 'One seat per position, each filled by one person.' }) +
       '<div>' + ui.field({ id: 'vf-shift', label: 'Shift', required: true, type: 'select', options: shiftOptions(clientId), value: d.shiftId || '', hint: 'The Shift this vacancy’s rate is read for.' }) + '</div>' +
       ui.field({ id: 'vf-start', label: 'Start date', required: true, type: 'date', value: d.startDate }) + ui.field({ id: 'vf-end', label: 'End date', required: true, type: 'date', value: d.endDate }) +
       ui.field({ id: 'vf-close', label: 'Close date', type: 'date', value: d.closeDate, hint: 'Optional. Nothing closes by itself on this date.' }) +
@@ -588,7 +595,7 @@
       ui.field({ id: 'vf-desc', label: 'Description', type: 'textarea', rows: 4, value: d.description }) + ui.field({ id: 'vf-req', label: 'Requirements', type: 'textarea', rows: 3, value: d.requirements }) + '</div></section>' +
       '<section class="' + cardCls + '" aria-labelledby="vf-3"><h2 id="vf-3" class="text-sm font-bold text-slate-900 mb-3">Rate</h2><div id="vf-rate"></div></section>' +
       '<div class="flex flex-wrap items-center justify-end gap-2"><a class="' + C.sec + '" href="' + (edit ? detail + '?id=' + v.id : list) + '">Cancel</a>' +
-      (edit ? '<button type="button" id="vf-save" class="' + C.pri + '" style="' + C.priStyle + '">Save changes</button>' : '<button type="button" id="vf-draft" class="' + C.sec + '">Save as draft</button><button type="button" id="vf-publish" class="' + C.pri + '" style="' + C.priStyle + '">Publish</button>') + '</div></div>';
+      (edit ? (readOnly ? '' : '<button type="button" id="vf-save" class="' + C.pri + '" style="' + C.priStyle + '">Save changes</button>' + (v.status === 'Draft' ? '<button type="button" id="vf-publish" class="' + C.pri + '" style="' + C.priStyle + '">Publish</button>' : '')) : '<button type="button" id="vf-draft" class="' + C.sec + '">Save as draft</button><button type="button" id="vf-publish" class="' + C.pri + '" style="' + C.priStyle + '">Publish</button>') + '</div></div>';
     var role, tree, nodesFor = function (c) {
       if (!c) return [];
       var ns = TREES[c] || [];
@@ -598,7 +605,11 @@
     function drawNoteRole() {
       var box = document.getElementById('vf-role-box');
       if (clientId && p.noRoles) { box.innerHTML = '<p class="' + C.label + '">Job role</p>' + ui.banner('info', 'This client has no job roles yet. ' + (abs ? 'Add one on <a class="' + C.link + '" href="abstract.rates.rate-cards.html">Rate Cards</a> first.' : 'Ask Abstract to add one.')); return; }
-      role = S3.combobox(box, { id: 'vf-role', label: 'Job role', required: true, disabled: locked, placeholder: clientId ? 'Search job roles' : 'Choose a client first', value: d.jobRoleId, options: function () { return clientId ? CLIENT_ROLES[clientId].map(function (r) { return [r, JOB_ROLES[r]]; }) : []; }, onChange: rateLine });
+      var roles = function () { return !clientId ? [] : abs ? Object.keys(JOB_ROLES).map(function (r) { return [r, JOB_ROLES[r], hasCard(r, clientId) ? '' : 'No rate card for this client']; }) : CLIENT_ROLES[clientId].map(function (r) { return [r, JOB_ROLES[r]]; }); };
+      var cardNote = function () { var r = role && role.get(), n = document.getElementById('vf-role-nocard'); if (n) n.style.display = abs && r && clientId && !hasCard(r, clientId) ? '' : 'none'; };
+      role = S3.combobox(box, { id: 'vf-role', label: 'Job role', required: true, disabled: locked, placeholder: clientId ? 'Search the client’s job roles' : 'Choose a client first', noMatch: 'No job role matches.', value: d.jobRoleId, options: roles, onChange: function () { cardNote(); rateLine(); } });
+      box.insertAdjacentHTML('beforeend', '<p id="vf-role-nocard" class="text-xs text-amber-800 mt-1" style="display:none">This client has no rate card for this job role. You can save a draft; publishing needs a rate card in force.</p>' + (locked ? '<p class="text-xs text-slate-500 mt-1">Fixed while a position is filled.</p>' : ''));
+      cardNote();
     }
     function drawTree() {
       var box = document.getElementById('vf-tree');
@@ -615,14 +626,15 @@
     }
     if (abs) {
       if (edit) { document.getElementById('vf-client-box').innerHTML = '<p class="' + C.label + '">Client</p><p class="text-sm text-slate-800">' + esc(v.clientName) + '</p>'; }
-      else S3.combobox(document.getElementById('vf-client-box'), { id: 'vf-client', label: 'Client', required: true, placeholder: 'Search clients', value: clientId, options: function () { return Object.keys(CLIENTS).filter(function (k) { return CLIENTS[k].status === 'Active'; }).map(function (k) { return [k, CLIENTS[k].name]; }); }, onChange: function (c) { clientId = c; d.jobRoleId = null; d.orgNodeId = null; drawNoteRole(); drawTree(); var sel = document.getElementById('vf-shift'); sel.innerHTML = shiftOptions(c).map(function (o) { return '<option value="' + o[0] + '">' + esc(o[1]) + '</option>'; }).join(''); var def = SHIFTS[c].filter(function (s) { return s.def; })[0]; if (def) sel.value = def.id; rateLine(); } });
+      else S3.combobox(document.getElementById('vf-client-box'), { id: 'vf-client', label: 'Client', required: true, placeholder: 'Search Active clients', noMatch: 'No Active client matches.', value: clientId, options: function () { return Object.keys(CLIENTS).filter(function (k) { return CLIENTS[k].status === 'Active'; }).map(function (k) { return [k, CLIENTS[k].name]; }); }, onChange: function (c) { clientId = c; d.jobRoleId = null; d.orgNodeId = null; drawNoteRole(); drawTree(); var sel = document.getElementById('vf-shift'); sel.innerHTML = shiftOptions(c).map(function (o) { return '<option value="' + o[0] + '">' + esc(o[1]) + '</option>'; }).join(''); var def = SHIFTS[c].filter(function (s) { return s.def; })[0]; if (def) sel.value = def.id; rateLine(); } });
     }
     drawNoteRole(); drawTree(); rateLine();
+    var cb = document.getElementById('vf-client-box'); if (cb && !edit) cb.insertAdjacentHTML('beforeend', '<p class="text-xs text-slate-500 mt-1">Active clients only.</p>');
     if (!edit && clientId && !d.shiftId) { var def = SHIFTS[clientId].filter(function (s) { return s.def; })[0]; if (def) document.getElementById('vf-shift').value = def.id; }
     document.getElementById('vf-shift').addEventListener('change', rateLine);
     var IDS = ['vf-title', 'vf-count', 'vf-shift', 'vf-start', 'vf-end', 'vf-close', 'vf-role', 'vf-client'];
     function collect() {
-      return { clientId: clientId, jobTitle: document.getElementById('vf-title').value.trim(), jobRoleId: role ? role.get() : null, orgNodeId: tree ? tree.get() : null, shiftId: document.getElementById('vf-shift').value, startDate: document.getElementById('vf-start').value, endDate: document.getElementById('vf-end').value, closeDate: document.getElementById('vf-close').value || null, workingTimes: document.getElementById('vf-times').value.trim() || null, description: document.getElementById('vf-desc').value.trim() || null, requirements: document.getElementById('vf-req').value.trim() || null, positionCount: edit ? v.positionCount : Number((document.getElementById('vf-count') || {}).value) };
+      return { clientId: clientId, jobTitle: document.getElementById('vf-title').value.trim(), jobRoleId: role ? role.get() : null, orgNodeId: tree ? tree.get() : null, shiftId: document.getElementById('vf-shift').value, startDate: document.getElementById('vf-start').value, endDate: document.getElementById('vf-end').value, closeDate: document.getElementById('vf-close').value || null, workingTimes: document.getElementById('vf-times').value.trim() || null, description: document.getElementById('vf-desc').value.trim() || null, requirements: document.getElementById('vf-req').value.trim() || null, positionCount: Number((document.getElementById('vf-count') || {}).value) };
     }
     function validate(f) {
       var e = {};
@@ -634,46 +646,92 @@
       if (!f.endDate) e['vf-end'] = 'Enter an end date.';
       if (f.startDate && f.endDate && f.endDate < f.startDate) e['vf-end'] = 'The end date can’t be before the start date.';
       if (f.closeDate && f.endDate && f.closeDate > f.endDate) e['vf-close'] = 'The close date can’t be after the end date.';
-      if (!edit && !(f.positionCount >= 1 && f.positionCount <= 500)) e['vf-count'] = 'Enter between 1 and 500 positions.';
+      if (!(f.positionCount >= 1)) e['vf-count'] = 'Enter at least one position.';
+      else if (f.positionCount > 500) e['vf-count'] = 'Enter at most 500 positions.';
+      else if (edit && f.positionCount < v.filledCount) e['vf-count'] = 'The count can’t go below the ' + v.filledCount + ' filled positions.';
       var ne = document.getElementById('vf-node-err');
       ne.style.display = f.orgNodeId ? 'none' : ''; ne.textContent = f.orgNodeId ? '' : 'Choose a place below the organisation itself.';
       ui.showErrs(e, IDS);
       return !Object.keys(e).length && !!f.orgNodeId;
     }
-    function fail(err) { if (!err.code) throw err; document.getElementById('vf-banner').innerHTML = ui.banner('error', esc(err.message)); document.getElementById('main').scrollTop = 0; }
-    function saved(id, msg) { S1.toast(msg, 'success'); setTimeout(function () { location.href = detail + '?id=' + id; }, 500); }
-    if (edit) document.getElementById('vf-save').onclick = function () { var f = collect(); if (!validate(f)) return; try { if (p.suspendOnSave) S3.fail('VACANCY_CLIENT_NOT_ACTIVE'); S3.act.saveVacancy(f, v.id, false); saved(v.id, 'Vacancy saved.'); } catch (e) { fail(e); } };
-    else {
+    function fail(err) { if (!err.code) throw err; document.getElementById('vf-banner').innerHTML = abs ? S3.refusalHtml(err) : ui.banner('error', esc(err.message)); document.getElementById('main').scrollTop = 0; }
+    function saved(id, msg) { var x = S3.vacancy(id); S1.toast(abs && x ? x.reference + ' saved: ' + x.status : msg, 'success'); setTimeout(function () { location.href = detail + '?id=' + id; }, 500); }
+    // on edit the count is saved through the position-count write, after the details (TSD 5.5 TV-1, TV-3)
+    function editSave(f, publish) { if (p.suspendOnSave) S3.fail('VACANCY_CLIENT_NOT_ACTIVE'); if (p.conflictOnSave) S3.fail('CONFLICT'); S3.act.saveVacancy(f, v.id, publish); if (f.positionCount !== v.positionCount) S3.act.changeCount(v.id, f.positionCount); saved(v.id, publish ? 'Vacancy published.' : 'Vacancy saved.'); }
+    var publishConfirm = function (go) { S1.confirm({ title: 'Publish this vacancy?', body: abs ? 'It opens in the Abstract tier as Open (Abstract Tier), and its positions can be filled from the worker pool or by a manual fill. The rate is read from the rate card when you publish.' : 'Abstract starts working it, and the client’s users who can see it can see it.', cta: 'Publish vacancy', onConfirm: go }); };
+    if (edit && !readOnly) {
+      document.getElementById('vf-save').onclick = function () { var f = collect(); if (!validate(f)) return; try { editSave(f, false); } catch (e) { fail(e); } };
+      var ep = document.getElementById('vf-publish'); if (ep) ep.onclick = function () { var f = collect(); if (!validate(f)) return; publishConfirm(function () { try { editSave(f, true); } catch (e) { fail(e); } }); };
+    }
+    else if (!edit) {
       document.getElementById('vf-draft').onclick = function () { var f = collect(); if (!validate(f)) return; try { if (p.suspendOnSave) S3.fail('VACANCY_CLIENT_NOT_ACTIVE'); saved(S3.act.saveVacancy(f, null, false), 'Saved as a draft.'); } catch (e) { fail(e); } };
       document.getElementById('vf-publish').onclick = function () {
         var f = collect(); if (!validate(f)) return;
-        S1.confirm({ title: 'Publish this vacancy?', body: 'Abstract starts working it, and the client’s users who can see ' + S3.nodeName(f.clientId, f.orgNodeId) + ' can see it.', cta: 'Publish vacancy', onConfirm: function () { try { if (p.suspendOnSave) S3.fail('VACANCY_CLIENT_NOT_ACTIVE'); saved(S3.act.saveVacancy(f, null, true), 'Vacancy published.'); } catch (e) { fail(e); } } });
+        publishConfirm(function () { try { if (p.suspendOnSave) S3.fail('VACANCY_CLIENT_NOT_ACTIVE'); saved(S3.act.saveVacancy(f, null, true), 'Vacancy published.'); } catch (e) { fail(e); } });
       };
     }
     if (p.showErrors) { validate(Object.assign(collect(), p.showErrors)); }
   };
-  S3.fail = function (code) { refuse(code, 'This client’s status changed to Suspended while you were working, so nothing was saved. Your entries are still here.'); };
+  S3.fail = function (code) { if (code === 'CONFLICT') refuse(code, 'It was changed while you had it open. The page now shows the latest version; check it and try again.'); refuse(code, PORTAL === 'abstract' ? 'This client is Suspended, so it takes no new vacancy, publish, edit, count change or fill. A vacancy can still be closed or cancelled.' : 'This client’s status changed to Suspended while you were working, so nothing was saved. Your entries are still here.'); };
+  // a refusal banner with its title (frontend demand.refusal.title / conflictTitle)
+  S3.refusalHtml = function (e) { return ui.banner(e.code === 'CONFLICT' ? 'warning' : 'error', '<p class="font-semibold">' + (e.code === 'CONFLICT' ? 'Someone else changed this vacancy' : 'This couldn’t be saved') + '</p><p class="mt-0.5">' + esc(e.message) + '</p>'); };
   S3.rateLineHtml = function (b, r, v, nobreakdown) {
     var rows = [['Charge rate', '<span class="font-semibold tnum">' + S3.money(r.charge) + '</span> per hour'], ['Shift', esc(v.shiftName)], ['Resolved for', S3.fmtDate(v.startDate > TODAY ? v.startDate : TODAY)]];
     
-    if (PORTAL === 'abstract' && !nobreakdown) { rows.push(['Pay rate', '<span class="tnum">' + S3.money(r.pay) + '</span> per hour']); rows.push(['Margin', '<span class="tnum">' + S3.money(r.margin) + ' (' + Number(r.pct).toFixed(2) + ' %)</span>']); }
+    if (PORTAL === 'abstract' && !nobreakdown) rows.push(['Worker pay rate', '<span class="tnum">' + S3.money(r.base) + '</span> per hour']);
+    if (PORTAL === 'abstract') rows.push(['Agency pay rate', '<span class="tnum">' + S3.money(r.pay) + '</span> per hour']);
+    if (PORTAL === 'abstract' && !nobreakdown) rows.push(['Margin', '<span class="tnum">' + S3.money(r.margin) + ' (' + Number(r.pct).toFixed(2) + ' %)</span>']);
     
     b.innerHTML = ui.dl(rows) + '<p class="text-xs text-slate-500 mt-3">Resolved from the rate card' + (PORTAL === 'abstract' ? '. <a class="' + C.link + '" href="abstract.rates.rate-cards.html">Open Rate Cards</a>' : '') + '</p>';
+  };
+
+  // ---------- list filters shared by the Vacancy List and the Bookings list (TSD 5.5 TV-2, 5.7 TV-1) ----------
+  // Status: a multi-select, the URL's comma list. A button opens a group of checkboxes; Escape or a click outside closes it.
+  ui.multiSelect = function (id, label, icon, opts, values, btnClass) {
+    var cls = btnClass || 'flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px] text-xs font-medium text-slate-700 hover:border-blue-300 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
+    return '<div class="relative" data-ms="' + id + '"><button type="button" id="' + id + '" class="' + cls + '" aria-haspopup="true" aria-expanded="false" aria-controls="' + id + '-pop"><i class="fa-solid ' + icon + ' text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">' + esc(label) + ': </span><span data-ms-sum>' + esc(ui.msSummary(values, label)) + '</span><i class="fa-solid fa-chevron-down text-[10px] text-slate-400" aria-hidden="true"></i></button>' +
+      '<div id="' + id + '-pop" role="group" aria-label="' + esc(label) + '" class="hidden absolute z-30 mt-1 left-0 min-w-[220px] bg-white border border-slate-200 rounded-lg shadow-2xl p-1.5">' + opts.map(function (o) { return '<label class="flex items-center gap-2 px-2.5 py-2 min-h-[36px] rounded-md text-xs text-slate-700 hover:bg-slate-50 cursor-pointer"><input type="checkbox" value="' + esc(o) + '"' + (values.indexOf(o) >= 0 ? ' checked' : '') + ' class="w-3.5 h-3.5 rounded border-slate-300 accent-blue-600"/>' + esc(o) + '</label>'; }).join('') + '</div></div>';
+  };
+  ui.msSummary = function (values, label) { var many = label.toLowerCase() + 'es'; return !values.length ? 'All ' + many : values.length <= 2 ? values.join(', ') : values.length + ' ' + many; };
+  ui.wireMultiSelect = function (id, label, onChange) {
+    var btn = document.getElementById(id), pop = document.getElementById(id + '-pop'); if (!btn) return;
+    function open(on) { pop.classList.toggle('hidden', !on); btn.setAttribute('aria-expanded', String(on)); if (on) { var f = pop.querySelector('input'); if (f) f.focus(); } }
+    btn.onclick = function () { open(pop.classList.contains('hidden')); };
+    pop.addEventListener('change', function () { var v = [].slice.call(pop.querySelectorAll('input:checked')).map(function (x) { return x.value; }); btn.querySelector('[data-ms-sum]').textContent = ui.msSummary(v, label); onChange(v); });
+    pop.addEventListener('keydown', function (e) { if (e.key === 'Escape') { open(false); btn.focus(); } });
+    document.addEventListener('click', function (e) { if (!btn.parentNode.contains(e.target) && !pop.classList.contains('hidden')) open(false); });
+    btn.parentNode.addEventListener('focusout', function () { setTimeout(function () { if (document.activeElement && !btn.parentNode.contains(document.activeElement)) open(false); }, 0); });
+  };
+  // Place: "All places" / the place's name on a button, opening "Choose a place" — the kernel Tree over the client's
+  // structure, searchable, the root shown and not chosen (frontend PlacePicker). onDone(id) with '' for all places.
+  S3.pickPlace = function (clientId, value, hint, onDone) {
+    var chosen = value || null, nodes = TREES[clientId] || [];
+    var dlg = S3.dialog({ title: 'Choose a place', cta: 'Show this place', cancel: 'All places', onOk: function () { if (!chosen) { document.getElementById('pl-err').style.display = ''; return false; } setTimeout(function () { onDone(chosen); }, 0); } });
+    var host = document.getElementById('s3-dlg-banner');
+    host.innerHTML = '<div id="pl-tree"></div><p class="text-xs text-slate-600 mt-2">' + esc(hint) + '</p><p id="pl-err" class="text-xs font-medium text-red-700 mt-1" style="display:none" role="alert">Choose a place, or show all places.</p>';
+    S3.tree(document.getElementById('pl-tree'), { nodes: nodes, value: chosen, label: 'Choose a place', expandDepth: nodes.length >= 50 ? 1 : 3, onChange: function (id) { chosen = id; document.getElementById('pl-err').style.display = 'none'; } });
+    document.querySelector('.s1-scrim [data-x]').onclick = function () { dlg.close(); setTimeout(function () { onDone(''); }, 0); };
+    var si = document.querySelector('#pl-tree input'); if (si) si.focus();
   };
 
   // ---------- ActiveBookingsCard: one card on both dashboards (TSD §3.3.9) ----------
   S3.activeBookingsCard = function (host, state) {
     if (state === 'loading') { host.innerHTML = '<div class="' + C.card + ' p-5" aria-busy="true"><div class="h-3 w-32 bg-slate-200 rounded animate-pulse"></div><div class="h-7 w-16 bg-slate-200 rounded animate-pulse mt-3"></div></div>'; return; }
-    if (state === 'error') { host.innerHTML = '<div class="' + C.card + ' p-5" role="alert"><p class="text-sm font-semibold text-slate-900">We couldn’t load active bookings</p><button type="button" class="' + C.sec + ' mt-3" onclick="S1.setState(\'default\')">Retry</button></div>'; return; }
+    if (state === 'error') { host.innerHTML = '<div class="' + C.card + ' p-5" role="alert"><p class="text-sm font-semibold text-slate-900">We couldn’t load the active bookings</p><button type="button" class="' + C.sec + ' mt-3" onclick="S1.setState(\'default\')">Try again</button></div>'; return; }
     if (state === 'denied') { host.innerHTML = ''; return; }
-    var live = S3.bookings().filter(function (b) { return b.status === 'Active' || b.status === 'Extended'; }), abs = PORTAL === 'abstract', lines = {}, list = abs ? 'abstract.bookings.bookings.html?active=1&client=' : 'client.bookings.bookings.html?active=1&node=';
+    var live = S3.bookings().filter(function (b) { return b.status === 'Active' || b.status === 'Extended'; }), abs = PORTAL === 'abstract', lines = {}, list = abs ? 'abstract.bookings.bookings.html?status=Active,Extended&client=' : 'client.bookings.bookings.html?status=Active,Extended&place=';
     if (state === 'empty') live = [];
     live.forEach(function (b) { var k = abs ? b.clientId : b.orgNodeId; lines[k] = lines[k] || { id: k, name: abs ? b.clientName : b.orgNodeName, n: 0 }; lines[k].n++; });
     var rows = Object.keys(lines).map(function (k) { return lines[k]; }), total = live.length;
     if (state === 'large') { rows = []; for (var i = 1; i <= 50; i++) rows.push({ id: 'acme', name: 'Client ' + i, n: 60 - i }); total = rows.reduce(function (m, r) { return m + r.n; }, 0); }
     rows.sort(function (a, b) { return b.n - a.n; });
-    var top = rows.slice(0, 10), all = abs ? 'abstract.bookings.bookings.html?active=1' : 'client.bookings.bookings.html?active=1';
-    host.innerHTML = '<section class="' + C.card + ' p-5" aria-labelledby="abc-t"><div class="flex items-center justify-between gap-3"><h2 id="abc-t" class="text-sm font-bold text-slate-900">Active bookings</h2><i class="fa-solid fa-calendar-check text-slate-400 text-xs" aria-hidden="true"></i></div>' + (total ? '<p class="text-3xl font-extrabold tracking-tight text-slate-900 tnum mt-2">' + total + '</p><ul class="mt-3 divide-y divide-slate-100">' + top.map(function (r) { return '<li><a class="flex items-center justify-between gap-3 py-2 min-h-[36px] text-sm text-slate-700 hover:text-blue-700 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" href="' + list + encodeURIComponent(r.id) + '"><span class="truncate">' + esc(r.name) + '</span><span class="font-semibold tnum">' + r.n + '</span></a></li>'; }).join('') + '</ul>' + (rows.length > 10 ? '<a class="' + C.ghost + ' mt-2" href="' + all + '">All</a>' : '') : '<p class="text-sm text-slate-600 mt-2">No active bookings</p>') + '</section>';
+    var top = rows.slice(0, 10), all = abs ? 'abstract.bookings.bookings.html?status=Active,Extended' : 'client.bookings.bookings.html?status=Active,Extended';
+    var widest = Math.max.apply(null, top.map(function (r) { return r.n; }).concat([1])), rest = rows.length - top.length, unit = abs ? 'client' : 'place';
+    host.innerHTML = '<section class="' + C.card + ' p-5" aria-labelledby="abc-t"><div class="flex items-center justify-between gap-3"><h2 id="abc-t" class="text-sm font-bold text-slate-900">Active bookings</h2><i class="fa-solid fa-calendar-check text-slate-400 text-xs" aria-hidden="true"></i></div>' +
+      (total ? '<p class="flex items-baseline gap-2 mt-2"><span class="text-3xl font-extrabold tracking-tight text-slate-900 tnum">' + total + '</span><span class="text-sm text-slate-600">' + (total === 1 ? 'booking active or extended' : 'bookings active or extended') + '</span></p>' +
+        '<h3 class="mt-4 mb-2 text-xs font-semibold tracking-wider text-slate-600 uppercase">' + (abs ? 'By client' : 'By place') + '</h3><ul class="flex flex-col gap-2">' + top.map(function (r) { return '<li class="flex flex-col gap-1"><span class="flex items-baseline justify-between gap-3 text-sm"><a class="' + C.link + ' truncate" href="' + list + encodeURIComponent(r.id) + '">' + esc(r.name) + '</a><span class="font-semibold text-slate-900 tnum">' + r.n + '</span></span><span class="h-1.5 w-full rounded-full bg-slate-100" aria-hidden="true"><span class="block h-1.5 rounded-full bg-blue-600" style="width:' + Math.round(r.n / widest * 100) + '%"></span></span></li>'; }).join('') + '</ul>' +
+        (rest > 0 ? '<p class="mt-3 text-sm"><a class="' + C.link + '" href="' + all + '">All</a> <span class="text-slate-600">and ' + rest + ' more ' + unit + (rest === 1 ? '' : 's') + '</span></p>' : '')
+      : '<p class="text-sm text-slate-600 mt-2">No active bookings</p>') + '</section>';
   };
 
   // ---------- page plumbing ----------
