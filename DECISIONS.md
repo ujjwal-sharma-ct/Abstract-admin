@@ -229,3 +229,14 @@ recommended option and is listed in the pass report for review.
    drawer's *Not active* row. The slice 2 page does not carry the link.
 7. **An agency's candidate on Abstract's worker profile is read only** (Abstract reads both owners; no write is specified).
 8. **One booking-week counts as invoiced** (BK-2210, week of 28 Sep), a stand-in for slice 6's invoiced periods.
+
+## 2026-11-16 — Slice 5 release drawer's rate row; no requirement IDs in copy (ruled by Ujjwal Sharma)
+
+1. **The release drawer's rate row reads *Agencies see the pay rate only · £x/hr*** (no figure when no rate card is in
+   force), with no *Locked* pill. *Locked* could be read as the figure being frozen at release; the figure is the rate
+   card's and can change. Replaces *Rate shown to agencies / Pay Rate only · £x/hr / Locked* (DESIGN-SPEC §5.2's
+   locked indicator: still read only, still never a control).
+2. **No requirement ID in the copy a user reads.** Users have no use for them. Dropped from the slice 5 copy: the
+   drawer's helper (XR-010), *All positions filled — release is not available* (VC-018, page and slice5-proto refusal),
+   Proposal Review's accept dialog (PP-004, PP-008). The slice 5 design hubs keep theirs (reviewer pages). Earlier
+   slices' pages are not changed by this entry.

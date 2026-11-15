@@ -443,7 +443,7 @@
     o = o || {};
     if (['Draft', 'Closed', 'Cancelled'].indexOf(v.status) >= 0) refuse('VACANCY_STATUS_INVALID', v.reference + ' is ' + v.status + ', so it can’t be released to agencies.', { status: v.status });
     if (window.S3 && S3.CLIENTS[v.clientId].status !== 'Active') refuse('VACANCY_CLIENT_NOT_ACTIVE', v.clientName + ' is ' + S3.CLIENTS[v.clientId].status + ', so its vacancies can’t be released.');
-    if (v.openCount === 0) refuse('VACANCY_NO_OPEN_POSITIONS', 'All positions filled — release is not available (VC-018).');
+    if (v.openCount === 0) refuse('VACANCY_NO_OPEN_POSITIONS', 'All positions filled — release is not available.');
     if (!agencyIds.length) refuse('VALIDATION_ERROR', 'Choose at least one agency.');
     var opts = S5.releaseOptions(v.id, v.clientId), by = {}; opts.forEach(function (x) { by[x.agencyId] = x; });
     var again = agencyIds.filter(function (a) { return by[a] && by[a].released; });
