@@ -576,6 +576,55 @@
   S5.agencyBookings = function () { return db.bookings.filter(function (b) { return b.agencyId === ME.agencyId; }).map(dressAgencyB).sort(function (a, b) { return a.startDate < b.startDate ? 1 : -1; }); };
   S5.agencyBooking = function (id) { var b = rawAB(id); return b && b.agencyId === ME.agencyId ? dressAgencyB(b) : null; };
 //#endif
+//#if client
+
+  // ---------- the Candidate Directory (B3; TSD §3.3.3 rule 4, CandidateDirectoryRow; CP-017, CP-018, CP-019, DV-010) ----------
+  // GET /candidate-directory: one row per candidate with at least one booking, in any status, at a node of the client in
+  // the caller's subtree (Rachel Green's is the whole of Acme); an anonymised candidate is never a row. Every field is open:
+  // no personal data, no pay, no charge, no margin, no source (CP-019, CP-022). A pool candidate's compliance and licence
+  // validity are the open facts its slice 3 record rolls up to (Abstract's slice3-proto.js); this copy holds those alone.
+  var POOL_FACTS = {
+    'c-mo': { complianceStatus: 'Compliant', licences: [lic('Reach truck (RTITB)', '2027-08-31')] },
+    'c-tw': { complianceStatus: 'Compliant', licences: [lic('Reach truck (RTITB)', '2026-09-30')] },
+    'c-sa': { complianceStatus: 'Compliant', licences: [] },
+    'c-lk': { complianceStatus: 'Pending', licences: [] },
+    'c-ra': { complianceStatus: 'Compliant', licences: [lic('Counterbalance (ITSSAR)', '2027-02-28')] },
+    'c-er': { complianceStatus: 'Expired', licences: [] },
+    'c-gh': { complianceStatus: 'Compliant', licences: [] },
+    'c-mo2': { complianceStatus: 'Compliant', licences: [] }
+  };
+  var COMPLIANCE = ['Compliant', 'Pending', 'Expired'];
+  S5.COMPLIANCE = COMPLIANCE;
+  function directoryRows() {
+    var by = {};
+    (window.S3 ? S3.bookings() : []).forEach(function (b) { if (S3.clientId && b.clientId !== S3.clientId) return; (by[b.candidateId] = by[b.candidateId] || []).push(b); });
+    return Object.keys(by).map(function (id) {
+      var list = by[id].slice().sort(function (a, b) { return a.startDate < b.startDate ? 1 : -1; }), latest = list[0], c = rawCand(id), facts, party;
+      if (c) { if (c.anonymisedAt) return null; facts = dressCand(c); party = facts.supplyingParty; }
+      else { facts = POOL_FACTS[id]; if (!facts) return null; party = 'Abstract'; }
+      return { candidateId: id, fullName: c ? facts.fullName : latest.candidateName, jobRoleTitle: latest.jobRoleTitle, supplyingParty: party, complianceStatus: facts.complianceStatus,
+        licences: (facts.licences || []).map(function (l) { return { licenceType: l.licenceType, expiryDate: l.expiryDate, expired: !!l.expiryDate && l.expiryDate < TODAY }; }),
+        lastBookedFrom: latest.startDate, bookingCount: list.length };
+    }).filter(Boolean).sort(function (a, b) { return a.fullName < b.fullName ? -1 : 1; });
+  }
+  // f: { q, jobRoleId, complianceStatus, supplyingParty }; a value outside the lists answers 422 VALIDATION_ERROR
+  S5.directory = function (f) {
+    f = f || {};
+    var rows = directoryRows(), parties = S5.directoryParties(rows);
+    if (f.jobRoleId && !(window.S3 && S3.JOB_ROLES[f.jobRoleId])) refuse('VALIDATION_ERROR', 'Choose a job role from the list.', { fields: { jobRoleId: 'That job role doesn’t exist. Choose one from the list.' } });
+    if (f.complianceStatus && COMPLIANCE.indexOf(f.complianceStatus) < 0) refuse('VALIDATION_ERROR', 'Choose a compliance status from the list.', { fields: { complianceStatus: 'Choose Compliant, Pending or Expired.' } });
+    if (f.supplyingParty && parties.indexOf(f.supplyingParty) < 0) refuse('VALIDATION_ERROR', 'Choose a supplying party from the list.', { fields: { supplyingParty: 'Choose a supplying party from the list.' } });
+    if (f.q && f.q.length > 100) refuse('VALIDATION_ERROR', 'Keep the search to 100 characters.', { fields: { q: 'Keep the search to 100 characters.' } });
+    return rows.filter(function (r) {
+      if (f.jobRoleId && r.jobRoleTitle !== S3.JOB_ROLES[f.jobRoleId]) return false;
+      if (f.complianceStatus && r.complianceStatus !== f.complianceStatus) return false;
+      if (f.supplyingParty && r.supplyingParty !== f.supplyingParty) return false;
+      return !f.q || r.fullName.toLowerCase().indexOf(f.q.trim().toLowerCase()) >= 0;
+    });
+  };
+  // the supplying-party filter's options: Abstract and the agencies as this client reads them (Agency when its key is off)
+  S5.directoryParties = function (rows) { var m = {}; (rows || directoryRows()).forEach(function (r) { m[r.supplyingParty] = 1; }); return Object.keys(m).sort(function (a, b) { return a === 'Abstract' ? -1 : b === 'Abstract' ? 1 : a < b ? -1 : 1; }); };
+//#endif
 
   // ---------- absence confirmation (TSD §3.3.7) ----------
   var INVOICED = [
@@ -786,7 +835,15 @@
     var W3 = '2026-09-28', W4 = '2026-10-05';
     var d1 = {}; d1[W3] = h.W('8.00', 'sh-pm'); d1[h.addDays(W3, 1)] = h.W('8.00', 'sh-pm');
     d1[h.addDays(W3, 2)] = h.day('Sick Leave', null, 'sh-pm', { shiftDefaulted: true, absenceComment: 'Phoned the branch before the shift.' });
+//#endif
+//#if abstract
     d1[h.addDays(W3, 3)] = h.day('No-show', null, 'sh-pm', { shiftDefaulted: true, payOverride: { value: 'Paid', reason: 'The site closed the Leeds Hub gate at short notice on 1 Oct; Acme agreed to pay the shift.', by: 'Sarah Mitchell', at: '2026-10-02T17:05:00' } });
+//#endif
+//#if client
+    // the client's copy holds the override's marker alone: never its reason, who or when (slice 4 DR-S6; TSD §3.3.6 rule 2)
+    d1[h.addDays(W3, 3)] = h.day('No-show', null, 'sh-pm', { shiftDefaulted: true, payOverride: { value: 'Paid' } });
+//#endif
+//#if abstract client
     d1[h.addDays(W3, 4)] = h.W('8.00', 'sh-pm'); d1[h.addDays(W3, 5)] = h.NB(); d1[h.addDays(W3, 6)] = h.NB();
     var t1 = h.ts('ts-s5-1', 'b2210', W3, 'Approved', d1, { submittedAt: '2026-10-05T09:30:00', submittedBy: 'Rachel Green', submittedLate: false, approvedAt: '2026-10-05T09:30:00', approvedBy: null, approvalMode: 'automatic', updatedAt: '2026-10-05T09:30:00' });
     t1.approvals.push(h.approved(W3, '2026-10-05T09:30:00', null, 'automatic', d1));
@@ -813,7 +870,16 @@
   function chip(state, small) { return S5.ui.confBadge(state, small); }
   S5.s4 = {
     // seed(list, helpers): add the slice 5 weeks to slice 4's store if they are missing; true when it added any
-    ensure: function (list, h) { var added = false; s4weeks(h).forEach(function (t) { if (!list.some(function (x) { return x.id === t.id; })) { list.push(t); added = true; } }); return added; },
+    // (a week the client's copy seeded first carries the override's marker alone; Abstract's copy fills in the rest)
+    ensure: function (list, h) {
+      var added = false;
+      s4weeks(h).forEach(function (t) {
+        var cur = list.filter(function (x) { return x.id === t.id; })[0];
+        if (!cur) { list.push(t); added = true; return; }
+        Object.keys(t.days).forEach(function (dt) { var a = t.days[dt] && t.days[dt].payOverride, c = cur.days[dt] && cur.days[dt].payOverride; if (a && c && a.value === c.value) Object.keys(a).forEach(function (k) { if (!(k in c)) { c[k] = a[k]; added = true; } }); });
+      });
+      return added;
+    },
     // dress(o, booking, raw): an Agency-sourced week's source, supplying party, invoiced stand-in and confirmation states
     dress: function (o, b, t) {
       if (!on() || !isAgency(b)) return;

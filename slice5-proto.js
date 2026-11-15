@@ -558,7 +558,16 @@
   function chip(state, small) { return S5.ui.confBadge(state, small); }
   S5.s4 = {
     // seed(list, helpers): add the slice 5 weeks to slice 4's store if they are missing; true when it added any
-    ensure: function (list, h) { var added = false; s4weeks(h).forEach(function (t) { if (!list.some(function (x) { return x.id === t.id; })) { list.push(t); added = true; } }); return added; },
+    // (a week the client's copy seeded first carries the override's marker alone; Abstract's copy fills in the rest)
+    ensure: function (list, h) {
+      var added = false;
+      s4weeks(h).forEach(function (t) {
+        var cur = list.filter(function (x) { return x.id === t.id; })[0];
+        if (!cur) { list.push(t); added = true; return; }
+        Object.keys(t.days).forEach(function (dt) { var a = t.days[dt] && t.days[dt].payOverride, c = cur.days[dt] && cur.days[dt].payOverride; if (a && c && a.value === c.value) Object.keys(a).forEach(function (k) { if (!(k in c)) { c[k] = a[k]; added = true; } }); });
+      });
+      return added;
+    },
     // dress(o, booking, raw): an Agency-sourced week's source, supplying party, invoiced stand-in and confirmation states
     dress: function (o, b, t) {
       if (!on() || !isAgency(b)) return;
