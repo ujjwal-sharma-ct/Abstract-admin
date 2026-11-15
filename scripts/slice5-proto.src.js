@@ -691,6 +691,32 @@
       return o;
     }).sort(function (a, b2) { return a.weekStart < b2.weekStart ? 1 : -1; });
   };
+  // GET /pay-statements, /pay-statements/:id for an agency caller (TS-100; TSD §3.3.8): its own workers' statements. A
+  // statement exists once its week is approved (slice 4 §3.3.5: written at approval) — here, a week of AgencyBookingWeeks
+  // whose status is Approved, Invoiced or Adjusted. One line per Worked day and Paid absence; the job role is the
+  // booking's (the agency's week projection carries no covered role). The pay fields (agencyPayRate, agencyAmount,
+  // agencyGrossPay) are present only on an invoiced booking-week (§3.3.6 rule 3): absent, not null, otherwise. No worker
+  // pay (abstract_margin), no charge and no source are in this copy.
+  var PS_GENERATED = { 'ts-s5-1': '2026-10-05T09:30:00' };
+  function agencyStatement(w, b) {
+    var lines = w.days.filter(function (y) { return y.dayStatus === 'Worked' || (ABSENCES.indexOf(y.dayStatus) >= 0 && y.absencePay === 'Paid'); }).map(function (y) {
+      var l = { date: y.date, dayStatus: y.dayStatus, shiftName: y.shiftName || b.shiftName || null, jobRoleWorkedTitle: b.jobRoleTitle, hourType: 'Standard', hours: y.hours || '8.00', overridden: y.overridden };
+      if (y.agencyPayRate) { l.agencyPayRate = y.agencyPayRate; l.agencyAmount = y.agencyCost; }
+      return l;
+    });
+    var s = { id: 'ps-' + w.id + '-v1', timesheetId: w.id, bookingId: b.id, bookingReference: b.reference, candidateId: b.candidateId, candidateName: b.candidateName, clientName: b.clientName, orgNodeName: b.orgNodeName, jobRoleTitle: b.jobRoleTitle, supplyingParty: ME.agencyName, weekStart: w.weekStart, version: 1, supersededAt: null, generatedAt: PS_GENERATED[w.id] || null, invoicedAt: w.invoicedAt, totalHours: lines.reduce(function (m, l) { return m + Number(l.hours); }, 0).toFixed(2), lines: lines };
+    if (w.invoicedAt) s.agencyGrossPay = lines.reduce(function (m, l) { return m + (l.agencyAmount ? Number(l.agencyAmount) : 0); }, 0).toFixed(2);
+    return s;
+  }
+  S5.agencyPayStatements = function () {
+    var out = [];
+    db.bookings.filter(function (b) { return b.agencyId === ME.agencyId; }).forEach(function (raw) {
+      var b = dressAgencyB(raw);
+      S5.agencyWeeks(raw.id).forEach(function (w) { if (['Approved', 'Invoiced', 'Adjusted'].indexOf(w.status) >= 0) out.push(agencyStatement(w, b)); });
+    });
+    return out.sort(function (a, b2) { return a.weekStart < b2.weekStart ? 1 : a.weekStart > b2.weekStart ? -1 : a.candidateName < b2.candidateName ? -1 : 1; });
+  };
+  S5.agencyPayStatement = function (id) { return S5.agencyPayStatements().filter(function (s) { return s.id === id; })[0] || null; };
 //#endif
 
   // ---------- the overlay on slice 3 (Abstract and client): Agency-sourced bookings, a released vacancy's status ----------
