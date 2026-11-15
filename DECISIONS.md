@@ -204,3 +204,28 @@ Context: the second fix round (helpers working from the brief-side audit and the
 9. **User erasure "retention obligation" refusal, DR-S13.** Full-product view only. No slice mode shows it: the product has no such refusal for a user, only a candidate's legal hold (`abstract.identity-access.data-subject-requests.html`).
 
 The project-docs session records these as DR-S11 to DR-S13 in `delivery/design-restore/PLAN.md` §2.
+
+## 2026-11-15 — Slice 5 design pass, Abstract (taken on the recommended option; for Ujjwal Sharma's review)
+
+Context: the slice 5 pass drew Part A of the slice 5 design brief. The pass ran unattended; each call below took the
+recommended option and is listed in the pass report for review.
+
+1. **Slice 5 mode.** The kit's sixth mode. `data-s4-later` changes meaning: it now marks a slice 5 part (shown in s5 and
+   the full product); `data-s5-later` is the new full-product-only marker. Every earlier `data-s4-later`/`later(4)` that
+   is not a slice 5 part was retagged to 5, so slice 4 mode and the pages outside slice 5 read in s5 as in s4.
+2. **One shared prototype script, built per portal.** `scripts/slice5-proto.src.js` with `//#if <portal>` fences; each copy
+   seeds only what its party may hold, and the store is their union (a record a write removed is not re-seeded).
+3. **ProposalStatusBadge.** `Rejected (Position Filled)` takes closed/archival with `fa-user-check` (a system outcome, not
+   a judgement on the candidate); `Requested (awaiting agency)` waiting with `fa-hourglass-half`; `Justified` good
+   terminal. Flagged for K59.
+4. **Proposal Review keeps its export.** The script draws the proposal of `?id=` in the page's look (context bar, KPI
+   strip, candidate card with its gradient header, the dark vacancy summary, Accept & Assign, Agency Submissions, Activity
+   Log) over the earlier static comparison, which stays in the file. Scorecard, competency match, internal notes, export,
+   send-to-client, average rate and quick actions are `later(5)`; the side-by-side comparison is `later(5)`, drawn from
+   the vacancy's other proposals.
+5. **Vacancy Detail's KPI strip stays full-product only** (slice 3: one rate line in the slice modes); its Proposals tile is
+   live. In s5 the count is on the Proposals card.
+6. **Summit Staffing Solutions** is approved for Acme from 1 Sep 2026 while In Setup, in slice5-proto's seed only, for the
+   drawer's *Not active* row. The slice 2 page does not carry the link.
+7. **An agency's candidate on Abstract's worker profile is read only** (Abstract reads both owners; no write is specified).
+8. **One booking-week counts as invoiced** (BK-2210, week of 28 Sep), a stand-in for slice 6's invoiced periods.

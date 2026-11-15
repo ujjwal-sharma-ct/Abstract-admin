@@ -474,7 +474,7 @@ var SAMPLES_BASE = Object.assign({}, SAMPLES), SAMPLES_S3 = {}, SAMPLES_S4 = {};
 var ALL_ORDER = ORDER.concat(['structure_change.pending', 'structure_change.decided',
   'vacancy.published', 'booking.created', 'booking.cancelled', 'vacancy.cancelled',
   'timesheet.reminder', 'timesheet.overdue', 'timesheet.submitted', 'timesheet.returned', 'timesheet.pricing_pending', 'timesheet.pricing_pending_client']);
-function modeLevel() { var m = window.S1 && S1.mode ? S1.mode() : 'full'; return m === 's1' ? 1 : m === 's2' ? 2 : m === 's3' ? 3 : m === 's4' ? 4 : 5; }
+function modeLevel() { var m = window.S1 && S1.mode ? S1.mode() : 'full'; return m === 's1' ? 1 : m === 's2' ? 2 : m === 's3' ? 3 : m === 's4' || m === 's5' ? 4 : 5; }
 function shown(k) { return !!TPL[k] && (TPL[k].slice || 1) <= modeLevel(); }
 function applyTemplateMode() {
   var lv = modeLevel();

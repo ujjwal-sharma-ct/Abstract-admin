@@ -19,7 +19,7 @@
             brand: { blue: '#1D4ED8', purple: '#5B2E91', navy: '#172554' } } } } };
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s3-page data-s1-states="default loading empty error denied large">
+<body class="font-inter bg-slate-100 overflow-hidden text-slate-600" data-s3-page data-s1-states="default loading empty error validation denied large">
 <div id="app-root" class="flex w-full" style="height: 100vh;">
     <aside id="sidebar" class="hidden lg:flex flex-col w-64 xl:w-72 flex-shrink-0 overflow-y-auto" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 40%, #1e1a4a 100%);">
         <div id="sidebar-logo" class="px-6 py-5 border-b border-white/10 flex justify-between items-center">
@@ -71,6 +71,7 @@
     </div>
 </div>
 <script src="slice3-proto.js"></script>
+<script src="slice5-proto.js"></script>
 <script>S3.mobileNav();</script>
 <script>
 var C=S3.C,ui=S3.ui,esc=S3.esc,app=document.getElementById('app'),st='default',page=1,PAGE=25,detail='abstract.bookings.booking-detail.html';
@@ -79,40 +80,42 @@ function data(){var all=S3.bookings();if(st==='empty')return[];if(st==='large'){
 // The list's query string is the Bookings lists' seam (TSD §3.3.9, R-65): client, place (the node and its subtree), role,
 // status (comma-separated: status=Active,Extended), source, from, to, q and page. A filtered list is a link; the dashboard
 // card writes status and client. The old active=1 is still read, as status=Active,Extended.
-var Q=new URLSearchParams(location.search),F={client:Q.get('client')||'',place:Q.get('place')||'',role:Q.get('role')||'',status:Q.get('status')||(Q.get('active')==='1'?'Active,Extended':''),source:Q.get('source')||'',from:Q.get('from')||'',to:Q.get('to')||'',q:Q.get('q')||''};
+var Q=new URLSearchParams(location.search),F={client:Q.get('client')||'',place:Q.get('place')||'',role:Q.get('role')||'',status:Q.get('status')||(Q.get('active')==='1'?'Active,Extended':''),source:Q.get('source')||'',agency:Q.get('agency')||'',from:Q.get('from')||'',to:Q.get('to')||'',q:Q.get('q')||''};
 page=Math.max(1,parseInt(Q.get('page'),10)||1);
 if(F.place&&!F.client)F.place='';
-function writeUrl(){var o=new URLSearchParams();['client','place','role','status','source','from','to','q'].forEach(function(k){if(F[k])o.set(k,F[k]);});if(page>1)o.set('page',page);var t=o.toString().replace(/%2C/g,',');try{history.replaceState(null,'',location.pathname+(t?'?'+t:''));}catch(e){/* a file: page may refuse */}}
+function writeUrl(){var o=new URLSearchParams();['client','place','role','status','source','agency','from','to','q'].forEach(function(k){if(F[k])o.set(k,F[k]);});if(page>1)o.set('page',page);var t=o.toString().replace(/%2C/g,',');try{history.replaceState(null,'',location.pathname+(t?'?'+t:''));}catch(e){/* a file: page may refuse */}}
 var CHIP='flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 min-h-[38px] text-xs font-medium text-slate-700 hover:border-blue-300 hover:text-blue-700 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
 function placeBtn(){return F.client?'<button type="button" id="f-node" class="'+CHIP+'" aria-haspopup="dialog"><i class="fa-solid fa-sitemap text-slate-400 text-xs" aria-hidden="true"></i><span class="sr-only">Place: </span><span>'+esc(F.place?S3.nodeName(F.client,F.place)||'One place':'All places')+'</span><i class="fa-solid fa-chevron-down text-[10px] text-slate-400" aria-hidden="true"></i></button>':'';}
 // the Place filter: the kernel Tree over the chosen client's structure, searchable, the root shown and not chosen (TSD 5.7; frontend PlacePicker)
 function redraw(){var pn=document.getElementById('f-panel'),open=pn&&pn.classList.contains('flex')&&window.innerWidth<768;setTimeout(function(){shell();if(open)document.querySelector('[data-filter-toggle]').click();draw();var b=document.getElementById('f-node');if(b)b.focus();},0);}
 function pickPlace(){S3.pickPlace(F.client,F.place,'The list shows bookings at the place and every place beneath it.',function(id){F.place=id;page=1;redraw();});}
-function clearAll(){F={client:'',place:'',role:'',status:'',source:'',from:'',to:'',q:''};page=1;shell();draw();}
+function clearAll(){F={client:'',place:'',role:'',status:'',source:'',agency:'',from:'',to:'',q:''};page=1;shell();draw();}
 function shell(){
  var sv=F.status?F.status.split(',').filter(function(w){return WORDS.indexOf(w)>=0;}):[];
- var f=ui.search('f-q','Search by reference or candidate name')+ui.select('f-client','Client','fa-building',[['','All clients']].concat(Object.keys(S3.CLIENTS).map(function(k){return[k,S3.CLIENTS[k].name];})),F.client)+placeBtn()+ui.select('f-role','Job role','fa-id-badge',[['','All job roles']].concat(Object.keys(S3.JOB_ROLES).map(function(k){return[k,S3.JOB_ROLES[k]];})),F.role)+ui.multiSelect('f-status','Status','fa-circle-half-stroke',WORDS,sv)+ui.select('f-source','Source','fa-building-shield',[['','All sources'],['Abstract-sourced','Abstract-sourced'],['Agency-sourced','Agency-sourced']],F.source)+ui.dates('f-from','f-to','Starts from','Starts by')+'<button type="button" id="f-clear" class="flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark text-xs" aria-hidden="true"></i>Clear filters</button>';
+ var f=ui.search('f-q','Search by reference or candidate name')+ui.select('f-client','Client','fa-building',[['','All clients']].concat(Object.keys(S3.CLIENTS).map(function(k){return[k,S3.CLIENTS[k].name];})),F.client)+placeBtn()+ui.select('f-role','Job role','fa-id-badge',[['','All job roles']].concat(Object.keys(S3.JOB_ROLES).map(function(k){return[k,S3.JOB_ROLES[k]];})),F.role)+ui.multiSelect('f-status','Status','fa-circle-half-stroke',WORDS,sv)+ui.select('f-source','Source','fa-building-shield',[['','All sources'],['Abstract-sourced','Abstract-sourced'],['Agency-sourced','Agency-sourced']],F.source)+(S5.on()?ui.select('f-agency','Agency','fa-handshake-angle',[['','All agencies']].concat(S5.agencies().map(function(x){return [x.id,x.name];})),F.agency):'')+ui.dates('f-from','f-to','Starts from','Starts by')+'<button type="button" id="f-clear" class="flex items-center gap-1.5 px-3 py-2 min-h-[38px] rounded-lg text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1"><i class="fa-solid fa-xmark text-xs" aria-hidden="true"></i>Clear filters</button>';
  app.innerHTML=ui.filterBar('f-panel',f)+'<div id="list"></div>';ui.wireFilterToggle(app);
  document.getElementById('f-q').value=F.q;document.getElementById('f-from').value=F.from;document.getElementById('f-to').value=F.to;
  ui.wireMultiSelect('f-status','Status',function(v){F.status=v.join(',');page=1;draw();});
  document.getElementById('f-clear').onclick=clearAll;
- [['f-client','client'],['f-role','role'],['f-source','source'],['f-from','from'],['f-to','to']].forEach(function(x){var e=document.getElementById(x[0]);e.onchange=function(){F[x[1]]=e.value;if(x[0]==='f-client'){F.place='';var open=document.getElementById('f-panel').classList.contains('flex');shell();if(open)document.querySelector('[data-filter-toggle]').click();document.getElementById('f-client').focus();}page=1;draw();};});
+ [['f-client','client'],['f-role','role'],['f-source','source'],['f-agency','agency'],['f-from','from'],['f-to','to']].forEach(function(x){var e=document.getElementById(x[0]);if(!e)return;e.onchange=function(){F[x[1]]=e.value;if(x[0]==='f-client'){F.place='';var open=document.getElementById('f-panel').classList.contains('flex');shell();if(open)document.querySelector('[data-filter-toggle]').click();document.getElementById('f-client').focus();}page=1;draw();};});
  var pb=document.getElementById('f-node');if(pb)pb.onclick=pickPlace;
  document.getElementById('f-q').oninput=function(){F.q=this.value;page=1;draw();};
 }
 function draw(){
- var all=data(),c=F.client,n=F.place,r=F.role,ss=F.status?F.status.split(','):[],so=F.source,a=F.from,b=F.to,q=F.q.toLowerCase(),sub=n&&c?S3.subtree(c,n):null;
- var rows=all.filter(function(v){return(!c||v.clientId===c)&&(!sub||sub.indexOf(v.orgNodeId)>=0)&&(!r||v.jobRoleId===r)&&(!ss.length||ss.indexOf(v.status)>=0)&&(so!=='Agency-sourced')&&(!a||v.startDate>=a)&&(!b||v.startDate<=b)&&(!q||(v.reference+' '+v.candidateName).toLowerCase().indexOf(q)>=0);}).sort(function(x,y){return x.startDate<y.startDate?1:-1;});
+ var all=data(),c=F.client,n=F.place,r=F.role,ss=F.status?F.status.split(','):[],so=F.source,ag=S5.on()?F.agency:'',a=F.from,b=F.to,q=F.q.toLowerCase(),sub=n&&c?S3.subtree(c,n):null;
+ var rows=all.filter(function(v){return(!c||v.clientId===c)&&(!sub||sub.indexOf(v.orgNodeId)>=0)&&(!r||v.jobRoleId===r)&&(!ss.length||ss.indexOf(v.status)>=0)&&(!so||(v.source||'Abstract-sourced')===so)&&(!ag||v.agencyId===ag)&&(!a||v.startDate>=a)&&(!b||v.startDate<=b)&&(!q||(v.reference+' '+v.candidateName).toLowerCase().indexOf(q)>=0);}).sort(function(x,y){return x.startDate<y.startDate?1:-1;});
  var box=document.getElementById('list');
  writeUrl();
+ // slice 5: the list refuses a date range that ends before it starts (the filters' 422, inline)
+ if(S5.on()&&F.from&&F.to&&F.to<F.from){box.innerHTML=ui.banner('error','<p class="font-semibold">Check the dates</p><p class="mt-0.5">“Starts by” is before “Starts from”. Choose a date on or after '+S3.fmtDate(F.from)+'.</p>');return;}
  if(!all.length){box.innerHTML=ui.empty('fa-calendar-check','No bookings yet','A booking appears here once a position is filled from a vacancy.');return;}
  if(!rows.length){box.innerHTML=ui.empty('fa-filter','No bookings match these filters','Change or clear the filters to see more.','<button type="button" class="'+C.sec+'" data-clear>Clear filters</button>');box.querySelector('[data-clear]').onclick=clearAll;return;}
  var pages=Math.ceil(rows.length/PAGE);if(page>pages)page=pages;var view=rows.slice((page-1)*PAGE,page*PAGE),href=function(v){return detail+'?id='+v.id;},ref=function(v){return'<a class="'+C.link+' tnum" href="'+href(v)+'">'+esc(v.reference)+'</a>';};
- var cols=[{label:'Reference',nowrap:true,cell:ref},{label:'Candidate',cell:function(v){return esc(v.candidateName);}},{label:'Client',cell:function(v){return esc(v.clientName);}},{label:'Place',cell:function(v){return esc(v.orgNodeName);}},{label:'Job role',cell:function(v){return esc(v.jobRoleTitle);}},{label:'Start',nowrap:true,cell:function(v){return S3.fmtDate(v.startDate);}},{label:'End',nowrap:true,cell:function(v){return S3.fmtDate(v.endDate);}},{label:'Working times',cell:function(v){return esc(v.workingTimes||'—');}},{label:'Source',cell:function(){return ui.source();}},{label:'Status',cell:function(v){return ui.badge(v.status);}}];
- box.innerHTML=ui.list({caption:'Bookings',cols:cols,rows:view,href:href,card:function(v){return ui.mobileCard({title:ref(v)+'<span class="block text-sm font-semibold text-slate-900 mt-0.5">'+esc(v.candidateName)+'</span>',badge:ui.badge(v.status,true),lines:[esc(v.clientName)+' · '+esc(v.orgNodeName),esc(v.jobRoleTitle),S3.fmtDate(v.startDate)+' to '+S3.fmtDate(v.endDate),ui.source()]});}})+ui.pager(rows.length,page,pages,'bookings');
+ var cols=[{label:'Reference',nowrap:true,cell:ref},{label:'Candidate',cell:function(v){return esc(v.candidateName);}},{label:'Client',cell:function(v){return esc(v.clientName);}},{label:'Place',cell:function(v){return esc(v.orgNodeName);}},{label:'Job role',cell:function(v){return esc(v.jobRoleTitle);}},{label:'Start',nowrap:true,cell:function(v){return S3.fmtDate(v.startDate);}},{label:'End',nowrap:true,cell:function(v){return S3.fmtDate(v.endDate);}},{label:'Working times',cell:function(v){return esc(v.workingTimes||'—');}},{label:'Source',cell:function(v){return ui.source(v.source)+(v.agencyName?'<span class="block text-xs text-slate-600 mt-1">'+esc(v.agencyName)+'</span>':'');}},{label:'Status',cell:function(v){return ui.badge(v.status);}}];
+ box.innerHTML=ui.list({caption:'Bookings',cols:cols,rows:view,href:href,card:function(v){return ui.mobileCard({title:ref(v)+'<span class="block text-sm font-semibold text-slate-900 mt-0.5">'+esc(v.candidateName)+'</span>',badge:ui.badge(v.status,true),lines:[esc(v.clientName)+' · '+esc(v.orgNodeName),esc(v.jobRoleTitle),S3.fmtDate(v.startDate)+' to '+S3.fmtDate(v.endDate),ui.source(v.source)+(v.agencyName?' '+esc(v.agencyName):'')]});}})+ui.pager(rows.length,page,pages,'bookings');
  ui.wireRows(box);box.querySelectorAll('[data-pg]').forEach(function(x){x.onclick=function(){page=+x.dataset.pg;draw();document.getElementById('main').scrollTop=0;};});
 }
-S3.onState(function(s){st=s;if(st!=='default')page=1;if(['loading','error','denied'].indexOf(s)<0){shell();draw();}});
+S3.onState(function(s){st=s;if(st!=='default')page=1;if(s==='validation'){F.from='2026-10-31';F.to='2026-10-01';}if(['loading','error','denied'].indexOf(s)<0){shell();draw();}});
 </script>
 <script src="slice1-kit.js"></script>
 </body>

@@ -71,6 +71,7 @@
     </div>
 </div>
 <script src="slice3-proto.js"></script>
+<script src="slice5-proto.js"></script>
 <script src="slice4-proto.js"></script>
 <script>S3.mobileNav();</script>
 <script>
@@ -84,12 +85,12 @@ function rows(){
  var r=st==='large'?synth():S4.timesheets();
  return r.filter(function(x){
   if(f.client&&x.clientId!==f.client)return false;
-  if(f.agency&&f.agency!=='none')return false;
+  if(f.agency&&(f.agency==='none'?!!x.agencyName:x.agencyName!==f.agency))return false;
   if(f.node&&S3.subtree(x.clientId,f.node).indexOf(x.orgNodeId)<0)return false;
   if(f.role&&x.jobRoleId!==f.role)return false;
   if(f.week&&x.weekStart!==f.week)return false;
   if(f.status&&x.status!==f.status)return false;
-  if(f.source&&f.source!=='Abstract-sourced')return false;
+  if(f.source&&(x.source||'Abstract-sourced')!==f.source)return false;
   if(f.overdue&&!x.overdue)return false;
   if(f.held&&!x.held)return false;
   if(f.exc&&!x.complianceExceptions)return false;
@@ -107,7 +108,7 @@ function draw(){
  var table=list.length?ui.list({caption:'Timesheets across clients',rows:view,href:href,cols:[
   {label:'Candidate',cell:function(x){return '<a class="'+C.link+'" href="'+href(x)+'">'+esc(x.candidateName)+'</a><span class="block text-xs text-slate-500 tnum">'+esc(x.bookingReference)+' · '+esc(x.jobRoleTitle)+'</span>';}},
   {label:'Client',cell:function(x){return esc(x.clientName)+'<span class="block text-xs text-slate-500">'+esc(x.orgNodeName)+'</span>';}},
-  {label:'Agency',cell:function(){return '<span class="text-slate-700">Abstract</span><span class="block text-xs text-slate-500">Abstract-sourced</span>';}},
+  {label:'Agency',cell:function(x){return '<span class="text-slate-700">'+esc(x.agencyName||'Abstract')+'</span><span class="block text-xs text-slate-500">'+(x.source||'Abstract-sourced')+'</span>';}},
   {label:'Week',nowrap:true,cell:function(x){return S4.fmtWeek(x.weekStart);}},
   {label:'Worked hours',right:true,cell:function(x){return x.workedHours;}},
   {label:'Absences',right:true,cell:function(x){return String(x.absenceDays);}},

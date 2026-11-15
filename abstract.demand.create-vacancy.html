@@ -71,6 +71,7 @@
     </div>
 </div>
 <script src="slice3-proto.js"></script>
+<script src="slice5-proto.js"></script>
 <script>S3.mobileNav();</script>
 <script>
 var host=document.getElementById('app'),C=S3.C,esc=S3.esc;
@@ -80,10 +81,10 @@ document.getElementById('page-title').textContent=edit?'Edit vacancy':'New vacan
 // The look restored 2026-11-12 (Ujjwal Sharma's ruling): the original wizard's step rail, progress card, step header
 // cards, positions stepper, shift tiles and footer bar, dressed around slice 3's one-page VacancyForm (S3.vacancyForm),
 // which keeps every field, rule and message. The form is moved into the old layout, never redrawn, so its handlers stay.
-// Steps 3 to 6 and the other later-slice parts keep their place, marked data-s4-later and shown in full product only.
+// Steps 3 to 6 and the other later-slice parts keep their place, marked data-s5-later and shown in full product only.
 var FOC=' focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
-var LATER=' data-s4-later';
-function gate(){var on=S1.mode()!=='full';host.querySelectorAll('[data-s4-later]').forEach(function(e){if(on)e.style.setProperty('display','none','important');else e.style.removeProperty('display');});}
+var LATER=' data-s5-later';
+function gate(){var on=S1.mode()!=='full';host.querySelectorAll('[data-s5-later]').forEach(function(e){if(on)e.style.setProperty('display','none','important');else e.style.removeProperty('display');});}
 function look(name){return /night/i.test(name)?'fa-moon':/after|late/i.test(name)?'fa-cloud-sun':'fa-sun';}
 function val(i){var e=document.getElementById(i);return e?e.value:'';}
 var STEPS=[[1,'Role details','fa-warehouse','The job title, client, place in the structure, dates, positions and Shift',0],[2,'Charge and pay','fa-sterling-sign','The rates come from the job role’s rate card; nothing is entered here',0],[3,'Margin & markup','fa-percent','Abstract’s margin target and the agency markup cap',1],[4,'Compliance','fa-shield-halved','Documents, safety checks and right-to-work rules',1],[5,'Publishing rules','fa-share-nodes','Which agencies receive this vacancy, and when',1],[6,'Internal status','fa-flag','Priority, tags and workflow flags',1]];

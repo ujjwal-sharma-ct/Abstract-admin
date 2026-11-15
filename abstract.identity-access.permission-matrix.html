@@ -502,7 +502,7 @@ var ADMIN_KEY = 'user:create_edit';
 var CAT, LABEL, TOTAL;
 /* The slice the current mode reaches: s1 → 1 … s4 → 4; full product draws everything. Asked at draw time and again
    on the kit's s1:mode event, which also fires at load once ?s1=1 / ?s2=1 is applied. */
-function modeSlice() { var m = window.S1 && S1.mode ? S1.mode() : 'full'; return { s1: 1, s2: 2, s3: 3, s4: 4 }[m] || 99; }
+function modeSlice() { var m = window.S1 && S1.mode ? S1.mode() : 'full'; return { s1: 1, s2: 2, s3: 3, s4: 4, s5: 4 }[m] || 99; }
 function buildCat() {
   var ms = modeSlice();
   CAT = CATALOGUES[ORG.party].filter(function (g) { return (g.s4 ? 4 : g.s || 1) <= ms; }).map(function (g) {

@@ -71,16 +71,17 @@
     </div>
 </div>
 <script src="slice3-proto.js"></script>
+<script src="slice5-proto.js"></script>
 <script>S3.mobileNav();</script>
 <script>
 var C=S3.C,ui=S3.ui,esc=S3.esc,app=document.getElementById('app'),st='default',page=1,PAGE=25;
 var pick=S3.param('book');
 // The look restored 2026-11-12 (Ujjwal Sharma's ruling): the original Worker Pool page's indigo ownership note, the stat
 // cards with tinted icons, and the table with initials avatars, licence chips, the client-and-booking assignment cell
-// and the in-card pager, drawn from the slice 3 records. The AWR column is a later-slice part: later(4) keeps it in
+// and the in-card pager, drawn from the slice 3 records. The AWR column is a later-slice part: later(5) keeps it in
 // full-product mode only (n=3 would show it in slice 4 mode as well).
 var FOC=' focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-1';
-function later(n,h){var m=S1.mode(),ok=n===3?(m==='s4'||m==='full'):m==='full';return ok?h:'';}
+function later(n,h){var m=S1.mode(),ok=n===3?(m==='s4'||m==='s5'||m==='full'):n===4?(m==='s5'||m==='full'):m==='full';return ok?h:'';}
 function avatar(n,sz){return '<span class="'+(sz||'w-8 h-8 text-[10px]')+' rounded-full flex items-center justify-center font-bold text-white flex-shrink-0" style="background:linear-gradient(135deg,#1D4ED8,#5B2E91)" aria-hidden="true">'+esc(S3.initials(n))+'</span>';}
 // the worker's photo where the record has one (TSD §3.4 row 2026-11-09), else the initials
 function pic(x,sz){return x.photo?'<img src="'+esc(x.photo)+'" alt="" class="'+(sz||'w-8 h-8').split(' ').slice(0,2).join(' ')+' rounded-full object-cover flex-shrink-0 border border-slate-200"/>':avatar(x.fullName,sz);}
@@ -116,7 +117,7 @@ function draw(){
  var box=document.getElementById('list');
  if(!all.length){box.innerHTML=ui.empty('fa-users','The worker pool is empty','',st==='nocreate'?'':'<a class="'+C.pri+'" style="'+C.priStyle+'" href="abstract.candidates.worker-form.html"><i class="fa-solid fa-plus" aria-hidden="true"></i> Add worker to pool</a>');return;}
  if(!rows.length){box.innerHTML=ui.empty('fa-filter','No workers match these filters','Try another filter, or clear them.','<button type="button" class="'+C.sec+'" data-clear>Clear the filters</button>');wireClear(box);return;}
- var pages=Math.ceil(rows.length/PAGE),view=rows.slice((page-1)*PAGE,page*PAGE),awr=!!later(4,'1');
+ var pages=Math.ceil(rows.length/PAGE),view=rows.slice((page-1)*PAGE,page*PAGE),awr=!!later(5,'1');
  var prof=function(x){return'abstract.candidates.worker-profile.html?id='+x.id;};
  var name=function(x){return'<a class="font-semibold text-slate-800 hover:text-blue-700 hover:underline rounded'+FOC+'" href="'+prof(x)+'">'+esc(x.fullName)+'</a>';};
  var lic=function(x){return x.licences.length?'<div class="flex flex-wrap gap-1 max-w-[12rem]">'+x.licences.map(licChip).join('')+'</div>':'<span class="text-slate-500">—</span>';};
@@ -128,7 +129,7 @@ function draw(){
  var TH='px-3 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider';
  var heads=['Candidate','Job role','Availability','Compliance','Licences','Current assignment'].concat(awr?['AWR']:[]);
  var table='<div class="hidden md:block overflow-x-auto"><table class="w-full text-left"><caption class="sr-only">Worker pool</caption><thead><tr class="bg-slate-50 border-b border-slate-200">'+heads.map(function(h){return '<th scope="col" class="'+TH+'">'+h+'</th>';}).join('')+'<th scope="col" class="'+TH+' text-right">Actions</th></tr></thead><tbody class="divide-y divide-slate-100 text-sm">'+
-  view.map(function(x){return '<tr class="hover:bg-slate-50"><td class="px-3 py-3"><div class="flex items-center gap-3">'+pic(x)+name(x)+'</div></td><td class="px-3 py-3 text-slate-600">'+esc(x.jobRoleTitle||'No usual job role')+'</td><td class="px-3 py-3">'+av(x)+'</td><td class="px-3 py-3">'+ui.badge(x.complianceStatus)+'</td><td class="px-3 py-3">'+lic(x)+'</td><td class="px-3 py-3">'+cur(x)+'</td>'+(awr?'<td class="px-3 py-3" data-s4-later>'+weeks(x)+'</td>':'')+'<td class="px-3 py-3 text-right"><div class="flex flex-col items-end gap-1.5">'+book(x)+view_(x)+'</div></td></tr>';}).join('')+'</tbody></table></div>';
+  view.map(function(x){return '<tr class="hover:bg-slate-50"><td class="px-3 py-3"><div class="flex items-center gap-3">'+pic(x)+name(x)+'</div></td><td class="px-3 py-3 text-slate-600">'+esc(x.jobRoleTitle||'No usual job role')+'</td><td class="px-3 py-3">'+av(x)+'</td><td class="px-3 py-3">'+ui.badge(x.complianceStatus)+'</td><td class="px-3 py-3">'+lic(x)+'</td><td class="px-3 py-3">'+cur(x)+'</td>'+(awr?'<td class="px-3 py-3" data-s5-later>'+weeks(x)+'</td>':'')+'<td class="px-3 py-3 text-right"><div class="flex flex-col items-end gap-1.5">'+book(x)+view_(x)+'</div></td></tr>';}).join('')+'</tbody></table></div>';
  var cards='<ul class="md:hidden divide-y divide-slate-100">'+view.map(function(x){return '<li class="p-4 flex flex-col gap-2.5"><div class="flex items-center gap-3">'+pic(x,'w-9 h-9 text-xs')+'<div class="min-w-0 flex-1">'+name(x)+'<p class="text-xs text-slate-600">'+esc(x.jobRoleTitle||'No usual job role')+'</p></div></div><div class="flex flex-wrap items-center gap-1.5">'+ui.badge(x.availability,true)+ui.badge(x.complianceStatus,true)+x.licences.map(licChip).join('')+'</div>'+(x.currentBooking?'<p class="text-xs text-slate-600">On <a class="'+C.link+' tnum" href="abstract.bookings.booking-detail.html?id='+x.currentBooking.id+'">'+esc(x.currentBooking.reference)+'</a>, '+esc(x.currentBooking.clientName)+'</p>':'')+'<div class="flex flex-wrap gap-2"><a class="'+C.sec+'" href="'+prof(x)+'">View<span class="sr-only"> '+esc(x.fullName)+'</span></a>'+book(x,1)+'</div></li>';}).join('')+'</ul>';
  box.innerHTML='<div class="'+C.card+' overflow-hidden">'+table+cards+pager(rows.length,page,pages)+'</div>';
  box.querySelectorAll('[data-pg]').forEach(function(b){b.onclick=function(){page=+b.dataset.pg;draw();document.getElementById('main').scrollTop=0;};});

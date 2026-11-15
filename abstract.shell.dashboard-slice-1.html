@@ -320,6 +320,7 @@ var S2_PENDING_COUNT = 5;
 document.addEventListener('s1:ready', function () { var c = document.getElementById('nav-sc-count'); if (c && S2_PENDING_COUNT > 0) { c.textContent = S2_PENDING_COUNT; c.classList.remove('hidden'); c.classList.add('inline-block'); c.setAttribute('aria-label', S2_PENDING_COUNT + ' waiting'); } });
 </script>
 <script src="slice3-proto.js"></script>
+<script src="slice5-proto.js"></script>
 <script>document.addEventListener('s1:state',function(e){S3.activeBookingsCard(document.getElementById('s3-active'),e.detail.state);});</script>
 <script src="slice1-kit.js"></script>
 </body>

@@ -15,7 +15,7 @@
   <header class="text-white" style="background: linear-gradient(180deg, #0f1a3e 0%, #172554 42%, #1e1a4a 100%);">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 py-6 flex flex-col sm:flex-row sm:items-center gap-4 sm:justify-between">
       <div class="flex items-center gap-4"><img src="logo.png" alt="Abstract VMS" class="h-12 w-auto -ml-[5px]"><div><h1 class="text-lg font-bold">Slice 4 screens · Admin Portal</h1><p class="text-xs text-white/70">Timesheets, pricing, approval and payroll</p></div></div>
-      <div class="flex flex-wrap gap-2"><a href="abstract.design.slice-3-index.html" class="px-4 py-2 rounded-lg text-sm font-semibold border border-white/20 text-white hover:bg-white/10">Slice 3 index</a><a href="abstract.timesheets.timesheets.html?s4=1" class="px-4 py-2 rounded-lg text-sm font-semibold text-white" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);">Start the slice 4 demo</a></div>
+      <div class="flex flex-wrap gap-2"><a href="abstract.design.slice-3-index.html" class="px-4 py-2 rounded-lg text-sm font-semibold border border-white/20 text-white hover:bg-white/10">Slice 3 index</a><a href="abstract.design.slice-5-index.html" class="px-4 py-2 rounded-lg text-sm font-semibold border border-white/20 text-white hover:bg-white/10">Slice 5 index</a><a href="abstract.timesheets.timesheets.html?s4=1" class="px-4 py-2 rounded-lg text-sm font-semibold text-white" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);">Start the slice 4 demo</a></div>
     </div>
   </header>
   <main class="max-w-5xl mx-auto px-4 sm:px-6 py-6 flex flex-col gap-4">
@@ -30,7 +30,7 @@
   </main>
   <script src="slice3-proto.js"></script>
   <script src="slice4-proto.js"></script>
-  <script>document.addEventListener('s1:ready',function(){var names={full:'full product',s1:'slice 1 only',s2:'slices 1 + 2',s3:'slices 1 to 3',s4:'slices 1 to 4'};function paint(){document.getElementById('mode-now').textContent=names[S1.mode()];}['full','s1','s2','s3','s4'].forEach(function(m){document.getElementById('mode-'+m).onclick=function(){S1.setMode(m);paint();};});document.getElementById('reset').onclick=function(){S3.reset();S4.reset();S4.resetNotified();S1.resetNotifications();S1.toast('Demo data reset.','success');};paint();});</script>
+  <script>document.addEventListener('s1:ready',function(){var names={full:'full product',s1:'slice 1 only',s2:'slices 1 + 2',s3:'slices 1 to 3',s4:'slices 1 to 4',s5:'slices 1 to 5'};function paint(){document.getElementById('mode-now').textContent=names[S1.mode()];}['full','s1','s2','s3','s4'].forEach(function(m){document.getElementById('mode-'+m).onclick=function(){S1.setMode(m);paint();};});document.getElementById('reset').onclick=function(){S3.reset();S4.reset();S4.resetNotified();S1.resetNotifications();S1.toast('Demo data reset.','success');};paint();});</script>
 <script src="slice1-kit.js"></script>
 </body>
 </html>
