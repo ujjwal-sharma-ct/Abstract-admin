@@ -560,7 +560,7 @@ function doErase(sample) {
       var fields = cand
         ? ['candidates.full_name', 'candidates.email', 'candidates.phone', 'candidates.date_of_birth', 'candidates.ni_number', 'candidates.address', 'candidate_licences.licence_number', 'documents.fileName'].concat(S1.mode() === 's3' ? [] : ['timesheet_entries.absence_comment'])
         : ['users.name', 'users.email', 'sessions.ip_address', 'sessions.user_agent', 'notifications.recipient'];
-      var kept = [['audit_log', 'audit retention (SYS-009)'], ['audit_log_safety', 'audit retention (SYS-009)']].concat(cand ? [['bookings', 'assignment history (BK-011)']].concat(S1.mode() === 's3' ? [] : [['timesheet_entries', 'invoicing and payroll (TS-008, TS-099)'], ['pay_statements', 'payroll (TS-099)']]) : []);
+      var kept = [['audit_log', 'audit retention'], ['audit_log_safety', 'audit retention']].concat(cand ? [['bookings', 'assignment history']].concat(S1.mode() === 's3' ? [] : [['timesheet_entries', 'invoicing and payroll'], ['pay_statements', 'payroll']]) : []);
       // the record keeps the anonymised token as its name (erased-<hash>)
       sel.name = 'erased-' + (sel.id.replace(/[^a-z]/g, '') + '7f3a2c91b04e').slice(0, 12); sel.email = null; sel.erased = true;
       if (!cand) sel.status = 'Inactive';

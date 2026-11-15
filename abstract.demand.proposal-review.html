@@ -983,7 +983,7 @@
                                     <option selected>Position 2 of 3 — Forklift Driver (Reach)</option>
                                     <option>Position 3 of 3 — Forklift Driver (Reach)</option>
                                 </select>
-                                <p class="text-xs text-slate-400">Accepting creates an Agency-sourced booking against the chosen open position (PP-004).</p>
+                                <p class="text-xs text-slate-400">Accepting creates an Agency-sourced booking against the chosen open position.</p>
                             </div>
                             <button id="accept-assign-btn" onclick="acceptAndCreateBooking()" class="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-white text-xs font-semibold transition-all hover:opacity-90 shadow-sm" style="background: linear-gradient(135deg, #1D4ED8, #5B2E91);">
                                 <i class="fa-solid fa-user-check text-xs"></i>
@@ -991,7 +991,7 @@
                             </button>
                             <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-100 flex items-start gap-2">
                                 <i class="fa-solid fa-triangle-exclamation text-amber-500 text-xs mt-0.5"></i>
-                                <p class="text-xs text-amber-700">Accepting into the <span class="font-semibold">last open position</span> automatically moves all remaining pending proposals to <span class="font-semibold">Rejected (Position Filled)</span> and notifies those agencies (PP-008).</p>
+                                <p class="text-xs text-amber-700">Accepting into the <span class="font-semibold">last open position</span> automatically moves all remaining pending proposals to <span class="font-semibold">Rejected (Position Filled)</span> and notifies those agencies.</p>
                             </div>
                         </div>
                     </div>
@@ -1211,7 +1211,7 @@ function proposalDecision(n, decision, name){
   var accept = decision === 'accept', reconsider = decision === 'reconsider';
   if (reconsider){
     openConfirm({ tone:'neutral', title:'Reopen this proposal?',
-      body: name + '\u2019s proposal returns to Under Review and the agency is notified (PP-005).',
+      body: name + '\u2019s proposal returns to Under Review and the agency is notified.',
       confirmLabel:'Reopen', onConfirm:function(){ applyProposal(n,'reconsider',name); }});
     return;
   }
@@ -1219,8 +1219,8 @@ function proposalDecision(n, decision, name){
     tone: accept ? 'neutral' : 'danger',
     title: accept ? 'Accept this proposal?' : 'Reject this proposal?',
     body: accept
-      ? name + ' is assigned to the selected open position and an Agency-sourced booking is created (PP-004). The agency is notified (PP-005).'
-      : name + '\u2019s proposal is rejected and the agency notified (PP-005).',
+      ? name + ' is assigned to the selected open position and an Agency-sourced booking is created. The agency is notified.'
+      : name + '\u2019s proposal is rejected and the agency notified.',
     confirmLabel: accept ? 'Accept & create booking' : 'Reject proposal',
     onConfirm: function(){ applyProposal(n, decision, name); }
   });
@@ -1262,7 +1262,7 @@ function acceptAndCreateBooking(){
   var sel = document.querySelector('#assign-panel select');
   var pos = sel ? sel.options[sel.selectedIndex].text : 'the selected position';
   openConfirm({ tone:'neutral', title:'Create booking?',
-    body:'This assigns the candidate to ' + pos + ' and creates an Agency-sourced booking (PP-004, BK-001).',
+    body:'This assigns the candidate to ' + pos + ' and creates an Agency-sourced booking.',
     confirmLabel:'Accept & create booking',
     onConfirm:function(){ toast('Booking created against ' + pos, 'success');
       setTimeout(function(){ window.location.href = 'abstract.bookings.booking-detail.html'; }, 900); }});

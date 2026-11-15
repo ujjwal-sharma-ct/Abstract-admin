@@ -240,3 +240,11 @@ recommended option and is listed in the pass report for review.
    drawer's helper (XR-010), *All positions filled — release is not available* (VC-018, page and slice5-proto refusal),
    Proposal Review's accept dialog (PP-004, PP-008). The slice 5 design hubs keep theirs (reviewer pages). Earlier
    slices' pages are not changed by this entry.
+
+
+## 2026-11-16 — Requirement IDs stripped from the earlier slices' pages too (ruled by Ujjwal Sharma)
+
+Extends the entry above to every page: no requirement ID in copy a user reads — text, tooltips (`title`), toasts
+and dialog bodies drawn by script. A trailing *(XX-NNN)* goes with its space; a leading *XX-NNN ·* label goes and
+the rest is capitalised (*SYS-007 · effective-dated* → *Effective-dated*). Code comments keep their IDs, and so do
+the slice design hubs (reviewer pages). Nothing else in the copy changed.
