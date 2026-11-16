@@ -10,7 +10,8 @@
  *
  * What a copy carries (slice 4's rule): only what its portal's responses would carry. The client's copy has no pay
  * figure, no booking source, no wave number, no candidate's personal data and no agency status; the agency's copy has
- * no charge rate, no margin, no other agency, no wave, no roster and no position total. The demo store (localStorage
+ * no charge rate, no margin but its own Agency Net Margin on an invoiced week (R5-D7), no other agency, no wave, no
+ * roster and no position total. The demo store (localStorage
  * `s5-demo-v1`, shared by the three portals on one origin) holds the cross-portal facts — releases with their waves,
  * proposals, the agency's candidates, the Agency-sourced bookings, absence confirmations, and each released vacancy's
  * agency-facing facts and open count. A copy's accessors never return what its party may not read, even where the
@@ -344,6 +345,16 @@
     o.availability = null; o.legalHold = false; o.anonymised = !!c.anonymisedAt; o.photo = null;
     o.unavailableFrom = null; o.unavailableUntil = null;
 //#endif
+//#if abstract
+    // Abstract edits an agency's candidate (ruled 2026-11-16, R5-D1): the job role and the legal hold it set read back;
+    // availability stays refused for an agency-owned record (Q11), and the photo is the one Abstract stored, if any
+    o.jobRoleId = c.jobRoleId || null; o.jobRoleTitle = c.jobRoleId && window.S3 ? S3.JOB_ROLES[c.jobRoleId] || null : null;
+    o.legalHold = !!c.legalHold; o.photo = c.photo || null;
+//#endif
+//#if agency
+    // what Abstract set on the record is not the agency's to read (R5-D1): the legal hold's facts
+    delete o.legalHoldReason; delete o.legalHoldSetBy; delete o.legalHoldSetAt;
+//#endif
 //#if client
     // a client reads a candidate's name, compliance and licence validity only (PP-006, CP-018)
     o = { id: o.id, fullName: o.fullName, complianceStatus: o.complianceStatus, licences: o.licences.map(function (l) { return { licenceType: l.licenceType, expiryDate: l.expiryDate, expired: l.expired }; }), supplyingParty: agencyName(c.agencyId) };
@@ -354,6 +365,19 @@
 //#if abstract
   S5.isAgencyCandidate = function (id) { return allCandIds().indexOf(id) >= 0; };
   S5.candidate = function (id) { var c = rawCand(id); return c ? dressCand(c) : null; };
+  // PATCH /candidates/:id from Abstract on an agency-owned record (ruled 2026-11-16, R5-D1): Abstract edits it as it edits
+  // its own, except that availability is refused for every caller on an agency's record (Q11) and the owning agency and
+  // its branch are the agency's (read only here). The record a write changes is kept in the store, so the agency reads it.
+  S5.rawCandidate = function (id) { var w = db.candidates.filter(function (c) { return c.id === id; })[0]; if (w) return w; var c = rawCand(id); if (!c) return null; db.candidates.push(c); return c; };
+  S5.saveCandidates = function () { save(); };
+  S5.act = S5.act || {};
+  S5.act.updateCandidate = function (id, patch) {
+    var c = S5.rawCandidate(id); if (!c) refuse('CANDIDATE_NOT_FOUND', 'We can’t find that candidate.');
+    ['unavailableFrom', 'unavailableUntil', 'unavailabilityNote'].forEach(function (k) { if (patch[k] != null) refuse('CANDIDATE_FIELD_NOT_ALLOWED', 'An agency’s candidate has no availability, so it can’t be set.', { field: k }); });
+    ['agencyId', 'agencyOrgNodeId'].forEach(function (k) { if (k in patch && patch[k] !== c[k]) refuse('CANDIDATE_FIELD_NOT_ALLOWED', 'The owning agency and its branch are set by the agency.', { field: k }); });
+    Object.keys(patch).forEach(function (k) { if (['unavailableFrom', 'unavailableUntil', 'unavailabilityNote', 'agencyId', 'agencyOrgNodeId'].indexOf(k) < 0) c[k] = patch[k]; });
+    c.updatedAt = now(); log('candidate', id, 'Record changed by Abstract'); save();
+  };
 //#endif
 //#if agency
   // GET /candidates?ownerType=agency — the agency's own candidates (CP-020); the propose picker's source (K53)
@@ -522,7 +546,7 @@
     db.bookings.unshift(b);
     var was = p.status; p.status = 'Accepted'; p.decidedAt = now(); p.decidedByParty = PARTY; p.decidedByName = S5.me; p.positionNumber = n; p.bookingId = bid; p.bookingReference = b.reference; p.updatedAt = now();
     log('proposal', p.id, 'Status: ' + was + ' → Accepted. Position ' + n + ', booking ' + b.reference);
-    log('booking', bid, 'Booking created from proposal ' + p.reference);
+    log('booking', bid, 'Booking created from an accepted proposal');   // no proposal reference on a booking (ruled 2026-11-16, R5-G1)
     var left = open.length - 1, auto = left === 0 ? rejectPending(v.id, p.id, 'Rejected (Position Filled)') : 0;
     save(); if (window.S3) syncFacts(S3.vacancy(v.id));
     return { bookingId: bid, bookingReference: b.reference, positionNumber: n, autoRejected: auto };
@@ -682,6 +706,17 @@
       { date: '2026-10-08', dayStatus: 'Sick Leave', absenceComment: 'Texted the site at 12:00.', absencePay: 'Paid', shiftName: 'Afternoon' },
       { date: '2026-10-09', dayStatus: 'Worked', hours: '8.00', shiftName: 'Afternoon' }, { date: '2026-10-10', dayStatus: null }, { date: '2026-10-11', dayStatus: null }] }
   ];
+  // The agency's own Agency Net Margin on an invoiced booking-week (ruled 2026-11-16, slice 5 TSD review R5-D7; §3.3.6
+  // rule 3 sends it): per day agencyCost − (workerGrossPay + Σ statutory), worked out as the server works it out with slice
+  // 4's engine — the worker's gross pay at the rate card line's worker pay rate × the hours, and the statutory costs at the
+  // engine's rates (employer's NI 15 %, WTR accrual 12.07 %, pension 3 %, apprenticeship levy 0.5 %), each rounded per day.
+  // Only the margin is drawn: this copy uses these inputs for nothing else, and holds no charge rate and no Abstract margin.
+  var WORKER_RATE = { v1042: '14.50' }, STAT_BP = [1500, 1207, 300, 50];
+  function netMargin(vid, y, agencyCost) {
+    var r = WORKER_RATE[vid]; if (!r) return null;
+    var wgp = Math.round(Math.round(Number(r) * 100) * Number(y.hours || '8.00')), stat = STAT_BP.reduce(function (m, bp) { return m + Math.round(wgp * bp / 10000); }, 0);
+    return ((Math.round(Number(agencyCost) * 100) - (wgp + stat)) / 100).toFixed(2);
+  }
   S5.agencyWeeks = function (bookingId) {
     var b = rawAB(bookingId); if (!b || b.agencyId !== ME.agencyId) return [];
     var live = Object.keys(db.weeks).map(function (k) { return db.weeks[k]; }).filter(function (w) { return w.bookingId === bookingId; });
@@ -692,10 +727,12 @@
       o.days = w.days.map(function (y) {
         var x = { date: y.date, dayStatus: y.dayStatus, hours: y.hours || null, shiftName: y.shiftName || null, absenceComment: y.absenceComment || null, absencePay: y.absencePay || null, overridden: !!y.overridden, inRange: y.inRange !== false, confirmationState: confState(bookingId, y.date, y.dayStatus), confirmation: confOf(bookingId, y.date) };
         // pay figures (pay columns) only on an invoiced booking-week; absent, not null, otherwise
-        if (inv && rate && (y.dayStatus === 'Worked' || y.absencePay === 'Paid')) { x.agencyPayRate = rate; x.agencyCost = (Math.round(Number(rate) * Number(y.hours || '8.00') * 100) / 100).toFixed(2); }
+        if (inv && rate && (y.dayStatus === 'Worked' || y.absencePay === 'Paid')) { x.agencyPayRate = rate; x.agencyCost = (Math.round(Number(rate) * Number(y.hours || '8.00') * 100) / 100).toFixed(2); x.agencyNetMargin = netMargin(b.vacancyId, y, x.agencyCost); }
         return x;
       });
       if (inv) o.agencyCost = o.days.reduce(function (m, x) { return m + (x.agencyCost ? Number(x.agencyCost) : 0); }, 0).toFixed(2);
+      // the agency's own Agency Net Margin, on an invoiced week only (R5-D7): the Σ of the days', in pence
+      if (inv && o.days.some(function (x) { return x.agencyNetMargin != null; })) o.agencyNetMargin = (o.days.reduce(function (m, x) { return m + (x.agencyNetMargin != null ? Math.round(Number(x.agencyNetMargin) * 100) : 0); }, 0) / 100).toFixed(2);
       return o;
     }).sort(function (a, b2) { return a.weekStart < b2.weekStart ? 1 : -1; });
   };
@@ -814,6 +851,11 @@
     // Pool's list (S3.candidates) stays the pool's alone, as the page sends ownerType=abstract (TV-7).
     var _cand = S3.candidate;
     S3.candidate = function (id) { if (on() && S5.isAgencyCandidate(id)) return S5.candidate(id); return _cand(id); };
+    // and edits it (ruled 2026-11-16, R5-D1): the record pages' writes on an agency's candidate land in this store
+    var _rawC = S3.rawCandidate, _saveC = S3.saveCandidates, _updC = S3.act.updateCandidate;
+    S3.rawCandidate = function (id) { if (on() && S5.isAgencyCandidate(id)) return S5.rawCandidate(id); return _rawC(id); };
+    S3.saveCandidates = function () { _saveC(); if (on()) save(); };
+    S3.act.updateCandidate = function (id, patch) { if (on() && S5.isAgencyCandidate(id)) return S5.act.updateCandidate(id, patch); return _updC(id, patch); };
     // the BookingSourceBadge's second value (design-tokens §4: teal, fa-handshake-angle)
     var _src = S3.ui.source;
     S3.ui.source = function (s) { return s === 'Agency-sourced' ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold whitespace-nowrap bg-teal-50 text-teal-700 border border-teal-200"><i class="fa-solid fa-handshake-angle text-[10px]" aria-hidden="true"></i>Agency-sourced</span>' : _src(); };
@@ -1005,7 +1047,7 @@
     dialogHtml: function (x, y, st) {
       if (!on() || !x.agencySourced || ABSENCES.indexOf(st) < 0) return '';
       var same = y.dayStatus === st, cs = same ? y.confirmationState : null, ag = esc(x.supplyingParty), c = same ? y.confirmation : null;
-      if (cs === 'Requested (awaiting agency)') return '<div class="rounded-lg border border-amber-200 bg-amber-50/60 p-3"><p class="text-xs font-semibold text-slate-700 mb-1.5">Agency confirmation</p>' + chip(cs) + '<p class="text-xs text-slate-600 mt-1.5">Requested ' + (c.requestedByParty === 'policy' ? 'by the client’s leave policy' : 'by ' + esc(c.requestedByName || (c.requestedByParty === 'abstract' ? 'Abstract' : 'the client'))) + ' on ' + fmtDateTime(c.requestedAt) + '. ' + ag + ' gives the reason; this never holds the week.</p></div>';
+      if (cs === 'Requested (awaiting agency)') return '<div class="rounded-lg border border-amber-200 bg-amber-50/60 p-3"><p class="text-xs font-semibold text-slate-700 mb-1.5">Agency confirmation</p>' + chip(cs) + '<p class="text-xs text-slate-600 mt-1.5">Requested ' + (c.requestedByParty === 'policy' ? 'automatically (client setting)' : 'by ' + esc(c.requestedByName || (c.requestedByParty === 'abstract' ? 'Abstract' : 'the client'))) + ' on ' + fmtDateTime(c.requestedAt) + '. ' + ag + ' gives the reason; this never holds the week.</p></div>';
       if (cs === 'Justified') return '<div class="rounded-lg border border-emerald-200 bg-emerald-50/60 p-3"><p class="text-xs font-semibold text-slate-700 mb-1.5">Agency confirmation</p>' + chip(cs) + '<p class="text-xs text-slate-700 mt-1.5"><span class="font-semibold">' + ag + '’s reason:</span> ' + esc(c.justification) + '</p><p class="text-xs text-slate-500 mt-0.5">Given on ' + fmtDateTime(c.justifiedAt) + '. Changing the day’s status ends the confirmation.</p></div>';
       var def = same ? false : !!AUTO_REQUEST[x.clientId];
       return '<label class="flex items-start gap-2.5 p-3 rounded-lg border border-slate-200 hover:border-blue-300 cursor-pointer"><input type="checkbox" id="d-rc" class="mt-0.5"' + (def ? ' checked' : '') + '/><span class="min-w-0"><span class="block text-sm font-semibold text-slate-800">Request agency confirmation</span><span class="block text-xs text-slate-600 mt-0.5">' + ag + ' is asked to confirm the absence and give a reason. It never holds the week.' + (same ? '' : ' Ticked by default: the client’s leave policy asks for it.') + '</span></span></label>';
@@ -1013,9 +1055,9 @@
     // a cell's marker: the requested and justified states read on the grid itself
     cellMark: function (y) {
       if (!on() || !y.confirmationState || y.confirmationState === 'Not Requested') return '';
-      return y.confirmationState === 'Justified' ? '<span class="absolute bottom-1 right-1 text-emerald-700" title="' + esc('Justified: ' + y.confirmation.justification) + '"><i class="fa-solid fa-circle-check text-[10px]" aria-hidden="true"></i></span>' : '<span class="absolute bottom-1 right-1 text-amber-700" title="Requested (awaiting agency)"><i class="fa-solid fa-hourglass-half text-[10px]" aria-hidden="true"></i></span>';
+      return y.confirmationState === 'Justified' ? '<span class="absolute bottom-1 right-1 text-emerald-700" title="' + esc('Justified: ' + y.confirmation.justification) + '"><i class="fa-solid fa-circle-check text-[10px]" aria-hidden="true"></i></span>' : '<span class="absolute bottom-1 right-1 text-amber-700" title="' + CLABEL['Requested (awaiting agency)'] + '"><i class="fa-solid fa-hourglass-half text-[10px]" aria-hidden="true"></i></span>';
     },
-    ariaPart: function (y) { return on() && y.confirmationState && y.confirmationState !== 'Not Requested' ? ', ' + y.confirmationState : ''; },
+    ariaPart: function (y) { return on() && y.confirmationState && y.confirmationState !== 'Not Requested' ? ', ' + (CLABEL[y.confirmationState] || y.confirmationState) : ''; },
     // the day-by-day table's status cell: the state's badge, the reason, and the standalone request on a Not Requested absence.
     // Not Requested draws no badge (ruled 2026-11-16, Ujjwal Sharma): such a day shows only the request link, where it is offered.
     dayHtml: function (x, y, canRequest) {
@@ -1027,7 +1069,7 @@
       else if (canRequest) h += '<button type="button" class="self-start text-[11px] font-semibold text-blue-700 hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" data-s5-req="' + esc(y.date) + '">Request agency confirmation</button>';
       return h + '</div>';
     },
-    legend: function () { return on() ? '<span role="listitem" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700"><i class="fa-solid fa-hourglass-half text-amber-700" aria-hidden="true"></i>Requested (awaiting agency)</span><span role="listitem" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700"><i class="fa-solid fa-circle-check text-emerald-700" aria-hidden="true"></i>Justified</span>' : ''; },
+    legend: function () { return on() ? '<span role="listitem" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700"><i class="fa-solid fa-hourglass-half text-amber-700" aria-hidden="true"></i>' + CLABEL['Requested (awaiting agency)'] + '</span><span role="listitem" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700"><i class="fa-solid fa-circle-check text-emerald-700" aria-hidden="true"></i>Justified</span>' : ''; },
     party: abstractParty
   };
 //#endif
@@ -1050,10 +1092,16 @@
   // judgement on the candidate (the pass's choice, flagged for K59). The confirmation words likewise (K59).
   var PWORD = { 'Submitted': ['info', 'fa-paper-plane'], 'Under Review': ['info', 'fa-magnifying-glass'], 'Accepted': ['good', 'fa-circle-check'], 'Rejected': ['bad', 'fa-circle-xmark'], 'Withdrawn': ['closed', 'fa-rotate-left'], 'Rejected (Position Filled)': ['closed', 'fa-user-check'] };
   var CWORD = { 'Not Requested': ['neutral', 'fa-minus'], 'Requested (awaiting agency)': ['waiting', 'fa-hourglass-half'], 'Justified': ['good', 'fa-circle-check'] };
-  function badge(map, s, small) { var w = map[s] || ['neutral', 'fa-circle']; return '<span class="inline-flex items-center gap-1.5 ' + (small ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs') + ' rounded-full font-semibold whitespace-nowrap ' + BUCKET[w[0]] + '"><i class="fa-solid ' + w[1] + ' text-[10px]" aria-hidden="true"></i>' + esc(s) + '</span>'; }
+  // the words a requested day reads on Abstract's and the client's pages: design-tokens §6's pill, "Awaiting agency" (pill,
+  // legend, cell mark and its aria text; ruled 2026-11-16, slice 5 TSD review R5-D6). The state's value is unchanged.
+  var CLABEL = {};
+//#if abstract client
+  CLABEL = { 'Requested (awaiting agency)': 'Awaiting agency' };
+//#endif
+  function badge(map, s, small, label) { var w = map[s] || ['neutral', 'fa-circle']; return '<span class="inline-flex items-center gap-1.5 ' + (small ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs') + ' rounded-full font-semibold whitespace-nowrap ' + BUCKET[w[0]] + '"><i class="fa-solid ' + w[1] + ' text-[10px]" aria-hidden="true"></i>' + esc(label || s) + '</span>'; }
   S5.ui = {
     proposalBadge: function (s, small) { return badge(PWORD, s, small); },
-    confBadge: function (s, small) { return badge(CWORD, s, small); },
+    confBadge: function (s, small) { return badge(CWORD, s, small, CLABEL[s]); },
     complianceBadge: function (s, small) { return badge({ Compliant: ['good', 'fa-circle-check'], Pending: ['waiting', 'fa-hourglass-half'], Expired: ['bad', 'fa-circle-xmark'] }, s, small); },
     licenceChip: function (l) { return '<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[11px] font-medium border ' + (l.expired ? 'bg-red-50 text-red-700 border-red-200' : 'bg-slate-50 text-slate-700 border-slate-200') + '"><i class="fa-solid ' + (l.expired ? 'fa-circle-xmark' : 'fa-id-card') + ' text-[10px]" aria-hidden="true"></i>' + esc(l.licenceType) + (l.expiryDate ? ' · ' + (l.expired ? 'expired ' : 'until ') + fmtDate(l.expiryDate) : '') + '</span>'; }
   };

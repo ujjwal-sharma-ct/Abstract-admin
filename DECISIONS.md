@@ -276,3 +276,33 @@ the slice design hubs (reviewer pages). Nothing else in the copy changed.
 4. **No *Not Requested* badge in the day table.** An Agency-sourced absence whose confirmation was never requested shows
    no badge, only the *Request agency confirmation* link where it is offered (Abstract and client: one shared function).
    *Requested (awaiting agency)* and *Justified* keep theirs.
+
+## 2026-11-16 — Slice 5 TSD review R5: the rulings applied to Abstract's pages (ruled by Ujjwal Sharma)
+
+From the slice 5 TSD review R5 (project-docs `review/slices/SLICE-5-TSD-REVIEW-R5-RECORD.md`). The shared slice 5 source
+`scripts/slice5-proto.src.js` was changed for all three portals and every copy rebuilt; the client's and the agency's
+parts are recorded in their own `DECISIONS.md`.
+
+1. **R5-D1 — Abstract edits an agency's candidate.** Worker Profile and Worker Form open an agency-owned record
+   (`?id=ac-kofi`) as they open Abstract's own: Edit, the compliance items' Update, Add and Remove licence, Upload, and
+   Set or Lift legal hold (still Abstract's control). What stays refused: availability (no *Set availability*, no
+   availability fields on the form; `S5.act.updateCandidate` refuses `CANDIDATE_FIELD_NOT_ALLOWED` for it), and the
+   owning agency and its branch, shown read only (the profile's note, the form's *Owning agency* and *Branch*). An
+   agency's candidate is still never booked from the pool (no *Book into position*). The note now reads *This record is
+   owned by &lt;agency&gt;, &lt;branch&gt;. Changes made here are audited.* The writes land in the shared store, so the
+   agency reads them; on open, the record's drama number takes the pool's one-off conversion so it can be saved.
+   Replaces entry 7 of the 2026-11-15 slice 5 entry (*read only*).
+2. **R5-D6 — "Awaiting agency".** A requested day's pill, legend entry, cell mark tooltip and aria text read
+   design-tokens §6's *Awaiting agency*, not *Requested (awaiting agency)*; the state's value is unchanged. *Justified*
+   stays.
+3. **R5-D8 — Margin on an Agency-sourced booking.** Booking Detail shows the agency pay rate where an Abstract-sourced
+   booking shows the worker pay rate (KPI, Margin summary, projection, rate composition, summary card), and the margin is
+   charge rate − agency pay rate: BK-2210 £22.50 − £15.90 = £6.60/hr, 29.33 % (worked out, not stored). The worker pay
+   rate is not shown there. Abstract-sourced bookings are unchanged.
+4. **R5-D9 — The absence modal sends the tick only if it changed.** `requestConfirmation` is sent only when the user
+   changes the tick from its default (the client's setting), so an untouched default records party `policy`; the dialog
+   then reads *Requested automatically (client setting)*.
+5. **R5-G1 — No proposal reference on a booking.** Booking Detail's *From proposal* term is gone, and a booking created
+   by an acceptance logs *Booking created from an accepted proposal*. Proposal pages keep their PRP ids.
+6. **R5-P2 — Accept dialog dates refusals.** Proposal Review gains `datesoutside` (422 BOOKING_DATES_OUTSIDE_VACANCY)
+   and `datesinvalid` (BOOKING_DATES_INVALID), as the client's page has them; the kit labels them.

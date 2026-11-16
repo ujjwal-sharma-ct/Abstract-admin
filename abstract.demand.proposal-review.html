@@ -48,7 +48,7 @@
         }
     </script>
 </head>
-<body class="font-inter bg-slate-100 overflow-hidden" data-s5-page data-s1-states="default loading empty error validation denied large stale accept reject positiontaken agencyinactive clientinactive anonymised noreview nocandidate">
+<body class="font-inter bg-slate-100 overflow-hidden" data-s5-page data-s1-states="default loading empty error validation denied large stale accept reject positiontaken agencyinactive clientinactive anonymised datesoutside datesinvalid noreview nocandidate">
 
 <div id="app-root" class="flex w-full" style="height: 100vh;">
 
@@ -1361,10 +1361,11 @@ function draw(){
 function reload(e){stale=true;banner='<p class="font-semibold">This proposal changed while you had it open</p><p class="mt-0.5">'+esc(e.message)+'</p>';draw();}
 // Accept (POST /bookings/from-proposal): the position picker defaults to the lowest open, the dates to the vacancy's;
 // the acceptance's refusals show inline in the dialog (TSD §5 UI rules)
-function acceptDialog(p,v,sim){
+function acceptDialog(p,v,sim,dates){
+ var d=dates||{};
  var open=v.rosterRows.filter(function(r){return r.status==='Open';});if(st==='large'&&open.length){var big=[];for(var i=1;i<=120;i++)big.push({n:i});open=big;}
  var dlg=S3.dialog({title:'Accept '+p.candidateName+'?',body:'An Agency-sourced booking is created for '+esc(p.candidateName)+' from '+esc(p.agencyName)+' on the position you choose, and '+esc(p.agencyName)+' is told. '+(v.openCount===1?'<strong>This fills the last open position:</strong> every other pending proposal becomes Rejected (Position Filled).':''),cta:'Accept & create booking',cancel:'Keep reviewing',refusalTitle:'This proposal couldn’t be accepted',width:520,
-  fields:[{id:'ac-pos',label:'Position',type:'select',options:open.map(function(r){return [r.n,'Position '+r.n+(r.n===open[0].n?' (lowest open)':'')];}),value:open[0]?open[0].n:'',required:true,hint:open.length+' open on '+v.reference+'.'},{id:'ac-start',label:'Start date',type:'date',value:v.startDate,required:true,requiredMessage:'Choose a start date.'},{id:'ac-end',label:'End date',type:'date',value:v.endDate,required:true,requiredMessage:'Choose an end date.',hint:'The vacancy runs '+S5.fmtDate(v.startDate)+' to '+S5.fmtDate(v.endDate)+'.'}],
+  fields:[{id:'ac-pos',label:'Position',type:'select',options:open.map(function(r){return [r.n,'Position '+r.n+(r.n===open[0].n?' (lowest open)':'')];}),value:open[0]?open[0].n:'',required:true,hint:open.length+' open on '+v.reference+'.'},{id:'ac-start',label:'Start date',type:'date',value:d.start||v.startDate,required:true,requiredMessage:'Choose a start date.'},{id:'ac-end',label:'End date',type:'date',value:d.end||v.endDate,required:true,requiredMessage:'Choose an end date.',hint:'The vacancy runs '+S5.fmtDate(v.startDate)+' to '+S5.fmtDate(v.endDate)+'.'}],
   onOk:function(x){var res=S5.act.accept(p.id,{positionNumber:Number(x['ac-pos']),startDate:x['ac-start'],endDate:x['ac-end']},{simulate:sim});S1.toast(p.candidateName+' accepted: '+res.bookingReference+' on position '+res.positionNumber+(res.autoRejected?'. '+res.autoRejected+' other proposal'+(res.autoRejected===1?' was':'s were')+' closed as Rejected (Position Filled).':'.'),'success');banner='';draw();}});
  return dlg;
 }
@@ -1381,6 +1382,9 @@ S3.onState(function(s){st=s;stale=false;banner='';document.querySelectorAll('.s1
  if(s==='reject'&&pend)rejectDialog(p);
  if(s==='validation'&&pend)rejectDialog(p,true);
  if(['positiontaken','agencyinactive','clientinactive','anonymised'].indexOf(s)>=0&&pend){acceptDialog(p,v,{positiontaken:'taken',agencyinactive:'agencyinactive',clientinactive:'clientinactive',anonymised:'anonymised'}[s]);setTimeout(function(){document.querySelector('.s1-scrim [data-ok]').click();},60);}
+ // the dates refusals, as the client's page draws them (ruled 2026-11-16, R5-P2): 422 BOOKING_DATES_OUTSIDE_VACANCY and BOOKING_DATES_INVALID
+ var dts={datesoutside:{start:'2026-09-01'},datesinvalid:{start:v.endDate,end:v.startDate}};
+ if(dts[s]&&pend){acceptDialog(p,v,null,dts[s]);setTimeout(function(){var ok=document.querySelector('.s1-scrim [data-ok]');if(ok)ok.click();},60);}
  if(s==='stale'&&pend){try{S5.act.accept(p.id,{},{simulate:'stale'});}catch(e){reload(e);}}
 });
 document.addEventListener('s1:mode',function(){var s=document.body.getAttribute('data-s1-state');if(s&&['loading','error','denied'].indexOf(s)<0)draw();});
