@@ -305,6 +305,9 @@
       notes: p.notes, reviewStartedAt: p.reviewStartedAt, decidedAt: p.decidedAt, decidedByParty: p.decidedByParty, decisionReason: p.decisionReason,
       positionNumber: p.positionNumber, bookingId: p.bookingId, bookingReference: p.bookingReference };
     o.agencyId = p.agencyId; o.agencyName = agencyName(p.agencyId); o.decidedByName = p.decidedByName || null; o.submittedByName = p.submittedByName || agencyName(p.agencyId);
+    // the proposal's branch, copied at submission and never moved (TSD §3.3.2 rule 6; R5 follow-up, 2026-11-16); a seeded
+    // proposal takes its candidate's seeded branch, as if copied when it was submitted
+    o.agencyOrgNodeName = branchName(p.agencyId, p.agencyOrgNodeId || (rawCand(p.candidateId) || {}).agencyOrgNodeId);
     return o;
   }
   function readable(p) {

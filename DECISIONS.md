@@ -312,3 +312,5 @@ parts are recorded in their own `DECISIONS.md`.
    with no edit; the hub's edit-form links open Kofi Mensah (`?id=ac-kofi`, and its `conflict` state).
 
 Availability on an agency's candidate is refused with `CANDIDATE_NOT_IN_POOL` for every caller (slice 5 TSD §3.1.0), not `CANDIDATE_FIELD_NOT_ALLOWED`; the agency's *fieldnotallowed* copy names the job role and the legal hold only (review R5 follow-up, from the TSD check of the design pass).
+
+The proposal's branch, copied at submission and never moved (TSD §3.3.2 rule 6), is what Abstract's Proposal Review shows in its *Branch* field (Ujjwal Sharma, 2026-11-16, ruling B5-N4); the card's header line no longer repeats a branch. Seeded proposals take their candidate's seeded branch, as if copied when submitted.

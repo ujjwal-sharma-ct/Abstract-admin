@@ -408,6 +408,9 @@
       positionNumber: p.positionNumber, bookingId: p.bookingId, bookingReference: p.bookingReference };
 //#if abstract
     o.agencyId = p.agencyId; o.agencyName = agencyName(p.agencyId); o.decidedByName = p.decidedByName || null; o.submittedByName = p.submittedByName || agencyName(p.agencyId);
+    // the proposal's branch, copied at submission and never moved (TSD §3.3.2 rule 6; R5 follow-up, 2026-11-16); a seeded
+    // proposal takes its candidate's seeded branch, as if copied when it was submitted
+    o.agencyOrgNodeName = branchName(p.agencyId, p.agencyOrgNodeId || (rawCand(p.candidateId) || {}).agencyOrgNodeId);
 //#endif
 //#if client
     // who decided reads as the party: the client sees its own user's name, Abstract as "Abstract"
@@ -581,7 +584,7 @@
     if (v.myPendingCount + 1 > v.myProposalCap) refuse('PROPOSAL_CAP_REACHED', 'You have reached your proposal limit for this vacancy (' + v.myPendingCount + ' of ' + v.myProposalCap + ').', { pending: v.myPendingCount, openCount: v.openCount, maxPerVacancy: MAX_PER_VACANCY });
     if (!notes || !notes.trim()) refuse('VALIDATION_ERROR', 'Say why this candidate suits the vacancy.', { fields: { notes: 'Say why this candidate suits the vacancy.' } });
     if (notes.length > 2000) refuse('VALIDATION_ERROR', 'Keep the notes to 2,000 characters.', { fields: { notes: 'Keep the notes to 2,000 characters.' } });
-    var n = ++db.seq.prp, p = prp(n, vid, candidateId, ME.agencyId, 'Submitted', now(), { notes: notes.trim(), submittedByName: ME.userName });
+    var n = ++db.seq.prp, p = prp(n, vid, candidateId, ME.agencyId, 'Submitted', now(), { notes: notes.trim(), submittedByName: ME.userName, agencyOrgNodeId: (rawCand(candidateId) || {}).agencyOrgNodeId });   // the branch, copied at submission (TSD §3.3.2 rule 6)
     db.proposals.push(p); log('proposal', p.id, 'Proposal submitted'); save(); return p.id;
   };
   // PATCH /proposals/:id { notes } — only while Submitted
