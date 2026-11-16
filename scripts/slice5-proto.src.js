@@ -161,14 +161,14 @@
   function addr(l, t, p) { return { line1: l, line2: null, town: t, postcode: p, country: 'GB' }; }
   function priv(branch, dob, tel, email, a, ni, kin, it, licIssuers, extra) { return Object.assign({ agencyOrgNodeId: branch, dateOfBirth: dob, telephone: tel, email: email, address: a, nationalInsuranceNumber: ni, nextOfKin: kin, items: it, issuers: licIssuers || [], documents: [], createdAt: '2026-08-20T10:00:00', updatedAt: '2026-10-01T09:00:00', createdBy: 'Daniel Wright' }, extra || {}); }
   var PRIV = {
-    'ac-kofi': priv('tf-leeds', '1990-02-11', '07700 900301', 'kofi.mensah@example.com', addr('8 Burley Road', 'Leeds', 'LS4 2EU'), 'QQ112233A', { name: 'Ama Mensah', relationship: 'Sister', telephone: '07700 900401' }, items(OK('2030-02-28', 'Share code.pdf'), OK('2027-05-31'), OK(), OK('2027-06-30')), ['RTITB'], { documents: [{ name: 'Share code.pdf', size: '180 KB', by: 'Daniel Wright', at: '2026-08-20T10:20:00' }] }),
-    'ac-liam': priv('tf-leeds', '1995-06-03', '07700 900302', 'liam.carter@example.com', addr('21 Kirkstall Road', 'Leeds', 'LS3 1LH'), 'QQ223344B', null, items(OK('2031-01-31'), NA, OK(), OK('2027-08-31')), ['RTITB', 'ITSSAR']),
-    'ac-ryan': priv('tf-leeds', '1987-10-19', '07700 900303', 'ryan.hughes@example.com', addr('4 Beeston Road', 'Leeds', 'LS11 6AA'), 'QQ334455C', { name: 'Kerry Hughes', relationship: 'Spouse', telephone: '07700 900403' }, items(OK('2029-03-31'), OK('2027-01-31'), OK(), OK('2027-02-28')), ['RTITB']),
-    'ac-chloe': priv('tf-bham', '1998-12-08', '07700 900304', 'chloe.adams@example.com', addr('15 Moseley Road', 'Birmingham', 'B12 0HJ'), 'QQ445566D', null, items(OK('2030-09-30'), NA, OK(), OK('2027-03-31')), []),
-    'ac-hannah': priv('tf-bham', '1993-04-27', '07700 900305', 'hannah.brooks@example.com', addr('30 Hagley Road', 'Birmingham', 'B16 8PE'), 'QQ556677A', { name: 'Paul Brooks', relationship: 'Father', telephone: '07700 900405' }, items(OK('2032-04-30'), OK('2027-10-31'), OK(), OK('2027-09-30')), ['ITSSAR']),
+    'ac-kofi': priv('tf-leeds', '1990-02-11', '07700 900301', 'kofi.mensah@example.com', addr('8 Burley Road', 'Leeds', 'LS4 2EU'), 'AB112233A', { name: 'Ama Mensah', relationship: 'Sister', telephone: '07700 900401' }, items(OK('2030-02-28', 'Share code.pdf'), OK('2027-05-31'), OK(), OK('2027-06-30')), ['RTITB'], { documents: [{ name: 'Share code.pdf', size: '180 KB', by: 'Daniel Wright', at: '2026-08-20T10:20:00' }] }),
+    'ac-liam': priv('tf-leeds', '1995-06-03', '07700 900302', 'liam.carter@example.com', addr('21 Kirkstall Road', 'Leeds', 'LS3 1LH'), 'AB223344B', null, items(OK('2031-01-31'), NA, OK(), OK('2027-08-31')), ['RTITB', 'ITSSAR']),
+    'ac-ryan': priv('tf-leeds', '1987-10-19', '07700 900303', 'ryan.hughes@example.com', addr('4 Beeston Road', 'Leeds', 'LS11 6AA'), 'AB334455C', { name: 'Kerry Hughes', relationship: 'Spouse', telephone: '07700 900403' }, items(OK('2029-03-31'), OK('2027-01-31'), OK(), OK('2027-02-28')), ['RTITB']),
+    'ac-chloe': priv('tf-bham', '1998-12-08', '07700 900304', 'chloe.adams@example.com', addr('15 Moseley Road', 'Birmingham', 'B12 0HJ'), 'AB445566D', null, items(OK('2030-09-30'), NA, OK(), OK('2027-03-31')), []),
+    'ac-hannah': priv('tf-bham', '1993-04-27', '07700 900305', 'hannah.brooks@example.com', addr('30 Hagley Road', 'Birmingham', 'B16 8PE'), 'AB556677A', { name: 'Paul Brooks', relationship: 'Father', telephone: '07700 900405' }, items(OK('2032-04-30'), OK('2027-10-31'), OK(), OK('2027-09-30')), ['ITSSAR']),
     'ac-daniel': priv('tf-bham', '2000-01-15', '07700 900306', 'daniel.osei@example.com', addr('2 Ladypool Road', 'Birmingham', 'B12 8JY'), null, null, items(OK('2030-12-31'), PD, OK(), OK('2027-12-31')), []),
-    'ac-megan': priv('tf-bham', '1996-07-30', '07700 900307', 'megan.price@example.com', addr('9 Coventry Road', 'Birmingham', 'B10 0RX'), 'QQ778899C', null, items(OK('2029-07-31'), NA, OK(), OK('2027-01-31')), []),
-    'ac-amira': priv('tf-leeds', '1992-03-09', '07700 900308', 'amira.hassan@example.com', addr('11 Harehills Lane', 'Leeds', 'LS8 4AA'), 'QQ889900D', { name: 'Omar Hassan', relationship: 'Husband', telephone: '07700 900408' }, items(OK('2031-03-31'), OK('2027-04-30'), OK(), OK('2027-05-31')), ['RTITB'])
+    'ac-megan': priv('tf-bham', '1996-07-30', '07700 900307', 'megan.price@example.com', addr('9 Coventry Road', 'Birmingham', 'B10 0RX'), 'AB778899C', null, items(OK('2029-07-31'), NA, OK(), OK('2027-01-31')), []),
+    'ac-amira': priv('tf-leeds', '1992-03-09', '07700 900308', 'amira.hassan@example.com', addr('11 Harehills Lane', 'Leeds', 'LS8 4AA'), 'AB889900D', { name: 'Omar Hassan', relationship: 'Husband', telephone: '07700 900408' }, items(OK('2031-03-31'), OK('2027-04-30'), OK(), OK('2027-05-31')), ['RTITB'])
 //#endif
 //#if abstract
     , 'nx-oliver': priv('nx-bham', '1994-05-05', '07700 900501', 'oliver.grant@example.com', addr('7 Bristol Street', 'Birmingham', 'B5 7AA'), 'NX112233A', null, items(PD, NA, OK(), OK('2027-02-28')), [], { createdBy: 'Nexus Talent' }),
@@ -727,10 +727,12 @@
       o.days = w.days.map(function (y) {
         var x = { date: y.date, dayStatus: y.dayStatus, hours: y.hours || null, shiftName: y.shiftName || null, absenceComment: y.absenceComment || null, absencePay: y.absencePay || null, overridden: !!y.overridden, inRange: y.inRange !== false, confirmationState: confState(bookingId, y.date, y.dayStatus), confirmation: confOf(bookingId, y.date) };
         // pay figures (pay columns) only on an invoiced booking-week; absent, not null, otherwise
-        if (inv && rate && (y.dayStatus === 'Worked' || y.absencePay === 'Paid')) { x.agencyPayRate = rate; x.agencyCost = (Math.round(Number(rate) * Number(y.hours || '8.00') * 100) / 100).toFixed(2); x.agencyNetMargin = netMargin(b.vacancyId, y, x.agencyCost); }
+        if (inv && rate && (y.dayStatus === 'Worked' || y.absencePay === 'Paid')) { x.agencyPayRate = rate; x.agencyCost = (Math.round(Number(rate) * Number(y.hours || '8.00') * 100) / 100).toFixed(2); x.agencyNetMargin = netMargin(b.vacancyId, y, x.agencyCost); x.paidHours = y.hours || '8.00'; }
         return x;
       });
       if (inv) o.agencyCost = o.days.reduce(function (m, x) { return m + (x.agencyCost ? Number(x.agencyCost) : 0); }, 0).toFixed(2);
+      // the hours the agency cost pays for: Worked hours and paid absences (a paid absence counts its Shift's 8.00 here)
+      if (inv) o.paidHours = o.days.reduce(function (m, x) { return m + (x.paidHours ? Number(x.paidHours) : 0); }, 0).toFixed(2);
       // the agency's own Agency Net Margin, on an invoiced week only (R5-D7): the Σ of the days', in pence
       if (inv && o.days.some(function (x) { return x.agencyNetMargin != null; })) o.agencyNetMargin = (o.days.reduce(function (m, x) { return m + (x.agencyNetMargin != null ? Math.round(Number(x.agencyNetMargin) * 100) : 0); }, 0) / 100).toFixed(2);
       return o;
@@ -1092,12 +1094,10 @@
   // judgement on the candidate (the pass's choice, flagged for K59). The confirmation words likewise (K59).
   var PWORD = { 'Submitted': ['info', 'fa-paper-plane'], 'Under Review': ['info', 'fa-magnifying-glass'], 'Accepted': ['good', 'fa-circle-check'], 'Rejected': ['bad', 'fa-circle-xmark'], 'Withdrawn': ['closed', 'fa-rotate-left'], 'Rejected (Position Filled)': ['closed', 'fa-user-check'] };
   var CWORD = { 'Not Requested': ['neutral', 'fa-minus'], 'Requested (awaiting agency)': ['waiting', 'fa-hourglass-half'], 'Justified': ['good', 'fa-circle-check'] };
-  // the words a requested day reads on Abstract's and the client's pages: design-tokens §6's pill, "Awaiting agency" (pill,
+  // the words a requested day reads on every portal's pages: design-tokens §6's pill, "Awaiting agency" (pill,
   // legend, cell mark and its aria text; ruled 2026-11-16, slice 5 TSD review R5-D6). The state's value is unchanged.
-  var CLABEL = {};
-//#if abstract client
-  CLABEL = { 'Requested (awaiting agency)': 'Awaiting agency' };
-//#endif
+  // Every portal, the agency's included (R5-D6, widened 2026-11-16 by the coordinator's correction of the pass's brief).
+  var CLABEL = { 'Requested (awaiting agency)': 'Awaiting agency' };
   function badge(map, s, small, label) { var w = map[s] || ['neutral', 'fa-circle']; return '<span class="inline-flex items-center gap-1.5 ' + (small ? 'px-2 py-0.5 text-[11px]' : 'px-2.5 py-1 text-xs') + ' rounded-full font-semibold whitespace-nowrap ' + BUCKET[w[0]] + '"><i class="fa-solid ' + w[1] + ' text-[10px]" aria-hidden="true"></i>' + esc(label || s) + '</span>'; }
   S5.ui = {
     proposalBadge: function (s, small) { return badge(PWORD, s, small); },

@@ -306,3 +306,7 @@ parts are recorded in their own `DECISIONS.md`.
    by an acceptance logs *Booking created from an accepted proposal*. Proposal pages keep their PRP ids.
 6. **R5-P2 — Accept dialog dates refusals.** Proposal Review gains `datesoutside` (422 BOOKING_DATES_OUTSIDE_VACANCY)
    and `datesinvalid` (BOOKING_DATES_INVALID), as the client's page has them; the kit labels them.
+7. **Follow-up, same day.** R5-D6's *Awaiting agency* now reads on the agency's pages too (the source's label is no
+   longer fenced to Abstract and the client). The agencies' seeded candidates' NI numbers take the pool's valid sample
+   prefix *AB* (TechForce's were *QQ…*, which the form's NI check refuses), so an agency's record saves from Abstract
+   with no edit; the hub's edit-form links open Kofi Mensah (`?id=ac-kofi`, and its `conflict` state).
