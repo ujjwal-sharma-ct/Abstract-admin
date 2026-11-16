@@ -86,7 +86,10 @@ function rangeErr(){if(f.from&&!/^\d{4}-\d{2}-\d{2}$/.test(f.from))return ['y-fr
 function draw(){
  var bd=st!=='nobreakdown',re=rangeErr();
  var list=st==='empty'||f.weekBad?[]:st==='large'?synth():S4.statements({current:!f.superseded,weekStart:f.week||null,clientId:f.client||null,q:f.q||null});
- if(f.source==='Agency-sourced')list=[];
+ // the source filter reads each statement's source (slice 5 writes Agency-sourced statements; before it every statement is Abstract-sourced)
+ if(f.source)list=list.filter(function(s){return (s.source||'Abstract-sourced')===f.source;});
+ // slice 5 §3.3.8 (ruled 2026-11-16): Agency gross pay, tag pay, shows with or without the breakdown once a listed statement is Agency-sourced
+ var ag=list.some(function(s){return s.agencyGrossPay!=null;});
  if(!re&&(f.from||f.to))list=list.filter(function(s){return (!f.from||s.weekStart>=f.from)&&(!f.to||s.weekStart<=f.to);});
  var pages=Math.ceil(list.length/PAGE)||1;if(pg>pages)pg=pages;var view=list.slice((pg-1)*PAGE,pg*PAGE);
  var weeks={};all0.forEach(function(s){weeks[s.weekStart]=1;});if(f.week)weeks[f.week]=1;
@@ -99,7 +102,7 @@ function draw(){
  var emptyBlock=st==='empty'||!all0.length?ui.empty('fa-file-lines','No pay statements yet','Statements are written when a week is approved.'):others?ui.empty('fa-filter','No pay statements match these filters','Clear a filter to see more.','<button type="button" id="y-clear" class="'+C.sec+'">Clear filters</button>'):f.week?ui.empty('fa-file-lines','No pay statements for this week','Statements are written when a week is approved.'):ui.empty('fa-file-lines','No pay statements yet','Statements are written when a week is approved.');
  var href=function(s){return 'abstract.timesheets.pay-statement.html?id='+s.id;};
  var ver=function(s){return '<span class="tnum">v'+s.version+'</span> '+(s.supersededAt?S3.ui.marker('Superseded','default'):S3.ui.marker('Current','success'));};
- app.innerHTML='<p class="text-sm text-slate-600 mb-3">One statement per booking-week, written when the week is approved. A reopened week’s statement is superseded and the next approval writes a new version. Abstract-sourced workers.</p>'+
+ app.innerHTML='<p class="text-sm text-slate-600 mb-3">One statement per booking-week, written when the week is approved. A reopened week’s statement is superseded and the next approval writes a new version. '+(S5.on()?'Abstract-sourced and Agency-sourced workers.':'Abstract-sourced workers.')+'</p>'+
   ui.filterBar('y-filters',weekCtl+ui.select('y-client','Client','fa-building',[['','All clients']].concat(Object.keys(S3.CLIENTS).map(function(k){return [k,S3.CLIENTS[k].name];})),f.client)+ui.search('y-q','Candidate or booking reference')+ui.select('y-source','Booking source','fa-building-shield',[['','All sources'],['Abstract-sourced','Abstract-sourced'],['Agency-sourced','Agency-sourced']],f.source)+'<div class="flex items-start gap-2">'+[['y-from','From week','from'],['y-to','To week','to']].map(function(d){var bad=re&&re[0]===d[0];return '<div><label for="'+d[0]+'" class="block text-[11px] font-semibold text-slate-600 mb-0.5">'+d[1]+'</label><input id="'+d[0]+'" type="date" value="'+esc(f[d[2]]||'')+'" class="px-2 py-1.5 rounded-lg border '+(bad?'border-red-500':'border-slate-200')+' text-xs text-slate-700 min-h-[34px]"'+(bad?' aria-invalid="true" aria-describedby="'+d[0]+'-err"':'')+'/>'+(bad?'<p id="'+d[0]+'-err" class="text-xs font-medium text-red-700 mt-1 max-w-[220px]" role="alert">'+esc(re[1])+'</p>':'')+'</div>';}).join('')+'</div>'+'<label class="flex items-center gap-2 text-xs font-semibold text-slate-700 min-h-[38px]"><input type="checkbox" id="y-sup"'+(f.superseded?' checked':'')+'/> Include superseded versions</label>')+
   (bd?'':'<div class="mb-3">'+ui.banner('info','You see each statement’s hours and versions. Worker pay needs the full rate breakdown.')+'</div>')+
   (re?'<div class="mb-3">'+ui.banner('error','Check the week range: '+esc(re[1]))+'</div>':'')+
@@ -111,8 +114,9 @@ function draw(){
    {label:'Week',nowrap:true,cell:function(s){return S4.fmtWeek(s.weekStart);}},
    {label:'Total hours',right:true,cell:function(s){return s.totalHours;}},
    bd?{label:'Gross pay',right:true,cell:function(s){return S3.money(s.workerGrossPay);}}:null,
+   ag?{label:'Agency gross pay',right:true,cell:function(s){return s.agencyGrossPay==null?'<span class="text-slate-500">—</span>':S3.money(s.agencyGrossPay);}}:null,
    {label:'Version',nowrap:true,cell:ver}].filter(Boolean),
-   card:function(s){return ui.mobileCard({title:'<a class="'+C.link+'" href="'+href(s)+'">'+esc(s.candidateName)+'</a>',badge:ver(s),lines:[esc(s.clientName)+' · '+esc(s.bookingReference),'Week of '+S4.fmtWeek(s.weekStart),s.totalHours+' h'+(bd?' · '+S3.money(s.workerGrossPay)+' gross':'')]});}})+ui.pager(list.length,pg,pages,'pay statements')
+   card:function(s){return ui.mobileCard({title:'<a class="'+C.link+'" href="'+href(s)+'">'+esc(s.candidateName)+'</a>',badge:ver(s),lines:[esc(s.clientName)+' · '+esc(s.bookingReference),'Week of '+S4.fmtWeek(s.weekStart),s.totalHours+' h'+(bd?' · '+S3.money(s.workerGrossPay)+' gross':'')+(s.agencyGrossPay!=null?' · '+S3.money(s.agencyGrossPay)+' agency':'')]});}})+ui.pager(list.length,pg,pages,'pay statements')
   :(f.weekBad?'':emptyBlock));
  ui.wireFilterToggle(app);ui.wireRows(app);
  [['y-week','week'],['y-client','client'],['y-source','source']].forEach(function(k){var e=document.getElementById(k[0]);if(e)e.onchange=function(){f[k[1]]=e.value;pg=1;draw();};});

@@ -248,3 +248,31 @@ Extends the entry above to every page: no requirement ID in copy a user reads �
 and dialog bodies drawn by script. A trailing *(XX-NNN)* goes with its space; a leading *XX-NNN ·* label goes and
 the rest is capitalised (*SYS-007 · effective-dated* → *Effective-dated*). Code comments keep their IDs, and so do
 the slice design hubs (reviewer pages). Nothing else in the copy changed.
+
+## 2026-11-16 — Slice 5 sample data and the agency pay figures (ruled by Ujjwal Sharma)
+
+1. **A third Active agency approved for Acme: Calder Recruitment** (Active, approved from 1 Jul 2026), so slice 5 TSD
+   5.6 TV-1 has three Active approved agencies. VAC-1042's release drawer now offers Calder and Nexus, so *Release to 2*
+   can be drawn. Like Summit Staffing Solutions it is an addition in `slice5-proto`'s seed only (Abstract's copy alone:
+   the client and agency copies do not name it); the slice 2 Approved Suppliers page does not carry the link.
+2. **VAC-1050 *Goods-in operatives*** (Acme, Leicester DC, Warehouse Operative, Morning, 26 Oct to 18 Dec 2026, three
+   open positions, created and published by Rachel Green on 6 Oct) is new slice 5 sample data, released to TechForce
+   alone in wave 1 on 9 Oct 2026 at 11:30 by Sarah Mitchell, agency pay rate £13.20/hr (the rate card's line). No Acme
+   vacancy of slice 3 was open, published and unreleased (VAC-1044 is the Draft demo, VAC-1048 is Northgate's and the
+   hub's unreleased-release demo), so one was added. It lives in `slice3-proto.js` (both copies) flagged `s5only`: it
+   reads only in the slice 5 mode and the full product, so slices 1 to 4 read as before. The agency demo now starts
+   with a vacancy Daniel Wright can propose to (0 of 2).
+3. **Agency pay figures on an Agency-sourced week and pay statement** (slice 5 TSD §3.3.6, §3.3.8; slice 4 §3.3.2,
+   §3.3.3). Worked out in the S5 seam (`S5.s4.dress`, `S5.s4.statement`), not in slice 4's engine: per line agency pay
+   rate = round(booking's agency pay rate × multiplier) and agency cost = round(hours × rate), 0.00 on a paid absence the
+   agency bears; per day Abstract margin = client cost − agency cost and agency net margin = agency cost − (worker gross
+   pay + statutory). Booking Week's *Day by day* gains *Agency pay rate* and *Agency cost* columns (cards: *· agency
+   cost £x*) and *This week* an *Agency cost* line, both shown also without the full breakdown (tag `pay`); *Agency net
+   margin* shows its total with the breakdown only. Pay Statement gains *Agency pay rate* / *Agency amount* columns and
+   an *Agency gross pay* total; its source badge now reads the statement's own source (it always read Abstract-sourced).
+   Payroll gains an *Agency gross pay* column when a listed statement is Agency-sourced, its source filter now filters by
+   source (it emptied the list on Agency-sourced), and its intro names both sources in slice 5. Abstract-sourced weeks
+   and statements are unchanged.
+4. **No *Not Requested* badge in the day table.** An Agency-sourced absence whose confirmation was never requested shows
+   no badge, only the *Request agency confirmation* link where it is offered (Abstract and client: one shared function).
+   *Requested (awaiting agency)* and *Justified* keep theirs.

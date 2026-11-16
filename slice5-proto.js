@@ -63,16 +63,20 @@
   var AGENCIES = {
     techforce: { name: 'TechForce Recruitment', status: 'Active' },
     nexus: { name: 'Nexus Talent', status: 'Active' },
+    calder: { name: 'Calder Recruitment', status: 'Active' },
     peoplebridge: { name: 'PeopleBridge', status: 'Pending Activation' },
     summit: { name: 'Summit Staffing Solutions', status: 'In Setup' },
     rapid: { name: 'Rapid Resource', status: 'Suspended' }
   };
-  // Approved-supplier links (slice 2's LINKS on abstract.organisations.approved-suppliers.html) plus ONE prototype addition:
-  // Summit Staffing Solutions approved for Acme from 1 Sep 2026 while still In Setup, for the drawer's "Not active" row.
-  // The slice 2 page does not carry that link.
+  // Approved-supplier links (slice 2's LINKS on abstract.organisations.approved-suppliers.html) plus TWO prototype additions
+  // the slice 2 page does not carry: Summit Staffing Solutions approved for Acme from 1 Sep 2026 while still In Setup, for
+  // the drawer's "Not active" row; and Calder Recruitment, Active, approved for Acme from 1 Jul 2026, so Acme has three
+  // Active approved agencies (5.6 TV-1; ruled 2026-11-16, Ujjwal Sharma). Calder lives in Abstract's copy alone: no other
+  // copy names it.
   var APPROVALS = [
     { client: 'acme', agency: 'techforce', from: '2026-03-12', to: null },
     { client: 'acme', agency: 'nexus', from: '2026-03-20', to: null },
+    { client: 'acme', agency: 'calder', from: '2026-07-01', to: null },
     { client: 'acme', agency: 'peoplebridge', from: '2026-11-01', to: null },
     { client: 'acme', agency: 'summit', from: '2026-09-01', to: null },
     { client: 'northgate', agency: 'techforce', from: '2026-05-01', to: null },
@@ -158,7 +162,9 @@
       rel('v1043', 'techforce', '2026-09-30T08:50:00', 1, 'Sarah Mitchell'),
       rel('v1041', 'techforce', '2026-10-05T14:20:00', 1, 'Sarah Mitchell'),
       rel('v1041', 'nexus', '2026-10-07T09:35:00', 2, 'Sarah Mitchell'),
-      rel('v1047', 'nexus', '2026-10-08T11:00:00', 1, 'Sarah Mitchell')
+      rel('v1047', 'nexus', '2026-10-08T11:00:00', 1, 'Sarah Mitchell'),
+      // VAC-1050 (slice 5 sample data, ruled 2026-11-16): released to TechForce alone, so the agency starts with a vacancy to propose to
+      rel('v1050', 'techforce', '2026-10-09T11:30:00', 1, 'Sarah Mitchell')
     ];
     // who decided, as each party may read it: Abstract's user by name only in Abstract's copy
     var ABS_DEC = {};
@@ -191,6 +197,7 @@
     var vacancies = {
       v1041: facts('v1041', 'VAC-1041', 'Warehouse operatives, peak cover', 'Warehouse Operative', 'Birmingham DC', '2026-10-19', '2026-12-18', '2026-10-16', 'Morning', 'Mon to Fri, 06:00 to 14:00', 'General warehouse duties at the site: goods in, picking to order, and loading for despatch.', 'Safety boots and hi-vis provided on site. Able to lift up to 20 kg.', 3, 'Released to Agencies', '2026-10-05T14:20:00'),
       v1042: facts('v1042', 'VAC-1042', 'Reach truck drivers', 'Forklift Driver (Reach)', 'Leeds Hub', '2026-09-28', '2026-11-27', null, 'Afternoon', 'Mon to Fri, 14:00 to 22:00', 'Racking and replenishment in the high-bay aisles.', 'Current reach truck licence.', 1, 'Released to Agencies', '2026-09-24T10:15:00'),
+      v1050: facts('v1050', 'VAC-1050', 'Goods-in operatives', 'Warehouse Operative', 'Leicester DC', '2026-10-26', '2026-12-18', '2026-10-23', 'Morning', 'Mon to Fri, 06:00 to 14:00', 'Unloading inbound trailers, checking deliveries against the paperwork, and putting stock away.', 'Safety boots and hi-vis provided on site. Able to lift up to 20 kg.', 3, 'Released to Agencies', '2026-10-09T11:30:00'),
       v1043: facts('v1043', 'VAC-1043', 'Night shift operatives', 'Warehouse Operative', 'Nights', '2026-10-12', '2026-11-13', null, 'Night', 'Sun to Thu, 22:00 to 06:00', null, null, 0, 'Filled', '2026-09-30T08:50:00')
       , v1047: facts('v1047', 'VAC-1047', 'Days team cover', 'Warehouse Operative', 'Days', '2026-09-14', '2026-11-06', null, 'Morning', 'Mon to Fri, 06:00 to 14:00', null, null, 0, 'Filled', '2026-10-08T11:00:00')
     };
@@ -205,7 +212,8 @@
       { type: 'vacancy', id: 'v1043', at: '2026-09-30T08:50:00', by: 'Sarah Mitchell', text: 'Released to agencies, wave 1: TechForce Recruitment' },
       { type: 'vacancy', id: 'v1041', at: '2026-10-05T14:20:00', by: 'Sarah Mitchell', text: 'Released to agencies, wave 1: TechForce Recruitment' },
       { type: 'vacancy', id: 'v1041', at: '2026-10-07T09:35:00', by: 'Sarah Mitchell', text: 'Released to agencies, wave 2: Nexus Talent' },
-      { type: 'vacancy', id: 'v1047', at: '2026-10-08T11:00:00', by: 'Sarah Mitchell', text: 'Released to agencies, wave 1: Nexus Talent' }
+      { type: 'vacancy', id: 'v1047', at: '2026-10-08T11:00:00', by: 'Sarah Mitchell', text: 'Released to agencies, wave 1: Nexus Talent' },
+      { type: 'vacancy', id: 'v1050', at: '2026-10-09T11:30:00', by: 'Sarah Mitchell', text: 'Released to agencies, wave 1: TechForce Recruitment' }
     ];
     return { releases: releases, proposals: proposals, candidates: [], bookings: bookings, vacancies: vacancies, confirmations: confirmations, weeks: {}, audit: audit, seq: { prp: 1012, bk: 2300, cand: 100 } };
   }
@@ -556,6 +564,39 @@
   S5.autoRequest = function (clientId) { return !!AUTO_REQUEST[clientId]; };
   function isAgency(b) { return !!b && !!rawAB(b.id); }
   function chip(state, small) { return S5.ui.confBadge(state, small); }
+  // The agency pay figures of an Agency-sourced week (slice 4 TSD §3.3.3 rules 3, 5 and 6; slice 5 §3.3.6), worked out from
+  // the priced lines slice4-proto.js's engine leaves (ruled 2026-11-16, Ujjwal Sharma). Per line: agencyPayRate =
+  // round(standard agency pay rate × multiplier), agencyCost = round(hours × agencyPayRate), 0.00 on a paid absence the agency
+  // bears. Per day: agencyCost = Σ lines, abstractMargin = clientCost − agencyCost, agencyNetMargin = agencyCost −
+  // (workerGrossPay + Σ statutory). The week's totals are the Σ of the days, null while a day waits for manual pricing. The
+  // standard rate is the booking's agency pay rate (VacancyRate.agencyPayRate: the rate card line's pay figure). Abstract's
+  // copy alone: the client reads no pay figure, and the agency reads its own gated projection (S5.agencyWeeks).
+  function pence(s) { return Math.round(Number(s) * 100); }
+  function money2(p) { return (p / 100).toFixed(2); }
+  var STAT_KEYS = ['employerNi', 'wtrAccrual', 'pension', 'apprenticeshipLevy'];
+  function agencyPay(o, b) {
+    var std = b.rate && b.rate.pay ? pence(b.rate.pay) : null, pending = false, sum = { clientCost: 0, agencyCost: 0, abstractMargin: 0, agencyNetMargin: 0 };
+    o.agencyPayRate = std == null ? null : money2(std);
+    if (std == null) return;
+    o.days.forEach(function (y) {
+      if (y.pricingState === 'pending manual pricing') pending = true;
+      if (!y.cost) return;
+      var ac = 0, cc = 0, agencyBears = y.dayStatus !== 'Worked' && y.costBearer === 'Agency';
+      y.lines.forEach(function (l) {
+        var r = Math.round(std * Number(l.multiplier));
+        l.agencyPayRate = money2(r);
+        l.agencyCost = agencyBears ? '0.00' : money2(Math.round(r * pence(l.hours) / 100));
+        if (agencyBears) l.clientCost = '0.00';      // costBearer Agency: the client is not charged the day either
+        ac += pence(l.agencyCost); cc += pence(l.clientCost);
+      });
+      var stat = STAT_KEYS.reduce(function (m, k) { return m + pence(y.cost[k] || '0'); }, 0);
+      y.cost.clientCost = money2(cc); y.cost.agencyCost = money2(ac);
+      y.cost.abstractMargin = money2(cc - ac); y.cost.agencyNetMargin = money2(ac - (pence(y.cost.workerGrossPay) + stat));
+      Object.keys(sum).forEach(function (k) { sum[k] += pence(y.cost[k]); });
+    });
+    Object.keys(sum).forEach(function (k) { o.totals[k] = pending ? null : money2(sum[k]); });
+    o.clientCost = o.totals.clientCost;
+  }
   S5.s4 = {
     // seed(list, helpers): add the slice 5 weeks to slice 4's store if they are missing; true when it added any
     // (a week the client's copy seeded first carries the override's marker alone; Abstract's copy fills in the rest)
@@ -576,6 +617,7 @@
       o.source = 'Agency-sourced'; o.agencyId = ab.agencyId; o.agencyName = agencyName(ab.agencyId);
       o.agencySourced = true; o.requestedDays = 0;
       o.days.forEach(function (y) { y.confirmationState = confState(b.id, y.date, y.dayStatus); y.confirmation = confOf(b.id, y.date); if (y.confirmationState === 'Requested (awaiting agency)') o.requestedDays++; });
+      agencyPay(o, b);
       // the snapshot the agency's copy reads (no charge, no worker pay: the agency's projection of the week)
       var snap = { id: o.id, bookingId: b.id, weekStart: o.weekStart, status: o.status, days: o.days.map(function (y) { return { date: y.date, dayStatus: y.dayStatus, hours: y.hours, shiftName: y.shiftName || null, absenceComment: y.absenceComment || null, absencePay: y.absencePay || null, overridden: !!y.absencePayOverride, inRange: y.inRange }; }) };
       if (!o.blank && JSON.stringify(db.weeks[o.id]) !== JSON.stringify(snap)) { db.weeks[o.id] = snap; save(); }
@@ -621,10 +663,12 @@
       return y.confirmationState === 'Justified' ? '<span class="absolute bottom-1 right-1 text-emerald-700" title="' + esc('Justified: ' + y.confirmation.justification) + '"><i class="fa-solid fa-circle-check text-[10px]" aria-hidden="true"></i></span>' : '<span class="absolute bottom-1 right-1 text-amber-700" title="Requested (awaiting agency)"><i class="fa-solid fa-hourglass-half text-[10px]" aria-hidden="true"></i></span>';
     },
     ariaPart: function (y) { return on() && y.confirmationState && y.confirmationState !== 'Not Requested' ? ', ' + y.confirmationState : ''; },
-    // the day-by-day table's status cell: the state's badge, the reason, and the standalone request on a Not Requested absence
+    // the day-by-day table's status cell: the state's badge, the reason, and the standalone request on a Not Requested absence.
+    // Not Requested draws no badge (ruled 2026-11-16, Ujjwal Sharma): such a day shows only the request link, where it is offered.
     dayHtml: function (x, y, canRequest) {
       if (!on() || !x.agencySourced || !y.confirmationState) return '';
-      var c = y.confirmation, h = '<div class="mt-1.5 flex flex-col gap-1">' + chip(y.confirmationState, true);
+      if (y.confirmationState === 'Not Requested' && !canRequest) return '';
+      var c = y.confirmation, h = '<div class="mt-1.5 flex flex-col gap-1">' + (y.confirmationState === 'Not Requested' ? '' : chip(y.confirmationState, true));
       if (y.confirmationState === 'Justified') h += '<p class="text-[11px] text-slate-700"><span class="font-semibold">' + esc(x.supplyingParty) + '’s reason:</span> ' + esc(c.justification) + '</p>';
       else if (y.confirmationState === 'Requested (awaiting agency)') h += '<p class="text-[11px] text-slate-600">Asked of ' + esc(x.supplyingParty) + ' on ' + fmtDateTime(c.requestedAt) + '</p>';
       else if (canRequest) h += '<button type="button" class="self-start text-[11px] font-semibold text-blue-700 hover:underline rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600" data-s5-req="' + esc(y.date) + '">Request agency confirmation</button>';
@@ -632,6 +676,16 @@
     },
     legend: function () { return on() ? '<span role="listitem" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700"><i class="fa-solid fa-hourglass-half text-amber-700" aria-hidden="true"></i>Requested (awaiting agency)</span><span role="listitem" class="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700"><i class="fa-solid fa-circle-check text-emerald-700" aria-hidden="true"></i>Justified</span>' : ''; },
     party: abstractParty
+  };
+  // statement(s, x): the pay statement's agency fields (slice 5 TSD §3.3.8, all `pay`): each line's agencyPayRate and
+  // agencyAmount (the line's agencyCost) and the summary's agencyGrossPay = Σ agencyAmount. x is the week dressed from the
+  // approval's days, so its lines carry agencyPay()'s figures; an Abstract-sourced statement keeps null (ruled 2026-11-16).
+  S5.s4.statement = function (s, x) {
+    s.agencyGrossPay = null;
+    if (!on() || !x.agencySourced || x.agencyPayRate == null) { s.lines.forEach(function (l) { l.agencyPayRate = null; l.agencyAmount = null; }); return; }
+    var i = 0, sum = 0;
+    x.days.forEach(function (y) { y.lines.forEach(function (l) { var sl = s.lines[i++]; sl.agencyPayRate = l.agencyPayRate; sl.agencyAmount = l.agencyCost; sum += pence(l.agencyCost); }); });
+    s.agencyGrossPay = money2(sum);
   };
 
   // ---------- the look: badges as the kernel buckets them (design-tokens §5); every portal ----------
