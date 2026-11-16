@@ -373,7 +373,7 @@
   S5.act = S5.act || {};
   S5.act.updateCandidate = function (id, patch) {
     var c = S5.rawCandidate(id); if (!c) refuse('CANDIDATE_NOT_FOUND', 'We can’t find that candidate.');
-    ['unavailableFrom', 'unavailableUntil', 'unavailabilityNote'].forEach(function (k) { if (patch[k] != null) refuse('CANDIDATE_FIELD_NOT_ALLOWED', 'An agency’s candidate has no availability, so it can’t be set.', { field: k }); });
+    ['unavailableFrom', 'unavailableUntil', 'unavailabilityNote'].forEach(function (k) { if (patch[k] != null) refuse('CANDIDATE_NOT_IN_POOL', 'An agency’s candidate has no availability, so it can’t be set.', { field: k }); });
     ['agencyId', 'agencyOrgNodeId'].forEach(function (k) { if (k in patch && patch[k] !== c[k]) refuse('CANDIDATE_FIELD_NOT_ALLOWED', 'The owning agency and its branch are set by the agency.', { field: k }); });
     Object.keys(patch).forEach(function (k) { if (['unavailableFrom', 'unavailableUntil', 'unavailabilityNote', 'agencyId', 'agencyOrgNodeId'].indexOf(k) < 0) c[k] = patch[k]; });
     c.updatedAt = now(); log('candidate', id, 'Record changed by Abstract'); save();
@@ -387,7 +387,8 @@
   S5.act = S5.act || {};
   S5.act.saveCandidate = function (f, id) {
     if (!f.agencyOrgNodeId || !branchName(ME.agencyId, f.agencyOrgNodeId)) refuse('CANDIDATE_BRANCH_INVALID', 'Choose one of your branches for this candidate.');
-    ['jobRoleId', 'legalHold', 'unavailableFrom'].forEach(function (k) { if (f[k] != null) refuse('CANDIDATE_FIELD_NOT_ALLOWED', 'An agency can’t set ' + k + ' on a candidate.', { field: k }); });
+    if (f.unavailableFrom != null) refuse('CANDIDATE_NOT_IN_POOL', 'An agency’s candidate has no availability, so it can’t be set.', { field: 'unavailableFrom' });   // TSD §3.1.0: every caller
+    ['jobRoleId', 'legalHold'].forEach(function (k) { if (f[k] != null) refuse('CANDIDATE_FIELD_NOT_ALLOWED', 'An agency can’t set ' + k + ' on a candidate.', { field: k }); });
     var c = id ? rawCand(id) : null;
     if (!c) { c = { id: 'ac-n' + (++db.seq.cand), agencyId: ME.agencyId, items: items(PD, PD, PD, PD), licences: [], documents: [], createdAt: now(), createdBy: ME.userName }; }
     Object.keys(f).forEach(function (k) { c[k] = f[k]; }); c.updatedAt = now();

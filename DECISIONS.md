@@ -310,3 +310,5 @@ parts are recorded in their own `DECISIONS.md`.
    longer fenced to Abstract and the client). The agencies' seeded candidates' NI numbers take the pool's valid sample
    prefix *AB* (TechForce's were *QQ…*, which the form's NI check refuses), so an agency's record saves from Abstract
    with no edit; the hub's edit-form links open Kofi Mensah (`?id=ac-kofi`, and its `conflict` state).
+
+Availability on an agency's candidate is refused with `CANDIDATE_NOT_IN_POOL` for every caller (slice 5 TSD §3.1.0), not `CANDIDATE_FIELD_NOT_ALLOWED`; the agency's *fieldnotallowed* copy names the job role and the legal hold only (review R5 follow-up, from the TSD check of the design pass).
